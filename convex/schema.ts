@@ -8,7 +8,7 @@ export default defineSchema({
     imageStorageId: v.optional(v.id("_storage")),
     clerkId: v.string(),
     name: v.string(),
-    collectionIdList: v.array(v.id("collections")),
+    recipeBookIdList: v.array(v.id("recipeBooks")),
     appSettings: v.object({
       colors: v.object({
         background: v.string(),
@@ -17,13 +17,13 @@ export default defineSchema({
       language: v.string(),
     }),
   }),
-  collections: defineTable({
+  recipeBooks: defineTable({
     name: v.string(),
     recipeIdList: v.array(v.id("recipes")),
   }),
-  userCollectionRelationShip: defineTable({
+  userRecipeBookRelationShip: defineTable({
     userId: v.id("users"),
-    collectionId: v.id("collections"),
+    recipeBookId: v.id("recipeBooks"),
     privilage: v.string(),
   }),
   recipes: defineTable({
@@ -32,6 +32,7 @@ export default defineSchema({
     tags: v.array(v.id("tags")),
     ingredients: v.string(),
     recipe: v.string(),
+    recipeImageUrl: v.optional(v.string()),
   })
     .searchIndex("search_name", { searchField: "name" })
     .searchIndex("search_tags", { searchField: "tags" }),

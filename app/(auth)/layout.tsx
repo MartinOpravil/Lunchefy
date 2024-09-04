@@ -8,7 +8,7 @@ export default function RootLayout({
   return (
     <main className="relative h-screen w-full">
       <div className="absolute size-full">
-        <Image src="next.svg" alt="background" fill className="size-full" />
+        {/* <Image src="next.svg" alt="background" fill className="size-full" /> */}
       </div>
       {children}
     </main>
