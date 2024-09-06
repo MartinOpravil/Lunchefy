@@ -91,7 +91,7 @@ html {
   }
 
   .action-button {
-    @apply text-16 w-fit font-extrabold text-white-1 gap-2 bg-secondary hover:bg-accent transition-all;
+    @apply text-16 w-fit font-extrabold text-white-1 gap-2 bg-accent hover:bg-secondary transition-all;
   }
   .icon-primary {
     .svg {

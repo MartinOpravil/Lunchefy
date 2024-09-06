@@ -23,7 +23,7 @@ const PageHeader = ({
           />
           {title}
         </h2>
-        {actionButton}
+        <div className="flex items-center gap-2">{actionButton}</div>
       </div>
 
       <div className="heading-underline" />

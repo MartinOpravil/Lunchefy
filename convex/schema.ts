@@ -5,10 +5,10 @@ export default defineSchema({
   users: defineTable({
     email: v.string(),
     imageUrl: v.string(),
-    imageStorageId: v.optional(v.id("_storage")),
+    //imageStorageId: v.optional(v.id("_storage")),
     clerkId: v.string(),
     name: v.string(),
-    recipeBookIdList: v.array(v.id("recipeBooks")),
+    //recipeBookIdList: v.optional(v.array(v.id("recipeBooks"))), // DELETE
     appSettings: v.object({
       colors: v.object({
         background: v.string(),
@@ -19,9 +19,9 @@ export default defineSchema({
   }),
   recipeBooks: defineTable({
     name: v.string(),
-    recipeIdList: v.array(v.id("recipes")),
+    //recipeIdList: v.array(v.id("recipes")),
   }),
-  userRecipeBookRelationShip: defineTable({
+  userRecipeBookRelationship: defineTable({
     userId: v.id("users"),
     recipeBookId: v.id("recipeBooks"),
     privilage: v.string(),

@@ -1,3 +1,5 @@
+import { GenericId } from "convex/values";
+
 export interface ClassListProp {
   classList?: string;
 }
@@ -25,4 +27,9 @@ export interface IconImageProps {
   name: string;
   width?: number;
   height?: number;
+}
+
+export interface RecipeBookProps {
+  id: GenericId<"recipeBooks">;
+  title: string;
 }

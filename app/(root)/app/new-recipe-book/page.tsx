@@ -29,7 +29,7 @@ const formSchema = z.object({
 
 const NewRecipeBookPage = () => {
   const router = useRouter();
-  const [isSumbitting, setIsSumbitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const createRecipeBook = useMutation(api.recipeBooks.createRecipeBook);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -40,19 +40,18 @@ const NewRecipeBookPage = () => {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsSumbitting(true);
+    setIsSubmitting(true);
 
     try {
       const newRecipeBookId = await createRecipeBook({
         name: values.name,
       });
-      console.log(newRecipeBookId);
       if (newRecipeBookId) router.push("/app");
+      setIsSubmitting(false);
     } catch (error) {
       console.log("Error creating recipe book", error);
+      setIsSubmitting(false);
     }
-
-    setIsSumbitting(false);
   }
 
   return (
@@ -60,7 +59,7 @@ const NewRecipeBookPage = () => {
       <PageHeader
         title="New recipe book"
         icon="recipe_book"
-        actionButton={<LinkButton title="Back" href="/app" />}
+        actionButton={<LinkButton title="Back" icon="back" href="/app" />}
       />
       <main className="pt-6">
         <Form {...form}>
@@ -93,7 +92,7 @@ const NewRecipeBookPage = () => {
             <div className="flex flex-col items-center">
               <ActionButton
                 title="Save"
-                isLoading={false}
+                isLoading={isSubmitting}
                 classList="min-w-32"
                 onClick={form.handleSubmit(onSubmit)}
               />
