@@ -9,8 +9,9 @@ export default function Home() {
       <section className="flex flex-col gap-2 text-center items-center">
         <h1>Lunchefy</h1>
         <p>
-          Your ultimate <strong className="text-accent">recipe manager</strong>{" "}
-          and <strong className="text-accent">dish decider</strong>.
+          Your ultimate{" "}
+          <strong className="text-secondary">recipe manager</strong> and{" "}
+          <strong className="text-secondary">dish decider</strong>.
         </p>
       </section>
       <section className="flex flex-col items-center text-center">

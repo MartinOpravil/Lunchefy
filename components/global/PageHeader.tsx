@@ -13,7 +13,7 @@ const PageHeader = ({
   return (
     <nav className="relative">
       <div className="flex items-center justify-between">
-        <h2 className="text-primary flex gap-3">
+        <h2 className="text-primary flex flex-col md:flex-row gap-3 ">
           <Image
             src={`/icons/${icon}.svg`}
             alt="recipe_book"

@@ -3,8 +3,8 @@ import React from "react";
 
 const LoaderSpiner = () => {
   return (
-    <div className="flex-center p-3">
-      <Loader className="animate-spin text-accent" size={30} />
+    <div className="flex-center">
+      <Loader className="animate-spin text-white" size={30} />
     </div>
   );
 };

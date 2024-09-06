@@ -21,15 +21,15 @@ html {
 
 :root {
   --primary: #f2726e;
-  --accent: #a4b476;
-  --secondary: #fec864;
+  --secondary: #a4b476;
+  --accent: #235789;
   --background: #fdf8ed;
   --text: #57463e;
 }
 
 @layer utilities {
   .input-class {
-    @apply text-16 placeholder:text-16 bg-black-1 rounded-[6px] placeholder:text-gray-1 border-none text-gray-1;
+    @apply text-16 placeholder:text-16 bg-background rounded-[6px] placeholder:text-secondary;
   }
   .podcast_grid {
     @apply grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4;
@@ -81,7 +81,7 @@ html {
     @apply text-5xl font-semibold text-primary;
   }
   h2 {
-    @apply text-3xl font-semibold text-accent;
+    @apply text-3xl font-semibold text-secondary;
   }
   h3 {
     @apply text-xl font-semibold;
@@ -91,7 +91,7 @@ html {
   }
 
   .action-button {
-    @apply text-16 w-fit font-extrabold text-white-2;
+    @apply text-16 w-fit font-extrabold text-white-1 gap-2 bg-secondary hover:bg-accent transition-all;
   }
   .icon-primary {
     .svg {
