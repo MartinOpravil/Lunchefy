@@ -13,7 +13,7 @@ export interface ActionButtonProps {
   icon?: string;
   classList?: string;
   isLoading?: boolean;
-  onClick: () => void;
+  onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
 export interface LinkButtonProps {
@@ -32,4 +32,13 @@ export interface IconImageProps {
 export interface RecipeBookProps {
   id: GenericId<"recipeBooks">;
   title: string;
+}
+
+export interface AlertDialogProps {
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  title?: string;
+  description?: string;
+  subject?: string;
+  action: () => void;
 }

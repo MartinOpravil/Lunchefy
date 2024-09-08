@@ -24,9 +24,10 @@ const getUserEntity = query({
   },
 });
 
-export const getRecipeById = query({
+export const getRecipeBookById = query({
   args: { id: v.string() },
   handler: async (ctx, args) => {
+    // TODO: Check if need to getUserEntity
     const recipeBook = await ctx.db
       .query("recipeBooks")
       .filter((q) => q.eq(q.field("_id"), args.id))

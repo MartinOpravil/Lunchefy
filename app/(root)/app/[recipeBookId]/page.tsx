@@ -1,12 +1,17 @@
 import LinkButton from "@/components/global/LinkButton";
 import PageHeader from "@/components/global/PageHeader";
+import { Id } from "@/convex/_generated/dataModel";
 import React from "react";
 
-const RecipeBookPage = () => {
+const RecipeBookPage = ({
+  params: { recipeBookId },
+}: {
+  params: { recipeBookId: Id<"recipeBooks"> };
+}) => {
   return (
     <main className="flex flex-col py-6 h-[calc(100vh-72.4px)]">
       <PageHeader
-        title="Recipes"
+        title={`${recipeBookId} Recipes`}
         icon="recipe_book"
         actionButton={
           <>
