@@ -28,6 +28,22 @@ export const getRecipeBookById = query({
   args: { id: v.string() },
   handler: async (ctx, args) => {
     // TODO: Check if need to getUserEntity
+    const userEntity = await getUserEntity(ctx, args);
+    if (!userEntity) return;
+
+    // TODO: Handle viewing of recipe book by permissions
+    const userRecipeBookRelationship = await ctx.db
+      .query("userRecipeBookRelationship")
+      .filter((q) =>
+        q.and(
+          q.eq(q.field("userId"), userEntity._id),
+          q.eq(q.field("recipeBookId"), args.id)
+        )
+      )
+      .unique();
+    if (!userRecipeBookRelationship)
+      throw new ConvexError("No permission to view recipe book");
+
     const recipeBook = await ctx.db
       .query("recipeBooks")
       .filter((q) => q.eq(q.field("_id"), args.id))
@@ -100,5 +116,23 @@ export const deleteRecipeBook = mutation({
     if (!recipeBook) throw new ConvexError("Recipe book not found");
 
     return await ctx.db.delete(args.id);
+  },
+});
+
+export const updateRecipeBook = mutation({
+  args: {
+    id: v.id("recipeBooks"),
+    name: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const user = await getUserEntity(ctx, args);
+    if (!user) return;
+
+    const recipeBook = await ctx.db.get(args.id);
+    if (!recipeBook) throw new ConvexError("Recipe book not found");
+
+    return await ctx.db.patch(args.id, {
+      name: args.name,
+    });
   },
 });

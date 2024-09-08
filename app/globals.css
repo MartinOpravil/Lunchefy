@@ -101,6 +101,13 @@ html {
   .heading-underline {
     @apply h-0.5 w-full bg-primary mt-3 rounded-md;
   }
+
+  .page {
+    @apply flex flex-col py-6 h-[calc(100vh-72.4px)];
+  }
+  .page-content {
+    @apply relative h-full flex flex-col items-center justify-start py-8;
+  }
 }
 
 /* ===== custom classes ===== */

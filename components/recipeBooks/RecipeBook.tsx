@@ -9,13 +9,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import ActionButton from "./global/ActionButton";
+import ActionButton from "../global/ActionButton";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import ActionDialog from "./global/ActionDialog";
-import LinkButton from "./global/LinkButton";
+import ActionDialog from "../global/ActionDialog";
+import LinkButton from "../global/LinkButton";
 
 const RecipeBook = ({ id, title }: RecipeBookProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
@@ -44,7 +44,7 @@ const RecipeBook = ({ id, title }: RecipeBookProps) => {
 
   return (
     <>
-      <Card className="relative hover:bg-secondary cursor-pointer transition-all bg-accent text-white-1 ">
+      <Card className="relative hover:bg-secondary cursor-pointer transition-all bg-accent text-white-1 text-center">
         <Link
           href={`/app/${id}`}
           className="min-h-[300px] flex flex-col justify-center items-center"

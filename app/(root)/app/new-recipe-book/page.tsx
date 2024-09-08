@@ -55,13 +55,13 @@ const NewRecipeBookPage = () => {
   }
 
   return (
-    <main className="flex flex-col py-6 h-[calc(100vh-72.4px)]">
+    <main className="page">
       <PageHeader
         title="New recipe book"
         icon="recipe_book"
         actionButton={<LinkButton title="Back" icon="back" href="/app" />}
       />
-      <main className="pt-6">
+      <main className="page-content">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
