@@ -20,6 +20,7 @@ import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useRouter } from "next/navigation";
 import ImageInput from "@/components/global/ImageInput";
+import { ImageStateProps } from "@/types";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -32,7 +33,8 @@ const NewRecipeBookPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const createRecipeBook = useMutation(api.recipeBooks.createRecipeBook);
 
-  const [imageUrl, setImageUrl] = useState("");
+  // const [imageUrl, setImageUrl] = useState("");
+  const [image, setImage] = useState<ImageStateProps | undefined>(undefined);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -47,7 +49,7 @@ const NewRecipeBookPage = () => {
     try {
       const newRecipeBookId = await createRecipeBook({
         name: values.name,
-        imageUrl: imageUrl,
+        image: image,
       });
       if (newRecipeBookId) router.push("/app");
       setIsSubmitting(false);
@@ -92,11 +94,12 @@ const NewRecipeBookPage = () => {
               />
             </div>
 
-            <ImageInput imageUrl={imageUrl} setImageUrl={setImageUrl} />
+            <ImageInput image={image} setImage={setImage} />
 
             <div className="flex flex-col items-center">
               <ActionButton
                 title="Save"
+                icon="save"
                 isLoading={isSubmitting}
                 classList="min-w-32"
                 onClick={form.handleSubmit(onSubmit)}

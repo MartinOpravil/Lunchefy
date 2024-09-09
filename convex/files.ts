@@ -16,3 +16,12 @@ export const getUrl = mutation({
     return await ctx.storage.getUrl(args.storageId);
   },
 });
+
+export const deleteFile = mutation({
+  args: {
+    storageId: v.id("_storage"),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.storage.delete(args.storageId);
+  },
+});

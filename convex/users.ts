@@ -27,7 +27,6 @@ export const createUser = internalMutation({
       email: args.email,
       imageUrl: args.imageUrl,
       name: args.name,
-      recipeBookIdList: [],
       appSettings: {
         colors: {
           background: "#1b1b1b",

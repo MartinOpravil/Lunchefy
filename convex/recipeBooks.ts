@@ -83,6 +83,12 @@ export const createRecipeBook = mutation({
   args: {
     name: v.string(),
     imageUrl: v.optional(v.string()),
+    image: v.optional(
+      v.object({
+        imageUrl: v.string(),
+        storageId: v.optional(v.id("_storage")),
+      })
+    ),
   },
   handler: async (ctx, args) => {
     const user = await getUserEntity(ctx, args);
@@ -90,7 +96,7 @@ export const createRecipeBook = mutation({
 
     const newRecipeBookId = await ctx.db.insert("recipeBooks", {
       name: args.name,
-      imageUrl: args.imageUrl,
+      image: args.image,
     });
     if (!newRecipeBookId) throw new ConvexError("Recipe book was not created");
 
@@ -114,10 +120,25 @@ export const deleteRecipeBook = mutation({
     id: v.id("recipeBooks"),
   },
   handler: async (ctx, args) => {
+    // TODO: Change behavior according to privilages
+
     const recipeBook = await ctx.db.get(args.id);
     if (!recipeBook) throw new ConvexError("Recipe book not found");
 
-    // TODO: Delete relationship
+    // Delete image from storage
+    if (recipeBook.image && recipeBook.image.storageId)
+      await ctx.storage.delete(recipeBook.image.storageId);
+
+    // Delete all relationsips
+    const relationship = await ctx.db
+      .query("userRecipeBookRelationship")
+      .filter((q) => q.eq(q.field("recipeBookId"), recipeBook._id))
+      .collect();
+    await Promise.all(
+      relationship.map(async (p) => {
+        await ctx.db.delete(p._id);
+      })
+    );
 
     return await ctx.db.delete(args.id);
   },
@@ -130,6 +151,12 @@ export const updateRecipeBook = mutation({
     id: v.id("recipeBooks"),
     name: v.string(),
     imageUrl: v.optional(v.string()),
+    image: v.optional(
+      v.object({
+        imageUrl: v.string(),
+        storageId: v.optional(v.id("_storage")),
+      })
+    ),
   },
   handler: async (ctx, args) => {
     const user = await getUserEntity(ctx, args);
@@ -138,15 +165,18 @@ export const updateRecipeBook = mutation({
     const recipeBook = await ctx.db.get(args.id);
     if (!recipeBook) throw new ConvexError("Recipe book not found");
 
-    const recipeBookImageUrl = recipeBook.imageUrl;
-    if (recipeBookImageUrl !== args.imageUrl) {
-      // const imageStorageId = await ctx.storage.store.
-      // ctx.storage.delete
+    // Delete previous image if image changes
+    const recipeBookImage = recipeBook.image;
+    if (
+      recipeBookImage?.imageUrl !== args.imageUrl &&
+      recipeBookImage?.storageId
+    ) {
+      await ctx.storage.delete(recipeBookImage.storageId);
     }
 
     return await ctx.db.patch(args.id, {
       name: args.name,
-      imageUrl: args.imageUrl,
+      image: args.image,
     });
   },
 });

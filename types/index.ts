@@ -1,5 +1,11 @@
+import { Id } from "@/convex/_generated/dataModel";
 import { GenericId } from "convex/values";
 import { Dispatch, SetStateAction } from "react";
+
+export interface ImageStateProps {
+  imageUrl: string;
+  storageId?: Id<"_storage">;
+}
 
 export interface ClassListProp {
   classList?: string;
@@ -31,8 +37,8 @@ export interface IconImageProps {
 }
 
 export interface ImageInputProps {
-  imageUrl: string;
-  setImageUrl: Dispatch<SetStateAction<string>>;
+  image?: ImageStateProps;
+  setImage: Dispatch<SetStateAction<ImageStateProps | undefined>>;
   label?: string;
   title?: string;
   description?: string;

@@ -34,7 +34,7 @@ const RecipeBookDetailForm = (props: {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const updateRecipeBook = useMutation(api.recipeBooks.updateRecipeBook);
-  const [imageUrl, setImageUrl] = useState(recipeBookResult?.imageUrl ?? "");
+  const [image, setImage] = useState(recipeBookResult?.image);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -55,6 +55,7 @@ const RecipeBookDetailForm = (props: {
       await updateRecipeBook({
         id: recipeBookResult?._id,
         name: values.name,
+        image: image,
       });
       router.push("/app");
       router.refresh();
@@ -93,11 +94,12 @@ const RecipeBookDetailForm = (props: {
           />
         </div>
 
-        <ImageInput imageUrl={imageUrl} setImageUrl={setImageUrl} />
+        <ImageInput image={image} setImage={setImage} />
 
         <div className="flex flex-col items-center">
           <ActionButton
             title="Save"
+            icon="save"
             isLoading={isSubmitting}
             classList="min-w-32"
             onClick={form.handleSubmit(onSubmit)}

@@ -19,8 +19,14 @@ export default defineSchema({
   }),
   recipeBooks: defineTable({
     name: v.string(),
-    imageUrl: v.optional(v.string()),
+    // imageUrl: v.optional(v.string()),
     //recipeIdList: v.array(v.id("recipes")),
+    image: v.optional(
+      v.object({
+        imageUrl: v.string(),
+        storageId: v.optional(v.id("_storage")),
+      })
+    ),
   }),
   userRecipeBookRelationship: defineTable({
     userId: v.id("users"),

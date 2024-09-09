@@ -11,11 +11,11 @@ import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 
 const ImageInput = ({
-  imageUrl,
-  setImageUrl,
-  label,
+  image,
+  setImage,
+  label = "Image",
   title = "Click to upload",
-  description = "SVG, PNG, JPG or GIF (max. 1080x1080px)",
+  description = "SVG, PNG, JPG or GIF",
 }: ImageInputProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isImageLoading, setIsImageLoading] = useState(false);
@@ -23,12 +23,28 @@ const ImageInput = ({
     null
   );
   const generateUploadUrl = useMutation(api.files.generateUploadUrl);
+  const deleteFile = useMutation(api.files.deleteFile);
   const { startUpload } = useUploadFiles(generateUploadUrl);
   const getImageUrl = useMutation(api.files.getUrl);
+  const [imageStorageIdBackup, setImageStorageIdBackup] = useState(
+    image?.storageId
+  );
 
-  const handleImage = async (blob: Blob, fileName: string) => {
+  const handleImage = async (
+    blob: Blob,
+    fileName: string,
+    previousImageStorageId?: Id<"_storage">
+  ) => {
     setIsImageLoading(true);
-    setImageUrl("");
+
+    if (
+      previousImageStorageId &&
+      previousImageStorageId !== imageStorageIdBackup
+    ) {
+      await deleteFile({ storageId: previousImageStorageId });
+    }
+
+    setImage(undefined);
 
     try {
       const file = new File([blob], fileName, { type: "image/png" });
@@ -39,7 +55,10 @@ const ImageInput = ({
       setImageStorageId(storageId);
 
       const imageUrl = await getImageUrl({ storageId });
-      setImageUrl(imageUrl!);
+      setImage({
+        imageUrl: imageUrl ?? "",
+        storageId: storageId,
+      });
       setIsImageLoading(false);
       // toast({
       //   title: "Thumbnail generated",
@@ -60,7 +79,7 @@ const ImageInput = ({
       if (!files) return;
       const file = files[0];
       const blob = await file.arrayBuffer().then((ab) => new Blob([ab]));
-      handleImage(blob, file.name);
+      handleImage(blob, file.name, image?.storageId);
     } catch (error) {
       console.log(error);
       // toast({
@@ -71,42 +90,49 @@ const ImageInput = ({
   };
 
   return (
-    <div className="file-input">
+    <div className="image-input">
       {label && (
         <FormLabel className="text-16 font-bold text-accent">{label}</FormLabel>
       )}
-      <div onClick={() => inputRef?.current?.click()}>
+      <div
+        className="image-input-inner"
+        onClick={() => inputRef?.current?.click()}
+      >
         <Input
           type="file"
           className="hidden"
           ref={inputRef}
           onChange={(e) => uploadImage(e)}
         />
-        {!isImageLoading ? (
-          <Image
-            src="/icons/upload-image.svg"
-            width={40}
-            height={40}
-            alt="upload"
-          />
-        ) : (
-          <div className="text-16 flex-center font-medium text-white-1">
-            Uploading
-            <Loader size={20} className="animate-spin ml-2" />
-          </div>
-        )}
+
         <div className="flex flex-col items-center gap-1">
-          <h2 className="text-12 font-bold text-orange-1">{title}</h2>
-          <p className="text-12 font-normal text-gray-1">{description}</p>
+          {!isImageLoading ? (
+            <>
+              <Image
+                src="/icons/upload.svg"
+                width={40}
+                height={40}
+                alt="upload"
+              />
+              <h2 className="text-12 font-bold text-primary">{title}</h2>
+              <p className="text-12 font-normal text-gray-1">{description}</p>
+            </>
+          ) : (
+            <div className="flex flex-col justify-center items-center text-16 flex-center font-medium text-primary">
+              <Loader size={30} className="animate-spin text-black-1" />
+              Uploading
+            </div>
+          )}
         </div>
-        {imageUrl && (
+        {image && (
           <div className="flex-center w-full ">
             <Image
-              src={imageUrl}
-              width={200}
-              height={200}
-              className="mt-5"
+              src={image.imageUrl}
               alt="thumbnail"
+              width={0}
+              height={0}
+              sizes="100vw"
+              className="w-[100%] h-[100%] sm:w-[50%] max-h-[500px] object-contain"
             />
           </div>
         )}
