@@ -23,7 +23,7 @@ const RecipeBooks = (props: {
               key={recipeBook._id}
               id={recipeBook._id}
               title={recipeBook.name}
-              imgUrl={recipeBook.imgUrl}
+              imageUrl={recipeBook.imageUrl}
             />
           ))}
         </div>

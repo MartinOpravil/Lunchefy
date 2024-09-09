@@ -19,7 +19,7 @@ import LinkButton from "../global/LinkButton";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
-const RecipeBook = ({ id, title, imgUrl }: RecipeBookProps) => {
+const RecipeBook = ({ id, title, imageUrl }: RecipeBookProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const deleteRecipeBook = useMutation(api.recipeBooks.deleteRecipeBook);
@@ -50,8 +50,8 @@ const RecipeBook = ({ id, title, imgUrl }: RecipeBookProps) => {
         className={cn(
           "relative hover:bg-secondary cursor-pointer transition-all bg-accent text-white-1 text-center overflow-hidden",
           {
-            "bg-accentTransparent": imgUrl,
-            "hover:bg-secondaryTransparent": imgUrl,
+            "bg-accentTransparent": imageUrl,
+            "hover:bg-secondaryTransparent": imageUrl,
           }
         )}
       >
@@ -59,9 +59,9 @@ const RecipeBook = ({ id, title, imgUrl }: RecipeBookProps) => {
           href={`/app/${id}`}
           className="min-h-[300px] flex flex-col justify-center items-center"
         >
-          {imgUrl && (
+          {imageUrl && (
             <Image
-              src={imgUrl}
+              src={imageUrl}
               alt="Recipe book cover"
               className="absolute z-[-1]"
               width={0}

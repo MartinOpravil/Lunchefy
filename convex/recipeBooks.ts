@@ -82,7 +82,7 @@ export const getRecipeBooks = query({
 export const createRecipeBook = mutation({
   args: {
     name: v.string(),
-    imgUrl: v.optional(v.string()),
+    imageUrl: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const user = await getUserEntity(ctx, args);
@@ -90,7 +90,7 @@ export const createRecipeBook = mutation({
 
     const newRecipeBookId = await ctx.db.insert("recipeBooks", {
       name: args.name,
-      imgUrl: args.imgUrl,
+      imageUrl: args.imageUrl,
     });
     if (!newRecipeBookId) throw new ConvexError("Recipe book was not created");
 
@@ -117,14 +117,19 @@ export const deleteRecipeBook = mutation({
     const recipeBook = await ctx.db.get(args.id);
     if (!recipeBook) throw new ConvexError("Recipe book not found");
 
+    // TODO: Delete relationship
+
     return await ctx.db.delete(args.id);
   },
 });
+
+// TODO: Implement soft delete for users that have shared recipe book and want to remove it from list -> remove record from userRecipeBookRelationship
 
 export const updateRecipeBook = mutation({
   args: {
     id: v.id("recipeBooks"),
     name: v.string(),
+    imageUrl: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const user = await getUserEntity(ctx, args);
@@ -133,8 +138,15 @@ export const updateRecipeBook = mutation({
     const recipeBook = await ctx.db.get(args.id);
     if (!recipeBook) throw new ConvexError("Recipe book not found");
 
+    const recipeBookImageUrl = recipeBook.imageUrl;
+    if (recipeBookImageUrl !== args.imageUrl) {
+      // const imageStorageId = await ctx.storage.store.
+      // ctx.storage.delete
+    }
+
     return await ctx.db.patch(args.id, {
       name: args.name,
+      imageUrl: args.imageUrl,
     });
   },
 });

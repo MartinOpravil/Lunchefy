@@ -1,4 +1,5 @@
 import { GenericId } from "convex/values";
+import { Dispatch, SetStateAction } from "react";
 
 export interface ClassListProp {
   classList?: string;
@@ -29,10 +30,18 @@ export interface IconImageProps {
   height?: number;
 }
 
+export interface ImageInputProps {
+  imageUrl: string;
+  setImageUrl: Dispatch<SetStateAction<string>>;
+  label?: string;
+  title?: string;
+  description?: string;
+}
+
 export interface RecipeBookProps {
   id: GenericId<"recipeBooks">;
   title: string;
-  imgUrl?: string;
+  imageUrl?: string;
 }
 
 export interface AlertDialogProps {

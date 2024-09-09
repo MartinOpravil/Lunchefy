@@ -18,6 +18,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import ActionButton from "@/components/global/ActionButton";
 import { useRouter } from "next/navigation";
+import ImageInput from "@/components/global/ImageInput";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -33,6 +34,7 @@ const RecipeBookDetailForm = (props: {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const updateRecipeBook = useMutation(api.recipeBooks.updateRecipeBook);
+  const [imageUrl, setImageUrl] = useState(recipeBookResult?.imageUrl ?? "");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -90,6 +92,8 @@ const RecipeBookDetailForm = (props: {
             )}
           />
         </div>
+
+        <ImageInput imageUrl={imageUrl} setImageUrl={setImageUrl} />
 
         <div className="flex flex-col items-center">
           <ActionButton

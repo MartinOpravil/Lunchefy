@@ -9,7 +9,10 @@ const IconImage = ({ name, width = 15, height = 15 }: IconImageProps) => {
       alt={name}
       width={width}
       height={height}
-      className={`w-[${width}px] h-[${height}px]`}
+      style={{
+        width: `${width}px`,
+        height: `${height}px`,
+      }}
     />
   );
 };
