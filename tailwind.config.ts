@@ -26,7 +26,9 @@ const config = {
       colors: {
         primary: "var(--primary)",
         secondary: "var(--secondary)",
+        secondaryTransparent: "var(--secondary-transparent)",
         accent: "var(--accent)",
+        accentTransparent: "var(--accent-transparent)",
         background: "var(--background)",
         white: {
           1: "#FFFFFF",

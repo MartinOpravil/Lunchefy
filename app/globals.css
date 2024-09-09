@@ -22,7 +22,9 @@ html {
 :root {
   --primary: #f2726e;
   --secondary: #a4b476;
+  --secondary-transparent: #a5b476d7;
   --accent: #235789;
+  --accent-transparent: #235889d7;
   --background: #fdf8ed;
   --text: #57463e;
 }

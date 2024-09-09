@@ -32,6 +32,7 @@ export interface IconImageProps {
 export interface RecipeBookProps {
   id: GenericId<"recipeBooks">;
   title: string;
+  imgUrl?: string;
 }
 
 export interface AlertDialogProps {

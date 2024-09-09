@@ -16,8 +16,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import ActionDialog from "../global/ActionDialog";
 import LinkButton from "../global/LinkButton";
+import Image from "next/image";
+import { cn } from "@/lib/utils";
 
-const RecipeBook = ({ id, title }: RecipeBookProps) => {
+const RecipeBook = ({ id, title, imgUrl }: RecipeBookProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const deleteRecipeBook = useMutation(api.recipeBooks.deleteRecipeBook);
@@ -44,11 +46,34 @@ const RecipeBook = ({ id, title }: RecipeBookProps) => {
 
   return (
     <>
-      <Card className="relative hover:bg-secondary cursor-pointer transition-all bg-accent text-white-1 text-center">
+      <Card
+        className={cn(
+          "relative hover:bg-secondary cursor-pointer transition-all bg-accent text-white-1 text-center overflow-hidden",
+          {
+            "bg-accentTransparent": imgUrl,
+            "hover:bg-secondaryTransparent": imgUrl,
+          }
+        )}
+      >
         <Link
           href={`/app/${id}`}
           className="min-h-[300px] flex flex-col justify-center items-center"
         >
+          {imgUrl && (
+            <Image
+              src={imgUrl}
+              alt="Recipe book cover"
+              className="absolute z-[-1]"
+              width={0}
+              height={0}
+              sizes="100vw"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+              }} // optional
+            />
+          )}
           <CardHeader>
             <CardTitle>{title}</CardTitle>
             <CardDescription></CardDescription>

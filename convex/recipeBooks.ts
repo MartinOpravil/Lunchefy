@@ -82,6 +82,7 @@ export const getRecipeBooks = query({
 export const createRecipeBook = mutation({
   args: {
     name: v.string(),
+    imgUrl: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const user = await getUserEntity(ctx, args);
@@ -89,6 +90,7 @@ export const createRecipeBook = mutation({
 
     const newRecipeBookId = await ctx.db.insert("recipeBooks", {
       name: args.name,
+      imgUrl: args.imgUrl,
     });
     if (!newRecipeBookId) throw new ConvexError("Recipe book was not created");
 
