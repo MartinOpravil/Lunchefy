@@ -19,6 +19,9 @@ import { AccessManagerProps } from "@/types";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import LoaderSpiner from "@/components/global/LoaderSpinner";
+import PrivilageBadge from "@/components/users/PrivilageBadge";
+import BasicDialog from "@/components/global/BasicDialog";
+import UserWithAccess from "./UserWithAccess";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -67,55 +70,37 @@ const AccessManager = ({
   }
 
   return (
-    <div className="access-manager w-full py-6">
-      <div className="flex gap-2">
-        <Image
-          src="/icons/viewer_primary.svg"
-          alt="access"
-          width={20}
-          height={20}
-        />
-        <h3 className="text-primary">Access</h3>
-      </div>
-      <div className="heading-underline mb-4" />
-      <div className="access-manager-list pb-6 w-full">
-        {recipebookSharedUsers ? (
-          recipebookSharedUsers.map((user, index) => (
-            <div
-              key={index}
-              className="w-full flex justify-between items-center gap-2 p-2 flex-wrap"
-            >
-              <div>{user.name}</div>
-              <div>{user.privilage}</div>
-              <div className="actions flex gap-2 w-full sm:w-fit justify-between">
-                <ActionButton
-                  icon="delete"
-                  isLoading={isSubmitting}
-                  onClick={() => {}}
-                  classList="!bg-primary hover:!bg-accent"
-                />
-                <ActionButton
-                  icon="save"
-                  isLoading={isSubmitting}
-                  onClick={() => {}}
-                />
-              </div>
-            </div>
-          ))
-        ) : (
-          <LoaderSpiner />
-        )}
-      </div>
+    <div className="access-manager w-full transition-all">
       {!isFormOpen && (
-        <div className="flex flex-col items-center">
-          <ActionButton
-            title="Share"
-            icon="share"
-            isLoading={isSubmitting}
-            classList="min-w-32"
-            onClick={() => setIsFormOpen(true)}
-          />
-        </div>
+        <>
+          <div className="flex flex-col">
+            <ActionButton
+              title="Share with user"
+              icon="share"
+              isLoading={isSubmitting}
+              classList="min-w-32"
+              onClick={() => setIsFormOpen(true)}
+            />
+          </div>
+          <div className="access-manager-list pt-6 w-full">
+            {recipebookSharedUsers ? (
+              <>
+                <h3 className="text-16 text-accent">Users with access:</h3>
+                {recipebookSharedUsers.map((user, index) => (
+                  <UserWithAccess
+                    key={index}
+                    name={user.name}
+                    email={user.email}
+                    privilage={user.privilage}
+                    relationShipId={user.relationshipId}
+                  />
+                ))}
+              </>
+            ) : (
+              <LoaderSpiner />
+            )}
+          </div>
+        </>
       )}
 
       {isFormOpen && (

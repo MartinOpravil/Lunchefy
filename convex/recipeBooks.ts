@@ -51,7 +51,10 @@ export const getRecipeBookById = query({
 
     if (!recipeBook) throw new ConvexError("Recipe book not found");
 
-    return { ...recipeBook, privilage: userRecipeBookRelationship.privilage };
+    return {
+      ...recipeBook,
+      privilage: userRecipeBookRelationship.privilage as Privilage,
+    };
   },
 });
 
@@ -81,7 +84,7 @@ export const getRecipeBooks = query({
       )?.privilage as string;
       return {
         ...recipeBook,
-        privilage: privilage,
+        privilage: privilage as Privilage,
       };
     });
 
@@ -233,6 +236,27 @@ export const addAccessToRecipeBook = mutation({
     return !!insertResult;
   },
 });
+export const changeAccessToRecipeBook = mutation({
+  args: {
+    relationShipId: v.id("userRecipeBookRelationship"),
+    privilage: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const userEntity = await getUserEntity(ctx, args);
+    if (!userEntity) return false;
+
+    const relationship = await ctx.db.get(args.relationShipId);
+
+    if (!relationship) {
+      console.log("User does not have access recipe book", args.relationShipId);
+      return;
+    }
+
+    await ctx.db.patch(relationship._id, {
+      privilage: args.privilage,
+    });
+  },
+});
 
 export const getRecipebookSharedUsers = query({
   args: {
@@ -258,11 +282,14 @@ export const getRecipebookSharedUsers = query({
       .collect();
 
     const userListResponse = userList.map((user) => {
+      const relationship = userRecipeBookRelationshipList.find(
+        (relation) => relation.userId === user._id
+      );
       return {
+        relationshipId: relationship!._id,
         name: user.name,
-        privilage: userRecipeBookRelationshipList.find(
-          (relation) => relation.userId === user._id
-        )?.privilage as string,
+        email: user.email,
+        privilage: relationship?.privilage as Privilage,
       };
     });
 

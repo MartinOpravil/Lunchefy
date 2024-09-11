@@ -19,6 +19,7 @@ const ActionDialog = ({
   description,
   subject,
   action,
+  confirmButtonLabel = "Delete",
 }: AlertDialogProps) => {
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
@@ -39,7 +40,7 @@ const ActionDialog = ({
           <AlertDialogAction asChild>
             <ActionButton
               icon="delete"
-              title="Delete"
+              title={confirmButtonLabel}
               onClick={action}
               classList="!bg-primary hover:!bg-accent"
             />

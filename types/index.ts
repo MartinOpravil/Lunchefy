@@ -1,6 +1,7 @@
 import { Id } from "@/convex/_generated/dataModel";
+import { Privilage } from "@/enums";
 import { GenericId } from "convex/values";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, ReactNode, SetStateAction } from "react";
 
 export interface ImageStateProps {
   imageUrl: string;
@@ -55,6 +56,16 @@ export interface RecipeBookProps {
   privilage: string;
 }
 
+export interface BasicDialogProps {
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  title: string;
+  description?: string;
+  icon?: ReactNode;
+  content: ReactNode;
+  action?: ReactNode;
+}
+
 export interface AlertDialogProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -62,9 +73,21 @@ export interface AlertDialogProps {
   description?: string;
   subject?: string;
   action: () => void;
+  confirmButtonLabel?: string;
 }
 
 export interface AccessManagerProps {
   recipeBookName: string;
   recipeBookId: GenericId<"recipeBooks">;
+}
+
+export interface PrivilageBadgeProps {
+  privilage: Privilage;
+}
+
+export interface UserWithAccessProps {
+  name: string;
+  email: string;
+  privilage: Privilage;
+  relationShipId: GenericId<"userRecipeBookRelationship">;
 }

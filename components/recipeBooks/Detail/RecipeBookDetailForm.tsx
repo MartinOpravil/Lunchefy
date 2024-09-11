@@ -21,8 +21,7 @@ import { useRouter } from "next/navigation";
 import ImageInput from "@/components/global/ImageInput";
 import { ImageInputHandle } from "@/types";
 import Image from "next/image";
-import { Privilage } from "@/enums";
-import AccessManager from "./AccessManager";
+import PrivilageBadge from "@/components/users/PrivilageBadge";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -79,15 +78,9 @@ const RecipeBookDetailForm = (props: {
         className="flex w-full flex-col"
       >
         <div className="flex justify-end">
-          <div className="text-white-1 bg-primary w-fit rounded-lg px-3 py-1 select-none flex gap-2">
-            <Image
-              src="/icons/owner.svg"
-              alt="privilage"
-              width={15}
-              height={15}
-            />
-            {recipeBookResult?.privilage}
-          </div>
+          {recipeBookResult && (
+            <PrivilageBadge privilage={recipeBookResult.privilage} />
+          )}
         </div>
         <div className="flex flex-col gap-[30px] pb-6">
           <FormField
@@ -123,13 +116,6 @@ const RecipeBookDetailForm = (props: {
           />
         </div>
       </form>
-
-      {recipeBookResult?.privilage === Privilage.Owner && (
-        <AccessManager
-          recipeBookName={recipeBookResult.name}
-          recipeBookId={recipeBookResult._id}
-        />
-      )}
     </Form>
   );
 };
