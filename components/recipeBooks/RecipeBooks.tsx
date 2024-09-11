@@ -24,6 +24,7 @@ const RecipeBooks = (props: {
               id={recipeBook._id}
               title={recipeBook.name}
               imageUrl={recipeBook.image?.imageUrl}
+              privilage={recipeBook.privilage}
             />
           ))}
         </div>

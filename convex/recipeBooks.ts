@@ -4,6 +4,8 @@ import { Privilage } from "@/enums";
 import { GenericMutationCtx } from "convex/server";
 import { filter } from "convex-helpers/server/filter";
 
+// TODO: Make wrapper for responses to unify usage
+
 const getUserEntity = query({
   args: {},
   handler: async (ctx, args) => {
@@ -27,11 +29,9 @@ const getUserEntity = query({
 export const getRecipeBookById = query({
   args: { id: v.string() },
   handler: async (ctx, args) => {
-    // TODO: Check if need to getUserEntity
     const userEntity = await getUserEntity(ctx, args);
     if (!userEntity) return;
 
-    // TODO: Handle viewing of recipe book by permissions
     const userRecipeBookRelationship = await ctx.db
       .query("userRecipeBookRelationship")
       .filter((q) =>
@@ -51,7 +51,7 @@ export const getRecipeBookById = query({
 
     if (!recipeBook) throw new ConvexError("Recipe book not found");
 
-    return recipeBook;
+    return { ...recipeBook, privilage: userRecipeBookRelationship.privilage };
   },
 });
 
@@ -75,7 +75,17 @@ export const getRecipeBooks = query({
       .order("desc")
       .collect();
 
-    return recipeBookList ?? [];
+    const recipeBookListWithPrivilage = recipeBookList.map((recipeBook) => {
+      const privilage = userRecipeBookRelationshipList.find(
+        (relation) => relation.recipeBookId === recipeBook._id
+      )?.privilage as string;
+      return {
+        ...recipeBook,
+        privilage: privilage,
+      };
+    });
+
+    return recipeBookListWithPrivilage ?? [];
   },
 });
 
@@ -150,7 +160,6 @@ export const updateRecipeBook = mutation({
   args: {
     id: v.id("recipeBooks"),
     name: v.string(),
-    imageUrl: v.optional(v.string()),
     image: v.optional(
       v.object({
         imageUrl: v.string(),
@@ -168,7 +177,7 @@ export const updateRecipeBook = mutation({
     // Delete previous image if image changes
     const recipeBookImage = recipeBook.image;
     if (
-      recipeBookImage?.imageUrl !== args.imageUrl &&
+      recipeBookImage?.imageUrl !== args.image?.imageUrl &&
       recipeBookImage?.storageId
     ) {
       await ctx.storage.delete(recipeBookImage.storageId);
@@ -178,5 +187,85 @@ export const updateRecipeBook = mutation({
       name: args.name,
       image: args.image,
     });
+  },
+});
+
+export const addAccessToRecipeBook = mutation({
+  args: {
+    email: v.string(),
+    recipeBookId: v.id("recipeBooks"),
+  },
+  handler: async (ctx, args) => {
+    const userEntity = await getUserEntity(ctx, args);
+    if (!userEntity) return false;
+
+    const emailUserEntity = await ctx.db
+      .query("users")
+      .filter((q) => q.eq(q.field("email"), args.email))
+      .unique();
+
+    if (!emailUserEntity) {
+      console.log("Email is not registered yet");
+      return false;
+    }
+
+    const userRecipeBookRelationshipList = await ctx.db
+      .query("userRecipeBookRelationship")
+      .filter((q) =>
+        q.and(
+          q.eq(q.field("userId"), emailUserEntity._id),
+          q.eq(q.field("recipeBookId"), args.recipeBookId)
+        )
+      )
+      .collect();
+
+    if (userRecipeBookRelationshipList.length) {
+      console.log("User already has access to this recipe book");
+      return false;
+    }
+
+    const insertResult = await ctx.db.insert("userRecipeBookRelationship", {
+      userId: emailUserEntity._id,
+      recipeBookId: args.recipeBookId,
+      privilage: Privilage.Editor,
+    });
+
+    return !!insertResult;
+  },
+});
+
+export const getRecipebookSharedUsers = query({
+  args: {
+    recipeBookId: v.id("recipeBooks"),
+  },
+  handler: async (ctx, args) => {
+    const userEntity = await getUserEntity(ctx, args);
+    if (!userEntity) return false;
+
+    const userRecipeBookRelationshipList = await ctx.db
+      .query("userRecipeBookRelationship")
+      .filter((q) => q.eq(q.field("recipeBookId"), args.recipeBookId))
+      .collect();
+
+    const userIdList = userRecipeBookRelationshipList.map(
+      (relation) => relation.userId
+    );
+    const userList = await filter(ctx.db.query("users"), (user) =>
+      userIdList.includes(user._id)
+    )
+      .filter((q) => q.neq(q.field("_id"), userEntity._id))
+      .order("desc")
+      .collect();
+
+    const userListResponse = userList.map((user) => {
+      return {
+        name: user.name,
+        privilage: userRecipeBookRelationshipList.find(
+          (relation) => relation.userId === user._id
+        )?.privilage as string,
+      };
+    });
+
+    return userListResponse;
   },
 });

@@ -44,10 +44,15 @@ export interface ImageInputProps {
   description?: string;
 }
 
+export interface ImageInputHandle {
+  commit: () => Promise<ImageStateProps | undefined>;
+}
+
 export interface RecipeBookProps {
   id: GenericId<"recipeBooks">;
   title: string;
   imageUrl?: string;
+  privilage: string;
 }
 
 export interface AlertDialogProps {
@@ -57,4 +62,9 @@ export interface AlertDialogProps {
   description?: string;
   subject?: string;
   action: () => void;
+}
+
+export interface AccessManagerProps {
+  recipeBookName: string;
+  recipeBookId: GenericId<"recipeBooks">;
 }

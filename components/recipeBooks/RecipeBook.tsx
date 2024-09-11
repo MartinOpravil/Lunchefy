@@ -18,8 +18,9 @@ import ActionDialog from "../global/ActionDialog";
 import LinkButton from "../global/LinkButton";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { Privilage } from "@/enums";
 
-const RecipeBook = ({ id, title, imageUrl }: RecipeBookProps) => {
+const RecipeBook = ({ id, title, imageUrl, privilage }: RecipeBookProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const deleteRecipeBook = useMutation(api.recipeBooks.deleteRecipeBook);
@@ -94,12 +95,16 @@ const RecipeBook = ({ id, title, imageUrl }: RecipeBookProps) => {
           </CardFooter> */}
         </Link>
         <div className="absolute w-full bottom-4 flex justify-between px-4 pointer-events-none">
-          <ActionButton
-            icon="delete"
-            onClick={handleOpenDialog}
-            isLoading={isDeleting}
-            classList="!bg-transparent hover:!bg-primary pointer-events-auto"
-          />
+          {privilage === Privilage.Owner ? (
+            <ActionButton
+              icon="delete"
+              onClick={handleOpenDialog}
+              isLoading={isDeleting}
+              classList="!bg-transparent hover:!bg-primary pointer-events-auto"
+            />
+          ) : (
+            <div></div>
+          )}
           <LinkButton
             icon="edit"
             href={`/app/${id}/detail`}

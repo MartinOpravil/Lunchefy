@@ -1,7 +1,7 @@
 "use client";
 import { api } from "@/convex/_generated/api";
 import { Preloaded, useMutation, usePreloadedQuery } from "convex/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -19,6 +19,10 @@ import { useForm } from "react-hook-form";
 import ActionButton from "@/components/global/ActionButton";
 import { useRouter } from "next/navigation";
 import ImageInput from "@/components/global/ImageInput";
+import { ImageInputHandle } from "@/types";
+import Image from "next/image";
+import { Privilage } from "@/enums";
+import AccessManager from "./AccessManager";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -35,6 +39,7 @@ const RecipeBookDetailForm = (props: {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const updateRecipeBook = useMutation(api.recipeBooks.updateRecipeBook);
   const [image, setImage] = useState(recipeBookResult?.image);
+  const imageInputRef = useRef<ImageInputHandle>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -52,10 +57,11 @@ const RecipeBookDetailForm = (props: {
     setIsSubmitting(true);
 
     try {
+      const updatedImage = await imageInputRef.current?.commit();
       await updateRecipeBook({
         id: recipeBookResult?._id,
         name: values.name,
-        image: image,
+        image: updatedImage ?? image,
       });
       router.push("/app");
       router.refresh();
@@ -72,6 +78,17 @@ const RecipeBookDetailForm = (props: {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex w-full flex-col"
       >
+        <div className="flex justify-end">
+          <div className="text-white-1 bg-primary w-fit rounded-lg px-3 py-1 select-none flex gap-2">
+            <Image
+              src="/icons/owner.svg"
+              alt="privilage"
+              width={15}
+              height={15}
+            />
+            {recipeBookResult?.privilage}
+          </div>
+        </div>
         <div className="flex flex-col gap-[30px] pb-6">
           <FormField
             control={form.control}
@@ -94,7 +111,7 @@ const RecipeBookDetailForm = (props: {
           />
         </div>
 
-        <ImageInput image={image} setImage={setImage} />
+        <ImageInput image={image} setImage={setImage} ref={imageInputRef} />
 
         <div className="flex flex-col items-center">
           <ActionButton
@@ -106,6 +123,13 @@ const RecipeBookDetailForm = (props: {
           />
         </div>
       </form>
+
+      {recipeBookResult?.privilage === Privilage.Owner && (
+        <AccessManager
+          recipeBookName={recipeBookResult.name}
+          recipeBookId={recipeBookResult._id}
+        />
+      )}
     </Form>
   );
 };

@@ -1,22 +1,31 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, {
+  forwardRef,
+  Ref,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import { Input } from "../ui/input";
 import Image from "next/image";
 import { Loader } from "lucide-react";
-import { ImageInputProps } from "@/types";
+import { ImageInputHandle, ImageInputProps, ImageStateProps } from "@/types";
 import { FormLabel } from "../ui/form";
 import { Id } from "@/convex/_generated/dataModel";
 import { useUploadFiles } from "@xixixao/uploadstuff/react";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 
-const ImageInput = ({
-  image,
-  setImage,
-  label = "Image",
-  title = "Click to upload",
-  description = "SVG, PNG, JPG or GIF",
-}: ImageInputProps) => {
+const ImageInput = (
+  {
+    image,
+    setImage,
+    label = "Image",
+    title = "Click to upload",
+    description = "SVG, PNG, JPG or GIF",
+  }: ImageInputProps,
+  ref: Ref<ImageInputHandle>
+) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isImageLoading, setIsImageLoading] = useState(false);
   const [imageStorageId, setImageStorageId] = useState<Id<"_storage"> | null>(
@@ -29,63 +38,70 @@ const ImageInput = ({
   const [imageStorageIdBackup, setImageStorageIdBackup] = useState(
     image?.storageId
   );
+  const [imageBlob, setImageBlob] = useState<
+    { blob: Blob; fileName: string } | undefined
+  >(undefined);
 
-  const handleImage = async (
-    blob: Blob,
-    fileName: string,
-    previousImageStorageId?: Id<"_storage">
-  ) => {
+  const commit = async () => {
+    console.log("Committing...");
+    if (!image?.imageUrl.startsWith("blob") || !imageBlob) return;
+
     setIsImageLoading(true);
-
-    if (
-      previousImageStorageId &&
-      previousImageStorageId !== imageStorageIdBackup
-    ) {
-      await deleteFile({ storageId: previousImageStorageId });
-    }
-
-    setImage(undefined);
-
     try {
-      const file = new File([blob], fileName, { type: "image/png" });
+      const file = new File([imageBlob.blob], imageBlob.fileName, {
+        type: "image/png",
+      });
 
       const uploaded = await startUpload([file]);
       const storageId = (uploaded[0].response as any).storageId;
 
-      setImageStorageId(storageId);
-
       const imageUrl = await getImageUrl({ storageId });
+
       setImage({
         imageUrl: imageUrl ?? "",
         storageId: storageId,
       });
+
       setIsImageLoading(false);
-      // toast({
-      //   title: "Thumbnail generated",
-      // });
+      return {
+        imageUrl: imageUrl,
+        storageId: storageId,
+      } as ImageStateProps;
     } catch (error) {
       console.log(error);
-      // toast({
-      //   title: "Error generating thumbnail",
-      //   variant: "destructive",
-      // });
+      setIsImageLoading(false);
+      return;
     }
   };
 
-  const uploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  useImperativeHandle(ref, () => ({
+    commit: async () => {
+      return await commit();
+    },
+  }));
+
+  const changeImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
+    setIsImageLoading(true);
     try {
       const files = e.target.files;
       if (!files) return;
       const file = files[0];
       const blob = await file.arrayBuffer().then((ab) => new Blob([ab]));
-      handleImage(blob, file.name, image?.storageId);
+      setImageBlob({
+        blob: blob,
+        fileName: file.name,
+      });
+
+      const imageUrl = URL.createObjectURL(blob);
+      setImage({
+        imageUrl: imageUrl,
+        storageId: image?.storageId,
+      });
+      setIsImageLoading(false);
     } catch (error) {
       console.log(error);
-      // toast({
-      //   title: "Error uploading image",
-      //   variant: "destructive",
-      // });
+      setIsImageLoading(false);
     }
   };
 
@@ -102,7 +118,7 @@ const ImageInput = ({
           type="file"
           className="hidden"
           ref={inputRef}
-          onChange={(e) => uploadImage(e)}
+          onChange={(e) => changeImage(e)}
         />
 
         <div className="flex flex-col items-center gap-1">
@@ -124,7 +140,7 @@ const ImageInput = ({
             </div>
           )}
         </div>
-        {image && (
+        {image?.imageUrl && (
           <div className="flex-center w-full ">
             <Image
               src={image.imageUrl}
@@ -141,4 +157,4 @@ const ImageInput = ({
   );
 };
 
-export default ImageInput;
+export default forwardRef<ImageInputHandle, ImageInputProps>(ImageInput);
