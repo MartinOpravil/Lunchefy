@@ -257,6 +257,24 @@ export const changeAccessToRecipeBook = mutation({
     });
   },
 });
+export const revokeAccessToRecipeBook = mutation({
+  args: {
+    relationShipId: v.id("userRecipeBookRelationship"),
+  },
+  handler: async (ctx, args) => {
+    const userEntity = await getUserEntity(ctx, args);
+    if (!userEntity) return false;
+
+    const relationship = await ctx.db.get(args.relationShipId);
+
+    if (!relationship) {
+      console.log("User does not have access recipe book", args.relationShipId);
+      return;
+    }
+
+    await ctx.db.delete(args.relationShipId);
+  },
+});
 
 export const getRecipebookSharedUsers = query({
   args: {

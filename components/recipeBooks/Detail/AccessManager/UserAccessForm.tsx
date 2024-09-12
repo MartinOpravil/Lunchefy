@@ -28,7 +28,7 @@ import { api } from "@/convex/_generated/api";
 
 const formSchema = z.object({
   privilage: z.string({
-    message: "Please enter a valid email.",
+    message: "Please select a valid privilage.",
   }),
 });
 
@@ -37,10 +37,13 @@ const UserAccessForm = ({
   email,
   privilage,
   relationShipId,
+  actionClicked,
 }: UserWithAccessProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const changeAccess = useMutation(api.recipeBooks.changeAccessToRecipeBook);
+  const revokeAccess = useMutation(api.recipeBooks.revokeAccessToRecipeBook);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -61,11 +64,24 @@ const UserAccessForm = ({
         privilage: form.getValues("privilage"),
       });
       setIsSubmitting(false);
+      actionClicked();
     } catch (error) {
       console.log(error);
       setIsSubmitting(false);
     }
   }
+
+  const handleDeleteRecipeBook = async () => {
+    setIsDeleting(true);
+    try {
+      const result = await revokeAccess({ relationShipId });
+      setIsDeleting(false);
+      actionClicked();
+    } catch (error) {
+      console.error("Error deleting recipe book", error);
+      setIsDeleting(false);
+    }
+  };
 
   return (
     <>
@@ -93,9 +109,6 @@ const UserAccessForm = ({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent className="bg-background">
-                      <SelectItem value={Privilage.Owner}>
-                        {Privilage.Owner}
-                      </SelectItem>
                       <SelectItem value={Privilage.Editor}>
                         {Privilage.Editor}
                       </SelectItem>
@@ -112,7 +125,8 @@ const UserAccessForm = ({
           <div className="flex justify-between gap-2">
             <ActionButton
               icon="delete"
-              onClick={() => {
+              onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+                e.preventDefault();
                 setIsDeleteDialogOpen(true);
               }}
               classList="!bg-primary hover:!bg-accent"

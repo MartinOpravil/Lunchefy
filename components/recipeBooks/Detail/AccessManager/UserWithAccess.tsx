@@ -50,6 +50,7 @@ const UserWithAccess = ({
             email={email}
             privilage={privilage}
             relationShipId={relationShipId}
+            actionClicked={() => setIsUserUpdateOpen(false)}
           />
         }
       />
