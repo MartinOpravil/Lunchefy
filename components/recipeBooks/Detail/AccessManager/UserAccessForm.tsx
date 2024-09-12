@@ -19,9 +19,8 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Privilage } from "@/enums";
-import { UserWithAccessProps } from "@/types";
+import { UserAccessFormProps } from "@/types";
 import ActionButton from "@/components/global/ActionButton";
-import { Input } from "@/components/ui/input";
 import ActionDialog from "@/components/global/ActionDialog";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
@@ -38,7 +37,7 @@ const UserAccessForm = ({
   privilage,
   relationShipId,
   actionClicked,
-}: UserWithAccessProps) => {
+}: UserAccessFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -148,7 +147,7 @@ const UserAccessForm = ({
         subject={name}
         description="User will lose access for this recipe book."
         confirmButtonLabel="Revoke"
-        action={() => {}}
+        action={handleDeleteRecipeBook}
       />
     </>
   );

@@ -90,5 +90,12 @@ export interface UserWithAccessProps {
   email: string;
   privilage: Privilage;
   relationShipId: GenericId<"userRecipeBookRelationship">;
+}
+
+export interface UserAccessFormProps {
+  name: string;
+  email: string;
+  privilage: Privilage;
+  relationShipId: GenericId<"userRecipeBookRelationship">;
   actionClicked: () => void;
 }
