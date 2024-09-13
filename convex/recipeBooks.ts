@@ -1,8 +1,9 @@
 import { ConvexError, v } from "convex/values";
-import { internalMutation, mutation, query } from "./_generated/server";
-import { Privilage } from "@/enums";
-import { GenericMutationCtx } from "convex/server";
+import { mutation, query } from "./_generated/server";
+import { HttpResponseCode, Privilage } from "@/enums";
 import { filter } from "convex-helpers/server/filter";
+import HttpResponse, { OKHttpResponse } from "@/classes/HttpResponse";
+import { Doc } from "./_generated/dataModel";
 
 // TODO: Make wrapper for responses to unify usage
 
@@ -11,7 +12,10 @@ const getUserEntity = query({
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) {
-      throw new ConvexError("User not authenticated");
+      return new HttpResponse({
+        status: HttpResponseCode.Unauthorized,
+        errorMessage: "User not authenticated",
+      });
     }
     // Get User
     const user = await ctx.db
@@ -19,24 +23,30 @@ const getUserEntity = query({
       .filter((q) => q.eq(q.field("email"), identity.email))
       .unique();
     if (!user) {
-      throw new ConvexError("User is not present in database");
+      return new HttpResponse({
+        status: HttpResponseCode.NotFound,
+        errorMessage: "User is not present in database",
+      });
     }
 
-    return user;
+    return new OKHttpResponse(user);
   },
 });
 
 export const getRecipeBookById = query({
   args: { id: v.string() },
   handler: async (ctx, args) => {
-    const userEntity = await getUserEntity(ctx, args);
-    if (!userEntity) return;
+    const userEntityResponse = await getUserEntity(ctx, args);
+    if (!userEntityResponse) return userEntityResponse;
 
     const userRecipeBookRelationship = await ctx.db
       .query("userRecipeBookRelationship")
       .filter((q) =>
         q.and(
-          q.eq(q.field("userId"), userEntity._id),
+          q.eq(
+            q.field("userId"),
+            (userEntityResponse.data as Doc<"users">)._id
+          ),
           q.eq(q.field("recipeBookId"), args.id)
         )
       )
@@ -61,12 +71,14 @@ export const getRecipeBookById = query({
 export const getRecipeBooks = query({
   args: {},
   handler: async (ctx, args) => {
-    const userEntity = await getUserEntity(ctx, args);
-    if (!userEntity) return [];
+    const userEntityResponse = await getUserEntity(ctx, args);
+    if (!userEntityResponse) return [];
 
     const userRecipeBookRelationshipList = await ctx.db
       .query("userRecipeBookRelationship")
-      .filter((q) => q.eq(q.field("userId"), userEntity._id))
+      .filter((q) =>
+        q.eq(q.field("userId"), (userEntityResponse.data as Doc<"users">)._id)
+      )
       .collect();
     const recipeBookIdList = userRecipeBookRelationshipList.map(
       (relation) => relation.recipeBookId
