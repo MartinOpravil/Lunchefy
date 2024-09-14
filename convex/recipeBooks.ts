@@ -2,20 +2,49 @@ import { ConvexError, v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { HttpResponseCode, Privilage } from "@/enums";
 import { filter } from "convex-helpers/server/filter";
-import HttpResponse, { OKHttpResponse } from "@/classes/HttpResponse";
 import { Doc } from "./_generated/dataModel";
 
-// TODO: Make wrapper for responses to unify usage
+// Response types
+export interface ConvexResponse<T> {
+  data: T | null;
+  status: HttpResponseCode;
+  errorMessage: string | null;
+}
+
+// Utility functions ---------------------------------
+
+export function createResponse<T>(
+  data: T | null,
+  status: number,
+  errorMessage: string | null
+): ConvexResponse<T> {
+  return {
+    data,
+    status,
+    errorMessage,
+  };
+}
+export function createOKResponse<T>(data: T) {
+  return createResponse(data, HttpResponseCode.OK, null);
+}
+export function createBadResponse(
+  status: HttpResponseCode,
+  errorMessage: string | null
+) {
+  return createResponse(null, status, errorMessage);
+}
+
+// QUERIES -------------------------------------------
 
 const getUserEntity = query({
   args: {},
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) {
-      return new HttpResponse({
-        status: HttpResponseCode.Unauthorized,
-        errorMessage: "User not authenticated",
-      });
+      return createBadResponse(
+        HttpResponseCode.Unauthorized,
+        "User not authenticated"
+      );
     }
     // Get User
     const user = await ctx.db
@@ -23,13 +52,13 @@ const getUserEntity = query({
       .filter((q) => q.eq(q.field("email"), identity.email))
       .unique();
     if (!user) {
-      return new HttpResponse({
-        status: HttpResponseCode.NotFound,
-        errorMessage: "User is not present in database",
-      });
+      return createBadResponse(
+        HttpResponseCode.NotFound,
+        "User is not present in database"
+      );
     }
 
-    return new OKHttpResponse(user);
+    return createOKResponse(user);
   },
 });
 
@@ -37,34 +66,42 @@ export const getRecipeBookById = query({
   args: { id: v.string() },
   handler: async (ctx, args) => {
     const userEntityResponse = await getUserEntity(ctx, args);
-    if (!userEntityResponse) return userEntityResponse;
-
-    const userRecipeBookRelationship = await ctx.db
-      .query("userRecipeBookRelationship")
-      .filter((q) =>
-        q.and(
-          q.eq(
-            q.field("userId"),
-            (userEntityResponse.data as Doc<"users">)._id
-          ),
-          q.eq(q.field("recipeBookId"), args.id)
-        )
-      )
-      .unique();
-    if (!userRecipeBookRelationship)
-      throw new ConvexError("No permission to view recipe book");
+    if (!userEntityResponse.data)
+      return createBadResponse(
+        userEntityResponse.status,
+        userEntityResponse.errorMessage ?? ""
+      );
 
     const recipeBook = await ctx.db
       .query("recipeBooks")
       .filter((q) => q.eq(q.field("_id"), args.id))
       .unique();
 
-    if (!recipeBook) throw new ConvexError("Recipe book not found");
+    if (!recipeBook)
+      return createBadResponse(
+        HttpResponseCode.NotFound,
+        "Recipe book not found"
+      );
 
-    return {
+    const userRecipeBookRelationship = await ctx.db
+      .query("userRecipeBookRelationship")
+      .filter((q) =>
+        q.and(
+          q.eq(q.field("userId"), userEntityResponse.data!._id),
+          q.eq(q.field("recipeBookId"), args.id)
+        )
+      )
+      .unique();
+    if (!userRecipeBookRelationship)
+      return createBadResponse(
+        HttpResponseCode.Forbidden,
+        "No permission to view recipe book"
+      );
+
+    return createOKResponse({
       ...recipeBook,
       privilage: userRecipeBookRelationship.privilage as Privilage,
-    };
+    });
   },
 });
 
@@ -72,7 +109,11 @@ export const getRecipeBooks = query({
   args: {},
   handler: async (ctx, args) => {
     const userEntityResponse = await getUserEntity(ctx, args);
-    if (!userEntityResponse) return [];
+    if (!userEntityResponse.data)
+      return createBadResponse(
+        userEntityResponse.status,
+        userEntityResponse.errorMessage
+      );
 
     const userRecipeBookRelationshipList = await ctx.db
       .query("userRecipeBookRelationship")
@@ -100,9 +141,55 @@ export const getRecipeBooks = query({
       };
     });
 
-    return recipeBookListWithPrivilage ?? [];
+    //return recipeBookListWithPrivilage ?? [];
+    return createOKResponse(recipeBookListWithPrivilage ?? []);
   },
 });
+
+export const getRecipebookSharedUsers = query({
+  args: {
+    recipeBookId: v.id("recipeBooks"),
+  },
+  handler: async (ctx, args) => {
+    const userConvexResponse = await getUserEntity(ctx, args);
+    if (!userConvexResponse.data)
+      return createBadResponse(
+        userConvexResponse.status,
+        userConvexResponse.errorMessage
+      );
+
+    const userRecipeBookRelationshipList = await ctx.db
+      .query("userRecipeBookRelationship")
+      .filter((q) => q.eq(q.field("recipeBookId"), args.recipeBookId))
+      .collect();
+
+    const userIdList = userRecipeBookRelationshipList.map(
+      (relation) => relation.userId
+    );
+    const userList = await filter(ctx.db.query("users"), (user) =>
+      userIdList.includes(user._id)
+    )
+      .filter((q) => q.neq(q.field("_id"), userConvexResponse.data!._id))
+      .order("desc")
+      .collect();
+
+    const userListResponse = userList.map((user) => {
+      const relationship = userRecipeBookRelationshipList.find(
+        (relation) => relation.userId === user._id
+      );
+      return {
+        relationshipId: relationship!._id,
+        name: user.name,
+        email: user.email,
+        privilage: relationship?.privilage as Privilage,
+      };
+    });
+
+    return createOKResponse(userListResponse);
+  },
+});
+
+// Mutations -----------------------------------------
 
 export const createRecipeBook = mutation({
   args: {
@@ -116,8 +203,12 @@ export const createRecipeBook = mutation({
     ),
   },
   handler: async (ctx, args) => {
-    const user = await getUserEntity(ctx, args);
-    if (!user) return;
+    const userConvexResponse = await getUserEntity(ctx, args);
+    if (!userConvexResponse.data)
+      return createBadResponse(
+        userConvexResponse.status,
+        userConvexResponse.errorMessage
+      );
 
     const newRecipeBookId = await ctx.db.insert("recipeBooks", {
       name: args.name,
@@ -128,7 +219,7 @@ export const createRecipeBook = mutation({
     const userRecipeBookRelationship = await ctx.db.insert(
       "userRecipeBookRelationship",
       {
-        userId: user._id,
+        userId: userConvexResponse.data._id,
         recipeBookId: newRecipeBookId,
         privilage: Privilage.Owner,
       }
@@ -285,44 +376,5 @@ export const revokeAccessToRecipeBook = mutation({
     }
 
     await ctx.db.delete(args.relationShipId);
-  },
-});
-
-export const getRecipebookSharedUsers = query({
-  args: {
-    recipeBookId: v.id("recipeBooks"),
-  },
-  handler: async (ctx, args) => {
-    const userEntity = await getUserEntity(ctx, args);
-    if (!userEntity) return false;
-
-    const userRecipeBookRelationshipList = await ctx.db
-      .query("userRecipeBookRelationship")
-      .filter((q) => q.eq(q.field("recipeBookId"), args.recipeBookId))
-      .collect();
-
-    const userIdList = userRecipeBookRelationshipList.map(
-      (relation) => relation.userId
-    );
-    const userList = await filter(ctx.db.query("users"), (user) =>
-      userIdList.includes(user._id)
-    )
-      .filter((q) => q.neq(q.field("_id"), userEntity._id))
-      .order("desc")
-      .collect();
-
-    const userListResponse = userList.map((user) => {
-      const relationship = userRecipeBookRelationshipList.find(
-        (relation) => relation.userId === user._id
-      );
-      return {
-        relationshipId: relationship!._id,
-        name: user.name,
-        email: user.email,
-        privilage: relationship?.privilage as Privilage,
-      };
-    });
-
-    return userListResponse;
   },
 });

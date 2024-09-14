@@ -33,32 +33,33 @@ const RecipeBookDetailForm = (props: {
   recipeBookPreloaded: Preloaded<typeof api.recipeBooks.getRecipeBookById>;
 }) => {
   const recipeBookResult = usePreloadedQuery(props.recipeBookPreloaded);
+  const recipeBookResultData = recipeBookResult.data;
 
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const updateRecipeBook = useMutation(api.recipeBooks.updateRecipeBook);
-  const [image, setImage] = useState(recipeBookResult?.image);
+  const [image, setImage] = useState(recipeBookResultData?.image);
   const imageInputRef = useRef<ImageInputHandle>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: recipeBookResult?.name ?? "",
+      name: recipeBookResultData?.name ?? "",
     },
     values: {
-      name: recipeBookResult?.name ?? "",
+      name: recipeBookResultData?.name ?? "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    if (!recipeBookResult) return;
+    if (!recipeBookResultData) return;
 
     setIsSubmitting(true);
 
     try {
       const updatedImage = await imageInputRef.current?.commit();
       await updateRecipeBook({
-        id: recipeBookResult?._id,
+        id: recipeBookResultData?._id,
         name: values.name,
         image: updatedImage ?? image,
       });
@@ -71,6 +72,8 @@ const RecipeBookDetailForm = (props: {
     }
   }
 
+  if (!recipeBookResultData) return <></>;
+
   return (
     <Form {...form}>
       <form
@@ -78,8 +81,8 @@ const RecipeBookDetailForm = (props: {
         className="flex w-full flex-col"
       >
         <div className="flex justify-end">
-          {recipeBookResult && (
-            <PrivilageBadge privilage={recipeBookResult.privilage} />
+          {recipeBookResultData && (
+            <PrivilageBadge privilage={recipeBookResultData.privilage} />
           )}
         </div>
         <div className="flex flex-col gap-[30px] pb-6">

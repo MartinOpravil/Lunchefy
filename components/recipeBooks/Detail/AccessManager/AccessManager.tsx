@@ -53,6 +53,7 @@ const AccessManager = ({
     api.recipeBooks.getRecipebookSharedUsers,
     { recipeBookId }
   );
+  const recipebookSharedUsersData = recipebookSharedUsers?.data;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -93,13 +94,13 @@ const AccessManager = ({
               onClick={() => setIsFormOpen(true)}
             />
           </div>
-          {recipebookSharedUsers ? (
+          {recipebookSharedUsersData ? (
             <>
-              {!!recipebookSharedUsers.length && (
+              {!!recipebookSharedUsersData.length && (
                 <div className="access-manager-list pt-6 w-full">
                   <h3 className="text-16 text-accent">Users with access:</h3>
 
-                  {recipebookSharedUsers.map((user, index) => (
+                  {recipebookSharedUsersData.map((user, index) => (
                     <UserWithAccess
                       key={index}
                       name={user.name}

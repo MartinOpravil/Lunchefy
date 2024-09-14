@@ -25,6 +25,8 @@ const RecipeBook = ({ id, title, imageUrl, privilage }: RecipeBookProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const deleteRecipeBook = useMutation(api.recipeBooks.deleteRecipeBook);
 
+  // TODO: Move recipe book deletion logic to separate deleteRecipeBookButton
+
   const handleDeleteRecipeBook = async () => {
     setIsDeleting(true);
     try {

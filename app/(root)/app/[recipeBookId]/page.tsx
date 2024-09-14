@@ -1,5 +1,4 @@
-import LinkButton from "@/components/global/LinkButton";
-import PageHeader from "@/components/global/PageHeader";
+import ErrorHandler from "@/components/global/ErrorHandler";
 import RecipeBookDetailPageHeader from "@/components/recipeBooks/Detail/RecipeBookDetailPageHeader";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
@@ -25,19 +24,11 @@ const RecipeBookPage = async ({
     { token }
   );
   return (
-    <main className="flex flex-col py-6 h-[calc(100vh-72.4px)]">
+    <main className="page">
       <RecipeBookDetailPageHeader recipeBookPreloaded={recipeBookPreload} />
-      {/* <PageHeader
-        title={`${recipeBookId} Recipes`}
-        icon="recipe_book"
-        actionButton={
-          <>
-            <LinkButton title="Back" icon="back" href="/app" />
-            <LinkButton title="New" icon="add" href="/app/new-recipe-book" />
-          </>
-        }
-      /> */}
-      <main className="relative h-full flex flex-col items-center justify-start py-8"></main>
+      <main className="page-content">
+        <ErrorHandler preloadedData={recipeBookPreload} />
+      </main>
     </main>
   );
 };
