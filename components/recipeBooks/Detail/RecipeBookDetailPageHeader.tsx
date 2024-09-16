@@ -29,10 +29,17 @@ const RecipeBookDetailPageHeader = (props: {
   const handleDeleteRecipeBook = async () => {
     setIsDeleting(true);
     try {
-      if (recipeBookResult.data)
-        await deleteRecipeBook({ id: recipeBookResult.data._id });
-      setIsDeleting(false);
-      router.push("/app");
+      // TODO: Fix brief flash of 404 - try .then instead of async/await
+      // if (recipeBookResult.data)
+      //   await deleteRecipeBook({ id: recipeBookResult.data._id });
+      // setIsDeleting(false);
+      // router.push("/app");
+
+      if (!recipeBookResult.data) return setIsDeleting(false);
+      deleteRecipeBook({ id: recipeBookResult.data._id }).then((x) => {
+        setIsDeleting(false);
+        router.push("/app");
+      });
     } catch (error) {
       console.error("Error deleting recipe book", error);
       setIsDeleting(false);
