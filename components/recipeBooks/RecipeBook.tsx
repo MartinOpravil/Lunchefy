@@ -19,6 +19,7 @@ import LinkButton from "../global/LinkButton";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Privilage } from "@/enums";
+import { notifyError, notifySuccess } from "@/lib/notifications";
 
 const RecipeBook = ({ id, title, imageUrl, privilage }: RecipeBookProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
@@ -30,8 +31,11 @@ const RecipeBook = ({ id, title, imageUrl, privilage }: RecipeBookProps) => {
   const handleDeleteRecipeBook = async () => {
     setIsDeleting(true);
     try {
-      await deleteRecipeBook({ id });
+      const response = await deleteRecipeBook({ id });
       setIsDeleting(false);
+      if (!response.data)
+        return notifyError(response.status.toString(), response.errorMessage);
+      return notifySuccess("Successfully deleted recipe book");
     } catch (error) {
       console.error("Error deleting recipe book", error);
       setIsDeleting(false);

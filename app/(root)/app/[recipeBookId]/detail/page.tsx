@@ -21,6 +21,7 @@ const RecipeBookDetail = async ({
     api.recipeBooks.getRecipeBookById,
     {
       id: recipeBookId,
+      checkPrivilages: true,
     },
     { token }
   );

@@ -30,6 +30,7 @@ import PrivilageBadge from "@/components/users/PrivilageBadge";
 import BasicDialog from "@/components/global/BasicDialog";
 import UserWithAccess from "./UserWithAccess";
 import { Privilage } from "@/enums";
+import { notifyError, notifySuccess } from "@/lib/notifications";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -68,13 +69,20 @@ const AccessManager = ({
     try {
       const result = await addAccessToRecipeBook({
         email: values.email,
+        privilage: values.privilage,
         recipeBookId: recipeBookId,
       });
       setIsSubmitting(false);
-      if (!result) return;
+      if (!result.data)
+        return notifyError(result.status.toString(), result.errorMessage);
 
-      form.setValue("email", "");
       setIsFormOpen(false);
+      notifySuccess(
+        "Access granted to:",
+        `${values.email} (${values.privilage})`
+      );
+      form.setValue("email", "");
+      form.setValue("privilage", "");
     } catch (error) {
       console.log(error);
       setIsSubmitting(false);

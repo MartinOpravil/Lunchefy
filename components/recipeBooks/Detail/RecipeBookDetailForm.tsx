@@ -22,6 +22,7 @@ import ImageInput from "@/components/global/ImageInput";
 import { ImageInputHandle } from "@/types";
 import Image from "next/image";
 import PrivilageBadge from "@/components/users/PrivilageBadge";
+import { notifyError, notifySuccess } from "@/lib/notifications";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -58,14 +59,19 @@ const RecipeBookDetailForm = (props: {
 
     try {
       const updatedImage = await imageInputRef.current?.commit();
-      await updateRecipeBook({
+      const response = await updateRecipeBook({
         id: recipeBookResultData?._id,
         name: values.name,
         image: updatedImage ?? image,
       });
+      setIsSubmitting(false);
+
+      if (!response.data)
+        return notifyError(response.status.toString(), response.errorMessage);
+      notifySuccess("Successfully updated recipe book");
+
       router.push("/app");
       router.refresh();
-      setIsSubmitting(false);
     } catch (error) {
       console.log("Error updating recipe book", error);
       setIsSubmitting(false);

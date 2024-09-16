@@ -63,7 +63,7 @@ const getUserEntity = query({
 });
 
 export const getRecipeBookById = query({
-  args: { id: v.string() },
+  args: { id: v.string(), checkPrivilages: v.optional(v.boolean()) },
   handler: async (ctx, args) => {
     const userEntityResponse = await getUserEntity(ctx, args);
     if (!userEntityResponse.data)
@@ -97,6 +97,16 @@ export const getRecipeBookById = query({
         HttpResponseCode.Forbidden,
         "No permission to view recipe book"
       );
+
+    if (
+      args.checkPrivilages &&
+      userRecipeBookRelationship.privilage === Privilage.Viewer
+    ) {
+      return createBadResponse(
+        HttpResponseCode.Forbidden,
+        "You don't have access to edit this recipe book."
+      );
+    }
 
     return createOKResponse({
       ...recipeBook,
@@ -203,43 +213,60 @@ export const createRecipeBook = mutation({
     ),
   },
   handler: async (ctx, args) => {
-    const userConvexResponse = await getUserEntity(ctx, args);
-    if (!userConvexResponse.data)
-      return createBadResponse(
-        userConvexResponse.status,
-        userConvexResponse.errorMessage
-      );
+    const userResponse = await getUserEntity(ctx, args);
+    if (!userResponse.data)
+      return createBadResponse(userResponse.status, userResponse.errorMessage);
 
     const newRecipeBookId = await ctx.db.insert("recipeBooks", {
       name: args.name,
       image: args.image,
     });
-    if (!newRecipeBookId) throw new ConvexError("Recipe book was not created");
+    if (!newRecipeBookId) {
+      return createBadResponse(
+        HttpResponseCode.InternalServerError,
+        "Recipe book was not created - Not able to insert to insert database."
+      );
+    }
 
     const userRecipeBookRelationship = await ctx.db.insert(
       "userRecipeBookRelationship",
       {
-        userId: userConvexResponse.data._id,
+        userId: userResponse.data._id,
         recipeBookId: newRecipeBookId,
         privilage: Privilage.Owner,
       }
     );
-    if (!userRecipeBookRelationship)
-      throw new ConvexError("userRecipeBookRelationship was not created");
+    if (!userRecipeBookRelationship) {
+      return createBadResponse(
+        HttpResponseCode.InternalServerError,
+        "Recipe book user relation was not created - Relation was not able to be inserted to database."
+      );
+    }
 
-    return newRecipeBookId;
+    return createOKResponse({
+      recipeBookId: newRecipeBookId,
+    });
   },
 });
-
+// TODO: Implement soft delete for users that have shared recipe book and want to remove it from list -> remove record from userRecipeBookRelationship
 export const deleteRecipeBook = mutation({
   args: {
     id: v.id("recipeBooks"),
   },
   handler: async (ctx, args) => {
+    const userResponse = await getUserEntity(ctx, args);
+    if (!userResponse.data)
+      return createBadResponse(userResponse.status, userResponse.errorMessage);
+
     // TODO: Change behavior according to privilages
 
     const recipeBook = await ctx.db.get(args.id);
-    if (!recipeBook) throw new ConvexError("Recipe book not found");
+    if (!recipeBook) {
+      return createBadResponse(
+        HttpResponseCode.InternalServerError,
+        "Recipe book was not deleted."
+      );
+    }
 
     // Delete image from storage
     if (recipeBook.image && recipeBook.image.storageId)
@@ -256,11 +283,10 @@ export const deleteRecipeBook = mutation({
       })
     );
 
-    return await ctx.db.delete(args.id);
+    await ctx.db.delete(args.id);
+    return createOKResponse(true);
   },
 });
-
-// TODO: Implement soft delete for users that have shared recipe book and want to remove it from list -> remove record from userRecipeBookRelationship
 
 export const updateRecipeBook = mutation({
   args: {
@@ -274,11 +300,17 @@ export const updateRecipeBook = mutation({
     ),
   },
   handler: async (ctx, args) => {
-    const user = await getUserEntity(ctx, args);
-    if (!user) return;
+    const userResponse = await getUserEntity(ctx, args);
+    if (!userResponse.data)
+      return createBadResponse(userResponse.status, userResponse.errorMessage);
 
     const recipeBook = await ctx.db.get(args.id);
-    if (!recipeBook) throw new ConvexError("Recipe book not found");
+    if (!recipeBook) {
+      return createBadResponse(
+        HttpResponseCode.NotFound,
+        "Cannot update because Recipe book was not found"
+      );
+    }
 
     // Delete previous image if image changes
     const recipeBookImage = recipeBook.image;
@@ -289,21 +321,24 @@ export const updateRecipeBook = mutation({
       await ctx.storage.delete(recipeBookImage.storageId);
     }
 
-    return await ctx.db.patch(args.id, {
+    await ctx.db.patch(args.id, {
       name: args.name,
       image: args.image,
     });
+    return createOKResponse(true);
   },
 });
 
 export const addAccessToRecipeBook = mutation({
   args: {
     email: v.string(),
+    privilage: v.string(),
     recipeBookId: v.id("recipeBooks"),
   },
   handler: async (ctx, args) => {
-    const userEntity = await getUserEntity(ctx, args);
-    if (!userEntity) return false;
+    const userResponse = await getUserEntity(ctx, args);
+    if (!userResponse.data)
+      return createBadResponse(userResponse.status, userResponse.errorMessage);
 
     const emailUserEntity = await ctx.db
       .query("users")
@@ -311,8 +346,10 @@ export const addAccessToRecipeBook = mutation({
       .unique();
 
     if (!emailUserEntity) {
-      console.log("Email is not registered yet");
-      return false;
+      return createBadResponse(
+        HttpResponseCode.NotFound,
+        "Cannot add access to user that is not registered yet"
+      );
     }
 
     const userRecipeBookRelationshipList = await ctx.db
@@ -326,17 +363,26 @@ export const addAccessToRecipeBook = mutation({
       .collect();
 
     if (userRecipeBookRelationshipList.length) {
-      console.log("User already has access to this recipe book");
-      return false;
+      return createBadResponse(
+        HttpResponseCode.Conflict,
+        "User already has access to this recipe book"
+      );
     }
 
     const insertResult = await ctx.db.insert("userRecipeBookRelationship", {
       userId: emailUserEntity._id,
       recipeBookId: args.recipeBookId,
-      privilage: Privilage.Editor,
+      privilage: args.privilage,
     });
+    if (!insertResult)
+      return createBadResponse(
+        HttpResponseCode.InternalServerError,
+        "Error when trying to add access to database."
+      );
 
-    return !!insertResult;
+    return createOKResponse({
+      relationId: insertResult,
+    });
   },
 });
 export const changeAccessToRecipeBook = mutation({
@@ -345,19 +391,24 @@ export const changeAccessToRecipeBook = mutation({
     privilage: v.string(),
   },
   handler: async (ctx, args) => {
-    const userEntity = await getUserEntity(ctx, args);
-    if (!userEntity) return false;
+    const userResponse = await getUserEntity(ctx, args);
+    if (!userResponse.data)
+      return createBadResponse(userResponse.status, userResponse.errorMessage);
 
     const relationship = await ctx.db.get(args.relationShipId);
 
     if (!relationship) {
-      console.log("User does not have access recipe book", args.relationShipId);
-      return;
+      return createBadResponse(
+        HttpResponseCode.Forbidden,
+        "User does not have access to recipe book yet."
+      );
     }
 
     await ctx.db.patch(relationship._id, {
       privilage: args.privilage,
     });
+
+    return createOKResponse(true);
   },
 });
 export const revokeAccessToRecipeBook = mutation({
@@ -365,16 +416,21 @@ export const revokeAccessToRecipeBook = mutation({
     relationShipId: v.id("userRecipeBookRelationship"),
   },
   handler: async (ctx, args) => {
-    const userEntity = await getUserEntity(ctx, args);
-    if (!userEntity) return false;
+    const userResponse = await getUserEntity(ctx, args);
+    if (!userResponse.data)
+      return createBadResponse(userResponse.status, userResponse.errorMessage);
 
     const relationship = await ctx.db.get(args.relationShipId);
 
     if (!relationship) {
-      console.log("User does not have access recipe book", args.relationShipId);
-      return;
+      return createBadResponse(
+        HttpResponseCode.Forbidden,
+        "User does not have access to recipe book yet."
+      );
     }
 
     await ctx.db.delete(args.relationShipId);
+
+    return createOKResponse(true);
   },
 });

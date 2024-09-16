@@ -21,6 +21,7 @@ import { api } from "@/convex/_generated/api";
 import { useRouter } from "next/navigation";
 import ImageInput from "@/components/global/ImageInput";
 import { ImageStateProps } from "@/types";
+import { notifyError, notifySuccess } from "@/lib/notifications";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -47,12 +48,17 @@ const NewRecipeBookPage = () => {
     setIsSubmitting(true);
 
     try {
-      const newRecipeBookId = await createRecipeBook({
+      const response = await createRecipeBook({
         name: values.name,
         image: image,
       });
-      if (newRecipeBookId) router.push("/app");
       setIsSubmitting(false);
+      if (response.data) {
+        notifySuccess("Recipe book successfully created.");
+        router.push("/app");
+        return;
+      }
+      notifyError(response.status.toString(), response.errorMessage);
     } catch (error) {
       console.log("Error creating recipe book", error);
       setIsSubmitting(false);

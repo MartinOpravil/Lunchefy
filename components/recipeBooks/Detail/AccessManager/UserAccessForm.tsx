@@ -24,6 +24,7 @@ import ActionButton from "@/components/global/ActionButton";
 import ActionDialog from "@/components/global/ActionDialog";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { notifyError, notifySuccess } from "@/lib/notifications";
 
 const formSchema = z.object({
   privilage: z.string({
@@ -63,7 +64,11 @@ const UserAccessForm = ({
         privilage: form.getValues("privilage"),
       });
       setIsSubmitting(false);
+      if (!result.data)
+        return notifyError(result.status.toString(), result.errorMessage);
+      notifySuccess("Access privilage updated to:", values.privilage);
       actionClicked();
+      form.setValue("privilage", "");
     } catch (error) {
       console.log(error);
       setIsSubmitting(false);
@@ -75,6 +80,9 @@ const UserAccessForm = ({
     try {
       const result = await revokeAccess({ relationShipId });
       setIsDeleting(false);
+      if (!result.data)
+        return notifyError(result.status.toString(), result.errorMessage);
+      notifySuccess("Revoke access for:", `${name} - (${email})`);
       actionClicked();
     } catch (error) {
       console.error("Error deleting recipe book", error);
