@@ -3,7 +3,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import PageHeader from "@/components/global/PageHeader";
 import { Input } from "@/components/ui/input";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -27,6 +27,7 @@ const formSchema = z.object({
   name: z.string().min(2, {
     message: "Recipe book name must be at least 2 characters.",
   }),
+  description: z.optional(z.string()),
 });
 
 const NewRecipeBookPage = () => {
@@ -41,6 +42,7 @@ const NewRecipeBookPage = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
+      description: "",
     },
   });
 
@@ -50,6 +52,7 @@ const NewRecipeBookPage = () => {
     try {
       const response = await createRecipeBook({
         name: values.name,
+        description: values.description,
         image: image,
       });
       setIsSubmitting(false);
@@ -85,12 +88,31 @@ const NewRecipeBookPage = () => {
                 render={({ field }) => (
                   <FormItem className="flex flex-col gap-1">
                     <FormLabel className="text-16 font-bold text-accent">
-                      Name
+                      Name*
                     </FormLabel>
                     <FormControl>
                       <Input
                         className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
-                        placeholder="New recipe book name"
+                        placeholder="Recipe book name"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage className="text-primary" />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col gap-1">
+                    <FormLabel className="text-16 font-bold text-accent">
+                      Description
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
+                        placeholder="Optional recipe book description"
                         {...field}
                       />
                     </FormControl>
@@ -107,7 +129,8 @@ const NewRecipeBookPage = () => {
                 title="Save"
                 icon="save"
                 isLoading={isSubmitting}
-                classList="min-w-32"
+                classList="min-w-48"
+                isDisabled={!form.formState.isDirty}
                 onClick={form.handleSubmit(onSubmit)}
               />
             </div>

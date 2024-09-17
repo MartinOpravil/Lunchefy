@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Preloaded, useMutation, usePreloadedQuery } from "convex/react";
+import { Preloaded, usePreloadedQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import PageHeader from "@/components/global/PageHeader";
 import LinkButton from "@/components/global/LinkButton";
@@ -9,44 +9,14 @@ import BasicDialog from "@/components/global/BasicDialog";
 import AccessManager from "./AccessManager/AccessManager";
 import { Privilage } from "@/enums";
 import Image from "next/image";
-import ActionDialog from "@/components/global/ActionDialog";
-import { useRouter } from "next/navigation";
-import { notifyError, notifySuccess } from "@/lib/notifications";
+import DeleteRecipeBookButton from "../DeleteRecipeBookButton";
 
 const RecipeBookDetailPageHeader = (props: {
   recipeBookPreloaded: Preloaded<typeof api.recipeBooks.getRecipeBookById>;
 }) => {
-  const router = useRouter();
   const recipeBookResult = usePreloadedQuery(props.recipeBookPreloaded);
   const recipeBookResultData = recipeBookResult.data;
   const [isAccessManagerOpen, setIsAccessManagerOpen] = useState(false);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
-
-  const deleteRecipeBook = useMutation(api.recipeBooks.deleteRecipeBook);
-
-  // TODO: Move recipe book deletion logic to separate deleteRecipeBookButton
-
-  const handleDeleteRecipeBook = async () => {
-    setIsDeleting(true);
-    try {
-      // TODO: Fix brief flash of 404 - try .then instead of async/await
-      if (!recipeBookResult.data) {
-        return;
-      }
-      const response = await deleteRecipeBook({
-        id: recipeBookResult.data._id,
-      });
-      setIsDeleting(false);
-      if (!response.data)
-        return notifyError(response.status.toString(), response.errorMessage);
-      notifySuccess("Successfully deleted recipe book");
-      router.push("/app");
-    } catch (error) {
-      console.error("Error deleting recipe book", error);
-      setIsDeleting(false);
-    }
-  };
 
   if (!recipeBookResultData) return <></>;
 
@@ -64,11 +34,11 @@ const RecipeBookDetailPageHeader = (props: {
                   icon="share"
                   onClick={() => setIsAccessManagerOpen(true)}
                 />
-                <ActionButton
-                  icon="delete"
-                  onClick={() => setIsDeleteDialogOpen(true)}
-                  isLoading={isDeleting}
-                  classList="hover:!bg-primary pointer-events-auto"
+                <DeleteRecipeBookButton
+                  recipeBookId={recipeBookResultData._id}
+                  recipeBookTitle={recipeBookResultData.name}
+                  redirectAfterDelete
+                  classList="!bg-accent"
                 />
               </>
             )}
@@ -94,14 +64,6 @@ const RecipeBookDetailPageHeader = (props: {
             recipeBookId={recipeBookResultData._id}
           />
         }
-      />
-      <ActionDialog
-        isOpen={isDeleteDialogOpen}
-        setIsOpen={setIsDeleteDialogOpen}
-        title="Are you absolutely sure want to delete?"
-        description="This action cannot be undone and will permanently delete your recipe book from our servers."
-        subject={recipeBookResultData.name}
-        action={handleDeleteRecipeBook}
       />
     </>
   );

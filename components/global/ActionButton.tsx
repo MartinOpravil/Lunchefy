@@ -10,11 +10,16 @@ const ActionButton = ({
   title,
   icon,
   isLoading = false,
+  isDisabled = false,
   onClick,
   classList,
 }: ActionButtonProps) => {
   return (
-    <Button className={cn("action-button", classList)} onClick={onClick}>
+    <Button
+      className={cn("action-button", classList)}
+      onClick={onClick}
+      disabled={isDisabled}
+    >
       {isLoading ? (
         <LoaderSpiner />
       ) : (

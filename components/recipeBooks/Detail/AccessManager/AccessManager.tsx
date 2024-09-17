@@ -197,6 +197,7 @@ const AccessManager = ({
                   icon="share"
                   isLoading={isSubmitting}
                   classList="min-w-32"
+                  isDisabled={!form.formState.isDirty}
                   onClick={form.handleSubmit(onSubmit)}
                 />
               </div>

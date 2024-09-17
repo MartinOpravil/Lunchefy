@@ -21,6 +21,7 @@ export interface ActionButtonProps {
   icon?: string;
   classList?: string;
   isLoading?: boolean;
+  isDisabled?: boolean;
   onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
@@ -52,6 +53,7 @@ export interface ImageInputHandle {
 export interface RecipeBookProps {
   id: GenericId<"recipeBooks">;
   title: string;
+  description?: string;
   imageUrl?: string;
   privilage: string;
 }
@@ -98,4 +100,10 @@ export interface UserAccessFormProps {
   privilage: Privilage;
   relationShipId: GenericId<"userRecipeBookRelationship">;
   actionClicked: () => void;
+}
+
+export interface DeleteRecipeBookButtonProps extends ClassListProp {
+  recipeBookId: GenericId<"recipeBooks">;
+  recipeBookTitle: string;
+  redirectAfterDelete?: boolean;
 }

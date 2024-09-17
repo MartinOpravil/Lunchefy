@@ -28,6 +28,7 @@ const formSchema = z.object({
   name: z.string().min(2, {
     message: "Recipe book name must be at least 2 characters.",
   }),
+  description: z.optional(z.string()),
 });
 
 const RecipeBookDetailForm = (props: {
@@ -46,9 +47,11 @@ const RecipeBookDetailForm = (props: {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: recipeBookResultData?.name ?? "",
+      description: recipeBookResultData?.description ?? "",
     },
     values: {
       name: recipeBookResultData?.name ?? "",
+      description: recipeBookResultData?.description ?? "",
     },
   });
 
@@ -62,6 +65,7 @@ const RecipeBookDetailForm = (props: {
       const response = await updateRecipeBook({
         id: recipeBookResultData?._id,
         name: values.name,
+        description: values.description,
         image: updatedImage ?? image,
       });
       setIsSubmitting(false);
@@ -98,12 +102,31 @@ const RecipeBookDetailForm = (props: {
             render={({ field }) => (
               <FormItem className="flex flex-col gap-1">
                 <FormLabel className="text-16 font-bold text-accent">
-                  Name
+                  Name*
                 </FormLabel>
                 <FormControl>
                   <Input
                     className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
-                    placeholder="New recipe book name"
+                    placeholder="Recipe book name"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage className="text-primary" />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem className="flex flex-col gap-1">
+                <FormLabel className="text-16 font-bold text-accent">
+                  Description
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
+                    placeholder="Optional recipe book description"
                     {...field}
                   />
                 </FormControl>
@@ -120,6 +143,7 @@ const RecipeBookDetailForm = (props: {
             title="Save"
             icon="save"
             isLoading={isSubmitting}
+            isDisabled={!form.formState.isDirty}
             classList="min-w-32"
             onClick={form.handleSubmit(onSubmit)}
           />

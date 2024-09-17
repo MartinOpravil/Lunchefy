@@ -101,7 +101,7 @@ html {
     }
   }
   .heading-underline {
-    @apply h-0.5 w-full bg-primary mt-3 rounded-md;
+    @apply w-full bg-primary mt-3 rounded-md h-[2px];
   }
 
   .page {

@@ -2,13 +2,9 @@ import ErrorHandler from "@/components/global/ErrorHandler";
 import RecipeBookDetailPageHeader from "@/components/recipeBooks/Detail/RecipeBookDetailPageHeader";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
-import { auth } from "@clerk/nextjs/server";
+import { getAuthToken } from "@/lib/authentication";
 import { preloadQuery } from "convex/nextjs";
 import React from "react";
-
-export async function getAuthToken() {
-  return (await auth().getToken({ template: "convex" })) ?? undefined;
-}
 
 const RecipeBookPage = async ({
   params: { recipeBookId },

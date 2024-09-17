@@ -15,6 +15,7 @@ const ConvexClerkProvider = ({ children }: { children: ReactNode }) => (
     localization={csCZ}
     signInForceRedirectUrl="/app"
     signUpForceRedirectUrl="/app"
+    afterSignOutUrl="/sign-in?loggedOut=true"
     appearance={{
       layout: {},
       variables: {

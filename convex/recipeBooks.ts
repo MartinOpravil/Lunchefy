@@ -204,6 +204,7 @@ export const getRecipebookSharedUsers = query({
 export const createRecipeBook = mutation({
   args: {
     name: v.string(),
+    description: v.optional(v.string()),
     imageUrl: v.optional(v.string()),
     image: v.optional(
       v.object({
@@ -219,6 +220,7 @@ export const createRecipeBook = mutation({
 
     const newRecipeBookId = await ctx.db.insert("recipeBooks", {
       name: args.name,
+      description: args.description,
       image: args.image,
     });
     if (!newRecipeBookId) {
@@ -292,6 +294,7 @@ export const updateRecipeBook = mutation({
   args: {
     id: v.id("recipeBooks"),
     name: v.string(),
+    description: v.optional(v.string()),
     image: v.optional(
       v.object({
         imageUrl: v.string(),
@@ -323,6 +326,7 @@ export const updateRecipeBook = mutation({
 
     await ctx.db.patch(args.id, {
       name: args.name,
+      description: args.description,
       image: args.image,
     });
     return createOKResponse(true);
