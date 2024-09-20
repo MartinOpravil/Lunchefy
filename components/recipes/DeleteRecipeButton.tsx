@@ -4,27 +4,29 @@ import ActionDialog from "../global/ActionDialog";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { notifyError, notifySuccess } from "@/lib/notifications";
+import { ClassListProp } from "@/types";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { GenericId } from "convex/values";
-import { ClassListProp } from "@/types";
 
-export interface DeleteRecipeBookButtonProps extends ClassListProp {
+export interface DeleteRecipeButtonProps extends ClassListProp {
+  recipeId: GenericId<"recipes">;
   recipeBookId: GenericId<"recipeBooks">;
-  recipeBookTitle: string;
+  recipeTitle: string;
   redirectAfterDelete?: boolean;
 }
 
-const DeleteRecipeBookButton = ({
+const DeleteRecipeButton = ({
+  recipeId,
   recipeBookId,
-  recipeBookTitle,
+  recipeTitle,
   redirectAfterDelete = false,
   classList,
-}: DeleteRecipeBookButtonProps) => {
+}: DeleteRecipeButtonProps) => {
   const router = useRouter();
   const [isDeleting, setIsDeleting] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const deleteRecipeBook = useMutation(api.recipeBooks.deleteRecipeBook);
+  const deleteRecipe = useMutation(api.recipes.deleteRecipe);
 
   const handleOpenDialog = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -35,15 +37,15 @@ const DeleteRecipeBookButton = ({
     setIsDialogOpen(true);
   };
 
-  const handleDeleteRecipeBook = async () => {
+  const handleDeleteRecipe = async () => {
     setIsDeleting(true);
     try {
-      const response = await deleteRecipeBook({ id: recipeBookId });
+      const response = await deleteRecipe({ recipeId });
       setIsDeleting(false);
       if (!response.data)
         return notifyError(response.status.toString(), response.errorMessage);
       notifySuccess("Successfully deleted recipe book");
-      if (redirectAfterDelete) router.push("/app");
+      if (redirectAfterDelete) router.push(`/app/${recipeBookId}`);
     } catch (error) {
       console.error("Error deleting recipe book", error);
       setIsDeleting(false);
@@ -63,11 +65,11 @@ const DeleteRecipeBookButton = ({
         setIsOpen={setIsDialogOpen}
         title="Are you absolutely sure want to delete?"
         description="This action cannot be undone and will permanently delete your recipe book from our servers."
-        subject={recipeBookTitle}
-        action={handleDeleteRecipeBook}
+        subject={recipeTitle}
+        action={handleDeleteRecipe}
       />
     </>
   );
 };
 
-export default DeleteRecipeBookButton;
+export default DeleteRecipeButton;

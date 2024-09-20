@@ -25,11 +25,14 @@ const config = {
       },
       colors: {
         primary: "var(--primary)",
+        primaryTransparent: "var(--primary-transparent)",
         secondary: "var(--secondary)",
         secondaryTransparent: "var(--secondary-transparent)",
         accent: "var(--accent)",
         accentTransparent: "var(--accent-transparent)",
         background: "var(--background)",
+        backgroundTransparent: "var(--background-transparent)",
+        text: "var(--text)",
         white: {
           1: "#FFFFFF",
           2: "rgba(255, 255, 255, 0.72)",

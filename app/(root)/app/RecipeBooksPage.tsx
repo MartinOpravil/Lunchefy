@@ -26,6 +26,7 @@ const RecipeBooksPage = (props: {
               title="Back"
               icon="back"
               onClick={() => setIsNewFormOpen(false)}
+              classList="!bg-gray-700 hover:!bg-secondary"
             />
           }
         />
@@ -47,6 +48,7 @@ const RecipeBooksPage = (props: {
             title="New"
             icon="add"
             onClick={() => setIsNewFormOpen(true)}
+            classList="!bg-primary hover:!bg-primaryTransparent"
           />
         }
       />

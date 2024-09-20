@@ -51,7 +51,7 @@ const RecipeBook = ({
               }} // optional
             />
           )}
-          <CardHeader>
+          <CardHeader className="gap-2">
             <CardTitle>{title}</CardTitle>
             {description && <CardDescription>{description}</CardDescription>}
           </CardHeader>

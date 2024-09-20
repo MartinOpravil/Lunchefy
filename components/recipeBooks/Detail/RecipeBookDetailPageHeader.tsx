@@ -28,19 +28,25 @@ const RecipeBookDetailPageHeader = ({
         icon="recipe_book"
         actionButton={
           <>
-            <LinkButton title="Back" icon="back" href="/app" />
+            <LinkButton
+              icon="back"
+              href="/app"
+              classList="!bg-gray-700 hover:!bg-secondary"
+            />
+            <div className="bg-accent w-[1.5px] h-6 mx-2 rounded"></div>
             {recipeBook.data.privilage === Privilage.Owner && (
               <>
-                <ActionButton
-                  icon="share"
-                  onClick={() => setIsAccessManagerOpen(true)}
-                />
                 <DeleteRecipeBookButton
                   recipeBookId={recipeBook.data._id}
                   recipeBookTitle={recipeBook.data.name}
                   redirectAfterDelete
                   classList="!bg-accent"
                 />
+                <ActionButton
+                  icon="share"
+                  onClick={() => setIsAccessManagerOpen(true)}
+                />
+                <LinkButton icon="list" href={`/app/${recipeBook.data._id}`} />
               </>
             )}
           </>

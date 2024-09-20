@@ -11,22 +11,21 @@ import { getLoggedUser } from "./users";
 export const getRecipeBookById = query({
   args: { id: v.string(), checkPrivilages: v.optional(v.boolean()) },
   handler: async (ctx, args) => {
+    const recipeBook = await ctx.db
+      .query("recipeBooks")
+      .filter((q) => q.eq(q.field("_id"), args.id))
+      .unique();
+    if (!recipeBook)
+      return createBadResponse(
+        HttpResponseCode.NotFound,
+        "Recipe book not found"
+      );
+
     const userEntityResponse = await getLoggedUser(ctx, args);
     if (!userEntityResponse.data)
       return createBadResponse(
         userEntityResponse.status,
         userEntityResponse.errorMessage ?? ""
-      );
-
-    const recipeBook = await ctx.db
-      .query("recipeBooks")
-      .filter((q) => q.eq(q.field("_id"), args.id))
-      .unique();
-
-    if (!recipeBook)
-      return createBadResponse(
-        HttpResponseCode.NotFound,
-        "Recipe book not found"
       );
 
     const userRecipeBookRelationship = await ctx.db
@@ -151,7 +150,6 @@ export const createRecipeBook = mutation({
   args: {
     name: v.string(),
     description: v.optional(v.string()),
-    imageUrl: v.optional(v.string()),
     image: v.optional(
       v.object({
         imageUrl: v.string(),
@@ -172,7 +170,7 @@ export const createRecipeBook = mutation({
     if (!newRecipeBookId) {
       return createBadResponse(
         HttpResponseCode.InternalServerError,
-        "Recipe book was not created - Not able to insert to insert database."
+        "Recipe book was not created - Not able to insert into database."
       );
     }
 

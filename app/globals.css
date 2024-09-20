@@ -21,11 +21,13 @@ html {
 
 :root {
   --primary: #f2726e;
+  --primary-transparent: #f2726ed7;
   --secondary: #a4b476;
   --secondary-transparent: #a5b476d7;
   --accent: #235789;
   --accent-transparent: #235889d7;
   --background: #fdf8ed;
+  --background-transparent: #fdf8edd7;
   --text: #57463e;
 }
 

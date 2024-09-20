@@ -4,6 +4,7 @@ import { getAuthToken } from "@/lib/authentication";
 import { preloadQuery } from "convex/nextjs";
 import React from "react";
 import RecipeBookPage from "./RecipeBookPage";
+import ErrorHandlerPreloaded from "@/components/global/ErrorHandlerPreloaded";
 
 const RecipeBookServerPage = async ({
   params: { recipeBookId },
@@ -30,10 +31,13 @@ const RecipeBookServerPage = async ({
   ]);
 
   return (
-    <RecipeBookPage
-      recipeBookPreloaded={recipeBookPreload}
-      recipesPreloaded={recipesPreload}
-    />
+    <>
+      <ErrorHandlerPreloaded preloadedData={recipeBookPreload} />
+      <RecipeBookPage
+        recipeBookPreloaded={recipeBookPreload}
+        recipesPreloaded={recipesPreload}
+      />
+    </>
   );
 };
 

@@ -15,7 +15,7 @@ const RecipeBookDetailPage = (props: {
     <main className="page">
       <RecipeBookDetailPageHeader recipeBook={recipeBook} />
       <main className="page-content">
-        <ErrorHandler preloadedData={props.recipeBookPreloaded} />
+        <ErrorHandler convexResponse={recipeBook} />
         <RecipeBookDetailForm recipeBook={recipeBook} />
       </main>
     </main>

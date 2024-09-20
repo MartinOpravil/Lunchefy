@@ -12,9 +12,11 @@ import LinkButton from "../global/LinkButton";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Privilage } from "@/enums";
+import DeleteRecipeButton from "./DeleteRecipeButton";
 
 const Recipe = ({
   id,
+  recipeBookId,
   title,
   privilage,
   description,
@@ -32,7 +34,7 @@ const Recipe = ({
         )}
       >
         <Link
-          href={`/app/${id}`}
+          href={`/app/${recipeBookId}/${id}`}
           className="min-h-[300px] flex flex-col justify-center items-center"
         >
           {imageUrl && (
@@ -56,19 +58,20 @@ const Recipe = ({
           </CardHeader>
         </Link>
         <div className="absolute w-full bottom-4 flex justify-between px-4 pointer-events-none">
-          {/* {privilage === Privilage.Owner ? (
-            <DeleteRecipeBookButton
-              recipeBookId={id}
-              recipeBookTitle={title}
+          {privilage === Privilage.Owner ? (
+            <DeleteRecipeButton
+              recipeId={id}
+              recipeBookId={recipeBookId}
+              recipeTitle={title}
               classList="!bg-transparent"
             />
           ) : (
             <div></div>
-          )} */}
+          )}
           {privilage !== Privilage.Viewer ? (
             <LinkButton
               icon="edit"
-              href={`/app/${id}/detail`}
+              href={`/app/${recipeBookId}/${id}/detail`}
               classList="!bg-transparent hover:!bg-accent pointer-events-auto"
             />
           ) : (

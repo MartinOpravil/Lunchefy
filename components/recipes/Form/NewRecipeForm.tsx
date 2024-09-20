@@ -1,9 +1,13 @@
 "use client";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { Input } from "@/components/ui/input";
-import React, { useRef, useState } from "react";
+import { api } from "@/convex/_generated/api";
+import { Id } from "@/convex/_generated/dataModel";
+import { notifyError, notifySuccess } from "@/lib/notifications";
+import { ImageInputHandle, ImageStateProps } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "convex/react";
+import React, { useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import {
   Form,
   FormControl,
@@ -12,29 +16,32 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import ActionButton from "@/components/global/ActionButton";
-import { useMutation } from "convex/react";
-import { api } from "@/convex/_generated/api";
-import ImageInput from "@/components/global/ImageInput";
-import { ImageInputHandle, ImageStateProps } from "@/types";
-import { notifyError, notifySuccess } from "@/lib/notifications";
+import { Input } from "../../ui/input";
+import ImageInput from "../../global/ImageInput";
+import ActionButton from "../../global/ActionButton";
 
 const formSchema = z.object({
   name: z.string().min(2, {
-    message: "Recipe book name must be at least 2 characters.",
+    message: "Recipe name must be at least 2 characters.",
   }),
   description: z.optional(z.string()),
+  recipe: z.string().min(2, {
+    message: "Recipe must be at least 2 characters.",
+  }),
 });
 
 interface NewRecipeBookForm {
+  recipeBookId: Id<"recipeBooks">;
   afterSaveAction: () => void;
 }
 
-const NewRecipeBookForm = ({ afterSaveAction }: NewRecipeBookForm) => {
+const NewRecipeForm = ({
+  recipeBookId,
+  afterSaveAction,
+}: NewRecipeBookForm) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const createRecipeBook = useMutation(api.recipeBooks.createRecipeBook);
+  const createRecipe = useMutation(api.recipes.createRecipe);
   const imageInputRef = useRef<ImageInputHandle>(null);
-
   const [image, setImage] = useState<ImageStateProps | undefined>(undefined);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -42,6 +49,7 @@ const NewRecipeBookForm = ({ afterSaveAction }: NewRecipeBookForm) => {
     defaultValues: {
       name: "",
       description: "",
+      recipe: "",
     },
   });
 
@@ -50,9 +58,11 @@ const NewRecipeBookForm = ({ afterSaveAction }: NewRecipeBookForm) => {
 
     try {
       const updatedImage = await imageInputRef.current?.commit();
-      const response = await createRecipeBook({
+      const response = await createRecipe({
+        recipeBookId,
         name: values.name,
         description: values.description,
+        recipe: values.recipe,
         image: updatedImage ?? image,
       });
       setIsSubmitting(false);
@@ -86,7 +96,7 @@ const NewRecipeBookForm = ({ afterSaveAction }: NewRecipeBookForm) => {
                 <FormControl>
                   <Input
                     className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
-                    placeholder="Recipe book name"
+                    placeholder="Recipe name"
                     {...field}
                   />
                 </FormControl>
@@ -105,7 +115,27 @@ const NewRecipeBookForm = ({ afterSaveAction }: NewRecipeBookForm) => {
                 <FormControl>
                   <Input
                     className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
-                    placeholder="Optional recipe book description"
+                    placeholder="Optional recipe description"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage className="text-primary" />
+              </FormItem>
+            )}
+          />
+          <ImageInput image={image} setImage={setImage} ref={imageInputRef} />
+          <FormField
+            control={form.control}
+            name="recipe"
+            render={({ field }) => (
+              <FormItem className="flex flex-col gap-1">
+                <FormLabel className="text-16 font-bold text-accent">
+                  Recipe
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
+                    placeholder="Recipe"
                     {...field}
                   />
                 </FormControl>
@@ -114,8 +144,6 @@ const NewRecipeBookForm = ({ afterSaveAction }: NewRecipeBookForm) => {
             )}
           />
         </div>
-
-        <ImageInput image={image} setImage={setImage} ref={imageInputRef} />
 
         <div className="flex flex-col items-center">
           <ActionButton
@@ -132,4 +160,4 @@ const NewRecipeBookForm = ({ afterSaveAction }: NewRecipeBookForm) => {
   );
 };
 
-export default NewRecipeBookForm;
+export default NewRecipeForm;

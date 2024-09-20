@@ -16,12 +16,12 @@ const RecipeBooks = (props: {
         <>
           {props.recipes.data.privilage === Privilage.Viewer ? (
             <NoContent
-              title="This recipe book does not have any recipes yet"
+              title="This book has no recipes yet"
               subTitle="Contact a responsible person to add some"
             />
           ) : (
             <NoContent
-              title="You have no recipe yet"
+              title="This book has no recipes yet"
               subTitle="Start by creating one"
             />
           )}
@@ -32,6 +32,7 @@ const RecipeBooks = (props: {
             <Recipe
               key={recipeBook._id}
               id={recipeBook._id}
+              recipeBookId={recipeBook.recipeBookId}
               title={recipeBook.name}
               description={recipeBook.description}
               imageUrl={recipeBook.image?.imageUrl}

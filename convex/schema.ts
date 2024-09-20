@@ -44,8 +44,8 @@ export default defineSchema({
         storageId: v.optional(v.id("_storage")),
       })
     ),
-    tags: v.array(v.id("tags")),
-    ingredients: v.string(),
+    tags: v.optional(v.array(v.id("tags"))),
+    ingredients: v.optional(v.string()),
     recipe: v.string(),
     recipePhoto: v.optional(
       v.object({

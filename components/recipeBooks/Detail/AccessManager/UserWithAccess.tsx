@@ -22,7 +22,7 @@ const UserWithAccess = ({
           <div className="text-12">{email}</div>
         </div>
         <PrivilageBadge privilage={privilage} />
-        <div className="actions flex gap-2 w-full sm:w-fit justify-between">
+        <div className="actions flex gap-2 w-full sm:w-fit justify-end">
           <ActionButton
             icon="edit"
             onClick={() => {

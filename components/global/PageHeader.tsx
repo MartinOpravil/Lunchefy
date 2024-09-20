@@ -15,8 +15,8 @@ const PageHeader = ({
 }) => {
   return (
     <nav className="relative">
-      <div className="flex items-center justify-between">
-        <h2 className="text-primary flex flex-col md:flex-row gap-3 ">
+      <div className="flex items-end flex-wrap gap-2 gap-y-6 justify-between">
+        <h2 className="text-primary flex items-start gap-3">
           <Image
             src={`/icons/${icon}.svg`}
             alt="recipe_book"
@@ -26,7 +26,9 @@ const PageHeader = ({
           />
           {title}
         </h2>
-        <div className="flex items-center gap-2">{actionButton}</div>
+        <div className="flex flex-grow items-center justify-end gap-2 flex-wrap">
+          {actionButton}
+        </div>
       </div>
 
       <div className="heading-underline" />

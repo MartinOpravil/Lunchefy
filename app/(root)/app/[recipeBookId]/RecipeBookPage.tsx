@@ -3,6 +3,7 @@ import ActionButton from "@/components/global/ActionButton";
 import ErrorHandler from "@/components/global/ErrorHandler";
 import LinkButton from "@/components/global/LinkButton";
 import PageHeader from "@/components/global/PageHeader";
+import NewRecipeForm from "@/components/recipes/Form/NewRecipeForm";
 import Recipes from "@/components/recipes/Recipes";
 import { api } from "@/convex/_generated/api";
 import { Privilage } from "@/enums";
@@ -36,7 +37,12 @@ const RecipeBookPage = (props: {
             />
           }
         />
-        <main className="page-content">{recipeBook.data.name}</main>
+        <main className="page-content">
+          <NewRecipeForm
+            recipeBookId={recipeBook.data._id}
+            afterSaveAction={() => setIsNewFormOpen(false)}
+          />
+        </main>
       </main>
     );
   }
@@ -48,13 +54,23 @@ const RecipeBookPage = (props: {
         icon="recipe_book"
         actionButton={
           <>
-            <LinkButton title="Back" icon="back" href="/app" />
+            <LinkButton
+              icon="back"
+              href="/app"
+              classList="!bg-gray-700 hover:!bg-secondary"
+            />
+            <div className="bg-accent w-[1.5px] h-6 mx-2 rounded"></div>
+            <LinkButton
+              icon="edit"
+              href={`/app/${recipeBook.data._id}/detail`}
+            />
             {recipeBook.data.privilage !== Privilage.Viewer && (
               <>
                 <ActionButton
                   title="New"
                   icon="add"
                   onClick={() => setIsNewFormOpen(true)}
+                  classList="!bg-primary hover:!bg-secondary"
                 />
               </>
             )}
@@ -62,7 +78,7 @@ const RecipeBookPage = (props: {
         }
       />
       <main className="page-content">
-        <ErrorHandler preloadedData={props.recipeBookPreloaded} />
+        <ErrorHandler convexResponse={recipeBook} />
         <Recipes recipes={recipes} />
       </main>
     </main>

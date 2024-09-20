@@ -7,16 +7,20 @@ import Image from "next/image";
 import LinkButton from "./LinkButton";
 import { ConvexResponse } from "@/lib/communication";
 
-interface ErrorHandlerProps {
-  convexResponse: ConvexResponse<any>; // Preloaded query data type
+interface ErrorHandlerPreloadedProps {
+  preloadedData: Preloaded<FunctionReference<"query">>; // Preloaded query data type
 }
 
-const ErrorHandlerNew = ({ convexResponse }: ErrorHandlerProps) => {
+const ErrorHandlerPreloaded = ({
+  preloadedData,
+}: ErrorHandlerPreloadedProps) => {
+  const response = usePreloadedQuery(preloadedData) as ConvexResponse<null>;
+
   const { title, image } = useMemo(() => {
     let title,
       image = "";
 
-    switch (convexResponse.status) {
+    switch (response.status) {
       case HttpResponseCode.NotFound:
         title = "Content does not exists.";
         image = "no_content";
@@ -33,9 +37,9 @@ const ErrorHandlerNew = ({ convexResponse }: ErrorHandlerProps) => {
       title,
       image,
     };
-  }, [convexResponse.status]);
+  }, [response.status]);
 
-  if (convexResponse.data) {
+  if (response.data) {
     return <></>;
   }
 
@@ -48,7 +52,7 @@ const ErrorHandlerNew = ({ convexResponse }: ErrorHandlerProps) => {
         height={200}
       />
       <div className="flex flex-col justify-center items-center gap-4 text-center">
-        <h1 className="text-7xl">{convexResponse.status}</h1>
+        <h1 className="text-7xl">{response.status}</h1>
         <h3>{title}</h3>
       </div>
       <LinkButton href="/app" icon="back" title="Return" />
@@ -56,4 +60,4 @@ const ErrorHandlerNew = ({ convexResponse }: ErrorHandlerProps) => {
   );
 };
 
-export default ErrorHandlerNew;
+export default ErrorHandlerPreloaded;

@@ -60,6 +60,7 @@ export interface RecipeBookProps {
 
 export interface RecipeProps {
   id: GenericId<"recipes">;
+  recipeBookId: GenericId<"recipeBooks">;
   title: string;
   privilage: Privilage;
   description?: string;
@@ -112,10 +113,4 @@ export interface UserAccessFormProps {
   privilage: Privilage;
   relationShipId: GenericId<"userRecipeBookRelationship">;
   actionClicked: () => void;
-}
-
-export interface DeleteRecipeBookButtonProps extends ClassListProp {
-  recipeBookId: GenericId<"recipeBooks">;
-  recipeBookTitle: string;
-  redirectAfterDelete?: boolean;
 }
