@@ -1,71 +1,17 @@
-import { ConvexError, v } from "convex/values";
+import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { HttpResponseCode, Privilage } from "@/enums";
 import { filter } from "convex-helpers/server/filter";
 import { Doc } from "./_generated/dataModel";
-
-// Response types
-export interface ConvexResponse<T> {
-  data: T | null;
-  status: HttpResponseCode;
-  errorMessage: string | null;
-}
-
-// Utility functions ---------------------------------
-
-export function createResponse<T>(
-  data: T | null,
-  status: number,
-  errorMessage: string | null
-): ConvexResponse<T> {
-  return {
-    data,
-    status,
-    errorMessage,
-  };
-}
-export function createOKResponse<T>(data: T) {
-  return createResponse(data, HttpResponseCode.OK, null);
-}
-export function createBadResponse(
-  status: HttpResponseCode,
-  errorMessage: string | null
-) {
-  return createResponse(null, status, errorMessage);
-}
+import { createBadResponse, createOKResponse } from "@/lib/communication";
+import { getLoggedUser } from "./users";
 
 // QUERIES -------------------------------------------
-
-const getUserEntity = query({
-  args: {},
-  handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) {
-      return createBadResponse(
-        HttpResponseCode.Unauthorized,
-        "User not authenticated"
-      );
-    }
-    // Get User
-    const user = await ctx.db
-      .query("users")
-      .filter((q) => q.eq(q.field("email"), identity.email))
-      .unique();
-    if (!user) {
-      return createBadResponse(
-        HttpResponseCode.NotFound,
-        "User is not present in database"
-      );
-    }
-
-    return createOKResponse(user);
-  },
-});
 
 export const getRecipeBookById = query({
   args: { id: v.string(), checkPrivilages: v.optional(v.boolean()) },
   handler: async (ctx, args) => {
-    const userEntityResponse = await getUserEntity(ctx, args);
+    const userEntityResponse = await getLoggedUser(ctx, args);
     if (!userEntityResponse.data)
       return createBadResponse(
         userEntityResponse.status,
@@ -118,7 +64,7 @@ export const getRecipeBookById = query({
 export const getRecipeBooks = query({
   args: {},
   handler: async (ctx, args) => {
-    const userEntityResponse = await getUserEntity(ctx, args);
+    const userEntityResponse = await getLoggedUser(ctx, args);
     if (!userEntityResponse.data)
       return createBadResponse(
         userEntityResponse.status,
@@ -161,7 +107,7 @@ export const getRecipebookSharedUsers = query({
     recipeBookId: v.id("recipeBooks"),
   },
   handler: async (ctx, args) => {
-    const userConvexResponse = await getUserEntity(ctx, args);
+    const userConvexResponse = await getLoggedUser(ctx, args);
     if (!userConvexResponse.data)
       return createBadResponse(
         userConvexResponse.status,
@@ -214,7 +160,7 @@ export const createRecipeBook = mutation({
     ),
   },
   handler: async (ctx, args) => {
-    const userResponse = await getUserEntity(ctx, args);
+    const userResponse = await getLoggedUser(ctx, args);
     if (!userResponse.data)
       return createBadResponse(userResponse.status, userResponse.errorMessage);
 
@@ -256,7 +202,7 @@ export const deleteRecipeBook = mutation({
     id: v.id("recipeBooks"),
   },
   handler: async (ctx, args) => {
-    const userResponse = await getUserEntity(ctx, args);
+    const userResponse = await getLoggedUser(ctx, args);
     if (!userResponse.data)
       return createBadResponse(userResponse.status, userResponse.errorMessage);
 
@@ -303,7 +249,7 @@ export const updateRecipeBook = mutation({
     ),
   },
   handler: async (ctx, args) => {
-    const userResponse = await getUserEntity(ctx, args);
+    const userResponse = await getLoggedUser(ctx, args);
     if (!userResponse.data)
       return createBadResponse(userResponse.status, userResponse.errorMessage);
 
@@ -340,7 +286,7 @@ export const addAccessToRecipeBook = mutation({
     recipeBookId: v.id("recipeBooks"),
   },
   handler: async (ctx, args) => {
-    const userResponse = await getUserEntity(ctx, args);
+    const userResponse = await getLoggedUser(ctx, args);
     if (!userResponse.data)
       return createBadResponse(userResponse.status, userResponse.errorMessage);
 
@@ -395,7 +341,7 @@ export const changeAccessToRecipeBook = mutation({
     privilage: v.string(),
   },
   handler: async (ctx, args) => {
-    const userResponse = await getUserEntity(ctx, args);
+    const userResponse = await getLoggedUser(ctx, args);
     if (!userResponse.data)
       return createBadResponse(userResponse.status, userResponse.errorMessage);
 
@@ -420,7 +366,7 @@ export const revokeAccessToRecipeBook = mutation({
     relationShipId: v.id("userRecipeBookRelationship"),
   },
   handler: async (ctx, args) => {
-    const userResponse = await getUserEntity(ctx, args);
+    const userResponse = await getLoggedUser(ctx, args);
     if (!userResponse.data)
       return createBadResponse(userResponse.status, userResponse.errorMessage);
 

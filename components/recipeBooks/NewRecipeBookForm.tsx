@@ -1,29 +1,23 @@
 "use client";
-import { api } from "@/convex/_generated/api";
-import { Preloaded, useMutation, usePreloadedQuery } from "convex/react";
-import React, { useEffect, useRef, useState } from "react";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { Input } from "@/components/ui/input";
+import React, { useRef, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { z } from "zod";
-
-import { useForm } from "react-hook-form";
 import ActionButton from "@/components/global/ActionButton";
-import { useRouter } from "next/navigation";
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
 import ImageInput from "@/components/global/ImageInput";
-import { ImageInputHandle } from "@/types";
-import Image from "next/image";
-import PrivilageBadge from "@/components/users/PrivilageBadge";
+import { ImageInputHandle, ImageStateProps } from "@/types";
 import { notifyError, notifySuccess } from "@/lib/notifications";
-import { getRecipeBookById } from "@/convex/recipeBooks";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -32,59 +26,48 @@ const formSchema = z.object({
   description: z.optional(z.string()),
 });
 
-interface RecipeBookDetailPageHeaderProps {
-  recipeBook: Awaited<ReturnType<typeof getRecipeBookById>>;
+interface NewRecipeBookForm {
+  afterSaveAction: () => void;
 }
 
-const RecipeBookDetailForm = ({
-  recipeBook,
-}: RecipeBookDetailPageHeaderProps) => {
-  const router = useRouter();
+const NewRecipeBookForm = ({ afterSaveAction }: NewRecipeBookForm) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const updateRecipeBook = useMutation(api.recipeBooks.updateRecipeBook);
-  const [image, setImage] = useState(recipeBook.data?.image);
+  const createRecipeBook = useMutation(api.recipeBooks.createRecipeBook);
   const imageInputRef = useRef<ImageInputHandle>(null);
+
+  // const [imageUrl, setImageUrl] = useState("");
+  const [image, setImage] = useState<ImageStateProps | undefined>(undefined);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: recipeBook.data?.name ?? "",
-      description: recipeBook.data?.description ?? "",
-    },
-    values: {
-      name: recipeBook.data?.name ?? "",
-      description: recipeBook.data?.description ?? "",
+      name: "",
+      description: "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    if (!recipeBook.data) return;
-
     setIsSubmitting(true);
 
     try {
       const updatedImage = await imageInputRef.current?.commit();
-      const response = await updateRecipeBook({
-        id: recipeBook.data?._id,
+      const response = await createRecipeBook({
         name: values.name,
         description: values.description,
         image: updatedImage ?? image,
       });
       setIsSubmitting(false);
-
-      if (!response.data)
-        return notifyError(response.status.toString(), response.errorMessage);
-      notifySuccess("Successfully updated recipe book");
-
-      router.push("/app");
-      router.refresh();
+      if (response.data) {
+        notifySuccess("Recipe book successfully created.");
+        afterSaveAction();
+        return;
+      }
+      notifyError(response.status.toString(), response.errorMessage);
     } catch (error) {
-      console.log("Error updating recipe book", error);
+      console.log("Error creating recipe book", error);
       setIsSubmitting(false);
     }
   }
-
-  if (!recipeBook.data) return <></>;
 
   return (
     <Form {...form}>
@@ -92,11 +75,6 @@ const RecipeBookDetailForm = ({
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex w-full flex-col"
       >
-        <div className="flex justify-end">
-          {recipeBook.data && (
-            <PrivilageBadge privilage={recipeBook.data.privilage} />
-          )}
-        </div>
         <div className="flex flex-col gap-[30px] pb-6">
           <FormField
             control={form.control}
@@ -145,8 +123,8 @@ const RecipeBookDetailForm = ({
             title="Save"
             icon="save"
             isLoading={isSubmitting}
+            classList="min-w-48"
             isDisabled={!form.formState.isDirty}
-            classList="min-w-32"
             onClick={form.handleSubmit(onSubmit)}
           />
         </div>
@@ -155,4 +133,4 @@ const RecipeBookDetailForm = ({
   );
 };
 
-export default RecipeBookDetailForm;
+export default NewRecipeBookForm;

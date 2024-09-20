@@ -3,9 +3,9 @@ import { Preloaded, usePreloadedQuery } from "convex/react";
 import React, { useMemo, useState } from "react";
 import { FunctionReference } from "convex/server";
 import { HttpResponseCode } from "@/enums";
-import { ConvexResponse } from "@/convex/recipeBooks";
 import Image from "next/image";
 import LinkButton from "./LinkButton";
+import { ConvexResponse } from "@/lib/communication";
 
 interface ErrorHandlerProps {
   preloadedData: Preloaded<FunctionReference<"query">>; // Preloaded query data type

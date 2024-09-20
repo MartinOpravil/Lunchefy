@@ -1,7 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import { Preloaded, usePreloadedQuery } from "convex/react";
-import { api } from "@/convex/_generated/api";
 import PageHeader from "@/components/global/PageHeader";
 import LinkButton from "@/components/global/LinkButton";
 import ActionButton from "@/components/global/ActionButton";
@@ -10,33 +8,36 @@ import AccessManager from "./AccessManager/AccessManager";
 import { Privilage } from "@/enums";
 import Image from "next/image";
 import DeleteRecipeBookButton from "../DeleteRecipeBookButton";
+import { getRecipeBookById } from "@/convex/recipeBooks";
 
-const RecipeBookDetailPageHeader = (props: {
-  recipeBookPreloaded: Preloaded<typeof api.recipeBooks.getRecipeBookById>;
-}) => {
-  const recipeBookResult = usePreloadedQuery(props.recipeBookPreloaded);
-  const recipeBookResultData = recipeBookResult.data;
+interface RecipeBookDetailPageHeaderProps {
+  recipeBook: Awaited<ReturnType<typeof getRecipeBookById>>;
+}
+
+const RecipeBookDetailPageHeader = ({
+  recipeBook,
+}: RecipeBookDetailPageHeaderProps) => {
   const [isAccessManagerOpen, setIsAccessManagerOpen] = useState(false);
 
-  if (!recipeBookResultData) return <></>;
+  if (!recipeBook.data) return <></>;
 
   return (
     <>
       <PageHeader
-        title={`${recipeBookResultData.name}`}
+        title={`${recipeBook.data.name}`}
         icon="recipe_book"
         actionButton={
           <>
             <LinkButton title="Back" icon="back" href="/app" />
-            {recipeBookResultData.privilage === Privilage.Owner && (
+            {recipeBook.data.privilage === Privilage.Owner && (
               <>
                 <ActionButton
                   icon="share"
                   onClick={() => setIsAccessManagerOpen(true)}
                 />
                 <DeleteRecipeBookButton
-                  recipeBookId={recipeBookResultData._id}
-                  recipeBookTitle={recipeBookResultData.name}
+                  recipeBookId={recipeBook.data._id}
+                  recipeBookTitle={recipeBook.data.name}
                   redirectAfterDelete
                   classList="!bg-accent"
                 />
@@ -60,8 +61,8 @@ const RecipeBookDetailPageHeader = (props: {
         description="Grant access for your family members or friends."
         content={
           <AccessManager
-            recipeBookName={recipeBookResultData.name}
-            recipeBookId={recipeBookResultData._id}
+            recipeBookName={recipeBook.data.name}
+            recipeBookId={recipeBook.data._id}
           />
         }
       />

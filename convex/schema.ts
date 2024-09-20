@@ -35,12 +35,24 @@ export default defineSchema({
     privilage: v.string(),
   }),
   recipes: defineTable({
+    recipeBookId: v.id("recipeBooks"),
     name: v.string(),
-    picture: v.string(),
+    description: v.optional(v.string()),
+    image: v.optional(
+      v.object({
+        imageUrl: v.string(),
+        storageId: v.optional(v.id("_storage")),
+      })
+    ),
     tags: v.array(v.id("tags")),
     ingredients: v.string(),
     recipe: v.string(),
-    recipeImageUrl: v.optional(v.string()),
+    recipePhoto: v.optional(
+      v.object({
+        imageUrl: v.string(),
+        storageId: v.optional(v.id("_storage")),
+      })
+    ),
   })
     .searchIndex("search_name", { searchField: "name" })
     .searchIndex("search_tags", { searchField: "tags" }),

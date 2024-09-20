@@ -1,5 +1,7 @@
 import { ConvexError, v } from "convex/values";
 import { internalMutation, query } from "./_generated/server";
+import { createBadResponse, createOKResponse } from "@/lib/communication";
+import { HttpResponseCode } from "@/enums";
 
 export const getUserById = query({
   args: { clerkId: v.string() },
@@ -85,5 +87,31 @@ export const updateUser = internalMutation({
     //     });
     //   })
     // );
+  },
+});
+
+export const getLoggedUser = query({
+  args: {},
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      return createBadResponse(
+        HttpResponseCode.Unauthorized,
+        "User not authenticated"
+      );
+    }
+    // Get User
+    const user = await ctx.db
+      .query("users")
+      .filter((q) => q.eq(q.field("email"), identity.email))
+      .unique();
+    if (!user) {
+      return createBadResponse(
+        HttpResponseCode.NotFound,
+        "User is not present in database"
+      );
+    }
+
+    return createOKResponse(user);
   },
 });

@@ -58,6 +58,18 @@ export interface RecipeBookProps {
   privilage: string;
 }
 
+export interface RecipeProps {
+  id: GenericId<"recipes">;
+  title: string;
+  privilage: Privilage;
+  description?: string;
+  imageUrl?: string;
+  tags?: Array<string>;
+  ingredients?: string;
+  recipe?: string;
+  recipePhotoUrl?: string;
+}
+
 export interface BasicDialogProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;

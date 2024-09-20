@@ -2,12 +2,10 @@ import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import React from "react";
 import { preloadQuery } from "convex/nextjs";
-import RecipeBookDetailPageHeader from "@/components/recipeBooks/Detail/RecipeBookDetailPageHeader";
-import RecipeBookDetailForm from "@/components/recipeBooks/Detail/RecipeBookDetailForm";
-import ErrorHandler from "@/components/global/ErrorHandler";
 import { getAuthToken } from "@/lib/authentication";
+import RecipeBookDetailPage from "./RecipeBookDetailPage";
 
-const RecipeBookDetail = async ({
+const RecipeBookDetailServerPage = async ({
   params: { recipeBookId },
 }: {
   params: { recipeBookId: Id<"recipeBooks"> };
@@ -21,15 +19,8 @@ const RecipeBookDetail = async ({
     },
     { token }
   );
-  return (
-    <main className="page">
-      <RecipeBookDetailPageHeader recipeBookPreloaded={recipeBookPreload} />
-      <main className="page-content">
-        <ErrorHandler preloadedData={recipeBookPreload} />
-        <RecipeBookDetailForm recipeBookPreloaded={recipeBookPreload} />
-      </main>
-    </main>
-  );
+
+  return <RecipeBookDetailPage recipeBookPreloaded={recipeBookPreload} />;
 };
 
-export default RecipeBookDetail;
+export default RecipeBookDetailServerPage;
