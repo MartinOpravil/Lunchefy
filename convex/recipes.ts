@@ -45,6 +45,55 @@ export const getRecipes = query({
   },
 });
 
+export const getRecipeById = query({
+  args: { id: v.string(), checkPrivilages: v.optional(v.boolean()) },
+  handler: async (ctx, args) => {
+    const recipe = await ctx.db
+      .query("recipes")
+      .filter((q) => q.eq(q.field("_id"), args.id))
+      .unique();
+    if (!recipe)
+      return createBadResponse(HttpResponseCode.NotFound, "Recipe not found");
+
+    const userEntityResponse = await getLoggedUser(ctx, args);
+    if (!userEntityResponse.data)
+      return createBadResponse(
+        userEntityResponse.status,
+        userEntityResponse.errorMessage ?? ""
+      );
+
+    const userRecipeBookRelationship = await ctx.db
+      .query("userRecipeBookRelationship")
+      .filter((q) =>
+        q.and(
+          q.eq(q.field("userId"), userEntityResponse.data!._id),
+          q.eq(q.field("recipeBookId"), recipe.recipeBookId)
+        )
+      )
+      .unique();
+    if (!userRecipeBookRelationship)
+      return createBadResponse(
+        HttpResponseCode.Forbidden,
+        "No permission to view recipe"
+      );
+
+    if (
+      args.checkPrivilages &&
+      userRecipeBookRelationship.privilage === Privilage.Viewer
+    ) {
+      return createBadResponse(
+        HttpResponseCode.Forbidden,
+        "You don't have access to edit this recipe."
+      );
+    }
+
+    return createOKResponse({
+      ...recipe,
+      privilage: userRecipeBookRelationship.privilage as Privilage,
+    });
+  },
+});
+
 export const createRecipe = mutation({
   args: {
     recipeBookId: v.id("recipeBooks"),
@@ -56,6 +105,7 @@ export const createRecipe = mutation({
         storageId: v.optional(v.id("_storage")),
       })
     ),
+    ingredients: v.optional(v.string()),
     recipe: v.string(),
   },
   handler: async (ctx, args) => {
@@ -68,6 +118,7 @@ export const createRecipe = mutation({
       name: args.name,
       description: args.description,
       image: args.image,
+      ingredients: args.ingredients,
       recipe: args.recipe,
     });
     if (!newRecipeBookId) {
@@ -80,6 +131,53 @@ export const createRecipe = mutation({
     return createOKResponse({
       recipeBookId: newRecipeBookId,
     });
+  },
+});
+
+export const updateRecipe = mutation({
+  args: {
+    id: v.id("recipes"),
+    name: v.string(),
+    description: v.optional(v.string()),
+    image: v.optional(
+      v.object({
+        imageUrl: v.string(),
+        storageId: v.optional(v.id("_storage")),
+      })
+    ),
+    ingredients: v.optional(v.string()),
+    recipe: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const userResponse = await getLoggedUser(ctx, args);
+    if (!userResponse.data)
+      return createBadResponse(userResponse.status, userResponse.errorMessage);
+
+    const recipe = await ctx.db.get(args.id);
+    if (!recipe) {
+      return createBadResponse(
+        HttpResponseCode.NotFound,
+        "Cannot update because Recipe was not found"
+      );
+    }
+
+    // Delete previous image if image changes
+    const recipeImage = recipe.image;
+    if (
+      recipeImage?.imageUrl !== args.image?.imageUrl &&
+      recipeImage?.storageId
+    ) {
+      await ctx.storage.delete(recipeImage.storageId);
+    }
+
+    await ctx.db.patch(args.id, {
+      name: args.name,
+      description: args.description,
+      image: args.image,
+      ingredients: args.ingredients,
+      recipe: args.recipe,
+    });
+    return createOKResponse(true);
   },
 });
 

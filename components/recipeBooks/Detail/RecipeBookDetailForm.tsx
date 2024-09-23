@@ -24,6 +24,7 @@ import Image from "next/image";
 import PrivilageBadge from "@/components/users/PrivilageBadge";
 import { notifyError, notifySuccess } from "@/lib/notifications";
 import { getRecipeBookById } from "@/convex/recipeBooks";
+import { Textarea } from "@/components/ui/textarea";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -126,7 +127,7 @@ const RecipeBookDetailForm = ({
                   Description
                 </FormLabel>
                 <FormControl>
-                  <Input
+                  <Textarea
                     className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
                     placeholder="Optional recipe book description"
                     {...field}

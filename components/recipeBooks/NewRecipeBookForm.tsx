@@ -18,6 +18,7 @@ import { api } from "@/convex/_generated/api";
 import ImageInput from "@/components/global/ImageInput";
 import { ImageInputHandle, ImageStateProps } from "@/types";
 import { notifyError, notifySuccess } from "@/lib/notifications";
+import { Textarea } from "../ui/textarea";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -103,7 +104,7 @@ const NewRecipeBookForm = ({ afterSaveAction }: NewRecipeBookForm) => {
                   Description
                 </FormLabel>
                 <FormControl>
-                  <Input
+                  <Textarea
                     className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
                     placeholder="Optional recipe book description"
                     {...field}

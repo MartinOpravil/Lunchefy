@@ -19,12 +19,14 @@ import {
 import { Input } from "../../ui/input";
 import ImageInput from "../../global/ImageInput";
 import ActionButton from "../../global/ActionButton";
+import { Textarea } from "@/components/ui/textarea";
 
 const formSchema = z.object({
   name: z.string().min(2, {
     message: "Recipe name must be at least 2 characters.",
   }),
   description: z.optional(z.string()),
+  ingredients: z.optional(z.string()),
   recipe: z.string().min(2, {
     message: "Recipe must be at least 2 characters.",
   }),
@@ -49,6 +51,7 @@ const NewRecipeForm = ({
     defaultValues: {
       name: "",
       description: "",
+      ingredients: "",
       recipe: "",
     },
   });
@@ -62,6 +65,7 @@ const NewRecipeForm = ({
         recipeBookId,
         name: values.name,
         description: values.description,
+        ingredients: values.ingredients,
         recipe: values.recipe,
         image: updatedImage ?? image,
       });
@@ -113,7 +117,7 @@ const NewRecipeForm = ({
                   Description
                 </FormLabel>
                 <FormControl>
-                  <Input
+                  <Textarea
                     className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
                     placeholder="Optional recipe description"
                     {...field}
@@ -126,14 +130,33 @@ const NewRecipeForm = ({
           <ImageInput image={image} setImage={setImage} ref={imageInputRef} />
           <FormField
             control={form.control}
+            name="ingredients"
+            render={({ field }) => (
+              <FormItem className="flex flex-col gap-1">
+                <FormLabel className="text-16 font-bold text-accent">
+                  Ingredients
+                </FormLabel>
+                <FormControl>
+                  <Textarea
+                    className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
+                    placeholder="Insert ingredients, preferably by using bullets"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage className="text-primary" />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
             name="recipe"
             render={({ field }) => (
               <FormItem className="flex flex-col gap-1">
                 <FormLabel className="text-16 font-bold text-accent">
-                  Recipe
+                  Recipe*
                 </FormLabel>
                 <FormControl>
-                  <Input
+                  <Textarea
                     className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
                     placeholder="Recipe"
                     {...field}

@@ -114,7 +114,7 @@ html {
   }
 
   .image-input {
-    @apply pb-6 flex flex-col gap-4;
+    @apply pb-6 flex flex-col gap-4 w-full;
     .image-input-inner {
       @apply cursor-pointer outline-dashed outline-2 outline-accent rounded-sm flex flex-col items-center justify-center p-6 gap-4 hover:outline-secondary transition-all;
     }

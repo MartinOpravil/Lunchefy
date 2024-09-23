@@ -50,8 +50,9 @@ const RecipeBookPage = (props: {
   return (
     <main className="page">
       <PageHeader
-        title={`${recipeBook.data.name}`}
+        title={recipeBook.data.name}
         icon="recipe_book"
+        description={recipeBook.data.description}
         actionButton={
           <>
             <LinkButton
