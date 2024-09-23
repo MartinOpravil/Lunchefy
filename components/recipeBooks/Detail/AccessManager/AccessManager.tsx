@@ -25,7 +25,7 @@ import { Input } from "@/components/ui/input";
 import { AccessManagerProps } from "@/types";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import LoaderSpiner from "@/components/global/LoaderSpinner";
+import LoaderSpinner from "@/components/global/LoaderSpinner";
 import PrivilageBadge from "@/components/users/PrivilageBadge";
 import BasicDialog from "@/components/global/BasicDialog";
 import UserWithAccess from "./UserWithAccess";
@@ -121,7 +121,7 @@ const AccessManager = ({
               )}
             </>
           ) : (
-            <LoaderSpiner />
+            <LoaderSpinner />
           )}
         </>
       )}

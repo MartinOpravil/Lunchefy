@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 import { ActionButtonProps } from "@/types";
 import IconImage from "./IconImage";
-import LoaderSpiner from "./LoaderSpinner";
+import LoaderSpinner from "./LoaderSpinner";
 
 const ActionButton = ({
   title,
@@ -21,7 +21,7 @@ const ActionButton = ({
       disabled={isDisabled}
     >
       {isLoading ? (
-        <LoaderSpiner />
+        <LoaderSpinner />
       ) : (
         <>
           {icon && <IconImage name={icon} />} {title}

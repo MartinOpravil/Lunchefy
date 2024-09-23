@@ -1,12 +1,21 @@
-import { Loader } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Loader, LoaderCircle } from "lucide-react";
 import React from "react";
 
-const LoaderSpiner = () => {
+interface LoaderSpinnerProps {
+  size?: number;
+  classList?: string;
+}
+
+const LoaderSpinner = ({ size = 30, classList }: LoaderSpinnerProps) => {
   return (
     <div className="flex-center">
-      <Loader className="animate-spin text-white" size={30} />
+      <LoaderCircle
+        className={cn("animate-spin text-white", classList)}
+        size={size}
+      />
     </div>
   );
 };
 
-export default LoaderSpiner;
+export default LoaderSpinner;

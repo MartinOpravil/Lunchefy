@@ -1,6 +1,6 @@
 "use client";
 import { RecipeBookProps } from "@/types";
-import React from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardDescription,
@@ -13,6 +13,7 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Privilage } from "@/enums";
 import DeleteRecipeBookButton from "./DeleteRecipeBookButton";
+import LoaderSpinner from "../global/LoaderSpinner";
 
 const RecipeBook = ({
   id,
@@ -21,6 +22,8 @@ const RecipeBook = ({
   imageUrl,
   privilage,
 }: RecipeBookProps) => {
+  const [isRoutingToOverview, setIsRoutingToOverview] = useState(false);
+
   return (
     <>
       <Card
@@ -35,6 +38,7 @@ const RecipeBook = ({
         <Link
           href={`/app/${id}`}
           className="min-h-[300px] flex flex-col justify-center items-center"
+          onClick={() => setIsRoutingToOverview(true)}
         >
           {imageUrl && (
             <Image
@@ -50,6 +54,9 @@ const RecipeBook = ({
                 objectFit: "cover",
               }} // optional
             />
+          )}
+          {isRoutingToOverview && (
+            <LoaderSpinner classList="absolute top-2 right-2" />
           )}
           <CardHeader className="gap-2">
             <CardTitle>{title}</CardTitle>
