@@ -23,6 +23,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import ImageInput from "@/components/global/ImageInput";
 import ActionButton from "@/components/global/ActionButton";
+import Editor from "@/components/editor/Editor";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -85,7 +86,7 @@ const UpdateRecipeForm = ({ recipe }: RecipeDetailHeaderProps) => {
         return notifyError(response.status.toString(), response.errorMessage);
       notifySuccess("Successfully updated recipe");
 
-      router.push(`/app/${recipe.data.recipeBookId}`);
+      router.push(`/app/${recipe.data.recipeBookId}/${recipe.data._id}`);
       router.refresh();
     } catch (error) {
       console.log("Error updating recipe", error);
@@ -163,17 +164,18 @@ const UpdateRecipeForm = ({ recipe }: RecipeDetailHeaderProps) => {
                   Ingredients
                 </FormLabel>
                 <FormControl>
-                  <Textarea
-                    className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
-                    placeholder="Insert ingredients, preferably by using bullets"
-                    {...field}
+                  <Editor
+                    value={field.value}
+                    onContentChange={(value: string) =>
+                      form.setValue("ingredients", value)
+                    }
                   />
                 </FormControl>
                 <FormMessage className="text-primary" />
               </FormItem>
             )}
           />
-          <FormField
+          {/* <FormField
             control={form.control}
             name="recipe"
             render={({ field }) => (
@@ -191,6 +193,26 @@ const UpdateRecipeForm = ({ recipe }: RecipeDetailHeaderProps) => {
                 <FormMessage className="text-primary" />
               </FormItem>
             )}
+          /> */}
+          <FormField
+            control={form.control}
+            name="recipe"
+            render={({ field }) => (
+              <FormItem className="flex flex-col gap-1">
+                <FormLabel className="text-16 font-bold text-accent">
+                  Recipe*
+                </FormLabel>
+                <FormControl>
+                  <Editor
+                    value={field.value}
+                    onContentChange={(value: string) =>
+                      form.setValue("recipe", value)
+                    }
+                  />
+                </FormControl>
+                <FormMessage className="text-primary" />
+              </FormItem>
+            )}
           />
         </div>
 
@@ -199,7 +221,7 @@ const UpdateRecipeForm = ({ recipe }: RecipeDetailHeaderProps) => {
             title="Save"
             icon="save"
             isLoading={isSubmitting}
-            isDisabled={!form.formState.isDirty}
+            // isDisabled={!form.formState.isDirty}
             classList="min-w-32"
             onClick={form.handleSubmit(onSubmit)}
           />

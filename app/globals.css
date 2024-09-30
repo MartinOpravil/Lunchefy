@@ -226,3 +226,31 @@ html {
 .cl-userButtonPopoverActionButtonIcon {
   color: var(--text);
 }
+
+@layer base {
+  ul,
+  ol {
+    li {
+      p {
+        margin: 0 !important;
+      }
+    }
+  }
+}
+
+.lucide {
+  /* Change this! */
+  color: var(--background);
+  width: 1.5rem;
+  height: 1.5rem;
+  stroke-width: 2px;
+  /* &:hover {
+    color: var(--accent-transparent);
+  } */
+}
+
+.editor-content {
+  .tiptap {
+    width: 100%;
+  }
+}

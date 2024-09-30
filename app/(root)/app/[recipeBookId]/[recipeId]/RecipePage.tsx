@@ -43,15 +43,19 @@ const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
               </div>
               <div className="w-full md:w-[50%] flex flex-col gap-2">
                 <h2>Ingredients:</h2>
-                <p
-                  dangerouslySetInnerHTML={formatTextWithHTML(
-                    recipe.data.ingredients
-                  )}
-                ></p>
+                <div
+                  className="prose"
+                  dangerouslySetInnerHTML={{
+                    __html: recipe.data.ingredients ?? "",
+                  }}
+                ></div>
               </div>
             </div>
             <h2>Recipe:</h2>
-            <p>{recipe.data.recipe}</p>
+            <div
+              className="prose w-full max-w-full"
+              dangerouslySetInnerHTML={{ __html: recipe.data.recipe }}
+            ></div>
           </div>
         )}
       </main>
