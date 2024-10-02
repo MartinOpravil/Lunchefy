@@ -95,7 +95,7 @@ html {
   }
 
   .action-button {
-    @apply text-16 w-fit font-extrabold text-white-1 gap-2 bg-accent hover:bg-secondary transition-all;
+    @apply text-16 w-fit font-extrabold text-white-1 gap-2 transition-all p-2.5;
   }
   .icon-primary {
     .svg {
@@ -239,14 +239,16 @@ html {
 }
 
 .lucide {
-  /* Change this! */
-  color: var(--background);
   width: 1.5rem;
   height: 1.5rem;
-  stroke-width: 2px;
-  /* &:hover {
-    color: var(--accent-transparent);
-  } */
+  stroke-width: 1.5px;
+}
+
+.editor-button,
+.color-editor-button {
+  .lucide {
+    color: var(--background);
+  }
 }
 
 .editor-content {

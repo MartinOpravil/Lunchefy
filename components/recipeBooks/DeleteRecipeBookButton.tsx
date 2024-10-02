@@ -8,6 +8,8 @@ import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { GenericId } from "convex/values";
 import { ClassListProp } from "@/types";
+import { Trash2 } from "lucide-react";
+import { ButtonVariant } from "@/enums";
 
 export interface DeleteRecipeBookButtonProps extends ClassListProp {
   recipeBookId: GenericId<"recipeBooks">;
@@ -53,10 +55,11 @@ const DeleteRecipeBookButton = ({
   return (
     <>
       <ActionButton
-        icon="delete"
+        icon={<Trash2 />}
         onClick={handleOpenDialog}
         isLoading={isDeleting}
-        classList={cn("hover:!bg-primary pointer-events-auto", classList)}
+        variant={ButtonVariant.Negative}
+        classList={cn("pointer-events-auto", classList)}
       />
       <ActionDialog
         isOpen={isDialogOpen}

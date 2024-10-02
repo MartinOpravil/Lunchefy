@@ -24,6 +24,8 @@ import { Textarea } from "@/components/ui/textarea";
 import ImageInput from "@/components/global/ImageInput";
 import ActionButton from "@/components/global/ActionButton";
 import Editor from "@/components/editor/Editor";
+import { ButtonVariant } from "@/enums";
+import { Save } from "lucide-react";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -219,9 +221,10 @@ const UpdateRecipeForm = ({ recipe }: RecipeDetailHeaderProps) => {
         <div className="flex flex-col items-center">
           <ActionButton
             title="Save"
-            icon="save"
+            icon={<Save />}
             isLoading={isSubmitting}
             // isDisabled={!form.formState.isDirty}
+            variant={ButtonVariant.Positive}
             classList="min-w-32"
             onClick={form.handleSubmit(onSubmit)}
           />

@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { Privilage } from "@/enums";
 import DeleteRecipeBookButton from "./DeleteRecipeBookButton";
 import LoaderSpinner from "../global/LoaderSpinner";
+import { Pencil } from "lucide-react";
 
 const RecipeBook = ({
   id,
@@ -30,8 +31,8 @@ const RecipeBook = ({
         className={cn(
           "relative hover:bg-secondary cursor-pointer transition-all bg-accent text-white-1 text-center overflow-hidden",
           {
-            "bg-accentTransparent": imageUrl,
-            "hover:bg-secondaryTransparent": imageUrl,
+            "bg-accent/80": imageUrl,
+            "hover:bg-secondary/80": imageUrl,
           }
         )}
       >
@@ -68,14 +69,14 @@ const RecipeBook = ({
             <DeleteRecipeBookButton
               recipeBookId={id}
               recipeBookTitle={title}
-              classList="!bg-transparent"
+              classList="!bg-transparent hover:!bg-primary"
             />
           ) : (
             <div></div>
           )}
           {privilage !== Privilage.Viewer ? (
             <LinkButton
-              icon="edit"
+              icon={<Pencil />}
               href={`/app/${id}/detail`}
               classList="!bg-transparent hover:!bg-accent pointer-events-auto"
             />

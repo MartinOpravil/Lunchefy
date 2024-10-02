@@ -2,9 +2,17 @@ import ActionButton from "@/components/global/ActionButton";
 import LinkButton from "@/components/global/LinkButton";
 import PageHeader from "@/components/global/PageHeader";
 import { getRecipeById } from "@/convex/recipes";
-import { Privilage } from "@/enums";
+import { ButtonVariant, Privilage } from "@/enums";
 import React from "react";
 import DeleteRecipeButton from "../DeleteRecipeButton";
+import {
+  ArrowBigLeft,
+  ArrowLeft,
+  MoveLeft,
+  NotebookText,
+  Save,
+  SquareArrowOutUpRight,
+} from "lucide-react";
 
 interface RecipeDetailHeaderProps {
   recipe: Awaited<ReturnType<typeof getRecipeById>>;
@@ -20,9 +28,10 @@ const RecipeDetailHeader = ({ recipe }: RecipeDetailHeaderProps) => {
       actionButton={
         <>
           <LinkButton
-            icon="back"
+            // iconName="back"
+            icon={<ArrowLeft />}
             href={`/app/${recipe.data.recipeBookId}`}
-            classList="!bg-gray-700 hover:!bg-secondary"
+            variant={ButtonVariant.Dark}
           />
           <div className="bg-accent w-[1.5px] h-6 mx-2 rounded"></div>
           {recipe.data.privilage === Privilage.Owner && (
@@ -31,13 +40,23 @@ const RecipeDetailHeader = ({ recipe }: RecipeDetailHeaderProps) => {
               recipeBookId={recipe.data.recipeBookId}
               recipeTitle={recipe.data.name}
               redirectAfterDelete
-              classList="!bg-accent"
             />
           )}
           <LinkButton
-            icon="viewer"
+            icon={<SquareArrowOutUpRight />}
+            // iconName="viewer"
             href={`/app/${recipe.data.recipeBookId}/${recipe.data._id}`}
           />
+          {/* <ActionButton
+            title="Save"
+            icon={<Save />}
+            // isLoading={isSubmitting}
+            // isDisabled={!form.formState.isDirty}
+            variant={ButtonVariant.Positive}
+            // classList="min-w-32"
+            // onClick={form.handleSubmit(onSubmit)}
+            onClick={() => {}}
+          /> */}
         </>
       }
     />

@@ -31,6 +31,7 @@ import BasicDialog from "@/components/global/BasicDialog";
 import UserWithAccess from "./UserWithAccess";
 import { Privilage } from "@/enums";
 import { notifyError, notifySuccess } from "@/lib/notifications";
+import { Share2 } from "lucide-react";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -96,7 +97,7 @@ const AccessManager = ({
           <div className="flex flex-col">
             <ActionButton
               title="Share with user"
-              icon="share"
+              icon={<Share2 />}
               isLoading={isSubmitting}
               classList="min-w-32"
               onClick={() => setIsFormOpen(true)}
@@ -194,7 +195,7 @@ const AccessManager = ({
                 />
                 <ActionButton
                   title="Share"
-                  icon="share"
+                  icon={<Share2 />}
                   isLoading={isSubmitting}
                   classList="min-w-32"
                   isDisabled={!form.formState.isDirty}

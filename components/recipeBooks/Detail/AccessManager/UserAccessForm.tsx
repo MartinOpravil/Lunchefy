@@ -18,13 +18,14 @@ import {
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Privilage } from "@/enums";
+import { ButtonVariant, Privilage } from "@/enums";
 import { UserAccessFormProps } from "@/types";
 import ActionButton from "@/components/global/ActionButton";
 import ActionDialog from "@/components/global/ActionDialog";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { notifyError, notifySuccess } from "@/lib/notifications";
+import { Save, Trash2 } from "lucide-react";
 
 const formSchema = z.object({
   privilage: z.string({
@@ -131,16 +132,17 @@ const UserAccessForm = ({
           </div>
           <div className="flex justify-between gap-2">
             <ActionButton
-              icon="delete"
+              icon={<Trash2 />}
               onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
                 e.preventDefault();
                 setIsDeleteDialogOpen(true);
               }}
-              classList="!bg-primary hover:!bg-accent"
+              variant={ButtonVariant.Negative}
             />
             <ActionButton
               title="Update"
-              icon="save"
+              icon={<Save />}
+              variant={ButtonVariant.Positive}
               isLoading={isSubmitting}
               classList="min-w-32"
               isDisabled={!form.formState.isDirty}

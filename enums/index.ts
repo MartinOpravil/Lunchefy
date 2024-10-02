@@ -17,3 +17,11 @@ export enum HttpResponseCode {
   ClientCancelled = 499,
   InternalServerError = 500,
 }
+
+export enum ButtonVariant {
+  // Default = "default",
+  Negative = "negative",
+  Positive = "positive",
+  Dark = "dark",
+  Editor = "editor",
+}

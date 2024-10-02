@@ -11,6 +11,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { AlertDialogProps } from "@/types";
 import ActionButton from "./ActionButton";
+import { Trash2 } from "lucide-react";
+import { ButtonVariant } from "@/enums";
 
 const ActionDialog = ({
   isOpen,
@@ -39,10 +41,10 @@ const ActionDialog = ({
           </AlertDialogCancel>
           <AlertDialogAction asChild>
             <ActionButton
-              icon="delete"
+              icon={<Trash2 />}
               title={confirmButtonLabel}
               onClick={action}
-              classList="!bg-primary hover:!bg-accent"
+              variant={ButtonVariant.Negative}
             />
           </AlertDialogAction>
         </AlertDialogFooter>

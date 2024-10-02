@@ -25,6 +25,8 @@ import PrivilageBadge from "@/components/users/PrivilageBadge";
 import { notifyError, notifySuccess } from "@/lib/notifications";
 import { getRecipeBookById } from "@/convex/recipeBooks";
 import { Textarea } from "@/components/ui/textarea";
+import { Save } from "lucide-react";
+import { ButtonVariant } from "@/enums";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -144,7 +146,8 @@ const RecipeBookDetailForm = ({
         <div className="flex flex-col items-center">
           <ActionButton
             title="Save"
-            icon="save"
+            icon={<Save />}
+            variant={ButtonVariant.Positive}
             isLoading={isSubmitting}
             isDisabled={!form.formState.isDirty}
             classList="min-w-32"

@@ -5,10 +5,11 @@ import LinkButton from "@/components/global/LinkButton";
 import ActionButton from "@/components/global/ActionButton";
 import BasicDialog from "@/components/global/BasicDialog";
 import AccessManager from "./AccessManager/AccessManager";
-import { Privilage } from "@/enums";
+import { ButtonVariant, Privilage } from "@/enums";
 import Image from "next/image";
 import DeleteRecipeBookButton from "../DeleteRecipeBookButton";
 import { getRecipeBookById } from "@/convex/recipeBooks";
+import { ArrowLeft, Share2, SquareArrowOutUpRight } from "lucide-react";
 
 interface RecipeBookDetailPageHeaderProps {
   recipeBook: Awaited<ReturnType<typeof getRecipeBookById>>;
@@ -29,9 +30,9 @@ const RecipeBookDetailPageHeader = ({
         actionButton={
           <>
             <LinkButton
-              icon="back"
+              icon={<ArrowLeft />}
               href="/app"
-              classList="!bg-gray-700 hover:!bg-secondary"
+              variant={ButtonVariant.Dark}
             />
             <div className="bg-accent w-[1.5px] h-6 mx-2 rounded"></div>
             {recipeBook.data.privilage === Privilage.Owner && (
@@ -40,13 +41,17 @@ const RecipeBookDetailPageHeader = ({
                   recipeBookId={recipeBook.data._id}
                   recipeBookTitle={recipeBook.data.name}
                   redirectAfterDelete
-                  classList="!bg-accent"
+                />
+                <LinkButton
+                  icon={<SquareArrowOutUpRight />}
+                  href={`/app/${recipeBook.data._id}`}
                 />
                 <ActionButton
-                  icon="share"
+                  title="Share"
+                  icon={<Share2 />}
+                  variant={ButtonVariant.Positive}
                   onClick={() => setIsAccessManagerOpen(true)}
                 />
-                <LinkButton icon="list" href={`/app/${recipeBook.data._id}`} />
               </>
             )}
           </>

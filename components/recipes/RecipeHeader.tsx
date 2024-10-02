@@ -3,6 +3,7 @@ import LinkButton from "@/components/global/LinkButton";
 import PageHeader from "@/components/global/PageHeader";
 import { getRecipeById } from "@/convex/recipes";
 import { Privilage } from "@/enums";
+import { ArrowLeft, Pencil } from "lucide-react";
 import React from "react";
 
 interface RecipeHeaderProps {
@@ -20,7 +21,7 @@ const RecipeHeader = ({ recipe }: RecipeHeaderProps) => {
       actionButton={
         <>
           <LinkButton
-            icon="back"
+            icon={<ArrowLeft />}
             href={`/app/${recipe.data.recipeBookId}`}
             classList="!bg-gray-700 hover:!bg-secondary"
           />
@@ -28,7 +29,7 @@ const RecipeHeader = ({ recipe }: RecipeHeaderProps) => {
             <>
               <div className="bg-accent w-[1.5px] h-6 mx-2 rounded"></div>
               <LinkButton
-                icon="edit"
+                icon={<Pencil />}
                 href={`/app/${recipe.data.recipeBookId}/${recipe.data._id}/detail`}
               />
             </>

@@ -5,6 +5,7 @@ import { UserWithAccessProps } from "@/types";
 import Image from "next/image";
 import React, { useState } from "react";
 import UserAccessForm from "./UserAccessForm";
+import { Pencil } from "lucide-react";
 
 const UserWithAccess = ({
   name,
@@ -24,7 +25,7 @@ const UserWithAccess = ({
         <PrivilageBadge privilage={privilage} />
         <div className="actions flex gap-2 w-full sm:w-fit justify-end">
           <ActionButton
-            icon="edit"
+            icon={<Pencil />}
             onClick={() => {
               setIsUserUpdateOpen(true);
             }}

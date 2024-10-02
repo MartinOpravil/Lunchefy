@@ -6,8 +6,9 @@ import PageHeader from "@/components/global/PageHeader";
 import NewRecipeForm from "@/components/recipes/Form/NewRecipeForm";
 import Recipes from "@/components/recipes/Recipes";
 import { api } from "@/convex/_generated/api";
-import { Privilage } from "@/enums";
+import { ButtonVariant, Privilage } from "@/enums";
 import { Preloaded, usePreloadedQuery } from "convex/react";
+import { ArrowLeft, Pencil, Plus } from "lucide-react";
 import React, { useState } from "react";
 
 const RecipeBookPage = (props: {
@@ -32,8 +33,9 @@ const RecipeBookPage = (props: {
           actionButton={
             <ActionButton
               title="Back"
-              icon="back"
+              icon={<ArrowLeft />}
               onClick={() => setIsNewFormOpen(false)}
+              variant={ButtonVariant.Dark}
             />
           }
         />
@@ -56,22 +58,22 @@ const RecipeBookPage = (props: {
         actionButton={
           <>
             <LinkButton
-              icon="back"
+              icon={<ArrowLeft />}
               href="/app"
-              classList="!bg-gray-700 hover:!bg-secondary"
+              variant={ButtonVariant.Dark}
             />
             <div className="bg-accent w-[1.5px] h-6 mx-2 rounded"></div>
             <LinkButton
-              icon="edit"
+              icon={<Pencil />}
               href={`/app/${recipeBook.data._id}/detail`}
             />
             {recipeBook.data.privilage !== Privilage.Viewer && (
               <>
                 <ActionButton
                   title="New"
-                  icon="add"
+                  icon={<Plus />}
                   onClick={() => setIsNewFormOpen(true)}
-                  classList="!bg-primary hover:!bg-secondary"
+                  variant={ButtonVariant.Positive}
                 />
               </>
             )}

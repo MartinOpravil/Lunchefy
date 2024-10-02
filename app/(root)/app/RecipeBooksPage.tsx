@@ -6,6 +6,8 @@ import RecipeBooks from "@/components/recipeBooks/RecipeBooks";
 import { Preloaded, usePreloadedQuery } from "convex/react";
 import ActionButton from "@/components/global/ActionButton";
 import NewRecipeBookForm from "@/components/recipeBooks/NewRecipeBookForm";
+import { ArrowLeft, Plus } from "lucide-react";
+import { ButtonVariant } from "@/enums";
 
 const RecipeBooksPage = (props: {
   recipeBooksPreloaded: Preloaded<typeof api.recipeBooks.getRecipeBooks>;
@@ -24,9 +26,9 @@ const RecipeBooksPage = (props: {
           actionButton={
             <ActionButton
               title="Back"
-              icon="back"
+              icon={<ArrowLeft />}
               onClick={() => setIsNewFormOpen(false)}
-              classList="!bg-gray-700 hover:!bg-secondary"
+              variant={ButtonVariant.Dark}
             />
           }
         />
@@ -46,9 +48,9 @@ const RecipeBooksPage = (props: {
         actionButton={
           <ActionButton
             title="New"
-            icon="add"
+            icon={<Plus />}
             onClick={() => setIsNewFormOpen(true)}
-            classList="!bg-primary hover:!bg-primaryTransparent"
+            variant={ButtonVariant.Positive}
           />
         }
       />

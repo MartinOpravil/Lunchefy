@@ -20,6 +20,8 @@ import {
   TextQuote,
   Undo,
 } from "lucide-react";
+import { ButtonVariant } from "@/enums";
+import { cn } from "@/lib/utils";
 
 export enum EditorButtonType {
   Bold = "bold",
@@ -219,11 +221,14 @@ const EditorButton = ({ type, editor }: EditorButtonProps) => {
   return (
     <Button
       disabled={isDisabled()}
-      className={isActive() ? "outline outline-[3px] outline-primary" : ""}
+      className={cn(
+        "editor-button",
+        isActive() ? "outline outline-[3px] outline-primary" : ""
+      )}
       onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
         performAction(e, action)
       }
-      variant={"editor"}
+      variant={ButtonVariant.Editor}
     >
       {icon}
     </Button>

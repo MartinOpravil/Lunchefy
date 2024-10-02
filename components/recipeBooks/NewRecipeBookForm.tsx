@@ -19,6 +19,8 @@ import ImageInput from "@/components/global/ImageInput";
 import { ImageInputHandle, ImageStateProps } from "@/types";
 import { notifyError, notifySuccess } from "@/lib/notifications";
 import { Textarea } from "../ui/textarea";
+import { Save } from "lucide-react";
+import { ButtonVariant } from "@/enums";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -121,7 +123,8 @@ const NewRecipeBookForm = ({ afterSaveAction }: NewRecipeBookForm) => {
         <div className="flex flex-col items-center">
           <ActionButton
             title="Save"
-            icon="save"
+            icon={<Save />}
+            variant={ButtonVariant.Positive}
             isLoading={isSubmitting}
             classList="min-w-48"
             isDisabled={!form.formState.isDirty}

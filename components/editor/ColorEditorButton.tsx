@@ -31,7 +31,7 @@ const ColorEditorButton = ({ editor }: ColorEditorButtonProps) => {
   };
 
   return (
-    <div className="relative flex justify-center">
+    <div className="color-editor-button relative flex justify-center">
       <Button
         onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
           performAction(e)

@@ -24,14 +24,13 @@ const config = {
         ...defaultTheme.screens,
       },
       colors: {
-        primary: "var(--primary)",
-        primaryTransparent: "var(--primary-transparent)",
-        secondary: "var(--secondary)",
-        secondaryTransparent: "var(--secondary-transparent)",
-        accent: "var(--accent)",
-        accentTransparent: "var(--accent-transparent)",
+        primary:
+          "color-mix(in srgb, var(--primary) calc(100% * <alpha-value>), transparent)",
+        secondary:
+          "color-mix(in srgb, var(--secondary) calc(100% * <alpha-value>), transparent)",
+        accent:
+          "color-mix(in srgb, var(--accent) calc(100% * <alpha-value>), transparent)",
         background: "var(--background)",
-        backgroundTransparent: "var(--background-transparent)",
         text: "var(--text)",
         white: {
           1: "#FFFFFF",
