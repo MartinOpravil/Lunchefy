@@ -95,7 +95,7 @@ html {
   }
 
   .action-button {
-    @apply text-16 w-fit font-extrabold text-white-1 gap-2 transition-all p-2.5;
+    @apply relative text-16 w-fit font-extrabold text-white-1 gap-2 transition-all p-2.5;
   }
   .icon-primary {
     .svg {

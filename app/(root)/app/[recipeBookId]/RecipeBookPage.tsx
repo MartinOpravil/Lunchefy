@@ -1,15 +1,17 @@
 "use client";
 import ActionButton from "@/components/global/ActionButton";
 import ErrorHandler from "@/components/global/ErrorHandler";
+import HorizontalSeparator from "@/components/global/HorizontalSeparator";
 import LinkButton from "@/components/global/LinkButton";
 import PageHeader from "@/components/global/PageHeader";
 import NewRecipeForm from "@/components/recipes/Form/NewRecipeForm";
 import Recipes from "@/components/recipes/Recipes";
 import { api } from "@/convex/_generated/api";
 import { ButtonVariant, Privilage } from "@/enums";
+import { FormRef } from "@/types";
 import { Preloaded, usePreloadedQuery } from "convex/react";
-import { ArrowLeft, Pencil, Plus } from "lucide-react";
-import React, { useState } from "react";
+import { ArrowLeft, Pencil, Plus, Save } from "lucide-react";
+import React, { useRef, useState } from "react";
 
 const RecipeBookPage = (props: {
   recipeBookPreloaded: Preloaded<typeof api.recipeBooks.getRecipeBookById>;
@@ -17,7 +19,7 @@ const RecipeBookPage = (props: {
 }) => {
   const recipeBook = usePreloadedQuery(props.recipeBookPreloaded);
   const recipes = usePreloadedQuery(props.recipesPreloaded);
-
+  const formRef = useRef<FormRef>(null);
   const [isNewFormOpen, setIsNewFormOpen] = useState(false);
 
   if (!recipeBook.data) {
@@ -31,18 +33,28 @@ const RecipeBookPage = (props: {
           title="New recipe"
           icon="recipe"
           actionButton={
-            <ActionButton
-              title="Back"
-              icon={<ArrowLeft />}
-              onClick={() => setIsNewFormOpen(false)}
-              variant={ButtonVariant.Dark}
-            />
+            <>
+              <ActionButton
+                icon={<ArrowLeft />}
+                onClick={() => setIsNewFormOpen(false)}
+                variant={ButtonVariant.Dark}
+              />
+              <HorizontalSeparator />
+              <ActionButton
+                title="Save"
+                icon={<Save />}
+                variant={ButtonVariant.Positive}
+                onClick={() => formRef.current?.save()}
+                isLoading={formRef.current?.isSubmitting}
+              />
+            </>
           }
         />
         <main className="page-content">
           <NewRecipeForm
             recipeBookId={recipeBook.data._id}
             afterSaveAction={() => setIsNewFormOpen(false)}
+            ref={formRef}
           />
         </main>
       </main>

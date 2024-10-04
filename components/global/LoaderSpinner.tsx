@@ -9,7 +9,7 @@ interface LoaderSpinnerProps {
 
 const LoaderSpinner = ({ size = 30, classList }: LoaderSpinnerProps) => {
   return (
-    <div className="flex-center">
+    <div className="absolute flex-center bg-inherit w-full h-full rounded-md pointer-events-none z-10">
       <LoaderCircle
         className={cn("animate-spin text-white", classList)}
         size={size}

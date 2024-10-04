@@ -3,22 +3,25 @@ import LinkButton from "@/components/global/LinkButton";
 import PageHeader from "@/components/global/PageHeader";
 import { getRecipeById } from "@/convex/recipes";
 import { ButtonVariant, Privilage } from "@/enums";
-import React from "react";
+import React, { RefObject } from "react";
 import DeleteRecipeButton from "../DeleteRecipeButton";
 import {
   ArrowBigLeft,
   ArrowLeft,
+  Book,
   MoveLeft,
   NotebookText,
   Save,
   SquareArrowOutUpRight,
 } from "lucide-react";
+import { FormRef } from "@/types";
 
 interface RecipeDetailHeaderProps {
   recipe: Awaited<ReturnType<typeof getRecipeById>>;
+  formRef: RefObject<FormRef>;
 }
 
-const RecipeDetailHeader = ({ recipe }: RecipeDetailHeaderProps) => {
+const RecipeDetailHeader = ({ recipe, formRef }: RecipeDetailHeaderProps) => {
   if (!recipe.data) return <></>;
 
   return (
@@ -43,9 +46,16 @@ const RecipeDetailHeader = ({ recipe }: RecipeDetailHeaderProps) => {
             />
           )}
           <LinkButton
-            icon={<SquareArrowOutUpRight />}
+            icon={<Book />}
             // iconName="viewer"
             href={`/app/${recipe.data.recipeBookId}/${recipe.data._id}`}
+          />
+          <ActionButton
+            title="Save"
+            icon={<Save />}
+            variant={ButtonVariant.Positive}
+            onClick={() => formRef.current?.save()}
+            isLoading={formRef.current?.isSubmitting}
           />
           {/* <ActionButton
             title="Save"

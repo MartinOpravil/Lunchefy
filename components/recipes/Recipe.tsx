@@ -1,6 +1,6 @@
 "use client";
 import { RecipeProps } from "@/types";
-import React from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardDescription,
@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { Privilage } from "@/enums";
 import DeleteRecipeButton from "./DeleteRecipeButton";
 import { Pencil } from "lucide-react";
+import LoaderSpinner from "../global/LoaderSpinner";
 
 const Recipe = ({
   id,
@@ -23,6 +24,8 @@ const Recipe = ({
   description,
   imageUrl,
 }: RecipeProps) => {
+  const [isRoutingToOverview, setIsRoutingToOverview] = useState(false);
+
   return (
     <>
       <Card
@@ -37,6 +40,7 @@ const Recipe = ({
         <Link
           href={`/app/${recipeBookId}/${id}`}
           className="min-h-[300px] flex flex-col justify-center items-center"
+          onClick={() => setIsRoutingToOverview(true)}
         >
           {imageUrl && (
             <Image
@@ -52,6 +56,9 @@ const Recipe = ({
                 objectFit: "cover",
               }} // optional
             />
+          )}
+          {isRoutingToOverview && (
+            <LoaderSpinner classList="absolute top-2 right-2" />
           )}
           <CardHeader>
             <CardTitle>{title}</CardTitle>

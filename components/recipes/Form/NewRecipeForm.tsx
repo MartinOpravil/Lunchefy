@@ -2,10 +2,15 @@
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { notifyError, notifySuccess } from "@/lib/notifications";
-import { ImageInputHandle, ImageStateProps } from "@/types";
+import { FormRef, ImageInputHandle, ImageStateProps } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "convex/react";
-import React, { useRef, useState } from "react";
+import React, {
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
@@ -34,156 +39,150 @@ const formSchema = z.object({
   }),
 });
 
-interface NewRecipeBookForm {
+interface NewRecipeBookFormProps {
   recipeBookId: Id<"recipeBooks">;
   afterSaveAction: () => void;
 }
 
-const NewRecipeForm = ({
-  recipeBookId,
-  afterSaveAction,
-}: NewRecipeBookForm) => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const createRecipe = useMutation(api.recipes.createRecipe);
-  const imageInputRef = useRef<ImageInputHandle>(null);
-  const [image, setImage] = useState<ImageStateProps | undefined>(undefined);
+const NewRecipeForm = forwardRef<FormRef, NewRecipeBookFormProps>(
+  ({ recipeBookId, afterSaveAction }, ref) => {
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const createRecipe = useMutation(api.recipes.createRecipe);
+    const imageInputRef = useRef<ImageInputHandle>(null);
+    const [image, setImage] = useState<ImageStateProps | undefined>(undefined);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      description: "",
-      ingredients: "",
-      recipe: "",
-    },
-  });
+    useImperativeHandle(ref, () => ({
+      save() {
+        form.handleSubmit(onSubmit)();
+      },
+      isSubmitting,
+    }));
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsSubmitting(true);
+    const form = useForm<z.infer<typeof formSchema>>({
+      resolver: zodResolver(formSchema),
+      defaultValues: {
+        name: "",
+        description: "",
+        ingredients: "",
+        recipe: "",
+      },
+    });
 
-    try {
-      const updatedImage = await imageInputRef.current?.commit();
-      const response = await createRecipe({
-        recipeBookId,
-        name: values.name,
-        description: values.description,
-        ingredients: values.ingredients,
-        recipe: values.recipe,
-        image: updatedImage ?? image,
-      });
-      setIsSubmitting(false);
-      if (response.data) {
-        notifySuccess("Recipe book successfully created.");
-        afterSaveAction();
-        return;
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+      setIsSubmitting(true);
+
+      try {
+        const updatedImage = await imageInputRef.current?.commit();
+        const response = await createRecipe({
+          recipeBookId,
+          name: values.name,
+          description: values.description,
+          ingredients: values.ingredients,
+          recipe: values.recipe,
+          image: updatedImage ?? image,
+        });
+        setIsSubmitting(false);
+        if (response.data) {
+          notifySuccess("Recipe book successfully created.");
+          afterSaveAction();
+          return;
+        }
+        notifyError(response.status.toString(), response.errorMessage);
+      } catch (error) {
+        console.log("Error creating recipe book", error);
+        setIsSubmitting(false);
       }
-      notifyError(response.status.toString(), response.errorMessage);
-    } catch (error) {
-      console.log("Error creating recipe book", error);
-      setIsSubmitting(false);
     }
+
+    return (
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex w-full flex-col"
+        >
+          <div className="flex flex-col gap-[30px] pb-6">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem className="flex flex-col gap-1">
+                  <FormLabel className="text-16 font-bold text-accent">
+                    Name*
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
+                      placeholder="Recipe name"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage className="text-primary" />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem className="flex flex-col gap-1">
+                  <FormLabel className="text-16 font-bold text-accent">
+                    Description
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea
+                      className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
+                      placeholder="Optional recipe description"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage className="text-primary" />
+                </FormItem>
+              )}
+            />
+            <ImageInput image={image} setImage={setImage} ref={imageInputRef} />
+            <FormField
+              control={form.control}
+              name="ingredients"
+              render={({ field }) => (
+                <FormItem className="flex flex-col gap-1">
+                  <FormLabel className="text-16 font-bold text-accent">
+                    Ingredients
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea
+                      className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
+                      placeholder="Insert ingredients, preferably by using bullets"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage className="text-primary" />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="recipe"
+              render={({ field }) => (
+                <FormItem className="flex flex-col gap-1">
+                  <FormLabel className="text-16 font-bold text-accent">
+                    Recipe*
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea
+                      className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
+                      placeholder="Recipe"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage className="text-primary" />
+                </FormItem>
+              )}
+            />
+          </div>
+        </form>
+      </Form>
+    );
   }
-
-  return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="flex w-full flex-col"
-      >
-        <div className="flex flex-col gap-[30px] pb-6">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem className="flex flex-col gap-1">
-                <FormLabel className="text-16 font-bold text-accent">
-                  Name*
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
-                    placeholder="Recipe name"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage className="text-primary" />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem className="flex flex-col gap-1">
-                <FormLabel className="text-16 font-bold text-accent">
-                  Description
-                </FormLabel>
-                <FormControl>
-                  <Textarea
-                    className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
-                    placeholder="Optional recipe description"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage className="text-primary" />
-              </FormItem>
-            )}
-          />
-          <ImageInput image={image} setImage={setImage} ref={imageInputRef} />
-          <FormField
-            control={form.control}
-            name="ingredients"
-            render={({ field }) => (
-              <FormItem className="flex flex-col gap-1">
-                <FormLabel className="text-16 font-bold text-accent">
-                  Ingredients
-                </FormLabel>
-                <FormControl>
-                  <Textarea
-                    className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
-                    placeholder="Insert ingredients, preferably by using bullets"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage className="text-primary" />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="recipe"
-            render={({ field }) => (
-              <FormItem className="flex flex-col gap-1">
-                <FormLabel className="text-16 font-bold text-accent">
-                  Recipe*
-                </FormLabel>
-                <FormControl>
-                  <Textarea
-                    className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
-                    placeholder="Recipe"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage className="text-primary" />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        <div className="flex flex-col items-center">
-          <ActionButton
-            title="Save"
-            icon={<Save />}
-            variant={ButtonVariant.Positive}
-            isLoading={isSubmitting}
-            classList="min-w-48"
-            isDisabled={!form.formState.isDirty}
-            onClick={form.handleSubmit(onSubmit)}
-          />
-        </div>
-      </form>
-    </Form>
-  );
-};
-
+);
+NewRecipeForm.displayName = "NewRecipeForm";
 export default NewRecipeForm;

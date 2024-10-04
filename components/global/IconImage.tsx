@@ -1,8 +1,19 @@
-import { IconImageProps } from "@/types";
 import Image from "next/image";
 import React from "react";
 
-const IconImage = ({ name, width = 15, height = 15 }: IconImageProps) => {
+export interface IconImageProps {
+  name: string;
+  width?: number;
+  height?: number;
+  opacity?: number;
+}
+
+const IconImage = ({
+  name,
+  width = 15,
+  height = 15,
+  opacity = 1,
+}: IconImageProps) => {
   return (
     <Image
       src={`/icons/${name}.svg`}
@@ -12,6 +23,7 @@ const IconImage = ({ name, width = 15, height = 15 }: IconImageProps) => {
       style={{
         width: `${width}px`,
         height: `${height}px`,
+        opacity: opacity,
       }}
     />
   );

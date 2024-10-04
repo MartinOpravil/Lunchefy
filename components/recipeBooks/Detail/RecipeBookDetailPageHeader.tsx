@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { RefObject, useState } from "react";
 import PageHeader from "@/components/global/PageHeader";
 import LinkButton from "@/components/global/LinkButton";
 import ActionButton from "@/components/global/ActionButton";
@@ -9,14 +9,18 @@ import { ButtonVariant, Privilage } from "@/enums";
 import Image from "next/image";
 import DeleteRecipeBookButton from "../DeleteRecipeBookButton";
 import { getRecipeBookById } from "@/convex/recipeBooks";
-import { ArrowLeft, Share2, SquareArrowOutUpRight } from "lucide-react";
+import { ArrowLeft, Book, Eye, Save, Share2 } from "lucide-react";
+import { FormRef } from "@/types";
+import HorizontalSeparator from "@/components/global/HorizontalSeparator";
 
 interface RecipeBookDetailPageHeaderProps {
   recipeBook: Awaited<ReturnType<typeof getRecipeBookById>>;
+  formRef: RefObject<FormRef>;
 }
 
 const RecipeBookDetailPageHeader = ({
   recipeBook,
+  formRef,
 }: RecipeBookDetailPageHeaderProps) => {
   const [isAccessManagerOpen, setIsAccessManagerOpen] = useState(false);
 
@@ -34,7 +38,7 @@ const RecipeBookDetailPageHeader = ({
               href="/app"
               variant={ButtonVariant.Dark}
             />
-            <div className="bg-accent w-[1.5px] h-6 mx-2 rounded"></div>
+            <HorizontalSeparator />
             {recipeBook.data.privilage === Privilage.Owner && (
               <>
                 <DeleteRecipeBookButton
@@ -43,14 +47,19 @@ const RecipeBookDetailPageHeader = ({
                   redirectAfterDelete
                 />
                 <LinkButton
-                  icon={<SquareArrowOutUpRight />}
+                  icon={<Book />}
                   href={`/app/${recipeBook.data._id}`}
                 />
                 <ActionButton
-                  title="Share"
                   icon={<Share2 />}
-                  variant={ButtonVariant.Positive}
                   onClick={() => setIsAccessManagerOpen(true)}
+                />
+                <ActionButton
+                  title="Save"
+                  icon={<Save />}
+                  variant={ButtonVariant.Positive}
+                  onClick={() => formRef.current?.save()}
+                  isLoading={formRef.current?.isSubmitting}
                 />
               </>
             )}

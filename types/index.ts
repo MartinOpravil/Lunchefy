@@ -16,12 +16,6 @@ export interface AuthButtonProps extends ClassListProp {
   title?: string;
 }
 
-export interface IconImageProps {
-  name: string;
-  width?: number;
-  height?: number;
-}
-
 export interface ImageInputProps {
   image?: ImageStateProps;
   setImage: Dispatch<SetStateAction<ImageStateProps | undefined>>;
@@ -97,4 +91,9 @@ export interface UserAccessFormProps {
   privilage: Privilage;
   relationShipId: GenericId<"userRecipeBookRelationship">;
   actionClicked: () => void;
+}
+
+export interface FormRef {
+  save: () => void;
+  isSubmitting: boolean;
 }

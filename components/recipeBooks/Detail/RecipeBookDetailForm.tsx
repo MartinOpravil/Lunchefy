@@ -1,12 +1,16 @@
 "use client";
 import { api } from "@/convex/_generated/api";
-import { Preloaded, useMutation, usePreloadedQuery } from "convex/react";
-import React, { useEffect, useRef, useState } from "react";
+import { useMutation } from "convex/react";
+import React, {
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -16,17 +20,13 @@ import { Input } from "@/components/ui/input";
 import { z } from "zod";
 
 import { useForm } from "react-hook-form";
-import ActionButton from "@/components/global/ActionButton";
 import { useRouter } from "next/navigation";
 import ImageInput from "@/components/global/ImageInput";
-import { ImageInputHandle } from "@/types";
-import Image from "next/image";
+import { FormRef, ImageInputHandle } from "@/types";
 import PrivilageBadge from "@/components/users/PrivilageBadge";
 import { notifyError, notifySuccess } from "@/lib/notifications";
 import { getRecipeBookById } from "@/convex/recipeBooks";
 import { Textarea } from "@/components/ui/textarea";
-import { Save } from "lucide-react";
-import { ButtonVariant } from "@/enums";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -39,14 +39,22 @@ interface RecipeBookDetailPageHeaderProps {
   recipeBook: Awaited<ReturnType<typeof getRecipeBookById>>;
 }
 
-const RecipeBookDetailForm = ({
-  recipeBook,
-}: RecipeBookDetailPageHeaderProps) => {
+const RecipeBookDetailForm = forwardRef<
+  FormRef,
+  RecipeBookDetailPageHeaderProps
+>(({ recipeBook }, ref) => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const updateRecipeBook = useMutation(api.recipeBooks.updateRecipeBook);
   const [image, setImage] = useState(recipeBook.data?.image);
   const imageInputRef = useRef<ImageInputHandle>(null);
+
+  useImperativeHandle(ref, () => ({
+    save() {
+      form.handleSubmit(onSubmit)();
+    },
+    isSubmitting,
+  }));
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -78,7 +86,6 @@ const RecipeBookDetailForm = ({
       if (!response.data)
         return notifyError(response.status.toString(), response.errorMessage);
       notifySuccess("Successfully updated recipe book");
-
       router.push("/app");
       router.refresh();
     } catch (error) {
@@ -142,21 +149,10 @@ const RecipeBookDetailForm = ({
         </div>
 
         <ImageInput image={image} setImage={setImage} ref={imageInputRef} />
-
-        <div className="flex flex-col items-center">
-          <ActionButton
-            title="Save"
-            icon={<Save />}
-            variant={ButtonVariant.Positive}
-            isLoading={isSubmitting}
-            isDisabled={!form.formState.isDirty}
-            classList="min-w-32"
-            onClick={form.handleSubmit(onSubmit)}
-          />
-        </div>
       </form>
     </Form>
   );
-};
+});
 
+RecipeBookDetailForm.displayName = "RecipeBookDetailForm";
 export default RecipeBookDetailForm;

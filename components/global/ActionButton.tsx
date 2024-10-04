@@ -31,18 +31,22 @@ const ActionButton = ({
 }: ActionButtonBaseProps & LinkButtonProps) => {
   return (
     <Button
-      className={cn("action-button", classList)}
+      className={cn(
+        "action-button",
+        classList,
+        `${isLoading && "pointer-events-none"}`
+      )}
       onClick={onClick}
       disabled={isDisabled}
       variant={variant}
     >
-      {isLoading ? (
-        <LoaderSpinner />
+      {iconName ? (
+        <IconImage name={iconName} />
       ) : (
-        <>
-          {iconName ? <IconImage name={iconName} /> : <>{icon}</>} {title}
-        </>
-      )}
+        <div className={`${isLoading && "opacity-0"}`}>{icon}</div>
+      )}{" "}
+      {title}
+      {isLoading && <LoaderSpinner />}
     </Button>
   );
 };

@@ -30,18 +30,22 @@ const LinkButton = ({
   return (
     <Button
       asChild
-      className={cn("action-button", classList)}
+      className={cn(
+        "action-button",
+        classList,
+        `${isRouting && "pointer-events-none"}`
+      )}
       onClick={() => setIsRouting(true)}
       variant={variant}
     >
       <Link href={href}>
-        {isRouting ? (
-          <LoaderSpinner size={15} />
+        {iconName ? (
+          <IconImage name={iconName} opacity={isRouting ? 0 : 1} />
         ) : (
-          <>
-            {iconName ? <IconImage name={iconName} /> : <>{icon}</>} {title}
-          </>
-        )}
+          <div className={`${isRouting && "opacity-0"}`}>{icon}</div>
+        )}{" "}
+        {title}
+        {isRouting && <LoaderSpinner />}
       </Link>
     </Button>
   );
