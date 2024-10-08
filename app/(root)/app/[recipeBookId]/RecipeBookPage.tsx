@@ -8,7 +8,7 @@ import NewRecipeForm from "@/components/recipes/Form/NewRecipeForm";
 import Recipes from "@/components/recipes/Recipes";
 import { api } from "@/convex/_generated/api";
 import { ButtonVariant, Privilage } from "@/enums";
-import { FormRef } from "@/types";
+import { FormMethods } from "@/types";
 import { Preloaded, usePreloadedQuery } from "convex/react";
 import { ArrowLeft, Pencil, Plus, Save } from "lucide-react";
 import React, { useRef, useState } from "react";
@@ -19,7 +19,7 @@ const RecipeBookPage = (props: {
 }) => {
   const recipeBook = usePreloadedQuery(props.recipeBookPreloaded);
   const recipes = usePreloadedQuery(props.recipesPreloaded);
-  const formRef = useRef<FormRef>(null);
+  const formRef = useRef<FormMethods>(null);
   const [isNewFormOpen, setIsNewFormOpen] = useState(false);
 
   if (!recipeBook.data) {

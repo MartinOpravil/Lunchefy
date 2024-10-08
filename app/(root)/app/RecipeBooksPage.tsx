@@ -8,14 +8,14 @@ import ActionButton from "@/components/global/ActionButton";
 import NewRecipeBookForm from "@/components/recipeBooks/NewRecipeBookForm";
 import { ArrowLeft, Plus, Save } from "lucide-react";
 import { ButtonVariant } from "@/enums";
-import { FormRef } from "@/types";
+import { FormMethods } from "@/types";
 import HorizontalSeparator from "@/components/global/HorizontalSeparator";
 
 const RecipeBooksPage = (props: {
   recipeBooksPreloaded: Preloaded<typeof api.recipeBooks.getRecipeBooks>;
 }) => {
   const recipeBooks = usePreloadedQuery(props.recipeBooksPreloaded);
-  const formRef = useRef<FormRef>(null);
+  const formRef = useRef<FormMethods>(null);
   const [isNewFormOpen, setIsNewFormOpen] = useState(false);
 
   // New Form

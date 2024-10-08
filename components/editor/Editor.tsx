@@ -1,3 +1,4 @@
+"use client";
 import BulletList from "@tiptap/extension-bullet-list";
 import ListItem from "@tiptap/extension-list-item";
 import { useEditor, EditorContent } from "@tiptap/react";
@@ -9,13 +10,15 @@ import { Color } from "@tiptap/extension-color";
 import TextStyle from "@tiptap/extension-text-style";
 import TextAlign from "@tiptap/extension-text-align";
 import { debounce } from "lodash";
+import { useFormContext } from "react-hook-form";
 
 interface EditorProps {
   value?: string;
-  onContentChange: (content: string) => void;
+  name: string;
 }
 
-const Editor = ({ value, onContentChange }: EditorProps) => {
+const Editor = ({ value, name }: EditorProps) => {
+  const { register, setValue, trigger, formState } = useFormContext();
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -27,10 +30,11 @@ const Editor = ({ value, onContentChange }: EditorProps) => {
         types: ["heading", "paragraph"],
       }),
     ],
+    immediatelyRender: false,
     content: value,
-    onUpdate: debounce((value) => {
-      const updatedContent = value.editor.getHTML();
-      onContentChange(updatedContent);
+    onUpdate: debounce(({ editor }) => {
+      const updatedContent = editor.getHTML();
+      setValue(name, updatedContent, { shouldDirty: true });
     }, 300),
     parseOptions: {
       preserveWhitespace: "full",
@@ -49,7 +53,11 @@ const Editor = ({ value, onContentChange }: EditorProps) => {
       preserveWhitespace: "full",
     });
     editor.commands.setTextSelection({ from, to });
-  }, [value, editor]);
+  }, [value, editor, register]);
+
+  useEffect(() => {
+    register(name, { required: true });
+  }, [register, name]);
 
   return (
     <>

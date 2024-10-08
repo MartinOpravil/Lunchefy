@@ -21,7 +21,7 @@ import ActionButton from "@/components/global/ActionButton";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import ImageInput from "@/components/global/ImageInput";
-import { FormRef, ImageInputHandle, ImageStateProps } from "@/types";
+import { FormMethods, ImageInputHandle, ImageStateProps } from "@/types";
 import { notifyError, notifySuccess } from "@/lib/notifications";
 import { Textarea } from "../ui/textarea";
 import { Save } from "lucide-react";
@@ -38,7 +38,7 @@ interface NewRecipeBookForm {
   afterSaveAction: () => void;
 }
 
-const NewRecipeBookForm = forwardRef<FormRef, NewRecipeBookForm>(
+const NewRecipeBookForm = forwardRef<FormMethods, NewRecipeBookForm>(
   ({ afterSaveAction }, ref) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const createRecipeBook = useMutation(api.recipeBooks.createRecipeBook);

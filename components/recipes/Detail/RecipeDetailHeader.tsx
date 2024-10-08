@@ -3,25 +3,25 @@ import LinkButton from "@/components/global/LinkButton";
 import PageHeader from "@/components/global/PageHeader";
 import { getRecipeById } from "@/convex/recipes";
 import { ButtonVariant, Privilage } from "@/enums";
-import React, { RefObject } from "react";
+import React from "react";
 import DeleteRecipeButton from "../DeleteRecipeButton";
-import {
-  ArrowBigLeft,
-  ArrowLeft,
-  Book,
-  MoveLeft,
-  NotebookText,
-  Save,
-  SquareArrowOutUpRight,
-} from "lucide-react";
-import { FormRef } from "@/types";
+import { ArrowLeft, Book, Save } from "lucide-react";
+import { useFormContext } from "react-hook-form";
 
 interface RecipeDetailHeaderProps {
   recipe: Awaited<ReturnType<typeof getRecipeById>>;
-  formRef: RefObject<FormRef>;
 }
 
-const RecipeDetailHeader = ({ recipe, formRef }: RecipeDetailHeaderProps) => {
+const RecipeDetailHeader = ({
+  recipe,
+  // formRef,
+  // formState,
+}: RecipeDetailHeaderProps) => {
+  const {
+    formState: { isDirty, isSubmitting },
+    handleSubmit,
+  } = useFormContext();
+
   if (!recipe.data) return <></>;
 
   return (
@@ -47,26 +47,16 @@ const RecipeDetailHeader = ({ recipe, formRef }: RecipeDetailHeaderProps) => {
           )}
           <LinkButton
             icon={<Book />}
-            // iconName="viewer"
             href={`/app/${recipe.data.recipeBookId}/${recipe.data._id}`}
           />
           <ActionButton
             title="Save"
             icon={<Save />}
             variant={ButtonVariant.Positive}
-            onClick={() => formRef.current?.save()}
-            isLoading={formRef.current?.isSubmitting}
+            isDisabled={!isDirty}
+            onClick={() => handleSubmit}
+            isLoading={isSubmitting}
           />
-          {/* <ActionButton
-            title="Save"
-            icon={<Save />}
-            // isLoading={isSubmitting}
-            // isDisabled={!form.formState.isDirty}
-            variant={ButtonVariant.Positive}
-            // classList="min-w-32"
-            // onClick={form.handleSubmit(onSubmit)}
-            onClick={() => {}}
-          /> */}
         </>
       }
     />

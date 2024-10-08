@@ -22,7 +22,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import ImageInput from "@/components/global/ImageInput";
-import { FormRef, ImageInputHandle } from "@/types";
+import { FormMethods, ImageInputHandle } from "@/types";
 import PrivilageBadge from "@/components/users/PrivilageBadge";
 import { notifyError, notifySuccess } from "@/lib/notifications";
 import { getRecipeBookById } from "@/convex/recipeBooks";
@@ -40,7 +40,7 @@ interface RecipeBookDetailPageHeaderProps {
 }
 
 const RecipeBookDetailForm = forwardRef<
-  FormRef,
+  FormMethods,
   RecipeBookDetailPageHeaderProps
 >(({ recipeBook }, ref) => {
   const router = useRouter();

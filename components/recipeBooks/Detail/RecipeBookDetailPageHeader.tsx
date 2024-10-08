@@ -10,12 +10,12 @@ import Image from "next/image";
 import DeleteRecipeBookButton from "../DeleteRecipeBookButton";
 import { getRecipeBookById } from "@/convex/recipeBooks";
 import { ArrowLeft, Book, Eye, Save, Share2 } from "lucide-react";
-import { FormRef } from "@/types";
+import { FormMethods } from "@/types";
 import HorizontalSeparator from "@/components/global/HorizontalSeparator";
 
 interface RecipeBookDetailPageHeaderProps {
   recipeBook: Awaited<ReturnType<typeof getRecipeBookById>>;
-  formRef: RefObject<FormRef>;
+  formRef: RefObject<FormMethods>;
 }
 
 const RecipeBookDetailPageHeader = ({

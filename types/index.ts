@@ -1,7 +1,8 @@
 import { Id } from "@/convex/_generated/dataModel";
 import { Privilage } from "@/enums";
 import { GenericId } from "convex/values";
-import { Dispatch, ReactNode, SetStateAction } from "react";
+import { Dispatch, ReactNode, RefObject, SetStateAction } from "react";
+import { UseFormReturn } from "react-hook-form";
 
 export interface ImageStateProps {
   imageUrl: string;
@@ -93,7 +94,15 @@ export interface UserAccessFormProps {
   actionClicked: () => void;
 }
 
-export interface FormRef {
+export interface FormMethods {
   save: () => void;
+}
+
+export interface FormImage {
+  upload: () => void;
+}
+
+export interface FormState {
   isSubmitting: boolean;
+  isDirty: boolean;
 }

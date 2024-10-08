@@ -2,7 +2,7 @@
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { notifyError, notifySuccess } from "@/lib/notifications";
-import { FormRef, ImageInputHandle, ImageStateProps } from "@/types";
+import { FormMethods, ImageInputHandle, ImageStateProps } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "convex/react";
 import React, {
@@ -44,7 +44,7 @@ interface NewRecipeBookFormProps {
   afterSaveAction: () => void;
 }
 
-const NewRecipeForm = forwardRef<FormRef, NewRecipeBookFormProps>(
+const NewRecipeForm = forwardRef<FormMethods, NewRecipeBookFormProps>(
   ({ recipeBookId, afterSaveAction }, ref) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const createRecipe = useMutation(api.recipes.createRecipe);
