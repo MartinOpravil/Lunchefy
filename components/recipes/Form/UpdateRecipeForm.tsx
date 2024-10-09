@@ -16,7 +16,7 @@ import { Textarea } from "@/components/ui/textarea";
 import ImageInput from "@/components/global/ImageInput";
 import Editor from "@/components/editor/Editor";
 interface RecipeDetailHeaderProps {
-  recipe: Awaited<ReturnType<typeof getRecipeById>>;
+  recipe?: Awaited<ReturnType<typeof getRecipeById>>;
 }
 
 interface CustomFormContext {
@@ -30,13 +30,15 @@ const UpdateRecipeForm = ({ recipe }: RecipeDetailHeaderProps) => {
   > &
     CustomFormContext;
 
-  if (!recipe.data) return <></>;
+  // if (!recipe || !recipe.data) return <></>;
 
   return (
     <div className="w-full">
-      <div className="flex justify-end">
-        {recipe.data && <PrivilageBadge privilage={recipe.data.privilage} />}
-      </div>
+      {recipe && recipe.data && (
+        <div className="flex justify-end">
+          {recipe.data && <PrivilageBadge privilage={recipe.data.privilage} />}
+        </div>
+      )}
       <div className="flex flex-col gap-[30px] pb-6 w-full">
         <div className="flex flex-col md:flex-row gap-[30px] w-full">
           <div className="flex flex-col gap-[30px] flex-auto">

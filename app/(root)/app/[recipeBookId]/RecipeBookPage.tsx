@@ -1,17 +1,21 @@
 "use client";
+import FormProviderWrapper from "@/components/FormProviderWrapper";
 import ActionButton from "@/components/global/ActionButton";
 import ErrorHandler from "@/components/global/ErrorHandler";
-import HorizontalSeparator from "@/components/global/HorizontalSeparator";
 import LinkButton from "@/components/global/LinkButton";
 import PageHeader from "@/components/global/PageHeader";
-import NewRecipeForm from "@/components/recipes/Form/NewRecipeForm";
+import UpdateRecipeForm from "@/components/recipes/Form/UpdateRecipeForm";
+import NewRecipeHeader from "@/components/recipes/headers/NewRecipeHeader";
 import Recipes from "@/components/recipes/Recipes";
+import { recipeFormSchema, RecipeFormValues } from "@/constants/FormSchemas";
 import { api } from "@/convex/_generated/api";
 import { ButtonVariant, Privilage } from "@/enums";
-import { FormMethods } from "@/types";
-import { Preloaded, usePreloadedQuery } from "convex/react";
+import { notifyError, notifySuccess } from "@/lib/notifications";
+import { ImageInputHandle, ImageStateProps } from "@/types";
+import { Preloaded, useMutation, usePreloadedQuery } from "convex/react";
 import { ArrowLeft, Pencil, Plus, Save } from "lucide-react";
 import React, { useRef, useState } from "react";
+import { SubmitHandler } from "react-hook-form";
 
 const RecipeBookPage = (props: {
   recipeBookPreloaded: Preloaded<typeof api.recipeBooks.getRecipeBookById>;
@@ -19,8 +23,44 @@ const RecipeBookPage = (props: {
 }) => {
   const recipeBook = usePreloadedQuery(props.recipeBookPreloaded);
   const recipes = usePreloadedQuery(props.recipesPreloaded);
-  const formRef = useRef<FormMethods>(null);
+  const createRecipe = useMutation(api.recipes.createRecipe);
+
+  const [resetForm, setResetForm] = useState<(() => void) | null>(null);
+  const coverImageRef = useRef<ImageInputHandle>(null);
+  const recipeImageRef = useRef<ImageInputHandle>(null);
+
   const [isNewFormOpen, setIsNewFormOpen] = useState(false);
+
+  const handleSubmit: SubmitHandler<RecipeFormValues> = async (
+    values: RecipeFormValues
+  ) => {
+    console.log("Should trigger submit");
+    if (!recipeBook.data?._id) {
+      notifyError("Error when creating recipe", "RecipebookId is empty");
+      return;
+    }
+
+    try {
+      const updatedImage = await coverImageRef.current?.commit();
+      const response = await createRecipe({
+        recipeBookId: recipeBook.data?._id,
+        name: values.name,
+        description: values.description,
+        ingredients: values.ingredients,
+        recipe: values.recipe,
+        image: updatedImage ?? (values.image as ImageStateProps),
+      });
+
+      if (response.data) {
+        notifySuccess("Recipe book successfully created.");
+        setIsNewFormOpen(false);
+        return;
+      }
+      notifyError(response.status.toString(), response.errorMessage);
+    } catch (error) {
+      notifyError("Error creating recipe", error?.toString());
+    }
+  };
 
   if (!recipeBook.data) {
     return <></>;
@@ -28,36 +68,32 @@ const RecipeBookPage = (props: {
 
   if (isNewFormOpen) {
     return (
-      <main className="page">
-        <PageHeader
-          title="New recipe"
-          icon="recipe"
-          actionButton={
-            <>
-              <ActionButton
-                icon={<ArrowLeft />}
-                onClick={() => setIsNewFormOpen(false)}
-                variant={ButtonVariant.Dark}
-              />
-              <HorizontalSeparator />
-              <ActionButton
-                title="Save"
-                icon={<Save />}
-                variant={ButtonVariant.Positive}
-                onClick={() => formRef.current?.save()}
-                isLoading={formRef.current?.isSubmitting}
-              />
-            </>
-          }
-        />
-        <main className="page-content">
-          <NewRecipeForm
-            recipeBookId={recipeBook.data._id}
-            afterSaveAction={() => setIsNewFormOpen(false)}
-            ref={formRef}
-          />
+      <FormProviderWrapper
+        onSubmit={handleSubmit}
+        formSchema={recipeFormSchema}
+        defaultValues={{
+          name: "",
+          recipe: "",
+          description: undefined,
+          ingredients: undefined,
+          image: undefined,
+        }}
+        passResetToParent={setResetForm}
+        coverImageRef={coverImageRef}
+        recipeImageRef={recipeImageRef}
+        manualLeaveAction={() => setIsNewFormOpen(false)}
+      >
+        <main className="page">
+          <NewRecipeHeader />
+          <main className="page-content">
+            <UpdateRecipeForm />
+            {/* <NewRecipeForm
+              recipeBookId={recipeBook.data._id}
+              afterSaveAction={() => setIsNewFormOpen(false)}
+            /> */}
+          </main>
         </main>
-      </main>
+      </FormProviderWrapper>
     );
   }
 

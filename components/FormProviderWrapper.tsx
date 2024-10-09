@@ -18,6 +18,7 @@ import { usePathname, useRouter } from "next/navigation";
 interface FormContextProps<T extends FieldValues> extends UseFormReturn<T> {
   coverImageRef: Ref<ImageInputHandle>;
   recipeImageRef?: Ref<ImageInputHandle>;
+  performManualLeaveAction: () => void;
 }
 
 interface FormProviderWrapperProps<T extends FieldValues> {
@@ -29,6 +30,7 @@ interface FormProviderWrapperProps<T extends FieldValues> {
   passResetToParent?: (reset: () => void) => void; // Callback to pass the reset method to the parent
   coverImageRef: Ref<ImageInputHandle>;
   recipeImageRef?: Ref<ImageInputHandle>;
+  manualLeaveAction?: () => void;
 }
 
 const FormProviderWrapper = <T extends FieldValues>({
@@ -40,6 +42,7 @@ const FormProviderWrapper = <T extends FieldValues>({
   passResetToParent,
   coverImageRef,
   recipeImageRef,
+  manualLeaveAction,
 }: FormProviderWrapperProps<T>) => {
   const router = useRouter();
   const currentPath = usePathname();
@@ -55,10 +58,20 @@ const FormProviderWrapper = <T extends FieldValues>({
     values: defaultValues as T,
   });
 
+  const performManualLeaveAction = () => {
+    if (!manualLeaveAction) return;
+    if (form.formState.isDirty) {
+      setIsModalOpen(true);
+      return;
+    }
+    manualLeaveAction();
+  };
+
   const methods: FormContextProps<T> = {
     ...form,
     coverImageRef,
     recipeImageRef,
+    performManualLeaveAction,
   };
 
   useEffect(() => {
@@ -74,13 +87,17 @@ const FormProviderWrapper = <T extends FieldValues>({
 
       form.reset();
       setTimeout(() => {
-        router.push(pendingNavigation); // Continue navigation after save
+        router.push(pendingNavigation);
       }, 100);
+      setPendingNavigation(null);
+      return;
     }
+    if (manualLeaveAction) manualLeaveAction();
   };
 
   const handleCancel = () => {
     setIsModalOpen(false);
+    setPendingNavigation(null);
   };
 
   useEffect(() => {
@@ -113,6 +130,7 @@ const FormProviderWrapper = <T extends FieldValues>({
       <ActionDialog
         isOpen={isModalOpen}
         setIsOpen={setIsModalOpen}
+        cancelAction={handleCancel}
         confirmAction={handleContinue}
         title="Unsaved changes present"
         description="By proceeding your unsaved changes will be lost. Do you still want to continue?"
