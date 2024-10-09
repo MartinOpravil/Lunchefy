@@ -6,11 +6,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import { AlertDialogProps, BasicDialogProps } from "@/types";
-import ActionButton from "./ActionButton";
-import Image from "next/image";
+import { BasicDialogProps } from "@/types";
 
 const BasicDialog = ({
   isOpen,

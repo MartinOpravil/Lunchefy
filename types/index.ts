@@ -60,16 +60,6 @@ export interface BasicDialogProps {
   action?: ReactNode;
 }
 
-export interface AlertDialogProps {
-  isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  title?: string;
-  description?: string;
-  subject?: string;
-  action: () => void;
-  confirmButtonLabel?: string;
-}
-
 export interface AccessManagerProps {
   recipeBookName: string;
   recipeBookId: GenericId<"recipeBooks">;

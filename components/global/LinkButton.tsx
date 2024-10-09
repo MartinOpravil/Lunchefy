@@ -27,6 +27,14 @@ const LinkButton = ({
   classList,
 }: LinkButtonBaseProps & LinkButtonProps) => {
   const [isRouting, setIsRouting] = useState(false);
+
+  const visualizeRouting = () => {
+    setIsRouting(true);
+    setTimeout(() => {
+      setIsRouting(false);
+    }, 2000);
+  };
+
   return (
     <Button
       asChild
@@ -35,16 +43,13 @@ const LinkButton = ({
         classList,
         `${isRouting && "pointer-events-none"}`
       )}
-      onClick={() => setIsRouting(true)}
+      onClick={visualizeRouting}
       variant={variant}
     >
       <Link href={href}>
-        {iconName ? (
-          <IconImage name={iconName} opacity={isRouting ? 0 : 1} />
-        ) : (
-          <div className={`${isRouting && "opacity-0"}`}>{icon}</div>
-        )}{" "}
-        {title}
+        {iconName && <IconImage name={iconName} />}
+        {icon && <div className={`${isRouting && "opacity-0"}`}>{icon}</div>}
+        {title && <div>{title}</div>}
         {isRouting && <LoaderSpinner />}
       </Link>
     </Button>

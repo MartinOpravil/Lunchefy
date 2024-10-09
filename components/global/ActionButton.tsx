@@ -40,12 +40,9 @@ const ActionButton = ({
       disabled={isDisabled}
       variant={variant}
     >
-      {iconName ? (
-        <IconImage name={iconName} />
-      ) : (
-        <div className={`${isLoading && "opacity-0"}`}>{icon}</div>
-      )}{" "}
-      {title}
+      {iconName && <IconImage name={iconName} />}
+      {icon && <div className={`${isLoading && "opacity-0"}`}>{icon}</div>}
+      {title && <div>{title}</div>}
       {isLoading && <LoaderSpinner />}
     </Button>
   );
