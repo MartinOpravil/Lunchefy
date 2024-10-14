@@ -4,7 +4,7 @@ import ActionButton from "@/components/global/ActionButton";
 import ErrorHandler from "@/components/global/ErrorHandler";
 import LinkButton from "@/components/global/LinkButton";
 import PageHeader from "@/components/global/PageHeader";
-import UpdateRecipeForm from "@/components/recipes/Form/UpdateRecipeForm";
+import RecipeForm from "@/components/recipes/Form/RecipeForm";
 import NewRecipeHeader from "@/components/recipes/headers/NewRecipeHeader";
 import Recipes from "@/components/recipes/Recipes";
 import { recipeFormSchema, RecipeFormValues } from "@/constants/FormSchemas";
@@ -86,11 +86,7 @@ const RecipeBookPage = (props: {
         <main className="page">
           <NewRecipeHeader />
           <main className="page-content">
-            <UpdateRecipeForm />
-            {/* <NewRecipeForm
-              recipeBookId={recipeBook.data._id}
-              afterSaveAction={() => setIsNewFormOpen(false)}
-            /> */}
+            <RecipeForm />
           </main>
         </main>
       </FormProviderWrapper>

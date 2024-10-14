@@ -1,5 +1,5 @@
 "use client";
-import React, { RefObject, useState } from "react";
+import React, { useState } from "react";
 import PageHeader from "@/components/global/PageHeader";
 import LinkButton from "@/components/global/LinkButton";
 import ActionButton from "@/components/global/ActionButton";
@@ -9,19 +9,21 @@ import { ButtonVariant, Privilage } from "@/enums";
 import Image from "next/image";
 import DeleteRecipeBookButton from "../DeleteRecipeBookButton";
 import { getRecipeBookById } from "@/convex/recipeBooks";
-import { ArrowLeft, Book, Eye, Save, Share2 } from "lucide-react";
-import { FormMethods } from "@/types";
+import { ArrowLeft, Book, Save, Share2 } from "lucide-react";
 import HorizontalSeparator from "@/components/global/HorizontalSeparator";
+import { useFormContext } from "react-hook-form";
 
 interface RecipeBookDetailPageHeaderProps {
   recipeBook: Awaited<ReturnType<typeof getRecipeBookById>>;
-  formRef: RefObject<FormMethods>;
 }
 
-const RecipeBookDetailPageHeader = ({
+const RecipeBookDetailHeader = ({
   recipeBook,
-  formRef,
 }: RecipeBookDetailPageHeaderProps) => {
+  const {
+    formState: { isDirty, isSubmitting },
+    handleSubmit,
+  } = useFormContext();
   const [isAccessManagerOpen, setIsAccessManagerOpen] = useState(false);
 
   if (!recipeBook.data) return <></>;
@@ -52,14 +54,18 @@ const RecipeBookDetailPageHeader = ({
                 />
                 <ActionButton
                   icon={<Share2 />}
-                  onClick={() => setIsAccessManagerOpen(true)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsAccessManagerOpen(true);
+                  }}
                 />
                 <ActionButton
                   title="Save"
                   icon={<Save />}
                   variant={ButtonVariant.Positive}
-                  onClick={() => formRef.current?.save()}
-                  isLoading={formRef.current?.isSubmitting}
+                  onClick={() => handleSubmit}
+                  isLoading={isSubmitting}
+                  isDisabled={!isDirty}
                 />
               </>
             )}
@@ -90,4 +96,4 @@ const RecipeBookDetailPageHeader = ({
   );
 };
 
-export default RecipeBookDetailPageHeader;
+export default RecipeBookDetailHeader;

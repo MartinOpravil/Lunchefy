@@ -12,11 +12,7 @@ interface RecipeDetailHeaderProps {
   recipe: Awaited<ReturnType<typeof getRecipeById>>;
 }
 
-const RecipeDetailHeader = ({
-  recipe,
-  // formRef,
-  // formState,
-}: RecipeDetailHeaderProps) => {
+const RecipeDetailHeader = ({ recipe }: RecipeDetailHeaderProps) => {
   const {
     formState: { isDirty, isSubmitting },
     handleSubmit,

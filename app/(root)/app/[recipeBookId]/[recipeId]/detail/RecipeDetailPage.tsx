@@ -2,21 +2,15 @@
 import FormProviderWrapper from "@/components/FormProviderWrapper";
 import ErrorHandler from "@/components/global/ErrorHandler";
 import RecipeDetailHeader from "@/components/recipes/Detail/RecipeDetailHeader";
-import UpdateRecipeForm from "@/components/recipes/Form/UpdateRecipeForm";
+import RecipeForm from "@/components/recipes/Form/RecipeForm";
 import { recipeFormSchema, RecipeFormValues } from "@/constants/FormSchemas";
 import { api } from "@/convex/_generated/api";
 import { notifyError, notifySuccess } from "@/lib/notifications";
-import {
-  FormImage,
-  FormMethods,
-  FormState,
-  ImageInputHandle,
-  ImageStateProps,
-} from "@/types";
+import { ImageInputHandle, ImageStateProps } from "@/types";
 import { Preloaded, useMutation, usePreloadedQuery } from "convex/react";
 import { useRouter } from "next/navigation";
 import React, { useRef, useState } from "react";
-import { SubmitHandler, useFormContext } from "react-hook-form";
+import { SubmitHandler } from "react-hook-form";
 
 interface RecipeDetailPageProps {
   recipePreloaded: Preloaded<typeof api.recipes.getRecipeById>;
@@ -81,7 +75,7 @@ const RecipeDetailPage = ({ recipePreloaded }: RecipeDetailPageProps) => {
         <RecipeDetailHeader recipe={recipe} />
         <main className="page-content">
           <ErrorHandler convexResponse={recipe} />
-          <UpdateRecipeForm recipe={recipe} />
+          <RecipeForm recipe={recipe} />
         </main>
       </main>
     </FormProviderWrapper>

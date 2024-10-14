@@ -1,7 +1,7 @@
 "use client";
 import { getRecipeById } from "@/convex/recipes";
-import { FormMethods, ImageInputHandle } from "@/types";
-import React, { forwardRef } from "react";
+import { ImageInputHandle } from "@/types";
+import React from "react";
 import { useFormContext } from "react-hook-form";
 import {
   FormControl,
@@ -24,7 +24,7 @@ interface CustomFormContext {
   recipeImageRef?: React.RefObject<ImageInputHandle>;
 }
 
-const UpdateRecipeForm = ({ recipe }: RecipeDetailHeaderProps) => {
+const RecipeForm = ({ recipe }: RecipeDetailHeaderProps) => {
   const { register, coverImageRef } = useFormContext() as ReturnType<
     typeof useFormContext
   > &
@@ -126,4 +126,4 @@ const UpdateRecipeForm = ({ recipe }: RecipeDetailHeaderProps) => {
     </div>
   );
 };
-export default UpdateRecipeForm;
+export default RecipeForm;

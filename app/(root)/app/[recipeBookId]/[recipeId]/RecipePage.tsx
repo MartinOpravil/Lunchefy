@@ -1,6 +1,6 @@
 "use client";
 import ErrorHandler from "@/components/global/ErrorHandler";
-import UpdateRecipeForm from "@/components/recipes/Form/UpdateRecipeForm";
+import RecipeForm from "@/components/recipes/Form/RecipeForm";
 import RecipeHeader from "@/components/recipes/RecipeHeader";
 import { api } from "@/convex/_generated/api";
 import { Preloaded, usePreloadedQuery } from "convex/react";
