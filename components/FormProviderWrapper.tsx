@@ -18,7 +18,9 @@ import { usePathname, useRouter } from "next/navigation";
 interface FormContextProps<T extends FieldValues> extends UseFormReturn<T> {
   coverImageRef: Ref<ImageInputHandle>;
   recipeImageRef?: Ref<ImageInputHandle>;
-  performManualLeaveAction: () => void;
+  performManualLeaveAction: (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => void;
 }
 
 interface FormProviderWrapperProps<T extends FieldValues> {
@@ -58,7 +60,10 @@ const FormProviderWrapper = <T extends FieldValues>({
     values: defaultValues as T,
   });
 
-  const performManualLeaveAction = () => {
+  const performManualLeaveAction = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
     if (!manualLeaveAction) return;
     if (form.formState.isDirty) {
       setIsModalOpen(true);

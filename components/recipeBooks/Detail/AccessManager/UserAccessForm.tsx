@@ -158,7 +158,7 @@ const UserAccessForm = ({
         subject={name}
         description="User will lose access for this recipe book."
         confirmButtonLabel="Revoke"
-        action={handleDeleteRecipeBook}
+        confirmAction={handleDeleteRecipeBook}
       />
     </>
   );
