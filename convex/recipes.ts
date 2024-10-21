@@ -36,12 +36,10 @@ export const getRecipes = query({
       .filter((q) => q.eq(q.field("recipeBookId"), args.recipeBookId))
       .collect();
 
-    return createOKResponse(
-      {
-        recipes,
-        privilage: userRecipeBookRelationship.privilage as Privilage,
-      } ?? []
-    );
+    return createOKResponse({
+      recipes,
+      privilage: userRecipeBookRelationship.privilage as Privilage,
+    });
   },
 });
 
@@ -99,14 +97,21 @@ export const createRecipe = mutation({
     recipeBookId: v.id("recipeBooks"),
     name: v.string(),
     description: v.optional(v.string()),
-    image: v.optional(
+    coverImage: v.optional(
       v.object({
         imageUrl: v.string(),
         storageId: v.optional(v.id("_storage")),
       })
     ),
+    isImageRecipe: v.boolean(),
     ingredients: v.optional(v.string()),
-    recipe: v.string(),
+    instructions: v.optional(v.string()),
+    recipeImage: v.optional(
+      v.object({
+        imageUrl: v.string(),
+        storageId: v.optional(v.id("_storage")),
+      })
+    ),
   },
   handler: async (ctx, args) => {
     const userResponse = await getLoggedUser(ctx, args);
@@ -117,9 +122,11 @@ export const createRecipe = mutation({
       recipeBookId: args.recipeBookId,
       name: args.name,
       description: args.description,
-      image: args.image,
+      coverImage: args.coverImage,
       ingredients: args.ingredients,
-      recipe: args.recipe,
+      instructions: args.instructions,
+      recipeImage: args.recipeImage,
+      isImageRecipe: args.isImageRecipe,
     });
     if (!newRecipeBookId) {
       return createBadResponse(
@@ -139,14 +146,21 @@ export const updateRecipe = mutation({
     id: v.id("recipes"),
     name: v.string(),
     description: v.optional(v.string()),
-    image: v.optional(
+    coverImage: v.optional(
       v.object({
         imageUrl: v.string(),
         storageId: v.optional(v.id("_storage")),
       })
     ),
+    isImageRecipe: v.boolean(),
     ingredients: v.optional(v.string()),
-    recipe: v.string(),
+    instructions: v.optional(v.string()),
+    recipeImage: v.optional(
+      v.object({
+        imageUrl: v.string(),
+        storageId: v.optional(v.id("_storage")),
+      })
+    ),
   },
   handler: async (ctx, args) => {
     const userResponse = await getLoggedUser(ctx, args);
@@ -161,21 +175,31 @@ export const updateRecipe = mutation({
       );
     }
 
-    // Delete previous image if image changes
-    const recipeImage = recipe.image;
+    // Handle cover photo deletion
     if (
-      recipeImage?.imageUrl !== args.image?.imageUrl &&
-      recipeImage?.storageId
+      recipe.coverImage?.storageId &&
+      recipe.coverImage?.imageUrl !== args.coverImage?.imageUrl
     ) {
-      await ctx.storage.delete(recipeImage.storageId);
+      await ctx.storage.delete(recipe.coverImage.storageId);
+    }
+
+    // Handle recipe photo deletion
+    if (
+      recipe.recipeImage?.storageId &&
+      (!args.isImageRecipe ||
+        recipe.recipeImage?.imageUrl !== args.recipeImage?.imageUrl)
+    ) {
+      await ctx.storage.delete(recipe.recipeImage.storageId);
     }
 
     await ctx.db.patch(args.id, {
       name: args.name,
       description: args.description,
-      image: args.image,
+      coverImage: args.coverImage,
       ingredients: args.ingredients,
-      recipe: args.recipe,
+      instructions: args.instructions,
+      recipeImage: args.isImageRecipe ? args.recipeImage : undefined,
+      isImageRecipe: args.isImageRecipe,
     });
     return createOKResponse(true);
   },
@@ -199,8 +223,10 @@ export const deleteRecipe = mutation({
     }
 
     // Delete image from storage
-    if (recipe.image && recipe.image.storageId)
-      await ctx.storage.delete(recipe.image.storageId);
+    if (recipe.coverImage?.storageId)
+      await ctx.storage.delete(recipe.coverImage.storageId);
+    if (recipe.recipeImage?.storageId)
+      await ctx.storage.delete(recipe.recipeImage.storageId);
 
     await ctx.db.delete(recipe._id);
     return createOKResponse(true);

@@ -78,6 +78,9 @@ const ImageInput = (
     commit: async () => {
       return await commit();
     },
+    getImageBlob: () => {
+      return imageBlob?.blob;
+    },
   }));
 
   const changeImage = async (e: React.ChangeEvent<HTMLInputElement>) => {

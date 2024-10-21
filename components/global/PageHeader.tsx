@@ -1,6 +1,4 @@
 "use client";
-import { api } from "@/convex/_generated/api";
-import { Preloaded, usePreloadedQuery } from "convex/react";
 import Image from "next/image";
 import React, { ReactNode } from "react";
 

@@ -36,7 +36,7 @@ const RecipeBooksPage = (props: {
       const response = await createRecipeBook({
         name: values.name,
         description: values.description,
-        image: updatedImage ?? (values.image as ImageStateProps),
+        coverImage: updatedImage ?? (values.coverImage as ImageStateProps),
       });
 
       if (response.data) {
@@ -59,7 +59,7 @@ const RecipeBooksPage = (props: {
         defaultValues={{
           name: "",
           description: undefined,
-          image: undefined,
+          coverImage: undefined,
         }}
         passResetToParent={setResetForm}
         coverImageRef={coverImageRef}

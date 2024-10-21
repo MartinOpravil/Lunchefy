@@ -22,7 +22,7 @@ export default defineSchema({
     description: v.optional(v.string()),
     // imageUrl: v.optional(v.string()),
     //recipeIdList: v.array(v.id("recipes")),
-    image: v.optional(
+    coverImage: v.optional(
       v.object({
         imageUrl: v.string(),
         storageId: v.optional(v.id("_storage")),
@@ -38,16 +38,17 @@ export default defineSchema({
     recipeBookId: v.id("recipeBooks"),
     name: v.string(),
     description: v.optional(v.string()),
-    image: v.optional(
+    coverImage: v.optional(
       v.object({
         imageUrl: v.string(),
         storageId: v.optional(v.id("_storage")),
       })
     ),
+    isImageRecipe: v.boolean(),
     tags: v.optional(v.array(v.id("tags"))),
     ingredients: v.optional(v.string()),
-    recipe: v.string(),
-    recipePhoto: v.optional(
+    instructions: v.optional(v.string()),
+    recipeImage: v.optional(
       v.object({
         imageUrl: v.string(),
         storageId: v.optional(v.id("_storage")),

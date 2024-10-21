@@ -69,7 +69,7 @@ const DeleteRecipeButton = ({
         title="Are you absolutely sure want to delete?"
         description="This action cannot be undone and will permanently delete your recipe book from our servers."
         subject={recipeTitle}
-        action={handleDeleteRecipe}
+        confirmAction={handleDeleteRecipe}
       />
     </>
   );

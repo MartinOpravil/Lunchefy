@@ -5,7 +5,7 @@ export const recipeBookFormSchema = z.object({
     message: "Recipe book name must be at least 2 characters.",
   }),
   description: z.optional(z.string()),
-  image: z.optional(
+  coverImage: z.optional(
     z.object({
       imageUrl: z.string(),
       storageId: z.optional(z.string()),
@@ -20,10 +20,15 @@ export const recipeFormSchema = z.object({
   }),
   description: z.optional(z.string()),
   ingredients: z.optional(z.string()),
-  recipe: z.string().min(2, {
-    message: "Recipe must be at least 2 characters.",
-  }),
-  image: z.optional(
+  instructions: z.optional(z.string()),
+  coverImage: z.optional(
+    z.object({
+      imageUrl: z.string(),
+      storageId: z.optional(z.string()),
+    })
+  ),
+  isImageRecipe: z.boolean(),
+  recipeImage: z.optional(
     z.object({
       imageUrl: z.string(),
       storageId: z.optional(z.string()),

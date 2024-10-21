@@ -27,6 +27,7 @@ export interface ImageInputProps {
 
 export interface ImageInputHandle {
   commit: () => Promise<ImageStateProps | undefined>;
+  getImageBlob: () => Blob | undefined;
 }
 
 export interface RecipeBookProps {

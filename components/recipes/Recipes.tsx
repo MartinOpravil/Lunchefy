@@ -35,7 +35,7 @@ const RecipeBooks = (props: {
               recipeBookId={recipeBook.recipeBookId}
               title={recipeBook.name}
               description={recipeBook.description}
-              imageUrl={recipeBook.image?.imageUrl}
+              imageUrl={recipeBook.coverImage?.imageUrl}
               privilage={props.recipes.data!.privilage}
             />
           ))}

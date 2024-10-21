@@ -150,7 +150,7 @@ export const createRecipeBook = mutation({
   args: {
     name: v.string(),
     description: v.optional(v.string()),
-    image: v.optional(
+    coverImage: v.optional(
       v.object({
         imageUrl: v.string(),
         storageId: v.optional(v.id("_storage")),
@@ -165,7 +165,7 @@ export const createRecipeBook = mutation({
     const newRecipeBookId = await ctx.db.insert("recipeBooks", {
       name: args.name,
       description: args.description,
-      image: args.image,
+      coverImage: args.coverImage,
     });
     if (!newRecipeBookId) {
       return createBadResponse(
@@ -215,8 +215,8 @@ export const deleteRecipeBook = mutation({
     }
 
     // Delete image from storage
-    if (recipeBook.image && recipeBook.image.storageId)
-      await ctx.storage.delete(recipeBook.image.storageId);
+    if (recipeBook.coverImage?.storageId)
+      await ctx.storage.delete(recipeBook.coverImage.storageId);
 
     // Delete all relationsips
     const relationship = await ctx.db
@@ -239,7 +239,7 @@ export const updateRecipeBook = mutation({
     id: v.id("recipeBooks"),
     name: v.string(),
     description: v.optional(v.string()),
-    image: v.optional(
+    coverImage: v.optional(
       v.object({
         imageUrl: v.string(),
         storageId: v.optional(v.id("_storage")),
@@ -260,18 +260,17 @@ export const updateRecipeBook = mutation({
     }
 
     // Delete previous image if image changes
-    const recipeBookImage = recipeBook.image;
     if (
-      recipeBookImage?.imageUrl !== args.image?.imageUrl &&
-      recipeBookImage?.storageId
+      recipeBook.coverImage?.storageId &&
+      recipeBook.coverImage?.imageUrl !== args.coverImage?.imageUrl
     ) {
-      await ctx.storage.delete(recipeBookImage.storageId);
+      await ctx.storage.delete(recipeBook.coverImage.storageId);
     }
 
     await ctx.db.patch(args.id, {
       name: args.name,
       description: args.description,
-      image: args.image,
+      coverImage: args.coverImage,
     });
     return createOKResponse(true);
   },

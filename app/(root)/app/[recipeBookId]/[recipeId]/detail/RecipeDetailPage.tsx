@@ -31,16 +31,19 @@ const RecipeDetailPage = ({ recipePreloaded }: RecipeDetailPageProps) => {
     values: RecipeFormValues
   ) => {
     if (!recipe.data) return;
-
     try {
-      const updatedImage = await coverImageRef.current?.commit();
+      const updatedCoverImage = await coverImageRef.current?.commit();
+      const updatedRecipePhotoImage = await recipeImageRef.current?.commit();
       const response = await updateRecipe({
         id: recipe.data?._id,
         name: values.name,
         description: values.description,
-        image: updatedImage ?? (values.image as ImageStateProps),
+        coverImage: updatedCoverImage ?? (values.coverImage as ImageStateProps),
         ingredients: values.ingredients,
-        recipe: values.recipe,
+        instructions: values.instructions,
+        recipeImage:
+          updatedRecipePhotoImage ?? (values.recipeImage as ImageStateProps),
+        isImageRecipe: values.isImageRecipe,
       });
 
       if (!response.data)
@@ -61,10 +64,12 @@ const RecipeDetailPage = ({ recipePreloaded }: RecipeDetailPageProps) => {
       formSchema={recipeFormSchema}
       defaultValues={{
         name: recipe.data?.name ?? "",
-        recipe: recipe.data?.recipe ?? "",
+        instructions: recipe.data?.instructions ?? "",
         description: recipe.data?.description,
         ingredients: recipe.data?.ingredients,
-        image: recipe.data?.image,
+        coverImage: recipe.data?.coverImage,
+        recipeImage: recipe.data?.recipeImage,
+        isImageRecipe: recipe.data?.isImageRecipe,
       }}
       onFormStateChange={setIsFormDirty}
       passResetToParent={setResetForm}

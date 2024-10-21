@@ -37,7 +37,7 @@ const RecipeBookDetailPage = (props: {
         id: recipeBook.data?._id,
         name: values.name,
         description: values.description,
-        image: updatedImage ?? (values.image as ImageStateProps),
+        coverImage: updatedImage ?? (values.coverImage as ImageStateProps),
       });
 
       if (!response.data)
@@ -58,7 +58,7 @@ const RecipeBookDetailPage = (props: {
       defaultValues={{
         name: recipeBook.data?.name ?? "",
         description: recipeBook.data?.description,
-        image: recipeBook.data?.image,
+        coverImage: recipeBook.data?.coverImage,
       }}
       onFormStateChange={setIsFormDirty}
       passResetToParent={setResetForm}

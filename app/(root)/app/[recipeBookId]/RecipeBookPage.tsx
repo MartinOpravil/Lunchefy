@@ -41,14 +41,18 @@ const RecipeBookPage = (props: {
     }
 
     try {
-      const updatedImage = await coverImageRef.current?.commit();
+      const updatedCoverImage = await coverImageRef.current?.commit();
+      const updatedRecipePhotoImage = await recipeImageRef.current?.commit();
       const response = await createRecipe({
         recipeBookId: recipeBook.data?._id,
         name: values.name,
         description: values.description,
         ingredients: values.ingredients,
-        recipe: values.recipe,
-        image: updatedImage ?? (values.image as ImageStateProps),
+        instructions: values.instructions,
+        coverImage: updatedCoverImage ?? (values.coverImage as ImageStateProps),
+        recipeImage:
+          updatedRecipePhotoImage ?? (values.recipeImage as ImageStateProps),
+        isImageRecipe: values.isImageRecipe,
       });
 
       if (response.data) {
@@ -73,10 +77,12 @@ const RecipeBookPage = (props: {
         formSchema={recipeFormSchema}
         defaultValues={{
           name: "",
-          recipe: "",
+          instructions: "",
           description: undefined,
           ingredients: undefined,
-          image: undefined,
+          coverImage: undefined,
+          recipeImage: undefined,
+          isImageRecipe: false,
         }}
         passResetToParent={setResetForm}
         coverImageRef={coverImageRef}

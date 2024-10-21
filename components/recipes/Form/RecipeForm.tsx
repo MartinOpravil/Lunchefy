@@ -15,6 +15,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import ImageInput from "@/components/global/ImageInput";
 import Editor from "@/components/editor/Editor";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { FileImage, FileText, Image as ImageLucide, Text } from "lucide-react";
 interface RecipeDetailHeaderProps {
   recipe?: Awaited<ReturnType<typeof getRecipeById>>;
 }
@@ -25,103 +27,163 @@ interface CustomFormContext {
 }
 
 const RecipeForm = ({ recipe }: RecipeDetailHeaderProps) => {
-  const { register, coverImageRef } = useFormContext() as ReturnType<
-    typeof useFormContext
-  > &
-    CustomFormContext;
+  const { register, setValue, coverImageRef, recipeImageRef } =
+    useFormContext() as ReturnType<typeof useFormContext> & CustomFormContext;
 
   // if (!recipe || !recipe.data) return <></>;
 
   return (
     <div className="w-full">
-      {recipe && recipe.data && (
-        <div className="flex justify-end">
-          {recipe.data && <PrivilageBadge privilage={recipe.data.privilage} />}
-        </div>
-      )}
-      <div className="flex flex-col gap-[30px] pb-6 w-full">
-        <div className="flex flex-col md:flex-row gap-[30px] w-full">
-          <div className="flex flex-col gap-[30px] flex-auto">
-            <FormField
-              {...{ ...register("name"), ref: null }}
-              render={({ field }) => (
-                <FormItem className="flex flex-col gap-1">
-                  <FormLabel className="text-16 font-bold text-accent">
-                    Name*
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
-                      placeholder="Recipe book name"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage className="text-primary" />
-                </FormItem>
-              )}
-            />
-            <FormField
-              {...{ ...register("description"), ref: null }}
-              render={({ field }) => (
-                <FormItem className="flex flex-col gap-1">
-                  <FormLabel className="text-16 font-bold text-accent">
-                    Description
-                  </FormLabel>
-                  <FormControl>
-                    <Textarea
-                      className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
-                      placeholder="Optional recipe book description"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage className="text-primary" />
-                </FormItem>
-              )}
-            />
+      <div className="flex flex-col gap-4 pb-6 w-full">
+        <section className="bg-primary/20 p-3 rounded">
+          <div className="flex w-full justify-between">
+            <h3 className="text-accent pb-2">General</h3>
+            {recipe && recipe.data && (
+              <div className="flex justify-center items-center">
+                {recipe.data && (
+                  <PrivilageBadge privilage={recipe.data.privilage} />
+                )}
+              </div>
+            )}
           </div>
-          <div className="flex flex-auto md:max-w-[50%] flex-col">
+          <div className="flex flex-col md:flex-row gap-[30px] w-full">
+            <div className="flex flex-col gap-[30px] flex-auto">
+              <FormField
+                {...{ ...register("name"), ref: null }}
+                render={({ field }) => (
+                  <FormItem className="flex flex-col gap-1">
+                    <FormLabel className="text-16 font-bold text-accent">
+                      Name*
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
+                        placeholder="Recipe book name"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage className="text-primary" />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                {...{ ...register("description"), ref: null }}
+                render={({ field }) => (
+                  <FormItem className="flex flex-col gap-1">
+                    <FormLabel className="text-16 font-bold text-accent">
+                      Description
+                    </FormLabel>
+                    <FormControl>
+                      <Textarea
+                        className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
+                        placeholder="Optional recipe book description"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage className="text-primary" />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="flex flex-auto md:max-w-[50%] flex-col">
+              <FormField
+                {...{ ...register("coverImage"), ref: null }}
+                render={({ field }) => (
+                  <ImageInput
+                    image={field.value}
+                    setImage={(newImage) => {
+                      field.onChange(newImage);
+                    }}
+                    ref={coverImageRef}
+                  />
+                )}
+              />
+            </div>
+          </div>
+        </section>
+        <Tabs
+          defaultValue={recipe?.data?.isImageRecipe.toString() ?? "false"}
+          className="bg-accent/20 p-3 rounded"
+        >
+          <h3 className="text-accent pb-2">Recipe</h3>
+          <TabsList className="w-full mb-4 flex flex-col sm:flex-row">
+            <TabsTrigger
+              value="false"
+              className="flex gap-2 w-full"
+              onClick={() =>
+                setValue("isImageRecipe", false, { shouldDirty: true })
+              }
+            >
+              <FileText />
+              Use Text
+            </TabsTrigger>
+            <TabsTrigger
+              value="true"
+              className="flex gap-2 w-full"
+              onClick={() =>
+                setValue("isImageRecipe", true, { shouldDirty: true })
+              }
+            >
+              <FileImage />
+              Use Image
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="false">
+            <div className="flex flex-col gap-[30px]">
+              {recipe?.data?.recipeImage && (
+                <div className="text-12 text-primary text-center">
+                  Keep in mind that using text will permanently delete
+                  previously uploaded image!
+                </div>
+              )}
+              <FormField
+                {...{ ...register("ingredients"), ref: null }}
+                render={({ field }) => (
+                  <FormItem className="flex flex-col gap-1">
+                    <FormLabel className="text-16 font-bold text-accent">
+                      Ingredients
+                    </FormLabel>
+                    <FormControl>
+                      <Editor name={field.name} value={field.value} />
+                    </FormControl>
+                    <FormMessage className="text-primary" />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                {...{ ...register("instructions"), ref: null }}
+                render={({ field }) => (
+                  <FormItem className="flex flex-col gap-1">
+                    <FormLabel className="text-16 font-bold text-accent">
+                      Instructions
+                    </FormLabel>
+                    <FormControl>
+                      <Editor name={field.name} value={field.value} />
+                    </FormControl>
+                    <FormMessage className="text-primary" />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </TabsContent>
+          <TabsContent value="true">
             <FormField
-              {...{ ...register("image"), ref: null }}
+              {...{ ...register("recipeImage"), ref: null }}
               render={({ field }) => (
                 <ImageInput
+                  label="Recipe image"
                   image={field.value}
                   setImage={(newImage) => {
                     field.onChange(newImage);
                   }}
-                  ref={coverImageRef}
+                  ref={recipeImageRef}
                 />
               )}
             />
-          </div>
-        </div>
-        <FormField
-          {...{ ...register("ingredients"), ref: null }}
-          render={({ field }) => (
-            <FormItem className="flex flex-col gap-1">
-              <FormLabel className="text-16 font-bold text-accent">
-                Ingredients
-              </FormLabel>
-              <FormControl>
-                <Editor name={field.name} value={field.value} />
-              </FormControl>
-              <FormMessage className="text-primary" />
-            </FormItem>
-          )}
-        />
-        <FormField
-          {...{ ...register("recipe"), ref: null }}
-          render={({ field }) => (
-            <FormItem className="flex flex-col gap-1">
-              <FormLabel className="text-16 font-bold text-accent">
-                Recipe*
-              </FormLabel>
-              <FormControl>
-                <Editor name={field.name} value={field.value} />
-              </FormControl>
-              <FormMessage className="text-primary" />
-            </FormItem>
-          )}
-        />
+          </TabsContent>
+        </Tabs>
+        <div className="flex flex-col md:flex-row gap-[30px] w-full"></div>
       </div>
     </div>
   );
