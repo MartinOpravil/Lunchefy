@@ -21,7 +21,13 @@ const RecipeBookServerPage = async ({
   );
   const recipesPreloadPromise = preloadQuery(
     api.recipes.getRecipes,
-    { recipeBookId: recipeBookId },
+    {
+      recipeBookId: recipeBookId,
+      paginationOpts: {
+        numItems: 5,
+        cursor: null,
+      },
+    },
     { token }
   );
 

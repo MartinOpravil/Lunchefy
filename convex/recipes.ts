@@ -3,43 +3,170 @@ import { mutation, query } from "./_generated/server";
 import { getLoggedUser } from "./users";
 import { HttpResponseCode, Privilage } from "@/enums";
 import { v } from "convex/values";
+import { filter } from "convex-helpers/server/filter";
+import { paginationOptsValidator } from "convex/server";
 
 export const getRecipes = query({
   args: {
     recipeBookId: v.string(),
+    searchTerm: v.optional(v.string()),
+    paginationOpts: paginationOptsValidator,
   },
   handler: async (ctx, args) => {
-    const userEntityResponse = await getLoggedUser(ctx, args);
-    if (!userEntityResponse.data)
-      return createBadResponse(
-        userEntityResponse.status,
-        userEntityResponse.errorMessage
-      );
+    // const userEntityResponse = await getLoggedUser(ctx, args);
+    // if (!userEntityResponse.data)
+    //   return createBadResponse(
+    //     userEntityResponse.status,
+    //     userEntityResponse.errorMessage
+    //   );
 
-    const userRecipeBookRelationship = await ctx.db
-      .query("userRecipeBookRelationship")
-      .filter((q) =>
-        q.and(
-          q.eq(q.field("userId"), userEntityResponse.data!._id),
-          q.eq(q.field("recipeBookId"), args.recipeBookId)
+    // const userRecipeBookRelationship = await ctx.db
+    //   .query("userRecipeBookRelationship")
+    //   .filter((q) =>
+    //     q.and(
+    //       q.eq(q.field("userId"), userEntityResponse.data!._id),
+    //       q.eq(q.field("recipeBookId"), args.recipeBookId)
+    //     )
+    //   )
+    //   .unique();
+    // if (!userRecipeBookRelationship)
+    //   return createBadResponse(
+    //     HttpResponseCode.NotFound,
+    //     "You don't have access to view this recipe book recipes"
+    //   );
+
+    // const recipes = await ctx.db
+    //   .query("recipes")
+    //   .filter((q) => q.eq(q.field("recipeBookId"), args.recipeBookId))
+    //   .paginate(args.paginationOpts);
+    // .collect();
+
+    // const recipes = await filter(
+    //   ctx.db.query("recipes"),
+    //   (recipe) =>
+    //     recipe.recipeBookId === args.recipeBookId &&
+    //     (!args.searchTerm ||
+    //       recipe.name.toLowerCase().includes(args.searchTerm.toLowerCase()))
+    // )
+    //   .order("desc")
+    //   .paginate(args.paginationOpts);
+    let query = undefined;
+
+    if (!args.searchTerm) {
+      query = ctx.db
+        .query("recipes")
+        .filter((q) => q.eq(q.field("recipeBookId"), args.recipeBookId))
+        .order("desc");
+    } else {
+      query = ctx.db
+        .query("recipes")
+        .withSearchIndex("search_name", (q) =>
+          q.search("name", args.searchTerm ?? "")
         )
-      )
-      .unique();
-    if (!userRecipeBookRelationship)
-      return createBadResponse(
-        HttpResponseCode.NotFound,
-        "You don't have access to view this recipe book recipes"
-      );
+        .filter((q) => q.eq(q.field("recipeBookId"), args.recipeBookId));
+    }
+    const paginatedResult = await query
+      // .order("desc") // Example ordering
+      .paginate(args.paginationOpts);
+    console.log("PaginatedResult: ", paginatedResult);
+    // return createOKResponse({
+    //   recipes,
+    //   privilage: userRecipeBookRelationship.privilage as Privilage,
+    // });
+    return {
+      ...paginatedResult,
+      // privilage: Privilage.Owner,
+    };
+  },
+});
 
-    const recipes = await ctx.db
+export const getRecipesByFilter = query({
+  args: {
+    recipeBookId: v.string(),
+    searchTerm: v.optional(v.string()),
+    paginationOpts: paginationOptsValidator,
+  },
+  handler: async (ctx, args) => {
+    // const userEntityResponse = await getLoggedUser(ctx, args);
+    // if (!userEntityResponse.data)
+    //   return createBadResponse(
+    //     userEntityResponse.status,
+    //     userEntityResponse.errorMessage
+    //   );
+
+    // const userRecipeBookRelationship = await ctx.db
+    //   .query("userRecipeBookRelationship")
+    //   .filter((q) =>
+    //     q.and(
+    //       q.eq(q.field("userId"), userEntityResponse.data!._id),
+    //       q.eq(q.field("recipeBookId"), args.recipeBookId)
+    //     )
+    //   )
+    //   .unique();
+    // if (!userRecipeBookRelationship)
+    //   return createBadResponse(
+    //     HttpResponseCode.NotFound,
+    //     "You don't have access to view this recipe book recipes"
+    //   );
+
+    // const recipes = await ctx.db
+    //   .query("recipes")
+    //   .filter((q) => q.eq(q.field("recipeBookId"), args.recipeBookId))
+    //   .paginate(args.paginationOpts);
+    // .collect();
+
+    // const recipes = await filter(
+    //   ctx.db.query("recipes"),
+    //   (recipe) =>
+    //     recipe.recipeBookId === args.recipeBookId &&
+    //     (!args.searchTerm ||
+    //       recipe.name.toLowerCase().includes(args.searchTerm.toLowerCase()))
+    // )
+    //   .order("desc")
+    //   .paginate(args.paginationOpts);
+    console.log("SearchTerm: ", args.searchTerm);
+    // let query = ctx.db
+    //   .query("recipes")
+    //   .filter((q) => q.eq(q.field("recipeBookId"), args.recipeBookId));
+    // console.log("FirstFilter: ", query);
+    // if (args.searchTerm) {
+    //   query = filter(query, (recipe) =>
+    //     recipe.name.toLowerCase().includes(args.searchTerm!.toLowerCase())
+    //   );
+    // }
+
+    // let query = filter(ctx.db.query("recipes"), (recipe) =>
+    //   recipe.name.toLowerCase().includes(args.searchTerm!.toLowerCase())
+    // );
+
+    // let query = filter(ctx.db.query("recipes"), (recipe) =>
+    //   recipe.name.toLowerCase().includes("ve")
+    // );
+
+    let query = ctx.db
       .query("recipes")
-      .filter((q) => q.eq(q.field("recipeBookId"), args.recipeBookId))
-      .collect();
+      .withSearchIndex("search_name", (q) =>
+        q.search("name", args.searchTerm ?? "")
+      )
+      .filter((q) => q.eq(q.field("recipeBookId"), args.recipeBookId));
+    // if (args.searchTerm)
+    //   query.withSearchIndex("search_name", (q) =>
+    //     q.search("name", args.searchTerm!)
+    //   );
 
-    return createOKResponse({
-      recipes,
-      privilage: userRecipeBookRelationship.privilage as Privilage,
-    });
+    console.log("SecondFilter: ", query);
+    const paginatedResult = await query
+      // .order("desc") // Example ordering
+      .paginate(args.paginationOpts);
+    console.log("PaginatedResult: ", paginatedResult);
+    // return createOKResponse({
+    //   recipes,
+    //   privilage: userRecipeBookRelationship.privilage as Privilage,
+    // });
+    return {
+      ...paginatedResult,
+      // privilage: Privilage.Owner,
+    };
   },
 });
 
