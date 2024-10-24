@@ -5,13 +5,17 @@ import ErrorHandler from "@/components/global/ErrorHandler";
 import LinkButton from "@/components/global/LinkButton";
 import LoaderSpinner from "@/components/global/LoaderSpinner";
 import PageHeader from "@/components/global/PageHeader";
+import InfiniteScrollDemo from "@/components/InfinityScrollDemo";
 import RecipeForm from "@/components/recipes/Form/RecipeForm";
 import NewRecipeHeader from "@/components/recipes/headers/NewRecipeHeader";
 import Recipes from "@/components/recipes/Recipes";
 import RecipeSearchResults from "@/components/RecipeSearchResults";
+import InfiniteScroll from "@/components/ui/infinite-scroll";
 import { Input } from "@/components/ui/input";
 import { recipeFormSchema, RecipeFormValues } from "@/constants/FormSchemas";
 import { api } from "@/convex/_generated/api";
+import { query } from "@/convex/_generated/server";
+import { getNextRecipePage } from "@/convex/PaginationTest";
 import { getRecipes } from "@/convex/recipes";
 import { ButtonVariant, Privilage } from "@/enums";
 import { notifyError, notifySuccess } from "@/lib/notifications";
@@ -25,7 +29,7 @@ import {
   useQuery,
 } from "convex/react";
 import { debounce } from "lodash";
-import { ArrowLeft, Pencil, Plus } from "lucide-react";
+import { ArrowLeft, Loader2, Pencil, Plus, Search } from "lucide-react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { SubmitHandler } from "react-hook-form";
 
@@ -34,22 +38,18 @@ const RecipeBookPage = (props: {
   recipesPreloaded: Preloaded<typeof api.recipes.getRecipes>;
 }) => {
   const recipeBook = usePreloadedQuery(props.recipeBookPreloaded);
-  const recipes = usePreloadedQuery(props.recipesPreloaded);
+  const initialRecipes = usePreloadedQuery(props.recipesPreloaded);
   const createRecipe = useMutation(api.recipes.createRecipe);
-  const [queryVersion, setQueryVersion] = useState(0); // Versioning to reset query
+
+  const [recipes, setRecipes] = useState(initialRecipes.page);
+  const [continuationToken, setContinuationToken] = useState(
+    initialRecipes.continueCursor
+  );
+  const [isDone, setIsDone] = useState(initialRecipes.isDone);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
-
-  // Pagination options with reset based on search term
-  const pageSize = 5; // Set how many items you want per page
-  const paginationOpts = { numItems: pageSize };
-
-  // UseEffect to reset the paginated query when searchTerm changes
-  useEffect(() => {
-    setQueryVersion((prev) => prev + 1); // Trigger query re-run by changing version
-    resetPaginationId();
-  }, [searchTerm]);
 
   const [isFiltering, setIsFiltering] = useState(false);
 
@@ -92,6 +92,32 @@ const RecipeBookPage = (props: {
     } catch (error) {
       notifyError("Error creating recipe", error?.toString());
     }
+  };
+
+  // Handle additional pagination when needed
+  // const paginatedResults = usePaginatedQuery(
+  //   api.recipes.getRecipes,
+  //   { recipeBookId: recipeBook.data!._id }, { initialNumItems: 5 },
+  //   { enabled: !!continuationToken } // Only enable pagination if there's more to load
+  // );
+
+  // Merge the new paginated results into the current list
+  // if (paginatedResults.status === 'CanLoadMore') {
+  //   setRecipes((prevRecipes) => [...prevRecipes, ...paginatedResults.results]);
+  //   setContinuationToken(paginatedResults.);
+  // }
+
+  const loadMore = async () => {
+    console.log("triggered...");
+    setIsLoadingMore(true);
+    const result = await getNextRecipePage(
+      recipeBook.data!._id,
+      continuationToken
+    );
+    setContinuationToken(result.continueCursor);
+    setRecipes([...recipes, ...result.results]);
+    setIsDone(result.isDone);
+    setIsLoadingMore(false);
   };
 
   const debouncedUpdate = useCallback(
@@ -143,7 +169,7 @@ const RecipeBookPage = (props: {
   }
 
   return (
-    <main className="page">
+    <main className="page pb-8">
       <PageHeader
         title={recipeBook.data.name}
         icon="recipe_book"
@@ -175,13 +201,19 @@ const RecipeBookPage = (props: {
       />
       <main className="page-content gap-6">
         <ErrorHandler convexResponse={recipeBook} />
-        <Input
-          className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
-          placeholder="Search"
-          type="text"
-          value={searchTerm}
-          onChange={handleInputChange}
-        />
+        <div className="w-full flex flex-col gap-4 justify-start items-start sm:flex-row sm:items-center">
+          <div className="flex gap-1 bg-accent p-2 rounded-lg text-white-1">
+            <Search color="white" />
+            Search:
+          </div>
+          <Input
+            className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
+            placeholder="Recipe name"
+            type="text"
+            value={searchTerm}
+            onChange={handleInputChange}
+          />
+        </div>
 
         {searchTerm ? (
           <RecipeSearchResults
@@ -190,10 +222,24 @@ const RecipeBookPage = (props: {
             privilage={recipeBook.data.privilage}
           />
         ) : (
-          <Recipes
-            recipes={recipes.page}
-            privilage={recipeBook.data.privilage}
-          />
+          <div className="w-full">
+            <div className="w-full overflow-y-auto">
+              <div className="flex w-full flex-col items-center gap-3">
+                <Recipes
+                  recipes={recipes}
+                  privilage={recipeBook.data.privilage}
+                />
+                <InfiniteScroll
+                  hasMore={!isDone}
+                  isLoading={isLoadingMore}
+                  next={loadMore}
+                  threshold={1}
+                >
+                  {!isDone && <Loader2 className="my-4 h-8 w-8 animate-spin" />}
+                </InfiniteScroll>
+              </div>
+            </div>
+          </div>
         )}
       </main>
     </main>

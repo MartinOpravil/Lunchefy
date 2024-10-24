@@ -108,7 +108,7 @@ html {
   }
 
   .page {
-    @apply flex flex-col py-6 h-[calc(100vh-72.4px)];
+    @apply flex flex-col py-6 min-h-[calc(100vh-72.4px)];
   }
   .page-content {
     @apply relative h-full flex flex-col items-center justify-start py-8;
