@@ -51,17 +51,6 @@ const RecipeBookPage = (props: {
     resetPaginationId();
   }, [searchTerm]);
 
-  // const filteredRecipes = usePaginatedQuery(
-  //   api.recipes.getRecipes,
-  //   {
-  //     recipeBookId: recipeBook.data?._id!,
-  //     searchTerm: debouncedSearchTerm,
-  //   },
-  //   {
-  //     initialNumItems: 5,
-  //   }
-  // );
-
   const [isFiltering, setIsFiltering] = useState(false);
 
   const [resetForm, setResetForm] = useState<(() => void) | null>(null);
@@ -107,9 +96,9 @@ const RecipeBookPage = (props: {
 
   const debouncedUpdate = useCallback(
     debounce((value) => {
-      setIsFiltering(true);
+      // setIsFiltering(true);
       setDebouncedSearchTerm(value);
-      setTimeout(() => setIsFiltering(false), 200);
+      // setTimeout(() => setIsFiltering(false), 200);
     }, 500), // 500ms delay, adjust as needed
     []
   );
@@ -193,36 +182,18 @@ const RecipeBookPage = (props: {
           value={searchTerm}
           onChange={handleInputChange}
         />
-        {isFiltering ? (
-          <LoaderSpinner />
+
+        {searchTerm ? (
+          <RecipeSearchResults
+            recipeBookId={recipeBook.data._id}
+            searchTerm={debouncedSearchTerm}
+            privilage={recipeBook.data.privilage}
+          />
         ) : (
-          // <Recipes recipes={filteredRecipes ? filteredRecipes : recipes} />
-          <div className="flex gap-2 items-start justify-around w-full">
-            {searchTerm && (
-              <RecipeSearchResults
-                recipeBookId={recipeBook.data._id}
-                searchTerm={debouncedSearchTerm}
-                key={queryVersion}
-              />
-            )}
-
-            <div className="flex flex-col gap-2 justify-center items-center">
-              <h3>All results:</h3>
-              {recipes.page.map((x, index) => (
-                <div key={index}>{x.name}</div>
-              ))}
-
-              {/* Handle all status representations */}
-              {/* <div
-              onClick={() => filteredRecipes.loadMore(2)}
-              className="p-2 bg-secondary"
-            >
-              {recipes.continueCursor === "CanLoadMore"
-                ? "Load more"
-                : "All loaded"}
-            </div> */}
-            </div>
-          </div>
+          <Recipes
+            recipes={recipes.page}
+            privilage={recipeBook.data.privilage}
+          />
         )}
       </main>
     </main>

@@ -3,18 +3,21 @@ import React from "react";
 import NoContent from "../global/NoContent";
 import Recipe from "./Recipe";
 import { Privilage } from "@/enums";
-import { getRecipes } from "@/convex/recipes";
+import { Doc } from "@/convex/_generated/dataModel";
 
-const RecipeBooks = (props: {
-  recipes: Awaited<ReturnType<typeof getRecipes>>;
-}) => {
-  if (!props.recipes.data) return <></>;
+interface RecipeBooksProps {
+  recipes: Doc<"recipes">[];
+  privilage: Privilage;
+}
+
+const RecipeBooks = ({ recipes, privilage }: RecipeBooksProps) => {
+  if (!recipes) return <></>;
 
   return (
     <>
-      {props.recipes.data.recipes.length === 0 ? (
+      {recipes.length === 0 ? (
         <>
-          {props.recipes.data.privilage === Privilage.Viewer ? (
+          {privilage === Privilage.Viewer ? (
             <NoContent
               title="This book has no recipes yet"
               subTitle="Contact a responsible person to add some"
@@ -28,15 +31,15 @@ const RecipeBooks = (props: {
         </>
       ) : (
         <div className="w-full grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 grid-rows-auto gap-4">
-          {props.recipes.data.recipes?.map((recipeBook) => (
+          {recipes?.map((recipe) => (
             <Recipe
-              key={recipeBook._id}
-              id={recipeBook._id}
-              recipeBookId={recipeBook.recipeBookId}
-              title={recipeBook.name}
-              description={recipeBook.description}
-              imageUrl={recipeBook.coverImage?.imageUrl}
-              privilage={props.recipes.data!.privilage}
+              key={recipe._id}
+              id={recipe._id}
+              recipeBookId={recipe.recipeBookId}
+              title={recipe.name}
+              description={recipe.description}
+              imageUrl={recipe.coverImage?.imageUrl}
+              privilage={privilage}
             />
           ))}
         </div>
