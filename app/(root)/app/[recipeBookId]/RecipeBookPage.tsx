@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import { recipeFormSchema, RecipeFormValues } from "@/constants/FormSchemas";
 import { api } from "@/convex/_generated/api";
 import { query } from "@/convex/_generated/server";
-import { getNextRecipePage } from "@/convex/PaginationTest";
+import { getNextRecipePage } from "@/lib/PaginationTest";
 import { getRecipes } from "@/convex/recipes";
 import { ButtonVariant, Privilage } from "@/enums";
 import { notifyError, notifySuccess } from "@/lib/notifications";
