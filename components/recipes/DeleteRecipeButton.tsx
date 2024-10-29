@@ -47,6 +47,7 @@ const DeleteRecipeButton = ({
       if (!response.data)
         return notifyError(response.status.toString(), response.errorMessage);
       notifySuccess("Successfully deleted recipe book");
+      setIsDialogOpen(false);
       if (redirectAfterDelete) router.push(`/app/${recipeBookId}`);
     } catch (error) {
       console.error("Error deleting recipe book", error);

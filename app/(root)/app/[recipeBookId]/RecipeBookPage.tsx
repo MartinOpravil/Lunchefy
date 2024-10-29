@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import { recipeFormSchema, RecipeFormValues } from "@/constants/FormSchemas";
 import { api } from "@/convex/_generated/api";
 import { query } from "@/convex/_generated/server";
-import { getNextRecipePage } from "@/lib/PaginationTest";
+import { getNextRecipePage } from "@/lib/pagination";
 import { getRecipes } from "@/convex/recipes";
 import { ButtonVariant, Privilage } from "@/enums";
 import { notifyError, notifySuccess } from "@/lib/notifications";
@@ -32,6 +32,7 @@ import { debounce } from "lodash";
 import { ArrowLeft, Loader2, Pencil, Plus, Search } from "lucide-react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { SubmitHandler } from "react-hook-form";
+import NoContent from "@/components/global/NoContent";
 
 const RecipeBookPage = (props: {
   recipeBookPreloaded: Preloaded<typeof api.recipeBooks.getRecipeBookById>;
@@ -41,17 +42,8 @@ const RecipeBookPage = (props: {
   const initialRecipes = usePreloadedQuery(props.recipesPreloaded);
   const createRecipe = useMutation(api.recipes.createRecipe);
 
-  const [recipes, setRecipes] = useState(initialRecipes.page);
-  const [continuationToken, setContinuationToken] = useState(
-    initialRecipes.continueCursor
-  );
-  const [isDone, setIsDone] = useState(initialRecipes.isDone);
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
-
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
-
-  const [isFiltering, setIsFiltering] = useState(false);
 
   const [resetForm, setResetForm] = useState<(() => void) | null>(null);
   const coverImageRef = useRef<ImageInputHandle>(null);
@@ -92,32 +84,6 @@ const RecipeBookPage = (props: {
     } catch (error) {
       notifyError("Error creating recipe", error?.toString());
     }
-  };
-
-  // Handle additional pagination when needed
-  // const paginatedResults = usePaginatedQuery(
-  //   api.recipes.getRecipes,
-  //   { recipeBookId: recipeBook.data!._id }, { initialNumItems: 5 },
-  //   { enabled: !!continuationToken } // Only enable pagination if there's more to load
-  // );
-
-  // Merge the new paginated results into the current list
-  // if (paginatedResults.status === 'CanLoadMore') {
-  //   setRecipes((prevRecipes) => [...prevRecipes, ...paginatedResults.results]);
-  //   setContinuationToken(paginatedResults.);
-  // }
-
-  const loadMore = async () => {
-    console.log("triggered...");
-    setIsLoadingMore(true);
-    const result = await getNextRecipePage(
-      recipeBook.data!._id,
-      continuationToken
-    );
-    setContinuationToken(result.continueCursor);
-    setRecipes([...recipes, ...result.results]);
-    setIsDone(result.isDone);
-    setIsLoadingMore(false);
   };
 
   const debouncedUpdate = useCallback(
@@ -201,21 +167,23 @@ const RecipeBookPage = (props: {
       />
       <main className="page-content gap-6">
         <ErrorHandler convexResponse={recipeBook} />
-        <div className="w-full flex flex-col gap-4 justify-start items-start sm:flex-row sm:items-center">
-          <div className="flex gap-1 bg-accent p-2 rounded-lg text-white-1">
-            <Search color="white" />
-            Search:
+        {!!initialRecipes.page.length && (
+          <div className="w-full flex flex-col gap-4 justify-start items-start sm:flex-row sm:items-center">
+            <div className="flex gap-1 bg-accent p-2 rounded-lg text-white-1">
+              <Search color="white" />
+              Search:
+            </div>
+            <Input
+              className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
+              placeholder="Recipe name"
+              type="text"
+              value={searchTerm}
+              onChange={handleInputChange}
+            />
           </div>
-          <Input
-            className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
-            placeholder="Recipe name"
-            type="text"
-            value={searchTerm}
-            onChange={handleInputChange}
-          />
-        </div>
+        )}
 
-        {searchTerm ? (
+        {debouncedSearchTerm.length > 0 ? (
           <RecipeSearchResults
             recipeBookId={recipeBook.data._id}
             searchTerm={debouncedSearchTerm}
@@ -225,18 +193,27 @@ const RecipeBookPage = (props: {
           <div className="w-full">
             <div className="w-full overflow-y-auto">
               <div className="flex w-full flex-col items-center gap-3">
-                <Recipes
-                  recipes={recipes}
-                  privilage={recipeBook.data.privilage}
-                />
-                <InfiniteScroll
-                  hasMore={!isDone}
-                  isLoading={isLoadingMore}
-                  next={loadMore}
-                  threshold={1}
-                >
-                  {!isDone && <Loader2 className="my-4 h-8 w-8 animate-spin" />}
-                </InfiniteScroll>
+                {!initialRecipes.page.length ? (
+                  <>
+                    {recipeBook.data.privilage === Privilage.Viewer ? (
+                      <NoContent
+                        title="This book has no recipes yet"
+                        subTitle="Contact a responsible person to add some"
+                      />
+                    ) : (
+                      <NoContent
+                        title="This book has no recipes yet"
+                        subTitle="Start by creating one"
+                      />
+                    )}
+                  </>
+                ) : (
+                  <Recipes
+                    initialRecipes={initialRecipes}
+                    recipeBookId={recipeBook.data._id}
+                    privilage={recipeBook.data.privilage}
+                  />
+                )}
               </div>
             </div>
           </div>

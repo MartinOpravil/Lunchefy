@@ -12,7 +12,8 @@ const client = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
  */
 export async function getNextRecipePage(
   recipeBookId: Id<"recipeBooks">,
-  continueCursor: string
+  continueCursor: string,
+  searchTerm?: string
 ) {
   let isDone = false;
   let page;
@@ -23,7 +24,8 @@ export async function getNextRecipePage(
     api.recipes.getRecipes,
     {
       recipeBookId,
-      paginationOpts: { numItems: 5, cursor: continueCursor },
+      searchTerm,
+      paginationOpts: { numItems: 2, cursor: continueCursor },
     }
   ));
   console.log("got", page.length);
