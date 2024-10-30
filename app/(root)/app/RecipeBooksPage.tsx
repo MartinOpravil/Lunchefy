@@ -13,7 +13,7 @@ import FormProviderWrapper from "@/components/FormProviderWrapper";
 import {
   recipeBookFormSchema,
   RecipeBookFormValues,
-} from "@/constants/FormSchemas";
+} from "@/constants/formSchemas";
 import RecipeBookForm from "@/components/recipeBooks/form/RecipeBookForm";
 import { SubmitHandler } from "react-hook-form";
 import { notifyError, notifySuccess } from "@/lib/notifications";

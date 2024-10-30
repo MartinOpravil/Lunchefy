@@ -3,36 +3,30 @@ import FormProviderWrapper from "@/components/FormProviderWrapper";
 import ActionButton from "@/components/global/ActionButton";
 import ErrorHandler from "@/components/global/ErrorHandler";
 import LinkButton from "@/components/global/LinkButton";
-import LoaderSpinner from "@/components/global/LoaderSpinner";
 import PageHeader from "@/components/global/PageHeader";
-import InfiniteScrollDemo from "@/components/InfinityScrollDemo";
 import RecipeForm from "@/components/recipes/Form/RecipeForm";
 import NewRecipeHeader from "@/components/recipes/headers/NewRecipeHeader";
-import Recipes from "@/components/recipes/Recipes";
+import RecipesPaginated from "@/components/recipes/RecipesPaginated";
 import RecipeSearchResults from "@/components/RecipeSearchResults";
-import InfiniteScroll from "@/components/ui/infinite-scroll";
 import { Input } from "@/components/ui/input";
-import { recipeFormSchema, RecipeFormValues } from "@/constants/FormSchemas";
+import { recipeFormSchema, RecipeFormValues } from "@/constants/formSchemas";
 import { api } from "@/convex/_generated/api";
-import { query } from "@/convex/_generated/server";
-import { getNextRecipePage } from "@/lib/pagination";
-import { getRecipes } from "@/convex/recipes";
 import { ButtonVariant, Privilage } from "@/enums";
 import { notifyError, notifySuccess } from "@/lib/notifications";
 import { ImageInputHandle, ImageStateProps } from "@/types";
 import {
   Preloaded,
-  resetPaginationId,
   useMutation,
   usePaginatedQuery,
   usePreloadedQuery,
-  useQuery,
 } from "convex/react";
 import { debounce } from "lodash";
-import { ArrowLeft, Loader2, Pencil, Plus, Search } from "lucide-react";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { ArrowLeft, Pencil, Plus, Search } from "lucide-react";
+import React, { useCallback, useRef, useState } from "react";
 import { SubmitHandler } from "react-hook-form";
 import NoContent from "@/components/global/NoContent";
+import Recipe from "@/components/recipes/Recipe";
+import { RECIPES_INITIAL_COUNT } from "@/constants/pagination";
 
 const RecipeBookPage = (props: {
   recipeBookPreloaded: Preloaded<typeof api.recipeBooks.getRecipeBookById>;
@@ -50,6 +44,14 @@ const RecipeBookPage = (props: {
   const recipeImageRef = useRef<ImageInputHandle>(null);
 
   const [isNewFormOpen, setIsNewFormOpen] = useState(false);
+
+  const recipesPaginated = usePaginatedQuery(
+    api.recipes.getRecipes,
+    {
+      recipeBookId: recipeBook.data?._id!,
+    },
+    { initialNumItems: RECIPES_INITIAL_COUNT }
+  );
 
   const handleSubmit: SubmitHandler<RecipeFormValues> = async (
     values: RecipeFormValues
@@ -208,11 +210,29 @@ const RecipeBookPage = (props: {
                     )}
                   </>
                 ) : (
-                  <Recipes
-                    initialRecipes={initialRecipes}
-                    recipeBookId={recipeBook.data._id}
-                    privilage={recipeBook.data.privilage}
-                  />
+                  <>
+                    {!recipesPaginated.results.length &&
+                    !!initialRecipes.page.length ? (
+                      <div className="recipe-grid">
+                        {initialRecipes.page.map((recipe) => (
+                          <Recipe
+                            key={recipe._id}
+                            id={recipe._id}
+                            recipeBookId={recipe.recipeBookId}
+                            title={recipe.name}
+                            description={recipe.description}
+                            imageUrl={recipe.coverImage?.imageUrl}
+                            privilage={recipeBook.data?.privilage!}
+                          />
+                        ))}
+                      </div>
+                    ) : (
+                      <RecipesPaginated
+                        recipesPaginated={recipesPaginated}
+                        privilage={recipeBook.data.privilage}
+                      />
+                    )}
+                  </>
                 )}
               </div>
             </div>

@@ -15,7 +15,7 @@ const RecipeBooks = (props: {
           subTitle="Start by creating one"
         />
       ) : (
-        <div className="w-full grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 grid-rows-auto gap-4">
+        <div className="recipe-grid">
           {props.recipeBooks.data?.map((recipeBook) => (
             <RecipeBook
               key={recipeBook._id}

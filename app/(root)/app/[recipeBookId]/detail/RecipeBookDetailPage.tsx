@@ -6,7 +6,7 @@ import RecipeBookDetailHeader from "@/components/recipeBooks/Detail/RecipeBookDe
 import {
   recipeBookFormSchema,
   RecipeBookFormValues,
-} from "@/constants/FormSchemas";
+} from "@/constants/formSchemas";
 import { api } from "@/convex/_generated/api";
 import { notifyError, notifySuccess } from "@/lib/notifications";
 import { ImageInputHandle, ImageStateProps } from "@/types";

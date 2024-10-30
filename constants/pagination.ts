@@ -1,0 +1,3 @@
+export const RECIPES_INITIAL_COUNT = 5;
+export const RECIPES_SEARCH_INITIAL_COUNT = 5;
+export const RECIPES_NEXT_COUNT = 2;

@@ -5,6 +5,7 @@ import { preloadQuery } from "convex/nextjs";
 import React from "react";
 import RecipeBookPage from "./RecipeBookPage";
 import ErrorHandlerPreloaded from "@/components/global/ErrorHandlerPreloaded";
+import { RECIPES_INITIAL_COUNT } from "@/constants/pagination";
 
 const RecipeBookServerPage = async ({
   params: { recipeBookId },
@@ -24,7 +25,7 @@ const RecipeBookServerPage = async ({
     {
       recipeBookId: recipeBookId,
       paginationOpts: {
-        numItems: 5,
+        numItems: RECIPES_INITIAL_COUNT,
         cursor: null,
       },
     },
