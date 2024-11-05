@@ -6,6 +6,7 @@ import RecipeForm from "@/components/recipes/Form/RecipeForm";
 import { recipeFormSchema, RecipeFormValues } from "@/constants/formSchemas";
 import { api } from "@/convex/_generated/api";
 import { notifyError, notifySuccess } from "@/lib/notifications";
+import { TagManager } from "@/lib/tags";
 import { ImageInputHandle, ImageStateProps } from "@/types";
 import { Preloaded, useMutation, usePreloadedQuery } from "convex/react";
 import { useRouter } from "next/navigation";
@@ -44,6 +45,7 @@ const RecipeDetailPage = ({ recipePreloaded }: RecipeDetailPageProps) => {
         recipeImage:
           updatedRecipePhotoImage ?? (values.recipeImage as ImageStateProps),
         isImageRecipe: values.isImageRecipe,
+        tags: values.tags ? TagManager.convertToValues(values.tags) : undefined,
       });
 
       if (!response.data)
@@ -68,6 +70,9 @@ const RecipeDetailPage = ({ recipePreloaded }: RecipeDetailPageProps) => {
         description: recipe.data?.description,
         ingredients: recipe.data?.ingredients,
         coverImage: recipe.data?.coverImage,
+        tags: recipe.data?.tags
+          ? TagManager.convertToTags(recipe.data.tags)
+          : undefined,
         recipeImage: recipe.data?.recipeImage,
         isImageRecipe: recipe.data?.isImageRecipe,
       }}

@@ -4,123 +4,42 @@ import { getLoggedUser } from "./users";
 import { HttpResponseCode, Privilage } from "@/enums";
 import { v } from "convex/values";
 import { paginationOptsValidator } from "convex/server";
+import { filter } from "convex-helpers/server/filter";
 
 export const getRecipes = query({
   args: {
     recipeBookId: v.string(),
     searchTerm: v.optional(v.string()),
+    searchTags: v.optional(v.array(v.string())),
     paginationOpts: paginationOptsValidator,
   },
   handler: async (ctx, args) => {
-    let query = undefined;
+    const query = filter(ctx.db.query("recipes"), (recipe) => {
+      // If no search term or filters, return true (match all recipes)
+      if (!args.searchTerm && !args.searchTags) {
+        return true;
+      }
+      const matchesSearchTerm = args.searchTerm
+        ? recipe.name.toLowerCase().includes(args.searchTerm.toLowerCase())
+        : false;
 
-    if (!args.searchTerm) {
-      query = ctx.db
-        .query("recipes")
-        .filter((q) => q.eq(q.field("recipeBookId"), args.recipeBookId))
-        .order("desc");
-    } else {
-      query = ctx.db
-        .query("recipes")
-        .withSearchIndex("search_name", (q) =>
-          q.search("name", args.searchTerm ?? "")
-        )
-        .filter((q) => q.eq(q.field("recipeBookId"), args.recipeBookId));
-    }
+      const matchesSearchFilters = args.searchTags?.length
+        ? args.searchTags.some((tag) => recipe.tags?.includes(tag))
+        : false;
+
+      // If both searchTerm and searchFilters are provided, ensure both match
+      if (args.searchTerm && args.searchTags?.length) {
+        return matchesSearchTerm && matchesSearchFilters;
+      }
+
+      // Otherwise, return true if either condition is met
+      return matchesSearchTerm || matchesSearchFilters;
+    });
+
     const paginatedResult = await query.paginate(args.paginationOpts);
     return paginatedResult;
   },
 });
-
-// export const getRecipesByFilter = query({
-//   args: {
-//     recipeBookId: v.string(),
-//     searchTerm: v.optional(v.string()),
-//     paginationOpts: paginationOptsValidator,
-//   },
-//   handler: async (ctx, args) => {
-//     // const userEntityResponse = await getLoggedUser(ctx, args);
-//     // if (!userEntityResponse.data)
-//     //   return createBadResponse(
-//     //     userEntityResponse.status,
-//     //     userEntityResponse.errorMessage
-//     //   );
-
-//     // const userRecipeBookRelationship = await ctx.db
-//     //   .query("userRecipeBookRelationship")
-//     //   .filter((q) =>
-//     //     q.and(
-//     //       q.eq(q.field("userId"), userEntityResponse.data!._id),
-//     //       q.eq(q.field("recipeBookId"), args.recipeBookId)
-//     //     )
-//     //   )
-//     //   .unique();
-//     // if (!userRecipeBookRelationship)
-//     //   return createBadResponse(
-//     //     HttpResponseCode.NotFound,
-//     //     "You don't have access to view this recipe book recipes"
-//     //   );
-
-//     // const recipes = await ctx.db
-//     //   .query("recipes")
-//     //   .filter((q) => q.eq(q.field("recipeBookId"), args.recipeBookId))
-//     //   .paginate(args.paginationOpts);
-//     // .collect();
-
-//     // const recipes = await filter(
-//     //   ctx.db.query("recipes"),
-//     //   (recipe) =>
-//     //     recipe.recipeBookId === args.recipeBookId &&
-//     //     (!args.searchTerm ||
-//     //       recipe.name.toLowerCase().includes(args.searchTerm.toLowerCase()))
-//     // )
-//     //   .order("desc")
-//     //   .paginate(args.paginationOpts);
-//     console.log("SearchTerm: ", args.searchTerm);
-//     // let query = ctx.db
-//     //   .query("recipes")
-//     //   .filter((q) => q.eq(q.field("recipeBookId"), args.recipeBookId));
-//     // console.log("FirstFilter: ", query);
-//     // if (args.searchTerm) {
-//     //   query = filter(query, (recipe) =>
-//     //     recipe.name.toLowerCase().includes(args.searchTerm!.toLowerCase())
-//     //   );
-//     // }
-
-//     // let query = filter(ctx.db.query("recipes"), (recipe) =>
-//     //   recipe.name.toLowerCase().includes(args.searchTerm!.toLowerCase())
-//     // );
-
-//     // let query = filter(ctx.db.query("recipes"), (recipe) =>
-//     //   recipe.name.toLowerCase().includes("ve")
-//     // );
-
-//     let query = ctx.db
-//       .query("recipes")
-//       .withSearchIndex("search_name", (q) =>
-//         q.search("name", args.searchTerm ?? "")
-//       )
-//       .filter((q) => q.eq(q.field("recipeBookId"), args.recipeBookId));
-//     // if (args.searchTerm)
-//     //   query.withSearchIndex("search_name", (q) =>
-//     //     q.search("name", args.searchTerm!)
-//     //   );
-
-//     console.log("SecondFilter: ", query);
-//     const paginatedResult = await query
-//       // .order("desc") // Example ordering
-//       .paginate(args.paginationOpts);
-//     console.log("PaginatedResult: ", paginatedResult);
-//     // return createOKResponse({
-//     //   recipes,
-//     //   privilage: userRecipeBookRelationship.privilage as Privilage,
-//     // });
-//     return {
-//       ...paginatedResult,
-//       // privilage: Privilage.Owner,
-//     };
-//   },
-// });
 
 export const getRecipeById = query({
   args: { id: v.string(), checkPrivilages: v.optional(v.boolean()) },
@@ -191,6 +110,7 @@ export const createRecipe = mutation({
         storageId: v.optional(v.id("_storage")),
       })
     ),
+    tags: v.optional(v.array(v.string())),
   },
   handler: async (ctx, args) => {
     const userResponse = await getLoggedUser(ctx, args);
@@ -206,6 +126,7 @@ export const createRecipe = mutation({
       instructions: args.instructions,
       recipeImage: args.recipeImage,
       isImageRecipe: args.isImageRecipe,
+      tags: args.tags,
     });
     if (!newRecipeBookId) {
       return createBadResponse(
@@ -240,6 +161,7 @@ export const updateRecipe = mutation({
         storageId: v.optional(v.id("_storage")),
       })
     ),
+    tags: v.optional(v.array(v.string())),
   },
   handler: async (ctx, args) => {
     const userResponse = await getLoggedUser(ctx, args);
@@ -279,6 +201,7 @@ export const updateRecipe = mutation({
       instructions: args.instructions,
       recipeImage: args.isImageRecipe ? args.recipeImage : undefined,
       isImageRecipe: args.isImageRecipe,
+      tags: args.tags,
     });
     return createOKResponse(true);
   },

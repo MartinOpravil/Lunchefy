@@ -17,6 +17,10 @@ import ImageInput from "@/components/global/ImageInput";
 import Editor from "@/components/editor/Editor";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FileImage, FileText, Image as ImageLucide, Text } from "lucide-react";
+import { AutosizeTextarea } from "@/components/ui/autosize-textarea";
+import MultipleSelector from "@/components/ui/multiple-selector";
+import { TagManager } from "@/lib/tags";
+
 interface RecipeDetailHeaderProps {
   recipe?: Awaited<ReturnType<typeof getRecipeById>>;
 }
@@ -35,7 +39,7 @@ const RecipeForm = ({ recipe }: RecipeDetailHeaderProps) => {
   return (
     <div className="w-full">
       <div className="flex flex-col gap-4 pb-6 w-full">
-        <section className="bg-primary/20 p-3 rounded">
+        <section className="bg-primary/20 p-3 rounded flex flex-col gap-2">
           <div className="flex w-full justify-between">
             <h3 className="text-accent pb-2">General</h3>
             {recipe && recipe.data && (
@@ -74,17 +78,24 @@ const RecipeForm = ({ recipe }: RecipeDetailHeaderProps) => {
                       Description
                     </FormLabel>
                     <FormControl>
-                      <Textarea
+                      <AutosizeTextarea
+                        className="input-class border-2 border-accent focus-visible:ring-secondary transition"
+                        placeholder="Optional recipe book description"
+                        {...field}
+                        maxHeight={200}
+                      />
+                      {/* <Textarea
                         className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
                         placeholder="Optional recipe book description"
                         {...field}
-                      />
+                      /> */}
                     </FormControl>
                     <FormMessage className="text-primary" />
                   </FormItem>
                 )}
               />
             </div>
+
             <div className="flex flex-auto md:max-w-[50%] flex-col">
               <FormField
                 {...{ ...register("coverImage"), ref: null }}
@@ -100,6 +111,25 @@ const RecipeForm = ({ recipe }: RecipeDetailHeaderProps) => {
               />
             </div>
           </div>
+          <FormField
+            {...{ ...register("tags"), ref: null }}
+            render={({ field }) => (
+              <FormItem className="flex flex-col gap-1">
+                <FormLabel className="text-16 font-bold text-accent">
+                  Tags
+                </FormLabel>
+                <FormControl>
+                  <MultipleSelector
+                    className="input-class border-2 border-accent focus-visible:ring-secondary transition"
+                    defaultOptions={TagManager.getTagOptions()}
+                    placeholder="Select tags that match this recipe"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage className="text-primary" />
+              </FormItem>
+            )}
+          />
         </section>
         <Tabs
           defaultValue={recipe?.data?.isImageRecipe.toString() ?? "false"}

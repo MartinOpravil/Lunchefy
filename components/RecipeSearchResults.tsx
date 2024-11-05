@@ -11,12 +11,14 @@ import { RECIPES_SEARCH_INITIAL_COUNT } from "@/constants/pagination";
 interface RecipeSearchResultsProps {
   recipeBookId: Id<"recipeBooks">;
   searchTerm: string;
+  searchTags: string[];
   privilage: Privilage;
 }
 
 const RecipeSearchResults = ({
   recipeBookId,
   searchTerm,
+  searchTags,
   privilage,
 }: RecipeSearchResultsProps) => {
   const filteredRecipesPaginated = usePaginatedQuery(
@@ -24,6 +26,7 @@ const RecipeSearchResults = ({
     {
       recipeBookId: recipeBookId,
       searchTerm: searchTerm,
+      searchTags: searchTags,
     },
     { initialNumItems: RECIPES_SEARCH_INITIAL_COUNT }
   );

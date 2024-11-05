@@ -15,6 +15,7 @@ import { ImageInputHandle } from "@/types";
 import PrivilageBadge from "@/components/users/PrivilageBadge";
 import { getRecipeBookById } from "@/convex/recipeBooks";
 import { Textarea } from "@/components/ui/textarea";
+import { AutosizeTextarea } from "@/components/ui/autosize-textarea";
 
 interface RecipeBookDetailPageHeaderProps {
   recipeBook?: Awaited<ReturnType<typeof getRecipeBookById>>;
@@ -66,11 +67,17 @@ const RecipeBookForm = ({ recipeBook }: RecipeBookDetailPageHeaderProps) => {
                 Description
               </FormLabel>
               <FormControl>
-                <Textarea
+                <AutosizeTextarea
+                  className="input-class border-2 border-accent focus-visible:ring-secondary transition"
+                  placeholder="Optional recipe book description"
+                  {...field}
+                  maxHeight={200}
+                />
+                {/* <Textarea
                   className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
                   placeholder="Optional recipe book description"
                   {...field}
-                />
+                /> */}
               </FormControl>
               <FormMessage className="text-primary" />
             </FormItem>
@@ -78,7 +85,7 @@ const RecipeBookForm = ({ recipeBook }: RecipeBookDetailPageHeaderProps) => {
         />
       </div>
       <FormField
-        {...{ ...register("image"), ref: null }}
+        {...{ ...register("coverImage"), ref: null }}
         render={({ field }) => (
           <ImageInput
             image={field.value}

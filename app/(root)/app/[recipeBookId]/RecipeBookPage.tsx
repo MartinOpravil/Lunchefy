@@ -27,6 +27,8 @@ import { SubmitHandler } from "react-hook-form";
 import NoContent from "@/components/global/NoContent";
 import Recipe from "@/components/recipes/Recipe";
 import { RECIPES_INITIAL_COUNT } from "@/constants/pagination";
+import MultipleSelector, { Option } from "@/components/ui/multiple-selector";
+import { TagManager } from "@/lib/tags";
 
 const RecipeBookPage = (props: {
   recipeBookPreloaded: Preloaded<typeof api.recipeBooks.getRecipeBookById>;
@@ -37,6 +39,7 @@ const RecipeBookPage = (props: {
   const createRecipe = useMutation(api.recipes.createRecipe);
 
   const [searchTerm, setSearchTerm] = useState("");
+  const [searchTags, setSearchTags] = useState<Option[]>([]);
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
 
   const [resetForm, setResetForm] = useState<(() => void) | null>(null);
@@ -118,6 +121,7 @@ const RecipeBookPage = (props: {
           description: undefined,
           ingredients: undefined,
           coverImage: undefined,
+          tags: undefined,
           recipeImage: undefined,
           isImageRecipe: false,
         }}
@@ -170,7 +174,7 @@ const RecipeBookPage = (props: {
       <main className="page-content gap-6">
         <ErrorHandler convexResponse={recipeBook} />
         {!!initialRecipes.page.length && (
-          <div className="w-full flex flex-col gap-4 justify-start items-start sm:flex-row sm:items-center">
+          <div className="w-full flex flex-col gap-4 justify-start items-start sm:flex-row sm:items-start">
             <div className="flex gap-1 bg-accent p-2 rounded-lg text-white-1">
               <Search color="white" />
               Search:
@@ -182,13 +186,21 @@ const RecipeBookPage = (props: {
               value={searchTerm}
               onChange={handleInputChange}
             />
+            <MultipleSelector
+              className="input-class border-2 border-accent focus-visible:ring-secondary transition"
+              defaultOptions={TagManager.getTagOptions()}
+              placeholder="Tags"
+              value={searchTags}
+              onChange={setSearchTags}
+            />
           </div>
         )}
 
-        {debouncedSearchTerm.length > 0 ? (
+        {debouncedSearchTerm.length > 0 || searchTags.length ? (
           <RecipeSearchResults
             recipeBookId={recipeBook.data._id}
             searchTerm={debouncedSearchTerm}
+            searchTags={TagManager.convertToValues(searchTags)}
             privilage={recipeBook.data.privilage}
           />
         ) : (

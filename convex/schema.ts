@@ -5,10 +5,8 @@ export default defineSchema({
   users: defineTable({
     email: v.string(),
     imageUrl: v.string(),
-    //imageStorageId: v.optional(v.id("_storage")),
     clerkId: v.string(),
     name: v.string(),
-    //recipeBookIdList: v.optional(v.array(v.id("recipeBooks"))), // DELETE
     appSettings: v.object({
       colors: v.object({
         background: v.string(),
@@ -20,8 +18,6 @@ export default defineSchema({
   recipeBooks: defineTable({
     name: v.string(),
     description: v.optional(v.string()),
-    // imageUrl: v.optional(v.string()),
-    //recipeIdList: v.array(v.id("recipes")),
     coverImage: v.optional(
       v.object({
         imageUrl: v.string(),
@@ -45,7 +41,7 @@ export default defineSchema({
       })
     ),
     isImageRecipe: v.boolean(),
-    tags: v.optional(v.array(v.id("tags"))),
+    tags: v.optional(v.array(v.string())),
     ingredients: v.optional(v.string()),
     instructions: v.optional(v.string()),
     recipeImage: v.optional(
@@ -54,11 +50,8 @@ export default defineSchema({
         storageId: v.optional(v.id("_storage")),
       })
     ),
-  })
-    .searchIndex("search_name", { searchField: "name" })
-    .searchIndex("search_tags", { searchField: "tags" }),
-  tags: defineTable({
-    name: v.string(),
-    icon: v.string(),
+  }).searchIndex("search_name_tags", {
+    searchField: "name",
+    filterFields: ["tags"],
   }),
 });
