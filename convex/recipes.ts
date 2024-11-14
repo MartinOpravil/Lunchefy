@@ -6,9 +6,10 @@ import { v } from "convex/values";
 import { paginationOptsValidator } from "convex/server";
 import { filter } from "convex-helpers/server/filter";
 
+// TODO: Filter out by groupId, it is missing
 export const getRecipes = query({
   args: {
-    recipeBookId: v.string(),
+    groupId: v.string(),
     searchTerm: v.optional(v.string()),
     searchTags: v.optional(v.array(v.string())),
     paginationOpts: paginationOptsValidator,
@@ -40,7 +41,7 @@ export const getRecipes = query({
     return paginatedResult;
   },
 });
-
+// TODO: Check if I can use id of group directly instead of generic string
 export const getRecipeById = query({
   args: { id: v.string(), checkPrivilages: v.optional(v.boolean()) },
   handler: async (ctx, args) => {
@@ -58,16 +59,16 @@ export const getRecipeById = query({
         userEntityResponse.errorMessage ?? ""
       );
 
-    const userRecipeBookRelationship = await ctx.db
-      .query("userRecipeBookRelationship")
+    const userGroupRelationship = await ctx.db
+      .query("userGroupRelationship")
       .filter((q) =>
         q.and(
           q.eq(q.field("userId"), userEntityResponse.data!._id),
-          q.eq(q.field("recipeBookId"), recipe.recipeBookId)
+          q.eq(q.field("groupId"), recipe.groupId)
         )
       )
       .unique();
-    if (!userRecipeBookRelationship)
+    if (!userGroupRelationship)
       return createBadResponse(
         HttpResponseCode.Forbidden,
         "No permission to view recipe"
@@ -75,7 +76,7 @@ export const getRecipeById = query({
 
     if (
       args.checkPrivilages &&
-      userRecipeBookRelationship.privilage === Privilage.Viewer
+      userGroupRelationship.privilage === Privilage.Viewer
     ) {
       return createBadResponse(
         HttpResponseCode.Forbidden,
@@ -85,14 +86,14 @@ export const getRecipeById = query({
 
     return createOKResponse({
       ...recipe,
-      privilage: userRecipeBookRelationship.privilage as Privilage,
+      privilage: userGroupRelationship.privilage as Privilage,
     });
   },
 });
 
 export const createRecipe = mutation({
   args: {
-    recipeBookId: v.id("recipeBooks"),
+    groupId: v.id("groups"),
     name: v.string(),
     description: v.optional(v.string()),
     coverImage: v.optional(
@@ -117,8 +118,8 @@ export const createRecipe = mutation({
     if (!userResponse.data)
       return createBadResponse(userResponse.status, userResponse.errorMessage);
 
-    const newRecipeBookId = await ctx.db.insert("recipes", {
-      recipeBookId: args.recipeBookId,
+    const newGroupId = await ctx.db.insert("recipes", {
+      groupId: args.groupId,
       name: args.name,
       description: args.description,
       coverImage: args.coverImage,
@@ -128,7 +129,7 @@ export const createRecipe = mutation({
       isImageRecipe: args.isImageRecipe,
       tags: args.tags,
     });
-    if (!newRecipeBookId) {
+    if (!newGroupId) {
       return createBadResponse(
         HttpResponseCode.InternalServerError,
         "Recipe was not created - Not able to insert into database."
@@ -136,7 +137,7 @@ export const createRecipe = mutation({
     }
 
     return createOKResponse({
-      recipeBookId: newRecipeBookId,
+      groupId: newGroupId,
     });
   },
 });
@@ -220,7 +221,7 @@ export const deleteRecipe = mutation({
     if (!recipe) {
       return createBadResponse(
         HttpResponseCode.InternalServerError,
-        "Recipe book was not deleted."
+        "Recipe was not deleted."
       );
     }
 

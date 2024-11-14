@@ -7,129 +7,118 @@ import { createBadResponse, createOKResponse } from "@/lib/communication";
 import { getLoggedUser } from "./users";
 
 // QUERIES -------------------------------------------
-
-export const getRecipeBookById = query({
+// TODO: Check if I can use id of group directly instead of generic string
+export const getGroupById = query({
   args: { id: v.string(), checkPrivilages: v.optional(v.boolean()) },
   handler: async (ctx, args) => {
-    const recipeBook = await ctx.db
-      .query("recipeBooks")
+    const group = await ctx.db
+      .query("groups")
       .filter((q) => q.eq(q.field("_id"), args.id))
       .unique();
-    if (!recipeBook)
+    if (!group)
+      return createBadResponse(HttpResponseCode.NotFound, "Group not found");
+
+    const userResponse = await getLoggedUser(ctx, args);
+    if (!userResponse.data)
       return createBadResponse(
-        HttpResponseCode.NotFound,
-        "Recipe book not found"
+        userResponse.status,
+        userResponse.errorMessage ?? ""
       );
 
-    const userEntityResponse = await getLoggedUser(ctx, args);
-    if (!userEntityResponse.data)
-      return createBadResponse(
-        userEntityResponse.status,
-        userEntityResponse.errorMessage ?? ""
-      );
-
-    const userRecipeBookRelationship = await ctx.db
-      .query("userRecipeBookRelationship")
+    const userGroupRelationship = await ctx.db
+      .query("userGroupRelationship")
       .filter((q) =>
         q.and(
-          q.eq(q.field("userId"), userEntityResponse.data!._id),
-          q.eq(q.field("recipeBookId"), args.id)
+          q.eq(q.field("userId"), userResponse.data!._id),
+          q.eq(q.field("groupId"), args.id)
         )
       )
       .unique();
-    if (!userRecipeBookRelationship)
+    if (!userGroupRelationship)
       return createBadResponse(
         HttpResponseCode.Forbidden,
-        "No permission to view recipe book"
+        "No permission to view group"
       );
 
     if (
       args.checkPrivilages &&
-      userRecipeBookRelationship.privilage === Privilage.Viewer
+      userGroupRelationship.privilage === Privilage.Viewer
     ) {
       return createBadResponse(
         HttpResponseCode.Forbidden,
-        "You don't have access to edit this recipe book."
+        "You don't have access to edit this group."
       );
     }
 
     return createOKResponse({
-      ...recipeBook,
-      privilage: userRecipeBookRelationship.privilage as Privilage,
+      ...group,
+      privilage: userGroupRelationship.privilage as Privilage,
     });
   },
 });
 
-export const getRecipeBooks = query({
+export const getGroupList = query({
   args: {},
   handler: async (ctx, args) => {
-    const userEntityResponse = await getLoggedUser(ctx, args);
-    if (!userEntityResponse.data)
-      return createBadResponse(
-        userEntityResponse.status,
-        userEntityResponse.errorMessage
-      );
+    const userResponse = await getLoggedUser(ctx, args);
+    if (!userResponse.data)
+      return createBadResponse(userResponse.status, userResponse.errorMessage);
 
-    const userRecipeBookRelationshipList = await ctx.db
-      .query("userRecipeBookRelationship")
+    const userGroupRelationshipList = await ctx.db
+      .query("userGroupRelationship")
       .filter((q) =>
-        q.eq(q.field("userId"), (userEntityResponse.data as Doc<"users">)._id)
+        q.eq(q.field("userId"), (userResponse.data as Doc<"users">)._id)
       )
       .collect();
-    const recipeBookIdList = userRecipeBookRelationshipList.map(
-      (relation) => relation.recipeBookId
+    const groupIdList = userGroupRelationshipList.map(
+      (relation) => relation.groupId
     );
-    const recipeBookList = await filter(
-      ctx.db.query("recipeBooks"),
-      (recipeBook) => recipeBookIdList.includes(recipeBook._id)
+    const groupList = await filter(ctx.db.query("groups"), (group) =>
+      groupIdList.includes(group._id)
     )
       .order("desc")
       .collect();
 
-    const recipeBookListWithPrivilage = recipeBookList.map((recipeBook) => {
-      const privilage = userRecipeBookRelationshipList.find(
-        (relation) => relation.recipeBookId === recipeBook._id
+    const groupListWithPrivilage = groupList.map((group) => {
+      const privilage = userGroupRelationshipList.find(
+        (relation) => relation.groupId === group._id
       )?.privilage as string;
       return {
-        ...recipeBook,
+        ...group,
         privilage: privilage as Privilage,
       };
     });
 
-    //return recipeBookListWithPrivilage ?? [];
-    return createOKResponse(recipeBookListWithPrivilage ?? []);
+    return createOKResponse(groupListWithPrivilage ?? []);
   },
 });
 
-export const getRecipebookSharedUsers = query({
+export const getGroupSharedUsers = query({
   args: {
-    recipeBookId: v.id("recipeBooks"),
+    groupId: v.id("groups"),
   },
   handler: async (ctx, args) => {
-    const userConvexResponse = await getLoggedUser(ctx, args);
-    if (!userConvexResponse.data)
-      return createBadResponse(
-        userConvexResponse.status,
-        userConvexResponse.errorMessage
-      );
+    const userResponse = await getLoggedUser(ctx, args);
+    if (!userResponse.data)
+      return createBadResponse(userResponse.status, userResponse.errorMessage);
 
-    const userRecipeBookRelationshipList = await ctx.db
-      .query("userRecipeBookRelationship")
-      .filter((q) => q.eq(q.field("recipeBookId"), args.recipeBookId))
+    const userGroupRelationshipList = await ctx.db
+      .query("userGroupRelationship")
+      .filter((q) => q.eq(q.field("groupId"), args.groupId))
       .collect();
 
-    const userIdList = userRecipeBookRelationshipList.map(
+    const userIdList = userGroupRelationshipList.map(
       (relation) => relation.userId
     );
     const userList = await filter(ctx.db.query("users"), (user) =>
       userIdList.includes(user._id)
     )
-      .filter((q) => q.neq(q.field("_id"), userConvexResponse.data!._id))
+      .filter((q) => q.neq(q.field("_id"), userResponse.data!._id))
       .order("desc")
       .collect();
 
     const userListResponse = userList.map((user) => {
-      const relationship = userRecipeBookRelationshipList.find(
+      const relationship = userGroupRelationshipList.find(
         (relation) => relation.userId === user._id
       );
       return {
@@ -146,7 +135,7 @@ export const getRecipebookSharedUsers = query({
 
 // Mutations -----------------------------------------
 
-export const createRecipeBook = mutation({
+export const createGroup = mutation({
   args: {
     name: v.string(),
     description: v.optional(v.string()),
@@ -162,42 +151,39 @@ export const createRecipeBook = mutation({
     if (!userResponse.data)
       return createBadResponse(userResponse.status, userResponse.errorMessage);
 
-    const newRecipeBookId = await ctx.db.insert("recipeBooks", {
+    const newGroupId = await ctx.db.insert("groups", {
       name: args.name,
       description: args.description,
       coverImage: args.coverImage,
     });
-    if (!newRecipeBookId) {
+    if (!newGroupId) {
       return createBadResponse(
         HttpResponseCode.InternalServerError,
-        "Recipe book was not created - Not able to insert into database."
+        "Group was not created - Not able to insert into database."
       );
     }
 
-    const userRecipeBookRelationship = await ctx.db.insert(
-      "userRecipeBookRelationship",
-      {
-        userId: userResponse.data._id,
-        recipeBookId: newRecipeBookId,
-        privilage: Privilage.Owner,
-      }
-    );
-    if (!userRecipeBookRelationship) {
+    const userGroupRelationship = await ctx.db.insert("userGroupRelationship", {
+      userId: userResponse.data._id,
+      groupId: newGroupId,
+      privilage: Privilage.Owner,
+    });
+    if (!userGroupRelationship) {
       return createBadResponse(
         HttpResponseCode.InternalServerError,
-        "Recipe book user relation was not created - Relation was not able to be inserted to database."
+        "User-Group relation was not created - Relation was not able to be inserted to database."
       );
     }
 
     return createOKResponse({
-      recipeBookId: newRecipeBookId,
+      groupId: newGroupId,
     });
   },
 });
-// TODO: Implement soft delete for users that have shared recipe book and want to remove it from list -> remove record from userRecipeBookRelationship
-export const deleteRecipeBook = mutation({
+// TODO: Implement soft delete for users that have shared group and want to remove it from list -> remove record from userGroupRelationship
+export const deleteGroup = mutation({
   args: {
-    id: v.id("recipeBooks"),
+    id: v.id("groups"),
   },
   handler: async (ctx, args) => {
     const userResponse = await getLoggedUser(ctx, args);
@@ -206,22 +192,22 @@ export const deleteRecipeBook = mutation({
 
     // TODO: Change behavior according to privilages
 
-    const recipeBook = await ctx.db.get(args.id);
-    if (!recipeBook) {
+    const group = await ctx.db.get(args.id);
+    if (!group) {
       return createBadResponse(
         HttpResponseCode.InternalServerError,
-        "Recipe book was not deleted."
+        "Group was not deleted."
       );
     }
 
     // Delete image from storage
-    if (recipeBook.coverImage?.storageId)
-      await ctx.storage.delete(recipeBook.coverImage.storageId);
+    if (group.coverImage?.storageId)
+      await ctx.storage.delete(group.coverImage.storageId);
 
     // Delete all relationsips
     const relationship = await ctx.db
-      .query("userRecipeBookRelationship")
-      .filter((q) => q.eq(q.field("recipeBookId"), recipeBook._id))
+      .query("userGroupRelationship")
+      .filter((q) => q.eq(q.field("groupId"), group._id))
       .collect();
     await Promise.all(
       relationship.map(async (p) => {
@@ -234,9 +220,9 @@ export const deleteRecipeBook = mutation({
   },
 });
 
-export const updateRecipeBook = mutation({
+export const updateGroup = mutation({
   args: {
-    id: v.id("recipeBooks"),
+    id: v.id("groups"),
     name: v.string(),
     description: v.optional(v.string()),
     coverImage: v.optional(
@@ -251,20 +237,20 @@ export const updateRecipeBook = mutation({
     if (!userResponse.data)
       return createBadResponse(userResponse.status, userResponse.errorMessage);
 
-    const recipeBook = await ctx.db.get(args.id);
-    if (!recipeBook) {
+    const group = await ctx.db.get(args.id);
+    if (!group) {
       return createBadResponse(
         HttpResponseCode.NotFound,
-        "Cannot update because Recipe book was not found"
+        "Cannot update because Group was not found"
       );
     }
 
     // Delete previous image if image changes
     if (
-      recipeBook.coverImage?.storageId &&
-      recipeBook.coverImage?.imageUrl !== args.coverImage?.imageUrl
+      group.coverImage?.storageId &&
+      group.coverImage?.imageUrl !== args.coverImage?.imageUrl
     ) {
-      await ctx.storage.delete(recipeBook.coverImage.storageId);
+      await ctx.storage.delete(group.coverImage.storageId);
     }
 
     await ctx.db.patch(args.id, {
@@ -276,11 +262,11 @@ export const updateRecipeBook = mutation({
   },
 });
 
-export const addAccessToRecipeBook = mutation({
+export const addAccessToGroup = mutation({
   args: {
     email: v.string(),
     privilage: v.string(),
-    recipeBookId: v.id("recipeBooks"),
+    groupId: v.id("groups"),
   },
   handler: async (ctx, args) => {
     const userResponse = await getLoggedUser(ctx, args);
@@ -299,26 +285,26 @@ export const addAccessToRecipeBook = mutation({
       );
     }
 
-    const userRecipeBookRelationshipList = await ctx.db
-      .query("userRecipeBookRelationship")
+    const userGroupRelationshipList = await ctx.db
+      .query("userGroupRelationship")
       .filter((q) =>
         q.and(
           q.eq(q.field("userId"), emailUserEntity._id),
-          q.eq(q.field("recipeBookId"), args.recipeBookId)
+          q.eq(q.field("groupId"), args.groupId)
         )
       )
       .collect();
 
-    if (userRecipeBookRelationshipList.length) {
+    if (userGroupRelationshipList.length) {
       return createBadResponse(
         HttpResponseCode.Conflict,
-        "User already has access to this recipe book"
+        "User already has access to this group"
       );
     }
 
-    const insertResult = await ctx.db.insert("userRecipeBookRelationship", {
+    const insertResult = await ctx.db.insert("userGroupRelationship", {
       userId: emailUserEntity._id,
-      recipeBookId: args.recipeBookId,
+      groupId: args.groupId,
       privilage: args.privilage,
     });
     if (!insertResult)
@@ -332,9 +318,9 @@ export const addAccessToRecipeBook = mutation({
     });
   },
 });
-export const changeAccessToRecipeBook = mutation({
+export const changeAccessToGroup = mutation({
   args: {
-    relationShipId: v.id("userRecipeBookRelationship"),
+    relationshipId: v.id("userGroupRelationship"),
     privilage: v.string(),
   },
   handler: async (ctx, args) => {
@@ -342,12 +328,12 @@ export const changeAccessToRecipeBook = mutation({
     if (!userResponse.data)
       return createBadResponse(userResponse.status, userResponse.errorMessage);
 
-    const relationship = await ctx.db.get(args.relationShipId);
+    const relationship = await ctx.db.get(args.relationshipId);
 
     if (!relationship) {
       return createBadResponse(
         HttpResponseCode.Forbidden,
-        "User does not have access to recipe book yet."
+        "User does not have access to this group yet."
       );
     }
 
@@ -358,25 +344,25 @@ export const changeAccessToRecipeBook = mutation({
     return createOKResponse(true);
   },
 });
-export const revokeAccessToRecipeBook = mutation({
+export const revokeAccessToGroup = mutation({
   args: {
-    relationShipId: v.id("userRecipeBookRelationship"),
+    relationshipId: v.id("userGroupRelationship"),
   },
   handler: async (ctx, args) => {
     const userResponse = await getLoggedUser(ctx, args);
     if (!userResponse.data)
       return createBadResponse(userResponse.status, userResponse.errorMessage);
 
-    const relationship = await ctx.db.get(args.relationShipId);
+    const relationship = await ctx.db.get(args.relationshipId);
 
     if (!relationship) {
       return createBadResponse(
         HttpResponseCode.Forbidden,
-        "User does not have access to recipe book yet."
+        "User does not have access to this group yet."
       );
     }
 
-    await ctx.db.delete(args.relationShipId);
+    await ctx.db.delete(args.relationshipId);
 
     return createOKResponse(true);
   },

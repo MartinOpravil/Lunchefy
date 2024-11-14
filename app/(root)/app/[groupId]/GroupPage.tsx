@@ -6,7 +6,7 @@ import LinkButton from "@/components/global/LinkButton";
 import PageHeader from "@/components/global/PageHeader";
 import RecipeForm from "@/components/recipes/Form/RecipeForm";
 import NewRecipeHeader from "@/components/recipes/headers/NewRecipeHeader";
-import RecipesPaginated from "@/components/recipes/RecipesPaginated";
+import RecipesPaginated from "@/components/recipes/RecipeListPaginated";
 import RecipeSearchResults from "@/components/RecipeSearchResults";
 import { Input } from "@/components/ui/input";
 import { recipeFormSchema, RecipeFormValues } from "@/constants/formSchemas";
@@ -30,12 +30,14 @@ import { RECIPES_INITIAL_COUNT } from "@/constants/pagination";
 import MultipleSelector, { Option } from "@/components/ui/multiple-selector";
 import { TagManager } from "@/lib/tags";
 
-const RecipeBookPage = (props: {
-  recipeBookPreloaded: Preloaded<typeof api.recipeBooks.getRecipeBookById>;
+interface GroupPageProps {
+  groupPreloaded: Preloaded<typeof api.groups.getGroupById>;
   recipesPreloaded: Preloaded<typeof api.recipes.getRecipes>;
-}) => {
-  const recipeBook = usePreloadedQuery(props.recipeBookPreloaded);
-  const initialRecipes = usePreloadedQuery(props.recipesPreloaded);
+}
+
+const GroupPage = ({ groupPreloaded, recipesPreloaded }: GroupPageProps) => {
+  const group = usePreloadedQuery(groupPreloaded);
+  const initialRecipes = usePreloadedQuery(recipesPreloaded);
   const createRecipe = useMutation(api.recipes.createRecipe);
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -48,10 +50,10 @@ const RecipeBookPage = (props: {
 
   const [isNewFormOpen, setIsNewFormOpen] = useState(false);
 
-  const recipesPaginated = usePaginatedQuery(
+  const recipeListPaginated = usePaginatedQuery(
     api.recipes.getRecipes,
     {
-      recipeBookId: recipeBook.data?._id!,
+      groupId: group.data?._id!,
     },
     { initialNumItems: RECIPES_INITIAL_COUNT }
   );
@@ -60,8 +62,8 @@ const RecipeBookPage = (props: {
     values: RecipeFormValues
   ) => {
     console.log("Should trigger submit");
-    if (!recipeBook.data?._id) {
-      notifyError("Error when creating recipe", "RecipebookId is empty");
+    if (!group.data?._id) {
+      notifyError("Error when creating recipe", "GroupId is empty");
       return;
     }
 
@@ -69,7 +71,7 @@ const RecipeBookPage = (props: {
       const updatedCoverImage = await coverImageRef.current?.commit();
       const updatedRecipePhotoImage = await recipeImageRef.current?.commit();
       const response = await createRecipe({
-        recipeBookId: recipeBook.data?._id,
+        groupId: group.data?._id,
         name: values.name,
         description: values.description,
         ingredients: values.ingredients,
@@ -78,16 +80,17 @@ const RecipeBookPage = (props: {
         recipeImage:
           updatedRecipePhotoImage ?? (values.recipeImage as ImageStateProps),
         isImageRecipe: values.isImageRecipe,
+        tags: values.tags ? TagManager.convertToValues(values.tags) : undefined,
       });
 
       if (response.data) {
-        notifySuccess("Recipe book successfully created.");
+        notifySuccess("Group successfully created.");
         setIsNewFormOpen(false);
         return;
       }
       notifyError(response.status.toString(), response.errorMessage);
     } catch (error) {
-      notifyError("Error creating recipe", error?.toString());
+      notifyError("Error creating group", error?.toString());
     }
   };
 
@@ -106,7 +109,7 @@ const RecipeBookPage = (props: {
     debouncedUpdate(value); // Debounced state for the query
   };
 
-  if (!recipeBook.data) {
+  if (!group.data) {
     return <></>;
   }
 
@@ -143,9 +146,9 @@ const RecipeBookPage = (props: {
   return (
     <main className="page pb-8">
       <PageHeader
-        title={recipeBook.data.name}
+        title={group.data.name}
         icon="recipe_book"
-        description={recipeBook.data.description}
+        description={group.data.description}
         actionButton={
           <>
             <LinkButton
@@ -156,9 +159,9 @@ const RecipeBookPage = (props: {
             <div className="bg-accent w-[1.5px] h-6 mx-2 rounded"></div>
             <LinkButton
               icon={<Pencil />}
-              href={`/app/${recipeBook.data._id}/detail`}
+              href={`/app/${group.data._id}/edit`}
             />
-            {recipeBook.data.privilage !== Privilage.Viewer && (
+            {group.data.privilage !== Privilage.Viewer && (
               <>
                 <ActionButton
                   title="New"
@@ -172,7 +175,7 @@ const RecipeBookPage = (props: {
         }
       />
       <main className="page-content gap-6">
-        <ErrorHandler convexResponse={recipeBook} />
+        <ErrorHandler convexResponse={group} />
         {!!initialRecipes.page.length && (
           <div className="w-full flex flex-col gap-4 justify-start items-start sm:flex-row sm:items-start">
             <div className="flex gap-1 bg-accent p-2 rounded-lg text-white-1">
@@ -198,10 +201,10 @@ const RecipeBookPage = (props: {
 
         {debouncedSearchTerm.length > 0 || searchTags.length ? (
           <RecipeSearchResults
-            recipeBookId={recipeBook.data._id}
+            groupId={group.data._id}
             searchTerm={debouncedSearchTerm}
             searchTags={TagManager.convertToValues(searchTags)}
-            privilage={recipeBook.data.privilage}
+            privilage={group.data.privilage}
           />
         ) : (
           <div className="w-full">
@@ -209,39 +212,39 @@ const RecipeBookPage = (props: {
               <div className="flex w-full flex-col items-center gap-3">
                 {!initialRecipes.page.length ? (
                   <>
-                    {recipeBook.data.privilage === Privilage.Viewer ? (
+                    {group.data.privilage === Privilage.Viewer ? (
                       <NoContent
-                        title="This book has no recipes yet"
+                        title="This group has no recipes yet"
                         subTitle="Contact a responsible person to add some"
                       />
                     ) : (
                       <NoContent
-                        title="This book has no recipes yet"
+                        title="This group has no recipes yet"
                         subTitle="Start by creating one"
                       />
                     )}
                   </>
                 ) : (
                   <>
-                    {!recipesPaginated.results.length &&
+                    {!recipeListPaginated.results.length &&
                     !!initialRecipes.page.length ? (
                       <div className="recipe-grid">
                         {initialRecipes.page.map((recipe) => (
                           <Recipe
                             key={recipe._id}
                             id={recipe._id}
-                            recipeBookId={recipe.recipeBookId}
+                            groupId={recipe.groupId}
                             title={recipe.name}
                             description={recipe.description}
                             imageUrl={recipe.coverImage?.imageUrl}
-                            privilage={recipeBook.data?.privilage!}
+                            privilage={group.data?.privilage!}
                           />
                         ))}
                       </div>
                     ) : (
                       <RecipesPaginated
-                        recipesPaginated={recipesPaginated}
-                        privilage={recipeBook.data.privilage}
+                        recipeListPaginated={recipeListPaginated}
+                        privilage={group.data.privilage}
                       />
                     )}
                   </>
@@ -255,4 +258,4 @@ const RecipeBookPage = (props: {
   );
 };
 
-export default RecipeBookPage;
+export default GroupPage;

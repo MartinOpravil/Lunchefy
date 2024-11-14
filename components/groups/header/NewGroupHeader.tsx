@@ -10,7 +10,7 @@ interface CustomFormContext {
   performManualLeaveAction: () => void;
 }
 
-const NewRecipeBookHeader = () => {
+const NewGroupHeader = () => {
   const {
     formState: { isDirty, isSubmitting },
     handleSubmit,
@@ -19,7 +19,7 @@ const NewRecipeBookHeader = () => {
 
   return (
     <PageHeader
-      title="New recipe book"
+      title="New group"
       icon="recipe_book"
       actionButton={
         <>
@@ -43,4 +43,4 @@ const NewRecipeBookHeader = () => {
   );
 };
 
-export default NewRecipeBookHeader;
+export default NewGroupHeader;

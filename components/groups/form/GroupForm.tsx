@@ -13,31 +13,29 @@ import { useFormContext } from "react-hook-form";
 import ImageInput from "@/components/global/ImageInput";
 import { ImageInputHandle } from "@/types";
 import PrivilageBadge from "@/components/users/PrivilageBadge";
-import { getRecipeBookById } from "@/convex/recipeBooks";
+import { getGroupById } from "@/convex/groups";
 import { Textarea } from "@/components/ui/textarea";
 import { AutosizeTextarea } from "@/components/ui/autosize-textarea";
 
-interface RecipeBookDetailPageHeaderProps {
-  recipeBook?: Awaited<ReturnType<typeof getRecipeBookById>>;
+interface GroupFormProps {
+  group?: Awaited<ReturnType<typeof getGroupById>>;
 }
 
 interface CustomFormContext {
   coverImageRef: React.RefObject<ImageInputHandle>;
 }
 
-const RecipeBookForm = ({ recipeBook }: RecipeBookDetailPageHeaderProps) => {
+const GroupForm = ({ group }: GroupFormProps) => {
   const { register, coverImageRef } = useFormContext() as ReturnType<
     typeof useFormContext
   > &
     CustomFormContext;
 
-  // if (!recipeBook.data) return <></>;
-
   return (
     <div className="w-full">
       <div className="flex justify-end">
-        {recipeBook && recipeBook.data && (
-          <PrivilageBadge privilage={recipeBook.data.privilage} />
+        {group && group.data && (
+          <PrivilageBadge privilage={group.data.privilage} />
         )}
       </div>
       <div className="flex flex-col gap-[30px] pb-6">
@@ -51,7 +49,7 @@ const RecipeBookForm = ({ recipeBook }: RecipeBookDetailPageHeaderProps) => {
               <FormControl>
                 <Input
                   className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
-                  placeholder="Recipe book name"
+                  placeholder="Group name"
                   {...field}
                 />
               </FormControl>
@@ -69,7 +67,7 @@ const RecipeBookForm = ({ recipeBook }: RecipeBookDetailPageHeaderProps) => {
               <FormControl>
                 <AutosizeTextarea
                   className="input-class border-2 border-accent focus-visible:ring-secondary transition"
-                  placeholder="Optional recipe book description"
+                  placeholder="Optional group description"
                   {...field}
                   maxHeight={200}
                 />
@@ -100,4 +98,4 @@ const RecipeBookForm = ({ recipeBook }: RecipeBookDetailPageHeaderProps) => {
   );
 };
 
-export default RecipeBookForm;
+export default GroupForm;

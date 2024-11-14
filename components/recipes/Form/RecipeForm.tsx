@@ -62,7 +62,7 @@ const RecipeForm = ({ recipe }: RecipeDetailHeaderProps) => {
                     <FormControl>
                       <Input
                         className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
-                        placeholder="Recipe book name"
+                        placeholder="Recipe name"
                         {...field}
                       />
                     </FormControl>
@@ -80,7 +80,7 @@ const RecipeForm = ({ recipe }: RecipeDetailHeaderProps) => {
                     <FormControl>
                       <AutosizeTextarea
                         className="input-class border-2 border-accent focus-visible:ring-secondary transition"
-                        placeholder="Optional recipe book description"
+                        placeholder="Optional recipe description"
                         {...field}
                         maxHeight={200}
                       />

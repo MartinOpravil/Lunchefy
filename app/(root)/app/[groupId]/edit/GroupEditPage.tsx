@@ -1,12 +1,9 @@
 "use client";
 import FormProviderWrapper from "@/components/FormProviderWrapper";
 import ErrorHandler from "@/components/global/ErrorHandler";
-import RecipeBookForm from "@/components/recipeBooks/form/RecipeBookForm";
-import RecipeBookDetailHeader from "@/components/recipeBooks/Detail/RecipeBookDetailHeader";
-import {
-  recipeBookFormSchema,
-  RecipeBookFormValues,
-} from "@/constants/formSchemas";
+import GroupForm from "@/components/groups/form/GroupForm";
+import GroupEditHeader from "@/components/groups/edit/GroupEditHeader";
+import { groupFormSchema, GroupFormValues } from "@/constants/formSchemas";
 import { api } from "@/convex/_generated/api";
 import { notifyError, notifySuccess } from "@/lib/notifications";
 import { ImageInputHandle, ImageStateProps } from "@/types";
@@ -15,26 +12,28 @@ import { useRouter } from "next/navigation";
 import React, { useRef, useState } from "react";
 import { SubmitHandler } from "react-hook-form";
 
-const RecipeBookDetailPage = (props: {
-  recipeBookPreloaded: Preloaded<typeof api.recipeBooks.getRecipeBookById>;
-}) => {
+interface GroupEditPageProps {
+  groupPreloaded: Preloaded<typeof api.groups.getGroupById>;
+}
+
+const GroupEditPage = ({ groupPreloaded }: GroupEditPageProps) => {
   const router = useRouter();
-  const recipeBook = usePreloadedQuery(props.recipeBookPreloaded);
-  const updateRecipeBook = useMutation(api.recipeBooks.updateRecipeBook);
+  const group = usePreloadedQuery(groupPreloaded);
+  const updateGroup = useMutation(api.groups.updateGroup);
 
   const coverImageRef = useRef<ImageInputHandle>(null);
   const [isFormDirty, setIsFormDirty] = useState(false);
   const [resetForm, setResetForm] = useState<(() => void) | null>(null);
 
-  const handleSubmit: SubmitHandler<RecipeBookFormValues> = async (
-    values: RecipeBookFormValues
+  const handleSubmit: SubmitHandler<GroupFormValues> = async (
+    values: GroupFormValues
   ) => {
-    if (!recipeBook.data) return;
+    if (!group.data) return;
 
     try {
       const updatedImage = await coverImageRef.current?.commit();
-      const response = await updateRecipeBook({
-        id: recipeBook.data?._id,
+      const response = await updateGroup({
+        id: group.data?._id,
         name: values.name,
         description: values.description,
         coverImage: updatedImage ?? (values.coverImage as ImageStateProps),
@@ -42,37 +41,37 @@ const RecipeBookDetailPage = (props: {
 
       if (!response.data)
         return notifyError(response.status.toString(), response.errorMessage);
-      notifySuccess("Successfully updated recipe book");
+      notifySuccess("Successfully updated group");
       // router.push("/app");
       if (resetForm) resetForm();
       router.refresh();
     } catch (error) {
-      notifyError("Error creating recipe book", error?.toString());
+      notifyError("Error updating group", error?.toString());
     }
   };
 
   return (
     <FormProviderWrapper
       onSubmit={handleSubmit}
-      formSchema={recipeBookFormSchema}
+      formSchema={groupFormSchema}
       defaultValues={{
-        name: recipeBook.data?.name ?? "",
-        description: recipeBook.data?.description,
-        coverImage: recipeBook.data?.coverImage,
+        name: group.data?.name ?? "",
+        description: group.data?.description,
+        coverImage: group.data?.coverImage,
       }}
       onFormStateChange={setIsFormDirty}
       passResetToParent={setResetForm}
       coverImageRef={coverImageRef}
     >
       <main className="page">
-        <RecipeBookDetailHeader recipeBook={recipeBook} />
+        <GroupEditHeader group={group} />
         <main className="page-content">
-          <ErrorHandler convexResponse={recipeBook} />
-          <RecipeBookForm recipeBook={recipeBook} />
+          <ErrorHandler convexResponse={group} />
+          <GroupForm group={group} />
         </main>
       </main>
     </FormProviderWrapper>
   );
 };
 
-export default RecipeBookDetailPage;
+export default GroupEditPage;

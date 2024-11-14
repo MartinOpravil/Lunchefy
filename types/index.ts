@@ -30,27 +30,6 @@ export interface ImageInputHandle {
   getImageBlob: () => Blob | undefined;
 }
 
-export interface RecipeBookProps {
-  id: GenericId<"recipeBooks">;
-  title: string;
-  description?: string;
-  imageUrl?: string;
-  privilage: string;
-}
-
-export interface RecipeProps {
-  id: GenericId<"recipes">;
-  recipeBookId: GenericId<"recipeBooks">;
-  title: string;
-  privilage: Privilage;
-  description?: string;
-  imageUrl?: string;
-  tags?: Array<string>;
-  ingredients?: string;
-  recipe?: string;
-  recipePhotoUrl?: string;
-}
-
 export interface BasicDialogProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -61,28 +40,8 @@ export interface BasicDialogProps {
   action?: ReactNode;
 }
 
-export interface AccessManagerProps {
-  recipeBookName: string;
-  recipeBookId: GenericId<"recipeBooks">;
-}
-
 export interface PrivilageBadgeProps {
   privilage: Privilage;
-}
-
-export interface UserWithAccessProps {
-  name: string;
-  email: string;
-  privilage: Privilage;
-  relationShipId: GenericId<"userRecipeBookRelationship">;
-}
-
-export interface UserAccessFormProps {
-  name: string;
-  email: string;
-  privilage: Privilage;
-  relationShipId: GenericId<"userRecipeBookRelationship">;
-  actionClicked: () => void;
 }
 
 export interface FormMethods {

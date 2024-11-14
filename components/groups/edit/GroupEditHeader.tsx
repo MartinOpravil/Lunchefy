@@ -7,31 +7,29 @@ import BasicDialog from "@/components/global/BasicDialog";
 import AccessManager from "./AccessManager/AccessManager";
 import { ButtonVariant, Privilage } from "@/enums";
 import Image from "next/image";
-import DeleteRecipeBookButton from "../DeleteRecipeBookButton";
-import { getRecipeBookById } from "@/convex/recipeBooks";
+import DeleteGroupButton from "../DeleteGroupButton";
+import { getGroupById } from "@/convex/groups";
 import { ArrowLeft, Book, Save, Share2 } from "lucide-react";
 import HorizontalSeparator from "@/components/global/HorizontalSeparator";
 import { useFormContext } from "react-hook-form";
 
-interface RecipeBookDetailPageHeaderProps {
-  recipeBook: Awaited<ReturnType<typeof getRecipeBookById>>;
+interface GroupEditHeaderProps {
+  group: Awaited<ReturnType<typeof getGroupById>>;
 }
 
-const RecipeBookDetailHeader = ({
-  recipeBook,
-}: RecipeBookDetailPageHeaderProps) => {
+const GroupEditHeader = ({ group }: GroupEditHeaderProps) => {
   const {
     formState: { isDirty, isSubmitting },
     handleSubmit,
   } = useFormContext();
   const [isAccessManagerOpen, setIsAccessManagerOpen] = useState(false);
 
-  if (!recipeBook.data) return <></>;
+  if (!group.data) return <></>;
 
   return (
     <>
       <PageHeader
-        title={`${recipeBook.data.name}`}
+        title={`${group.data.name}`}
         icon="recipe_book"
         actionButton={
           <>
@@ -41,17 +39,14 @@ const RecipeBookDetailHeader = ({
               variant={ButtonVariant.Dark}
             />
             <HorizontalSeparator />
-            {recipeBook.data.privilage === Privilage.Owner && (
+            {group.data.privilage === Privilage.Owner && (
               <>
-                <DeleteRecipeBookButton
-                  recipeBookId={recipeBook.data._id}
-                  recipeBookTitle={recipeBook.data.name}
+                <DeleteGroupButton
+                  groupId={group.data._id}
+                  groupTitle={group.data.name}
                   redirectAfterDelete
                 />
-                <LinkButton
-                  icon={<Book />}
-                  href={`/app/${recipeBook.data._id}`}
-                />
+                <LinkButton icon={<Book />} href={`/app/${group.data._id}`} />
                 <ActionButton
                   icon={<Share2 />}
                   onClick={(e) => {
@@ -86,14 +81,11 @@ const RecipeBookDetailHeader = ({
         title="Access manager"
         description="Grant access for your family members or friends."
         content={
-          <AccessManager
-            recipeBookName={recipeBook.data.name}
-            recipeBookId={recipeBook.data._id}
-          />
+          <AccessManager groupName={group.data.name} groupId={group.data._id} />
         }
       />
     </>
   );
 };
 
-export default RecipeBookDetailHeader;
+export default GroupEditHeader;

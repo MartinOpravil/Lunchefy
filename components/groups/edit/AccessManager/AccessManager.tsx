@@ -22,7 +22,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
-import { AccessManagerProps } from "@/types";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import LoaderSpinner from "@/components/global/LoaderSpinner";
@@ -32,6 +31,7 @@ import UserWithAccess from "./UserWithAccess";
 import { Privilage } from "@/enums";
 import { notifyError, notifySuccess } from "@/lib/notifications";
 import { Share2 } from "lucide-react";
+import { GenericId } from "convex/values";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -42,20 +42,19 @@ const formSchema = z.object({
   }),
 });
 
-const AccessManager = ({
-  recipeBookName,
-  recipeBookId,
-}: AccessManagerProps) => {
+export interface AccessManagerProps {
+  groupName: string;
+  groupId: GenericId<"groups">;
+}
+
+const AccessManager = ({ groupName, groupId }: AccessManagerProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const addAccessToRecipeBook = useMutation(
-    api.recipeBooks.addAccessToRecipeBook
-  );
-  const recipebookSharedUsers = useQuery(
-    api.recipeBooks.getRecipebookSharedUsers,
-    { recipeBookId }
-  );
-  const recipebookSharedUsersData = recipebookSharedUsers?.data;
+  const addAccessToGroup = useMutation(api.groups.addAccessToGroup);
+  const groupSharedUsers = useQuery(api.groups.getGroupSharedUsers, {
+    groupId,
+  });
+  const groupSharedUsersData = groupSharedUsers?.data;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -68,10 +67,10 @@ const AccessManager = ({
     setIsSubmitting(true);
 
     try {
-      const result = await addAccessToRecipeBook({
+      const result = await addAccessToGroup({
         email: values.email,
         privilage: values.privilage,
-        recipeBookId: recipeBookId,
+        groupId,
       });
       setIsSubmitting(false);
       if (!result.data)
@@ -103,19 +102,19 @@ const AccessManager = ({
               onClick={() => setIsFormOpen(true)}
             />
           </div>
-          {recipebookSharedUsersData ? (
+          {groupSharedUsersData ? (
             <>
-              {!!recipebookSharedUsersData.length && (
+              {!!groupSharedUsersData.length && (
                 <div className="access-manager-list pt-6 w-full">
                   <h3 className="text-16 text-accent">Users with access:</h3>
 
-                  {recipebookSharedUsersData.map((user, index) => (
+                  {groupSharedUsersData.map((user, index) => (
                     <UserWithAccess
                       key={index}
                       name={user.name}
                       email={user.email}
                       privilage={user.privilage}
-                      relationShipId={user.relationshipId}
+                      relationshipId={user.relationshipId}
                     />
                   ))}
                 </div>
@@ -146,7 +145,7 @@ const AccessManager = ({
                       <FormControl>
                         <Input
                           className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
-                          placeholder={`Email to share "${recipeBookName}" with`}
+                          placeholder={`Email to share "${groupName}" with`}
                           {...field}
                         />
                       </FormControl>

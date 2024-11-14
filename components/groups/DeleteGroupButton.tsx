@@ -11,22 +11,22 @@ import { ClassListProp } from "@/types";
 import { Trash2 } from "lucide-react";
 import { ButtonVariant } from "@/enums";
 
-export interface DeleteRecipeBookButtonProps extends ClassListProp {
-  recipeBookId: GenericId<"recipeBooks">;
-  recipeBookTitle: string;
+export interface DeleteGroupButtonProps extends ClassListProp {
+  groupId: GenericId<"groups">;
+  groupTitle: string;
   redirectAfterDelete?: boolean;
 }
 
-const DeleteRecipeBookButton = ({
-  recipeBookId,
-  recipeBookTitle,
+const DeleteGroupButton = ({
+  groupId,
+  groupTitle,
   redirectAfterDelete = false,
   classList,
-}: DeleteRecipeBookButtonProps) => {
+}: DeleteGroupButtonProps) => {
   const router = useRouter();
   const [isDeleting, setIsDeleting] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const deleteRecipeBook = useMutation(api.recipeBooks.deleteRecipeBook);
+  const deleteGroup = useMutation(api.groups.deleteGroup);
 
   const handleOpenDialog = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -37,17 +37,17 @@ const DeleteRecipeBookButton = ({
     setIsDialogOpen(true);
   };
 
-  const handleDeleteRecipeBook = async () => {
+  const handleDeleteGroup = async () => {
     setIsDeleting(true);
     try {
-      const response = await deleteRecipeBook({ id: recipeBookId });
+      const response = await deleteGroup({ id: groupId });
       setIsDeleting(false);
       if (!response.data)
         return notifyError(response.status.toString(), response.errorMessage);
-      notifySuccess("Successfully deleted recipe book");
+      notifySuccess("Successfully deleted group");
       if (redirectAfterDelete) router.push("/app");
     } catch (error) {
-      console.error("Error deleting recipe book", error);
+      console.error("Error deleting group", error);
       setIsDeleting(false);
     }
   };
@@ -65,12 +65,12 @@ const DeleteRecipeBookButton = ({
         isOpen={isDialogOpen}
         setIsOpen={setIsDialogOpen}
         title="Are you absolutely sure want to delete?"
-        description="This action cannot be undone and will permanently delete your recipe book from our servers."
-        subject={recipeBookTitle}
-        confirmAction={handleDeleteRecipeBook}
+        description="This action cannot be undone and will permanently delete group from our servers."
+        subject={groupTitle}
+        confirmAction={handleDeleteGroup}
       />
     </>
   );
 };
 
-export default DeleteRecipeBookButton;
+export default DeleteGroupButton;

@@ -2,51 +2,50 @@
 import PageHeader from "@/components/global/PageHeader";
 import { api } from "@/convex/_generated/api";
 import React, { useRef, useState } from "react";
-import RecipeBooks from "@/components/recipeBooks/RecipeBooks";
+import GroupList from "@/components/groups/GroupList";
 import { Preloaded, useMutation, usePreloadedQuery } from "convex/react";
 import ActionButton from "@/components/global/ActionButton";
 import { Plus } from "lucide-react";
 import { ButtonVariant } from "@/enums";
 import { ImageInputHandle, ImageStateProps } from "@/types";
-import NewRecipeBookHeader from "@/components/recipeBooks/header/NewRecipeBookHeader";
+import NewGroupHeader from "@/components/groups/header/NewGroupHeader";
 import FormProviderWrapper from "@/components/FormProviderWrapper";
-import {
-  recipeBookFormSchema,
-  RecipeBookFormValues,
-} from "@/constants/formSchemas";
-import RecipeBookForm from "@/components/recipeBooks/form/RecipeBookForm";
+import { groupFormSchema, GroupFormValues } from "@/constants/formSchemas";
+import GroupForm from "@/components/groups/form/GroupForm";
 import { SubmitHandler } from "react-hook-form";
 import { notifyError, notifySuccess } from "@/lib/notifications";
 
-const RecipeBooksPage = (props: {
-  recipeBooksPreloaded: Preloaded<typeof api.recipeBooks.getRecipeBooks>;
-}) => {
-  const recipeBooks = usePreloadedQuery(props.recipeBooksPreloaded);
-  const createRecipeBook = useMutation(api.recipeBooks.createRecipeBook);
+interface GroupListPageProps {
+  groupListPreloaded: Preloaded<typeof api.groups.getGroupList>;
+}
+
+const GroupListPage = ({ groupListPreloaded }: GroupListPageProps) => {
+  const groupList = usePreloadedQuery(groupListPreloaded);
+  const createGroup = useMutation(api.groups.createGroup);
   const [isNewFormOpen, setIsNewFormOpen] = useState(false);
 
   const [resetForm, setResetForm] = useState<(() => void) | null>(null);
   const coverImageRef = useRef<ImageInputHandle>(null);
 
-  const handleSubmit: SubmitHandler<RecipeBookFormValues> = async (
-    values: RecipeBookFormValues
+  const handleSubmit: SubmitHandler<GroupFormValues> = async (
+    values: GroupFormValues
   ) => {
     try {
       const updatedImage = await coverImageRef.current?.commit();
-      const response = await createRecipeBook({
+      const response = await createGroup({
         name: values.name,
         description: values.description,
         coverImage: updatedImage ?? (values.coverImage as ImageStateProps),
       });
 
       if (response.data) {
-        notifySuccess("Recipe book successfully created.");
+        notifySuccess("Group successfully created.");
         setIsNewFormOpen(false);
         return;
       }
       notifyError(response.status.toString(), response.errorMessage);
     } catch (error) {
-      console.log("Error creating recipe book", error);
+      console.log("Error creating group", error);
     }
   };
 
@@ -55,7 +54,7 @@ const RecipeBooksPage = (props: {
     return (
       <FormProviderWrapper
         onSubmit={handleSubmit}
-        formSchema={recipeBookFormSchema}
+        formSchema={groupFormSchema}
         defaultValues={{
           name: "",
           description: undefined,
@@ -66,9 +65,9 @@ const RecipeBooksPage = (props: {
         manualLeaveAction={() => setIsNewFormOpen(false)}
       >
         <main className="page">
-          <NewRecipeBookHeader />
+          <NewGroupHeader />
           <main className="page-content">
-            <RecipeBookForm />
+            <GroupForm />
           </main>
         </main>
       </FormProviderWrapper>
@@ -79,7 +78,7 @@ const RecipeBooksPage = (props: {
   return (
     <main className="page">
       <PageHeader
-        title="Recipe books"
+        title="Groups"
         icon="recipe_book"
         actionButton={
           <ActionButton
@@ -91,10 +90,10 @@ const RecipeBooksPage = (props: {
         }
       />
       <main className="page-content">
-        <RecipeBooks recipeBooks={recipeBooks} />
+        <GroupList groupList={groupList} />
       </main>
     </main>
   );
 };
 
-export default RecipeBooksPage;
+export default GroupListPage;

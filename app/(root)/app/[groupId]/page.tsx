@@ -3,27 +3,29 @@ import { Id } from "@/convex/_generated/dataModel";
 import { getAuthToken } from "@/lib/authentication";
 import { preloadQuery } from "convex/nextjs";
 import React from "react";
-import RecipeBookPage from "./RecipeBookPage";
+import GroupPage from "./GroupPage";
 import ErrorHandlerPreloaded from "@/components/global/ErrorHandlerPreloaded";
 import { RECIPES_INITIAL_COUNT } from "@/constants/pagination";
 
-const RecipeBookServerPage = async ({
-  params: { recipeBookId },
-}: {
-  params: { recipeBookId: Id<"recipeBooks"> };
-}) => {
+interface GroupServerPageProps {
+  params: { groupId: Id<"groups"> };
+}
+
+const GroupServerPage = async ({
+  params: { groupId },
+}: GroupServerPageProps) => {
   const token = await getAuthToken();
-  const recipeBookPreloadPromise = preloadQuery(
-    api.recipeBooks.getRecipeBookById,
+  const groupPreloadPromise = preloadQuery(
+    api.groups.getGroupById,
     {
-      id: recipeBookId,
+      id: groupId,
     },
     { token }
   );
   const recipesPreloadPromise = preloadQuery(
     api.recipes.getRecipes,
     {
-      recipeBookId: recipeBookId,
+      groupId,
       paginationOpts: {
         numItems: RECIPES_INITIAL_COUNT,
         cursor: null,
@@ -32,20 +34,20 @@ const RecipeBookServerPage = async ({
     { token }
   );
 
-  const [recipeBookPreload, recipesPreload] = await Promise.all([
-    recipeBookPreloadPromise,
+  const [groupPreload, recipesPreload] = await Promise.all([
+    groupPreloadPromise,
     recipesPreloadPromise,
   ]);
 
   return (
     <>
-      <ErrorHandlerPreloaded preloadedData={recipeBookPreload} />
-      <RecipeBookPage
-        recipeBookPreloaded={recipeBookPreload}
+      <ErrorHandlerPreloaded preloadedData={groupPreload} />
+      <GroupPage
+        groupPreloaded={groupPreload}
         recipesPreloaded={recipesPreload}
       />
     </>
   );
 };
 
-export default RecipeBookServerPage;
+export default GroupServerPage;

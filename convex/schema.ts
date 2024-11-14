@@ -15,7 +15,7 @@ export default defineSchema({
       language: v.string(),
     }),
   }),
-  recipeBooks: defineTable({
+  groups: defineTable({
     name: v.string(),
     description: v.optional(v.string()),
     coverImage: v.optional(
@@ -25,13 +25,13 @@ export default defineSchema({
       })
     ),
   }),
-  userRecipeBookRelationship: defineTable({
+  userGroupRelationship: defineTable({
     userId: v.id("users"),
-    recipeBookId: v.id("recipeBooks"),
+    groupId: v.id("groups"),
     privilage: v.string(),
   }),
   recipes: defineTable({
-    recipeBookId: v.id("recipeBooks"),
+    groupId: v.id("groups"),
     name: v.string(),
     description: v.optional(v.string()),
     coverImage: v.optional(

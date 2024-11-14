@@ -9,20 +9,25 @@ import { UsePaginatedQueryReturnType } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { RECIPES_NEXT_COUNT } from "@/constants/pagination";
 
-interface RecipeBooksProps {
-  recipesPaginated: UsePaginatedQueryReturnType<typeof api.recipes.getRecipes>;
+interface RecipeListPaginatedProps {
+  recipeListPaginated: UsePaginatedQueryReturnType<
+    typeof api.recipes.getRecipes
+  >;
   privilage: Privilage;
 }
 
-const RecipeBooks = ({ recipesPaginated, privilage }: RecipeBooksProps) => {
+const RecipeListPaginated = ({
+  recipeListPaginated,
+  privilage,
+}: RecipeListPaginatedProps) => {
   return (
     <>
       <div className="recipe-grid">
-        {recipesPaginated.results?.map((recipe) => (
+        {recipeListPaginated.results?.map((recipe) => (
           <Recipe
             key={recipe._id}
             id={recipe._id}
-            recipeBookId={recipe.recipeBookId}
+            groupId={recipe.groupId}
             title={recipe.name}
             description={recipe.description}
             imageUrl={recipe.coverImage?.imageUrl}
@@ -30,12 +35,12 @@ const RecipeBooks = ({ recipesPaginated, privilage }: RecipeBooksProps) => {
           />
         ))}
         <InfiniteScroll
-          hasMore={recipesPaginated.status === "CanLoadMore"}
-          isLoading={recipesPaginated.isLoading ?? false}
-          next={() => recipesPaginated.loadMore(RECIPES_NEXT_COUNT)}
+          hasMore={recipeListPaginated.status === "CanLoadMore"}
+          isLoading={recipeListPaginated.isLoading ?? false}
+          next={() => recipeListPaginated.loadMore(RECIPES_NEXT_COUNT)}
           threshold={1}
         >
-          {recipesPaginated.status !== "Exhausted" && (
+          {recipeListPaginated.status !== "Exhausted" && (
             <div className="h-full w-full relative">
               <Skeleton className="h-full w-full bg-accent/70" />
               <div className="absolute top-0 left-0 w-full h-full text-white-1 flex flex-col justify-center items-center gap-2">
@@ -53,4 +58,4 @@ const RecipeBooks = ({ recipesPaginated, privilage }: RecipeBooksProps) => {
   );
 };
 
-export default RecipeBooks;
+export default RecipeListPaginated;

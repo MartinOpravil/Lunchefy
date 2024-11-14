@@ -1,5 +1,4 @@
 "use client";
-import { RecipeBookProps } from "@/types";
 import React, { useState } from "react";
 import {
   Card,
@@ -12,17 +11,20 @@ import LinkButton from "../global/LinkButton";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Privilage } from "@/enums";
-import DeleteRecipeBookButton from "./DeleteRecipeBookButton";
+import DeleteGroupButton from "./DeleteGroupButton";
 import LoaderSpinner from "../global/LoaderSpinner";
 import { Pencil } from "lucide-react";
+import { GenericId } from "convex/values";
 
-const RecipeBook = ({
-  id,
-  title,
-  description,
-  imageUrl,
-  privilage,
-}: RecipeBookProps) => {
+export interface GroupProps {
+  id: GenericId<"groups">;
+  title: string;
+  description?: string;
+  imageUrl?: string;
+  privilage: string;
+}
+
+const Group = ({ id, title, description, imageUrl, privilage }: GroupProps) => {
   const [isRoutingToOverview, setIsRoutingToOverview] = useState(false);
 
   return (
@@ -44,7 +46,7 @@ const RecipeBook = ({
           {imageUrl && (
             <Image
               src={imageUrl}
-              alt="Recipe book cover"
+              alt="Group cover"
               className="absolute z-[-1]"
               width={0}
               height={0}
@@ -66,9 +68,9 @@ const RecipeBook = ({
         </Link>
         <div className="absolute w-full bottom-4 flex justify-between px-4 pointer-events-none">
           {privilage === Privilage.Owner ? (
-            <DeleteRecipeBookButton
-              recipeBookId={id}
-              recipeBookTitle={title}
+            <DeleteGroupButton
+              groupId={id}
+              groupTitle={title}
               classList="!bg-transparent hover:!bg-primary"
             />
           ) : (
@@ -77,7 +79,7 @@ const RecipeBook = ({
           {privilage !== Privilage.Viewer ? (
             <LinkButton
               icon={<Pencil />}
-              href={`/app/${id}/detail`}
+              href={`/app/${id}/edit`}
               classList="!bg-transparent hover:!bg-accent pointer-events-auto"
             />
           ) : (
@@ -89,4 +91,4 @@ const RecipeBook = ({
   );
 };
 
-export default RecipeBook;
+export default Group;

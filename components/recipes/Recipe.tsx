@@ -1,5 +1,4 @@
 "use client";
-import { RecipeProps } from "@/types";
 import React, { useState } from "react";
 import {
   Card,
@@ -15,10 +14,24 @@ import { Privilage } from "@/enums";
 import DeleteRecipeButton from "./DeleteRecipeButton";
 import { Pencil } from "lucide-react";
 import LoaderSpinner from "../global/LoaderSpinner";
+import { GenericId } from "convex/values";
+
+export interface RecipeProps {
+  id: GenericId<"recipes">;
+  groupId: GenericId<"groups">;
+  title: string;
+  privilage: Privilage;
+  description?: string;
+  imageUrl?: string;
+  tags?: Array<string>;
+  ingredients?: string;
+  recipe?: string;
+  recipePhotoUrl?: string;
+}
 
 const Recipe = ({
   id,
-  recipeBookId,
+  groupId,
   title,
   privilage,
   description,
@@ -38,14 +51,14 @@ const Recipe = ({
         )}
       >
         <Link
-          href={`/app/${recipeBookId}/${id}`}
+          href={`/app/${groupId}/${id}`}
           className="min-h-[300px] flex flex-col justify-center items-center"
           onClick={() => setIsRoutingToOverview(true)}
         >
           {imageUrl && (
             <Image
               src={imageUrl}
-              alt="Recipe book cover"
+              alt="Recipe cover"
               className="absolute z-[-1]"
               width={0}
               height={0}
@@ -69,7 +82,7 @@ const Recipe = ({
           {privilage === Privilage.Owner ? (
             <DeleteRecipeButton
               recipeId={id}
-              recipeBookId={recipeBookId}
+              groupId={groupId}
               recipeTitle={title}
               classList="!bg-transparent hover:!bg-primary"
             />
@@ -79,7 +92,7 @@ const Recipe = ({
           {privilage !== Privilage.Viewer ? (
             <LinkButton
               icon={<Pencil />}
-              href={`/app/${recipeBookId}/${id}/detail`}
+              href={`/app/${groupId}/${id}/edit`}
               classList="!bg-transparent hover:!bg-accent pointer-events-auto"
             />
           ) : (

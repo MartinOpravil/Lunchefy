@@ -2,17 +2,17 @@ import { api } from "@/convex/_generated/api";
 import { preloadQuery } from "convex/nextjs";
 import React from "react";
 import { getAuthToken } from "@/lib/authentication";
-import RecipeBooksPage from "./RecipeBooksPage";
+import GroupListPage from "./GroupListPage";
 
-const RecipeBooksServerPage = async () => {
+const GroupListServerPage = async () => {
   const token = await getAuthToken();
-  const recipeBooksPreload = await preloadQuery(
-    api.recipeBooks.getRecipeBooks,
+  const groupListPreload = await preloadQuery(
+    api.groups.getGroupList,
     {},
     { token }
   );
 
-  return <RecipeBooksPage recipeBooksPreloaded={recipeBooksPreload} />;
+  return <GroupListPage groupListPreloaded={groupListPreload} />;
 };
 
-export default RecipeBooksServerPage;
+export default GroupListServerPage;

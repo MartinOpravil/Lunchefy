@@ -1,7 +1,7 @@
 import { api } from "@/convex/_generated/api";
 import { usePaginatedQuery, useQuery } from "convex/react";
 import React, { useEffect, useState } from "react";
-import Recipes from "./recipes/RecipesPaginated";
+import Recipes from "./recipes/RecipeListPaginated";
 import { Privilage } from "@/enums";
 import { Id } from "@/convex/_generated/dataModel";
 import { Loader2 } from "lucide-react";
@@ -9,14 +9,14 @@ import NoContent from "./global/NoContent";
 import { RECIPES_SEARCH_INITIAL_COUNT } from "@/constants/pagination";
 
 interface RecipeSearchResultsProps {
-  recipeBookId: Id<"recipeBooks">;
+  groupId: Id<"groups">;
   searchTerm: string;
   searchTags: string[];
   privilage: Privilage;
 }
 
 const RecipeSearchResults = ({
-  recipeBookId,
+  groupId,
   searchTerm,
   searchTags,
   privilage,
@@ -24,7 +24,7 @@ const RecipeSearchResults = ({
   const filteredRecipesPaginated = usePaginatedQuery(
     api.recipes.getRecipes,
     {
-      recipeBookId: recipeBookId,
+      groupId,
       searchTerm: searchTerm,
       searchTags: searchTags,
     },
@@ -40,7 +40,7 @@ const RecipeSearchResults = ({
       {filteredRecipesPaginated.status !== "LoadingFirstPage" && (
         <>
           {!filteredRecipesPaginated.results.length ? (
-            <NoContent title="This recipe book does not have searched recipe" />
+            <NoContent title="This group does not have searched recipe" />
           ) : (
             <Recipes
               recipesPaginated={filteredRecipesPaginated}

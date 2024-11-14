@@ -13,14 +13,14 @@ import { ButtonVariant } from "@/enums";
 
 export interface DeleteRecipeButtonProps extends ClassListProp {
   recipeId: GenericId<"recipes">;
-  recipeBookId: GenericId<"recipeBooks">;
+  groupId: GenericId<"groups">;
   recipeTitle: string;
   redirectAfterDelete?: boolean;
 }
 
 const DeleteRecipeButton = ({
   recipeId,
-  recipeBookId,
+  groupId,
   recipeTitle,
   redirectAfterDelete = false,
   classList,
@@ -46,11 +46,11 @@ const DeleteRecipeButton = ({
       setIsDeleting(false);
       if (!response.data)
         return notifyError(response.status.toString(), response.errorMessage);
-      notifySuccess("Successfully deleted recipe book");
+      notifySuccess("Successfully deleted group");
       setIsDialogOpen(false);
-      if (redirectAfterDelete) router.push(`/app/${recipeBookId}`);
+      if (redirectAfterDelete) router.push(`/app/${groupId}`);
     } catch (error) {
-      console.error("Error deleting recipe book", error);
+      console.error("Error deleting group", error);
       setIsDeleting(false);
     }
   };
@@ -68,7 +68,7 @@ const DeleteRecipeButton = ({
         isOpen={isDialogOpen}
         setIsOpen={setIsDialogOpen}
         title="Are you absolutely sure want to delete?"
-        description="This action cannot be undone and will permanently delete your recipe book from our servers."
+        description="This action cannot be undone and will permanently delete your recipe from our servers."
         subject={recipeTitle}
         confirmAction={handleDeleteRecipe}
       />

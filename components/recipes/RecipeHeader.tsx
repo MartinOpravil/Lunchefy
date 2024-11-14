@@ -22,7 +22,7 @@ const RecipeHeader = ({ recipe }: RecipeHeaderProps) => {
         <>
           <LinkButton
             icon={<ArrowLeft />}
-            href={`/app/${recipe.data.recipeBookId}`}
+            href={`/app/${recipe.data.groupId}`}
             variant={ButtonVariant.Dark}
           />
           {recipe.data.privilage !== Privilage.Viewer && (
@@ -30,7 +30,7 @@ const RecipeHeader = ({ recipe }: RecipeHeaderProps) => {
               <div className="bg-accent w-[1.5px] h-6 mx-2 rounded"></div>
               <LinkButton
                 icon={<Pencil />}
-                href={`/app/${recipe.data.recipeBookId}/${recipe.data._id}/detail`}
+                href={`/app/${recipe.data.groupId}/${recipe.data._id}/edit`}
               />
             </>
           )}

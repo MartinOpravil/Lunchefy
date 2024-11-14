@@ -5,9 +5,9 @@ const optionSchema = z.object({
   value: z.string(),
 });
 
-export const recipeBookFormSchema = z.object({
+export const groupFormSchema = z.object({
   name: z.string().min(2, {
-    message: "Recipe book name must be at least 2 characters.",
+    message: "Group name must be at least 2 characters.",
   }),
   description: z.optional(z.string()),
   coverImage: z.optional(
@@ -17,7 +17,7 @@ export const recipeBookFormSchema = z.object({
     })
   ),
 });
-export type RecipeBookFormValues = z.infer<typeof recipeBookFormSchema>;
+export type GroupFormValues = z.infer<typeof groupFormSchema>;
 
 export const recipeFormSchema = z.object({
   name: z.string().min(2, {

@@ -29,21 +29,21 @@ const RecipeDetailHeader = ({ recipe }: RecipeDetailHeaderProps) => {
           <LinkButton
             // iconName="back"
             icon={<ArrowLeft />}
-            href={`/app/${recipe.data.recipeBookId}`}
+            href={`/app/${recipe.data.groupId}`}
             variant={ButtonVariant.Dark}
           />
           <div className="bg-accent w-[1.5px] h-6 mx-2 rounded"></div>
           {recipe.data.privilage === Privilage.Owner && (
             <DeleteRecipeButton
               recipeId={recipe.data._id}
-              recipeBookId={recipe.data.recipeBookId}
+              groupId={recipe.data.groupId}
               recipeTitle={recipe.data.name}
               redirectAfterDelete
             />
           )}
           <LinkButton
             icon={<Book />}
-            href={`/app/${recipe.data.recipeBookId}/${recipe.data._id}`}
+            href={`/app/${recipe.data.groupId}/${recipe.data._id}`}
           />
           <ActionButton
             title="Save"

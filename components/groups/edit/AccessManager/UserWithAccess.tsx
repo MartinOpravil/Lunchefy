@@ -1,17 +1,25 @@
 import ActionButton from "@/components/global/ActionButton";
 import BasicDialog from "@/components/global/BasicDialog";
 import PrivilageBadge from "@/components/users/PrivilageBadge";
-import { UserWithAccessProps } from "@/types";
 import Image from "next/image";
 import React, { useState } from "react";
 import UserAccessForm from "./UserAccessForm";
 import { Pencil } from "lucide-react";
+import { Privilage } from "@/enums";
+import { GenericId } from "convex/values";
+
+export interface UserWithAccessProps {
+  name: string;
+  email: string;
+  privilage: Privilage;
+  relationshipId: GenericId<"userGroupRelationship">;
+}
 
 const UserWithAccess = ({
   name,
   email,
   privilage,
-  relationShipId,
+  relationshipId,
 }: UserWithAccessProps) => {
   const [isUserUpdateOpen, setIsUserUpdateOpen] = useState(false);
 
@@ -50,7 +58,7 @@ const UserWithAccess = ({
             name={name}
             email={email}
             privilage={privilage}
-            relationShipId={relationShipId}
+            relationshipId={relationshipId}
             actionClicked={() => setIsUserUpdateOpen(false)}
           />
         }

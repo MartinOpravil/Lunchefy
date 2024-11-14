@@ -19,13 +19,13 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ButtonVariant, Privilage } from "@/enums";
-import { UserAccessFormProps } from "@/types";
 import ActionButton from "@/components/global/ActionButton";
 import ActionDialog from "@/components/global/ActionDialog";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { notifyError, notifySuccess } from "@/lib/notifications";
 import { Save, Trash2 } from "lucide-react";
+import { GenericId } from "convex/values";
 
 const formSchema = z.object({
   privilage: z.string({
@@ -33,18 +33,26 @@ const formSchema = z.object({
   }),
 });
 
+export interface UserAccessFormProps {
+  name: string;
+  email: string;
+  privilage: Privilage;
+  relationshipId: GenericId<"userGroupRelationship">;
+  actionClicked: () => void;
+}
+
 const UserAccessForm = ({
   name,
   email,
   privilage,
-  relationShipId,
+  relationshipId,
   actionClicked,
 }: UserAccessFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const changeAccess = useMutation(api.recipeBooks.changeAccessToRecipeBook);
-  const revokeAccess = useMutation(api.recipeBooks.revokeAccessToRecipeBook);
+  const changeAccess = useMutation(api.groups.changeAccessToGroup);
+  const revokeAccess = useMutation(api.groups.revokeAccessToGroup);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -61,7 +69,7 @@ const UserAccessForm = ({
 
     try {
       const result = await changeAccess({
-        relationShipId: relationShipId,
+        relationshipId,
         privilage: form.getValues("privilage"),
       });
       setIsSubmitting(false);
@@ -76,17 +84,17 @@ const UserAccessForm = ({
     }
   }
 
-  const handleDeleteRecipeBook = async () => {
+  const handleRevokeAccess = async () => {
     setIsDeleting(true);
     try {
-      const result = await revokeAccess({ relationShipId });
+      const result = await revokeAccess({ relationshipId });
       setIsDeleting(false);
       if (!result.data)
         return notifyError(result.status.toString(), result.errorMessage);
       notifySuccess("Revoke access for:", `${name} - (${email})`);
       actionClicked();
     } catch (error) {
-      console.error("Error deleting recipe book", error);
+      console.error("Error revoking access", error);
       setIsDeleting(false);
     }
   };
@@ -156,9 +164,9 @@ const UserAccessForm = ({
         setIsOpen={setIsDeleteDialogOpen}
         title="Are you sure you want to revoke access?"
         subject={name}
-        description="User will lose access for this recipe book."
+        description="User will lose access for this group."
         confirmButtonLabel="Revoke"
-        confirmAction={handleDeleteRecipeBook}
+        confirmAction={handleRevokeAccess}
       />
     </>
   );
