@@ -33,10 +33,18 @@ const GroupServerPage = async ({
     },
     { token }
   );
+  const todayRecipePreloadPromise = preloadQuery(
+    api.planner.getTodayRecipe,
+    {
+      groupId,
+    },
+    { token }
+  );
 
-  const [groupPreload, recipesPreload] = await Promise.all([
+  const [groupPreload, recipesPreload, todayRecipePreload] = await Promise.all([
     groupPreloadPromise,
     recipesPreloadPromise,
+    todayRecipePreloadPromise,
   ]);
 
   return (
@@ -45,6 +53,7 @@ const GroupServerPage = async ({
       <GroupPage
         groupPreloaded={groupPreload}
         recipesPreloaded={recipesPreload}
+        todayRecipePreload={todayRecipePreload}
       />
     </>
   );

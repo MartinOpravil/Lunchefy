@@ -30,6 +30,11 @@ export default defineSchema({
     groupId: v.id("groups"),
     privilage: v.string(),
   }),
+  plannedGroupRecipes: defineTable({
+    date: v.string(),
+    groupId: v.id("groups"),
+    recipeId: v.id("recipes"),
+  }),
   recipes: defineTable({
     groupId: v.id("groups"),
     name: v.string(),

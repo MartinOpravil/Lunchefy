@@ -8,7 +8,7 @@ interface Recipe {
   name: string;
 }
 
-const CalendarPage = () => {
+const PlannerPage = () => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -75,4 +75,4 @@ const CalendarPage = () => {
   );
 };
 
-export default CalendarPage;
+export default PlannerPage;

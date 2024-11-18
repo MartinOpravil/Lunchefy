@@ -17,6 +17,7 @@ import type * as files from "../files.js";
 import type * as groups from "../groups.js";
 import type * as http from "../http.js";
 import type * as migrations_migrations from "../migrations/migrations.js";
+import type * as planner from "../planner.js";
 import type * as recipes from "../recipes.js";
 import type * as users from "../users.js";
 
@@ -33,6 +34,7 @@ declare const fullApi: ApiFromModules<{
   groups: typeof groups;
   http: typeof http;
   "migrations/migrations": typeof migrations_migrations;
+  planner: typeof planner;
   recipes: typeof recipes;
   users: typeof users;
 }>;

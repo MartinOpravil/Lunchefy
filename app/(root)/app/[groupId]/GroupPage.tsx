@@ -21,7 +21,7 @@ import {
   usePreloadedQuery,
 } from "convex/react";
 import { debounce } from "lodash";
-import { ArrowLeft, Pencil, Plus, Search } from "lucide-react";
+import { ArrowLeft, CalendarFold, Pencil, Plus, Search } from "lucide-react";
 import React, { useCallback, useRef, useState } from "react";
 import { SubmitHandler } from "react-hook-form";
 import NoContent from "@/components/global/NoContent";
@@ -33,12 +33,18 @@ import { TagManager } from "@/lib/tags";
 interface GroupPageProps {
   groupPreloaded: Preloaded<typeof api.groups.getGroupById>;
   recipesPreloaded: Preloaded<typeof api.recipes.getRecipes>;
+  todayRecipePreload: Preloaded<typeof api.planner.getTodayRecipe>;
 }
 
-const GroupPage = ({ groupPreloaded, recipesPreloaded }: GroupPageProps) => {
+const GroupPage = ({
+  groupPreloaded,
+  recipesPreloaded,
+  todayRecipePreload,
+}: GroupPageProps) => {
   const group = usePreloadedQuery(groupPreloaded);
   const initialRecipes = usePreloadedQuery(recipesPreloaded);
   const createRecipe = useMutation(api.recipes.createRecipe);
+  const todayRecipe = usePreloadedQuery(todayRecipePreload);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [searchTags, setSearchTags] = useState<Option[]>([]);
@@ -156,6 +162,20 @@ const GroupPage = ({ groupPreloaded, recipesPreloaded }: GroupPageProps) => {
               href="/app"
               variant={ButtonVariant.Dark}
             />
+            <div className="flex gap-2 items-center bg-accent/70 rounded-md">
+              <LinkButton
+                icon={<CalendarFold />}
+                href={`/app/${group.data._id}/planner`}
+              />
+              <div className="text-white-1 pr-2">
+                <div className="text-12">Today</div>
+                <div>
+                  {todayRecipe.data?.length
+                    ? todayRecipe.data[0].name
+                    : "No recipe"}
+                </div>
+              </div>
+            </div>
             <div className="bg-accent w-[1.5px] h-6 mx-2 rounded"></div>
             <LinkButton
               icon={<Pencil />}
