@@ -10,16 +10,22 @@ export const getTodayRecipe = query({
   },
   handler: async (ctx, args) => {
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    today.setUTCHours(0, 0, 0, 0);
+    console.log("Today: ", today.toISOString());
+    const plannedGroupRecipes = await filter(
+      ctx.db.query("plannedGroupRecipes"),
+      (plan) =>
+        plan.groupId === args.groupId && plan.date === today.toISOString()
+    ).collect();
 
-    const plannedGroupRecipes = await ctx.db
-      .query("plannedGroupRecipes")
-      .filter(
-        (q) =>
-          q.eq(q.field("groupId"), args.groupId) &&
-          q.eq(q.field("date"), today.toISOString())
-      )
-      .collect();
+    // const plannedGroupRecipes = await ctx.db
+    //   .query("plannedGroupRecipes")
+    //   .filter(
+    //     (q) =>
+    //       q.eq(q.field("groupId"), args.groupId) &&
+    //       q.eq(q.field("date"), today.toISOString())
+    //   )
+    //   .collect();
 
     if (!plannedGroupRecipes.length) {
       return createOKResponse([]);
@@ -47,20 +53,30 @@ export const getGroupRecipeListForMonth = query({
     ).collect();
 
     // TODO: Create Set to iterate through
-    const set = new Set(plannedGroupRecipes);
-    const recipeIdList = plannedGroupRecipes.map((x) => x.recipeId);
+    const recipeIdList = new Set(plannedGroupRecipes.map((x) => x.recipeId));
 
     const recipes = await filter(ctx.db.query("recipes"), (recipe) =>
-      recipeIdList.includes(recipe._id)
+      recipeIdList.has(recipe._id)
     ).collect();
-    const recipesWithPlanId = recipes.map((recipe) => {
+
+    const recipeMap = new Map(recipes.map((recipe) => [recipe._id, recipe]));
+
+    const plan = plannedGroupRecipes.map((plan) => {
       return {
-        ...recipe,
-        plannerId: plannedGroupRecipes.find((x) => x.recipeId === recipe._id)
-          ?._id,
+        id: plan._id,
+        date: plan.date,
+        recipe: recipeMap.get(plan.recipeId),
       };
     });
-    return createOKResponse(recipesWithPlanId);
+
+    // const recipesWithPlanId = recipes.map((recipe) => {
+    //   return {
+    //     ...recipe,
+    //     plannerId: plannedGroupRecipes.find((x) => x.recipeId === recipe._id)
+    //       ?._id,
+    //   };
+    // });
+    return createOKResponse(plan);
   },
 });
 
@@ -71,23 +87,34 @@ export const assignRecipeToDate = mutation({
     date: v.string(),
   },
   handler: async (ctx, args) => {
-    const plannedGroupRecipes = await ctx.db
-      .query("plannedGroupRecipes")
-      .filter(
-        (q) =>
-          q.eq(q.field("groupId"), args.groupId) &&
-          q.eq(q.field("date"), args.date) &&
-          q.eq(q.field("recipeId"), args.recipeId)
-      )
-      .collect();
+    console.log("date", args.date);
 
-    if (plannedGroupRecipes)
+    const plannedGroupRecipes = await filter(
+      ctx.db.query("plannedGroupRecipes"),
+      (plan) =>
+        plan.groupId === args.groupId &&
+        plan.recipeId === args.recipeId &&
+        plan.date === args.date
+    ).collect();
+
+    // console.log(
+    //   "plannedGroupRecipes length",
+    //   plannedGroupRecipes.length,
+    //   plannedGroupRecipes[0].date
+    // );
+
+    if (plannedGroupRecipes.length)
       return createBadResponse(
         HttpResponseCode.Conflict,
         "Recipe is already assigned to date."
       );
 
-    const result = await ctx.db.insert("plannedGroupRecipes", args);
+    const result = await ctx.db.insert("plannedGroupRecipes", {
+      groupId: args.groupId,
+      recipeId: args.recipeId,
+      date: args.date,
+    });
+    console.log("result", result);
 
     if (!result)
       return createBadResponse(

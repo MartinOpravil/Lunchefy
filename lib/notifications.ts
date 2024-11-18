@@ -11,10 +11,14 @@ export function notifySuccess(title: string, description?: string | null) {
   });
 }
 
-export function notifyError(title: string, description?: string | null) {
+export function notifyError(
+  title: string,
+  description?: string | null,
+  duration: number = 30000
+) {
   toast(title, {
     className: "bg-primary text-white-1 text-16",
-    duration: 30000,
+    duration,
     description,
     style: {
       border: "none",

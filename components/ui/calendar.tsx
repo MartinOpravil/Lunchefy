@@ -6,11 +6,12 @@ import { DayPicker } from "react-day-picker";
 
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
+import { convertToServerTime } from "@/lib/time";
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
 type CalendarWithEventsProps = CalendarProps & {
-  events: string[];
+  events?: string[];
 };
 
 function Calendar({
@@ -70,7 +71,7 @@ function Calendar({
                   .toLocaleDateString("cs", { day: "numeric" })
                   .replace(".", "")}
               </div>
-              {eventDates.has(props.date.toISOString()) && (
+              {eventDates.has(convertToServerTime(props.date)) && (
                 <div className="absolute bg-secondary w-6 h-6 z-0 rounded-full top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"></div>
               )}
             </div>

@@ -14,6 +14,8 @@ interface PlannerServerPageProps {
 const PlannerServerPage = async ({
   params: { groupId },
 }: PlannerServerPageProps) => {
+  const month = new Date().toISOString().slice(0, 7);
+
   const token = await getAuthToken();
   const groupPreloadPromise = preloadQuery(
     api.groups.getGroupById,
@@ -22,13 +24,27 @@ const PlannerServerPage = async ({
     },
     { token }
   );
+  const recipeListForMonthPreloadPromise = preloadQuery(
+    api.planner.getGroupRecipeListForMonth,
+    {
+      groupId,
+      month,
+    },
+    { token }
+  );
 
-  const [groupPreload] = await Promise.all([groupPreloadPromise]);
+  const [groupPreload, recipeListForMonthPreload] = await Promise.all([
+    groupPreloadPromise,
+    recipeListForMonthPreloadPromise,
+  ]);
 
   return (
     <>
       <ErrorHandlerPreloaded preloadedData={groupPreload} />
-      <PlannerPage />
+      <PlannerPage
+        groupPreloaded={groupPreload}
+        recipeListForMonthPreloaded={recipeListForMonthPreload}
+      />
     </>
   );
 };

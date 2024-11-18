@@ -43,7 +43,7 @@ const RecipeSearchResults = ({
             <NoContent title="This group does not have searched recipe" />
           ) : (
             <Recipes
-              recipesPaginated={filteredRecipesPaginated}
+              recipeListPaginated={filteredRecipesPaginated}
               privilage={privilage}
             />
           )}
