@@ -18,3 +18,7 @@ export function convertToServerTime(clientDate: Date) {
   ).toISOString();
   return result;
 }
+
+export function getISOMonth(date: Date) {
+  return `${date.getFullYear()}-${date.getMonth() + 1}`;
+}

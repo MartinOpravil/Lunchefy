@@ -13,22 +13,19 @@ import { api } from "@/convex/_generated/api";
 import PageHeader from "@/components/global/PageHeader";
 import LinkButton from "@/components/global/LinkButton";
 import { ArrowLeft, Pencil, Plus, Trash2 } from "lucide-react";
-import { ButtonVariant, HttpResponseCode, Privilage } from "@/enums";
+import { ButtonVariant } from "@/enums";
 import ActionButton from "@/components/global/ActionButton";
 import { notifyError, notifySuccess } from "@/lib/notifications";
-import { Doc, Id } from "@/convex/_generated/dataModel";
-import { convertToClientTime, convertToServerTime } from "@/lib/time";
-import { getRecipeById } from "@/convex/recipes";
-interface Recipe {
-  id: string;
-  name: string;
-}
-
-// interface Plan {
-//   id: string;
-//   date: string;
-//   recipe: Awaited<ReturnType<typeof getRecipeById>>;
-// }
+import { Id } from "@/convex/_generated/dataModel";
+import {
+  convertToClientTime,
+  convertToServerTime,
+  getISOMonth,
+} from "@/lib/time";
+import LoaderSpinner from "@/components/global/LoaderSpinner";
+import { Plan } from "@/types";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import ActionDialog from "@/components/global/ActionDialog";
 
 interface PlannerPageProps {
   groupPreloaded: Preloaded<typeof api.groups.getGroupById>;
@@ -41,7 +38,7 @@ const PlannerPage = ({
   groupPreloaded,
   recipeListForMonthPreloaded,
 }: PlannerPageProps) => {
-  const initialMonth = new Date().toISOString().slice(0, 7);
+  const initialISOMonth = getISOMonth(new Date());
 
   const group = usePreloadedQuery(groupPreloaded);
   const initialRecipeListForMonth = usePreloadedQuery(
@@ -52,41 +49,34 @@ const PlannerPage = ({
   const changeRecipeInDate = useMutation(api.planner.changeRecipeInDate);
   const removeRecipeFromDate = useMutation(api.planner.removeRecipeFromDate);
 
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const [selectedISOMonth, setSelectedISOMonth] = useState(initialISOMonth);
   const recipeListForMonth = useQuery(api.planner.getGroupRecipeListForMonth, {
     groupId: group.data!._id,
-    month: initialMonth,
+    month: selectedISOMonth,
   });
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const normalizedToday = new Date();
-  normalizedToday.setUTCHours(0, 0, 0, 0);
-
   const [date, setDate] = useState<Date | undefined>(today);
-  const [normalizedDate, setNormalizedDate] = useState<Date | undefined>(
-    normalizedToday
+  const [selectedPlanList, setSelectedPlanList] = useState<Plan[] | undefined>(
+    initialRecipeListForMonth.data?.filter(
+      (day) => day.date === convertToServerTime(today)
+    )
   );
-  const [selectedRecipe, setSelectedRecipe] = useState<
-    Doc<"recipes"> | undefined
-  >(undefined);
-
-  const [filledDays, setFilledDays] = useState<Recipe[]>([
-    { id: "2024-11-07T23:00:00.000Z", name: "Svíčková na smetaně" },
-    { id: "2024-11-11T23:00:00.000Z", name: "Kuře na paprice" },
-    { id: "2024-11-13T23:00:00.000Z", name: "Čevapčiči" },
-    { id: "2024-11-16T23:00:00.000Z", name: "Bramborový guláš" },
-    { id: "2024-11-27T23:00:00.000Z", name: "Svíčková na smetaně" },
-    { id: "2024-11-30T23:00:00.000Z", name: "Brambory na smetaně" },
-    { id: "2024-11-21T23:00:00.000Z", name: "Testovací brambory" },
-  ]);
+  const [selectedPlan, setSelectedPlan] = useState<Plan | undefined>(
+    selectedPlanList ? selectedPlanList[0] : undefined
+  );
+  const [planList, setPlanList] = useState(initialRecipeListForMonth.data);
 
   const handleAssignRecipeToDate = async () => {
     // if (!selectedRecipe)
     //   return notifyError("No recipe was selected.", null, 3000);
     if (!date) return notifyError("No date was picked.", null, 3000);
-    // date.setUTCHours(0, 0, 0, 0);
+
     try {
-      const tryOutId = "jd7fs94aaak8nrzw6gb9h9x3r174kvy4"; // "jd7a0rcsn78ws46as3mfaatjwh74vf3t"
+      const tryOutId = "jd7fs94aaak8nrzw6gb9h9x3r174kvy4";
       const result = await assignRecipeToDate({
         groupId: group.data!._id,
         recipeId: tryOutId as Id<"recipes">,
@@ -99,33 +89,78 @@ const PlannerPage = ({
       notifyError("Error assigning recipe", error?.toString());
     }
   };
+  const handleChangeRecipeInDate = async () => {
+    if (!selectedPlan)
+      return notifyError("No recipe was selected.", null, 3000);
+    if (!date) return notifyError("No date was picked.", null, 3000);
+
+    try {
+      const tryOutId = "jd7a0rcsn78ws46as3mfaatjwh74vf3t";
+      const result = await changeRecipeInDate({
+        planId: selectedPlan.planId,
+        newRecipeId: tryOutId as Id<"recipes">,
+      });
+
+      if (!result.data) return notifyError(result.errorMessage!);
+
+      notifySuccess("Plan successfully updated.");
+    } catch (error) {
+      notifyError("Error changing plan.", error?.toString());
+    }
+  };
+  const handleRemoveRecipeFromDate = async () => {
+    if (!selectedPlan)
+      return notifyError("No recipe was selected.", null, 3000);
+    if (!date) return notifyError("No date was picked.", null, 3000);
+
+    try {
+      const result = await removeRecipeFromDate({
+        planId: selectedPlan.planId,
+      });
+      // selectedRecipe.pl
+      if (!result.data) return notifyError(result.errorMessage!);
+
+      notifySuccess("Recipe successfully removed from date.");
+      setIsDialogOpen(false);
+    } catch (error) {
+      notifyError("Error removing recipe", error?.toString());
+    }
+  };
 
   const handleSelect = (clickedDate: Date | undefined) => {
     if (!clickedDate) return;
-    // clickedDate.setUTCHours(0, 0, 0, 0);
 
     if (date && isSameDay(date, clickedDate)) {
       return;
     }
 
     setDate(clickedDate);
-    const normalizedDate = new Date(
-      Date.UTC(
-        clickedDate.getFullYear(),
-        clickedDate.getMonth(),
-        clickedDate.getDate()
-      )
-    );
-    setNormalizedDate(normalizedDate);
+  };
+
+  const handleMonthChange = (newDate: Date) => {
+    setDate(newDate);
+    setSelectedISOMonth(getISOMonth(newDate));
   };
 
   useEffect(() => {
-    const result = initialRecipeListForMonth.data?.find(
-      (day) => day.date === convertToServerTime(date!)
+    if (!date) return;
+    const updatedSelectedPlanList = planList?.filter(
+      (day) => day.date === convertToServerTime(date)
     );
-    if (result) return setSelectedRecipe(result.recipe);
-    setSelectedRecipe(undefined);
-  }, [date, initialRecipeListForMonth]);
+    if (updatedSelectedPlanList) {
+      setSelectedPlanList(updatedSelectedPlanList);
+      setSelectedPlan(updatedSelectedPlanList[0]);
+      return;
+    }
+    setSelectedPlanList(undefined);
+    setSelectedPlan(undefined);
+  }, [date, planList]);
+
+  useEffect(() => {
+    if (recipeListForMonth?.data) {
+      setPlanList(recipeListForMonth.data);
+    }
+  }, [recipeListForMonth]);
 
   if (!group.data) {
     return <></>;
@@ -147,14 +182,14 @@ const PlannerPage = ({
             <div className="bg-accent w-[1.5px] h-6 mx-2 rounded"></div>
             <ActionButton
               icon={<Trash2 />}
-              onClick={() => {}}
+              onClick={() => setIsDialogOpen(true)}
               variant={ButtonVariant.Negative}
-              isDisabled={!selectedRecipe}
+              isDisabled={!selectedPlan}
             />
             <ActionButton
               icon={<Pencil />}
-              onClick={() => {}}
-              isDisabled={!selectedRecipe}
+              onClick={handleChangeRecipeInDate}
+              isDisabled={!selectedPlan}
             />
             <ActionButton
               title="Add"
@@ -166,7 +201,7 @@ const PlannerPage = ({
         }
       />
       <main className="page-content">
-        <div className="flex gap-8 w-full">
+        <div className="flex gap-8 w-full relative flex-col sm:flex-row">
           <div className="flex flex-col gap-2 items-center">
             <Calendar
               mode="single"
@@ -174,59 +209,104 @@ const PlannerPage = ({
               ISOWeek
               selected={date}
               onSelect={handleSelect}
-              events={initialRecipeListForMonth.data?.map((x) => x.date)}
+              events={planList?.map((x) => x.date)}
               className="rounded-md border"
-              onMonthChange={() => {}}
+              onMonthChange={(e) => handleMonthChange(e)}
             />
-            <div className="p-2 bg-accent text-white-1 rounded w-full">
-              <div>ISO: {date?.toISOString()}</div>
-              <div>Locale: {date?.toLocaleDateString("cs").slice(0, 10)}</div>
-            </div>
-            <div className="p-2 bg-accent text-white-1 rounded w-full">
-              <div>Recipes for this month:</div>
+            <div className="p-2 rounded w-full">
+              <div className="text-accent">Recipes for this month:</div>
               <div className="pt-2">
-                {initialRecipeListForMonth.data
-                  ?.sort((a, b) => (a.date > b.date ? 1 : -1))
-                  .map((plan, index) => {
-                    return (
-                      <div key={index}>
+                {planList?.map((plan, index) => {
+                  return (
+                    <div key={index} className="flex gap-2">
+                      <div className="w-6 text-accent">
                         {convertToClientTime(plan.date).toLocaleString("cs", {
                           day: "numeric",
-                        })}{" "}
-                        - {plan.recipe?.name}
+                        })}
                       </div>
-                    );
-                  })}
+                      <div>{plan.recipe?.name}</div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 w-full">
+            {recipeListForMonth === undefined &&
+              initialISOMonth !== selectedISOMonth && (
+                <div className="absolute top-0 right-0 w-10">
+                  <LoaderSpinner size={15} />
+                </div>
+              )}
             <div>
               {date?.toLocaleDateString("cs")} -{" "}
               {date?.toLocaleDateString("cs", { weekday: "long" })}
             </div>
-            {selectedRecipe ? (
+            {selectedPlan ? (
               <>
-                <h3>{selectedRecipe.name}</h3>
+                <h3>{selectedPlan.recipe.name}</h3>
                 <div
                   className="prose"
                   dangerouslySetInnerHTML={{
-                    __html: selectedRecipe.ingredients ?? "",
+                    __html: selectedPlan.recipe.ingredients ?? "",
                   }}
                 />
                 <div
                   className="prose"
                   dangerouslySetInnerHTML={{
-                    __html: selectedRecipe.instructions ?? "",
+                    __html: selectedPlan.recipe.instructions ?? "",
                   }}
                 />
               </>
             ) : (
               <div>Selected day has no recipe yet.</div>
             )}
+            {!!selectedPlanList?.length && (
+              <Tabs value={selectedPlan?.planId} className="p-3 rounded">
+                <TabsList className="flex flex-col sm:flex-row gap-2">
+                  {selectedPlanList.map((plan, index) => (
+                    <TabsTrigger
+                      key={index}
+                      value={plan.planId}
+                      className="flex gap-2"
+                      onClick={() => {
+                        setSelectedPlan(
+                          selectedPlanList.find((x) => x.planId === plan.planId)
+                        );
+                      }}
+                    >
+                      {plan.recipe.name}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+                {selectedPlanList.map((plan, index) => (
+                  <TabsContent key={index} value={plan.planId}>
+                    <div
+                      className="prose"
+                      dangerouslySetInnerHTML={{
+                        __html: plan.recipe.ingredients ?? "",
+                      }}
+                    />
+                    <div
+                      className="prose"
+                      dangerouslySetInnerHTML={{
+                        __html: plan.recipe.instructions ?? "",
+                      }}
+                    />
+                  </TabsContent>
+                ))}
+              </Tabs>
+            )}
           </div>
         </div>
       </main>
+      <ActionDialog
+        isOpen={isDialogOpen}
+        setIsOpen={setIsDialogOpen}
+        title="Are you absolutely sure want to remove recipe from date?"
+        subject={selectedPlan?.recipe.name}
+        confirmAction={handleRemoveRecipeFromDate}
+      />
     </main>
   );
 };

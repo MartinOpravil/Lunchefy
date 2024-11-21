@@ -3,6 +3,7 @@ import { mutation, query } from "./_generated/server";
 import { createBadResponse, createOKResponse } from "@/lib/communication";
 import { filter } from "convex-helpers/server/filter";
 import { HttpResponseCode } from "@/enums";
+import { Plan } from "@/types";
 
 export const getTodayRecipe = query({
   args: {
@@ -11,7 +12,6 @@ export const getTodayRecipe = query({
   handler: async (ctx, args) => {
     const today = new Date();
     today.setUTCHours(0, 0, 0, 0);
-    console.log("Today: ", today.toISOString());
     const plannedGroupRecipes = await filter(
       ctx.db.query("plannedGroupRecipes"),
       (plan) =>
@@ -40,7 +40,6 @@ export const getTodayRecipe = query({
     return createOKResponse(recipeList);
   },
 });
-// TODO: Return new response containing id of plannerTableId to simplify logic
 export const getGroupRecipeListForMonth = query({
   args: {
     groupId: v.id("groups"),
@@ -52,7 +51,6 @@ export const getGroupRecipeListForMonth = query({
       (x) => x.groupId === args.groupId && x.date.startsWith(args.month)
     ).collect();
 
-    // TODO: Create Set to iterate through
     const recipeIdList = new Set(plannedGroupRecipes.map((x) => x.recipeId));
 
     const recipes = await filter(ctx.db.query("recipes"), (recipe) =>
@@ -61,21 +59,16 @@ export const getGroupRecipeListForMonth = query({
 
     const recipeMap = new Map(recipes.map((recipe) => [recipe._id, recipe]));
 
-    const plan = plannedGroupRecipes.map((plan) => {
-      return {
-        id: plan._id,
-        date: plan.date,
-        recipe: recipeMap.get(plan.recipeId),
-      };
-    });
+    const plan = plannedGroupRecipes
+      .map((plan) => {
+        return {
+          planId: plan._id,
+          date: plan.date,
+          recipe: recipeMap.get(plan.recipeId),
+        } as Plan;
+      })
+      .sort((a, b) => (a.date > b.date ? 1 : -1));
 
-    // const recipesWithPlanId = recipes.map((recipe) => {
-    //   return {
-    //     ...recipe,
-    //     plannerId: plannedGroupRecipes.find((x) => x.recipeId === recipe._id)
-    //       ?._id,
-    //   };
-    // });
     return createOKResponse(plan);
   },
 });
@@ -87,8 +80,6 @@ export const assignRecipeToDate = mutation({
     date: v.string(),
   },
   handler: async (ctx, args) => {
-    console.log("date", args.date);
-
     const plannedGroupRecipes = await filter(
       ctx.db.query("plannedGroupRecipes"),
       (plan) =>
@@ -96,12 +87,6 @@ export const assignRecipeToDate = mutation({
         plan.recipeId === args.recipeId &&
         plan.date === args.date
     ).collect();
-
-    // console.log(
-    //   "plannedGroupRecipes length",
-    //   plannedGroupRecipes.length,
-    //   plannedGroupRecipes[0].date
-    // );
 
     if (plannedGroupRecipes.length)
       return createBadResponse(
@@ -114,7 +99,6 @@ export const assignRecipeToDate = mutation({
       recipeId: args.recipeId,
       date: args.date,
     });
-    console.log("result", result);
 
     if (!result)
       return createBadResponse(
@@ -128,50 +112,41 @@ export const assignRecipeToDate = mutation({
 
 export const changeRecipeInDate = mutation({
   args: {
-    groupId: v.id("groups"),
-    oldRecipeId: v.id("recipes"),
     newRecipeId: v.id("recipes"),
-    date: v.string(),
+    planId: v.id("plannedGroupRecipes"),
   },
   handler: async (ctx, args) => {
-    if (args.oldRecipeId === args.newRecipeId)
-      return createBadResponse(
-        HttpResponseCode.BadRequest,
-        "Old and New recipes are the same."
-      );
-
-    const plannedGroupRecipes = await ctx.db
-      .query("plannedGroupRecipes")
-      .filter(
-        (q) =>
-          q.eq(q.field("groupId"), args.groupId) &&
-          q.eq(q.field("date"), args.date)
-      )
-      .collect();
-
-    if (!plannedGroupRecipes)
+    const plan = await ctx.db.get(args.planId);
+    if (!plan) {
       return createBadResponse(
         HttpResponseCode.NotFound,
-        "Cannot change recipe. Date does not have any recipe yet."
+        "Cannot change. Plan does not exists in databse"
       );
+    }
 
-    if (plannedGroupRecipes.find((x) => x.recipeId === args.newRecipeId)) {
+    if (plan.recipeId === args.newRecipeId) {
+      return createBadResponse(
+        HttpResponseCode.BadRequest,
+        "Recipes is already assigned to date."
+      );
+    }
+
+    const newRecipePlanInDate = await filter(
+      ctx.db.query("plannedGroupRecipes"),
+      (x) =>
+        x.groupId === plan.groupId &&
+        x.recipeId === args.newRecipeId &&
+        x.date === plan.date
+    ).unique();
+
+    if (newRecipePlanInDate) {
       return createBadResponse(
         HttpResponseCode.Conflict,
         "Recipe is already assigned to date."
       );
     }
 
-    const oldRecipePlannedDateId = plannedGroupRecipes.find(
-      (x) => x.recipeId === args.oldRecipeId
-    )?._id;
-    if (!oldRecipePlannedDateId)
-      return createBadResponse(
-        HttpResponseCode.NotFound,
-        "Recipe that you are trying to change does not exists."
-      );
-
-    await ctx.db.patch(oldRecipePlannedDateId, {
+    await ctx.db.patch(args.planId, {
       recipeId: args.newRecipeId,
     });
     return createOKResponse(true);
@@ -180,28 +155,18 @@ export const changeRecipeInDate = mutation({
 
 export const removeRecipeFromDate = mutation({
   args: {
-    groupId: v.id("groups"),
-    recipeId: v.id("recipes"),
-    date: v.string(),
+    planId: v.id("plannedGroupRecipes"),
   },
   handler: async (ctx, args) => {
-    const plannedGroupRecipes = await ctx.db
-      .query("plannedGroupRecipes")
-      .filter(
-        (q) =>
-          q.eq(q.field("groupId"), args.groupId) &&
-          q.eq(q.field("date"), args.date) &&
-          q.eq(q.field("recipeId"), args.recipeId)
-      )
-      .unique();
-
-    if (!plannedGroupRecipes)
-      return createBadResponse(
-        HttpResponseCode.BadRequest,
-        "Cannot remove recipe. Given recipe is not assigned to this date."
+    const plan = await ctx.db.get(args.planId);
+    if (!plan) {
+      createBadResponse(
+        HttpResponseCode.NotFound,
+        "Cannot delete. Plan does not exists in databse"
       );
+    }
 
-    await ctx.db.delete(plannedGroupRecipes._id);
+    await ctx.db.delete(args.planId);
     return createOKResponse(true);
   },
 });

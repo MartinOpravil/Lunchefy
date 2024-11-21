@@ -1,4 +1,4 @@
-import { Id } from "@/convex/_generated/dataModel";
+import { Doc, Id } from "@/convex/_generated/dataModel";
 import { Privilage } from "@/enums";
 import { GenericId } from "convex/values";
 import { Dispatch, ReactNode, RefObject, SetStateAction } from "react";
@@ -55,4 +55,10 @@ export interface FormImage {
 export interface FormState {
   isSubmitting: boolean;
   isDirty: boolean;
+}
+
+export interface Plan {
+  planId: Id<"plannedGroupRecipes">;
+  date: "string";
+  recipe: Doc<"recipes">;
 }
