@@ -12,7 +12,7 @@ import {
 import { api } from "@/convex/_generated/api";
 import PageHeader from "@/components/global/PageHeader";
 import LinkButton from "@/components/global/LinkButton";
-import { ArrowLeft, Pencil, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, Pencil, Plus, Replace, Trash2 } from "lucide-react";
 import { ButtonVariant } from "@/enums";
 import ActionButton from "@/components/global/ActionButton";
 import { notifyError, notifySuccess } from "@/lib/notifications";
@@ -26,6 +26,17 @@ import LoaderSpinner from "@/components/global/LoaderSpinner";
 import { Plan } from "@/types";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ActionDialog from "@/components/global/ActionDialog";
+import BasicDialog from "@/components/global/BasicDialog";
+import RecipeSearchInput, {
+  RecipeFilterVariant,
+} from "@/components/RecipeSearchInput";
+import { Option } from "@/components/ui/multiple-selector";
+import PlannerRecipeResultList from "@/components/PlannerRecipeResultList";
+
+enum RecipeAction {
+  Assign = "assign",
+  Swap = "swap",
+}
 
 interface PlannerPageProps {
   groupPreloaded: Preloaded<typeof api.groups.getGroupById>;
@@ -49,7 +60,18 @@ const PlannerPage = ({
   const changeRecipeInDate = useMutation(api.planner.changeRecipeInDate);
   const removeRecipeFromDate = useMutation(api.planner.removeRecipeFromDate);
 
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTags, setSearchTags] = useState<Option[]>([]);
+
+  const [recipeAction, setRecipeAction] = useState<RecipeAction>(
+    RecipeAction.Assign
+  );
+  const [isRemoveDialogOpen, setIsRemoveDialogOpen] = useState(false);
+  const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
+  const [isChangeDialogOpen, setIsChangeDialogOpen] = useState(false);
+  const [selectedRecipeIdForAction, setSelectedRecipeIdForAction] = useState<
+    string | undefined
+  >(undefined);
 
   const [selectedISOMonth, setSelectedISOMonth] = useState(initialISOMonth);
   const recipeListForMonth = useQuery(api.planner.getGroupRecipeListForMonth, {
@@ -71,42 +93,48 @@ const PlannerPage = ({
   const [planList, setPlanList] = useState(initialRecipeListForMonth.data);
 
   const handleAssignRecipeToDate = async () => {
-    // if (!selectedRecipe)
-    //   return notifyError("No recipe was selected.", null, 3000);
+    if (!selectedRecipeIdForAction)
+      return notifyError("No recipe was selected.", null, 3000);
     if (!date) return notifyError("No date was picked.", null, 3000);
 
     try {
-      const tryOutId = "jd7fs94aaak8nrzw6gb9h9x3r174kvy4";
       const result = await assignRecipeToDate({
         groupId: group.data!._id,
-        recipeId: tryOutId as Id<"recipes">,
+        recipeId: selectedRecipeIdForAction as Id<"recipes">,
         date: convertToServerTime(date),
       });
       if (!result.data) return notifyError(result.errorMessage!);
 
+      cleanModifyPopup();
       notifySuccess("Recipe successfully assigned to date.");
     } catch (error) {
       notifyError("Error assigning recipe", error?.toString());
     }
   };
   const handleChangeRecipeInDate = async () => {
-    if (!selectedPlan)
-      return notifyError("No recipe was selected.", null, 3000);
+    if (!selectedPlan) return notifyError("No plan was selected.", null, 3000);
+    if (!selectedRecipeIdForAction)
+      return notifyError("No new recipe was selected.", null, 3000);
     if (!date) return notifyError("No date was picked.", null, 3000);
 
     try {
-      const tryOutId = "jd7a0rcsn78ws46as3mfaatjwh74vf3t";
       const result = await changeRecipeInDate({
         planId: selectedPlan.planId,
-        newRecipeId: tryOutId as Id<"recipes">,
+        newRecipeId: selectedRecipeIdForAction as Id<"recipes">,
       });
-
       if (!result.data) return notifyError(result.errorMessage!);
 
+      cleanModifyPopup();
       notifySuccess("Plan successfully updated.");
     } catch (error) {
       notifyError("Error changing plan.", error?.toString());
     }
+  };
+  const cleanModifyPopup = () => {
+    setIsAssignDialogOpen(false);
+    setSelectedRecipeIdForAction(undefined);
+    setSearchTerm("");
+    setSearchTags([]);
   };
   const handleRemoveRecipeFromDate = async () => {
     if (!selectedPlan)
@@ -121,7 +149,7 @@ const PlannerPage = ({
       if (!result.data) return notifyError(result.errorMessage!);
 
       notifySuccess("Recipe successfully removed from date.");
-      setIsDialogOpen(false);
+      setIsRemoveDialogOpen(false);
     } catch (error) {
       notifyError("Error removing recipe", error?.toString());
     }
@@ -140,6 +168,11 @@ const PlannerPage = ({
   const handleMonthChange = (newDate: Date) => {
     setDate(newDate);
     setSelectedISOMonth(getISOMonth(newDate));
+  };
+
+  const handleOpenModifyDialog = (action: RecipeAction) => {
+    setRecipeAction(action);
+    setIsAssignDialogOpen(true);
   };
 
   useEffect(() => {
@@ -182,19 +215,19 @@ const PlannerPage = ({
             <div className="bg-accent w-[1.5px] h-6 mx-2 rounded"></div>
             <ActionButton
               icon={<Trash2 />}
-              onClick={() => setIsDialogOpen(true)}
+              onClick={() => setIsRemoveDialogOpen(true)}
               variant={ButtonVariant.Negative}
               isDisabled={!selectedPlan}
             />
             <ActionButton
               icon={<Pencil />}
-              onClick={handleChangeRecipeInDate}
+              onClick={() => handleOpenModifyDialog(RecipeAction.Swap)}
               isDisabled={!selectedPlan}
             />
             <ActionButton
               title="Add"
               icon={<Plus />}
-              onClick={handleAssignRecipeToDate}
+              onClick={() => handleOpenModifyDialog(RecipeAction.Assign)}
               variant={ButtonVariant.Positive}
             />
           </>
@@ -301,11 +334,57 @@ const PlannerPage = ({
         </div>
       </main>
       <ActionDialog
-        isOpen={isDialogOpen}
-        setIsOpen={setIsDialogOpen}
+        isOpen={isRemoveDialogOpen}
+        setIsOpen={setIsRemoveDialogOpen}
         title="Are you absolutely sure want to remove recipe from date?"
         subject={selectedPlan?.recipe.name}
         confirmAction={handleRemoveRecipeFromDate}
+      />
+      <BasicDialog
+        isOpen={isAssignDialogOpen}
+        setIsOpen={setIsAssignDialogOpen}
+        icon={recipeAction === RecipeAction.Assign ? <Plus /> : <Pencil />}
+        title={
+          recipeAction === RecipeAction.Assign ? "Assign recipe" : "Swap recipe"
+        }
+        description={
+          recipeAction === RecipeAction.Swap ? selectedPlan?.recipe.name : ""
+        }
+        classList="max-w-[800px]"
+        content={
+          <div className="flex flex-col items-end gap-4">
+            <RecipeSearchInput
+              variant={RecipeFilterVariant.Planner}
+              group={group}
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              searchTags={searchTags}
+              setSearchTags={setSearchTags}
+            />
+            <PlannerRecipeResultList
+              groupId={group.data._id}
+              privilage={group.data.privilage}
+              searchTerm={searchTerm}
+              searchTags={searchTags.map((x) => x.value)}
+              selectResultAction={setSelectedRecipeIdForAction}
+              selectedRecipeId={selectedRecipeIdForAction}
+            />
+            <ActionButton
+              title={recipeAction === RecipeAction.Assign ? "Assign" : "Swap"}
+              icon={
+                recipeAction === RecipeAction.Assign ? <Plus /> : <Pencil />
+              }
+              variant={ButtonVariant.Positive}
+              onClick={
+                recipeAction === RecipeAction.Assign
+                  ? handleAssignRecipeToDate
+                  : handleChangeRecipeInDate
+              }
+              isLoading={false}
+              isDisabled={!selectedRecipeIdForAction}
+            />
+          </div>
+        }
       />
     </main>
   );

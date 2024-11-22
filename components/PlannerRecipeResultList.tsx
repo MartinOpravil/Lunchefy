@@ -1,30 +1,31 @@
 import { api } from "@/convex/_generated/api";
-import { usePaginatedQuery } from "convex/react";
-import React from "react";
+import { usePaginatedQuery, useQuery } from "convex/react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import RecipeListPaginated from "./recipes/RecipeListPaginated";
 import { Privilage } from "@/enums";
 import { Id } from "@/convex/_generated/dataModel";
-import { Loader2 } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 import NoContent from "./global/NoContent";
 import { RECIPES_SEARCH_INITIAL_COUNT } from "@/constants/pagination";
+import PlannerRecipeListPaginated from "./recipes/PlannerRecipeListPaginated";
 
-export enum RecipeSearchResultListVariant {
-  Page = "page",
-  Planner = "planner",
-}
-interface RecipeSearchResultsProps {
+interface PlannerRecipeResultListProps {
   groupId: Id<"groups">;
   searchTerm: string;
   searchTags: string[];
   privilage: Privilage;
+  selectResultAction: Dispatch<SetStateAction<string | undefined>>;
+  selectedRecipeId?: string;
 }
 
-const RecipeSearchResults = ({
+const PlannerRecipeResultList = ({
   groupId,
   searchTerm,
   searchTags,
   privilage,
-}: RecipeSearchResultsProps) => {
+  selectResultAction,
+  selectedRecipeId,
+}: PlannerRecipeResultListProps) => {
   const filteredRecipesPaginated = usePaginatedQuery(
     api.recipes.getRecipes,
     {
@@ -37,8 +38,6 @@ const RecipeSearchResults = ({
 
   return (
     <div className="flex flex-col gap-2 justify-center items-start w-full @container">
-      <h3>Search results:</h3>
-
       {!filteredRecipesPaginated && (
         <Loader2 className="my-4 h-8 w-8 animate-spin" />
       )}
@@ -48,9 +47,11 @@ const RecipeSearchResults = ({
             {!filteredRecipesPaginated.results.length ? (
               <NoContent title="No recipe match search criteria." />
             ) : (
-              <RecipeListPaginated
+              <PlannerRecipeListPaginated
                 recipeListPaginated={filteredRecipesPaginated}
                 privilage={privilage}
+                selectResultAction={selectResultAction}
+                selectedRecipeId={selectedRecipeId}
               />
             )}
           </>
@@ -59,4 +60,4 @@ const RecipeSearchResults = ({
   );
 };
 
-export default RecipeSearchResults;
+export default PlannerRecipeResultList;

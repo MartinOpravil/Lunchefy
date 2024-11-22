@@ -89,7 +89,7 @@ const GroupListPage = ({ groupListPreloaded }: GroupListPageProps) => {
           />
         }
       />
-      <main className="page-content">
+      <main className="page-content @container">
         <GroupList groupList={groupList} />
       </main>
     </main>

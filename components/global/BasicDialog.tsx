@@ -17,10 +17,11 @@ const BasicDialog = ({
   description,
   content,
   action,
+  classList,
 }: BasicDialogProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent>
+      <DialogContent className={classList}>
         <DialogHeader>
           <DialogTitle className="text-primary flex gap-2 items-center">
             {icon}

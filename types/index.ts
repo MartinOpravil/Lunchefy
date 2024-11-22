@@ -30,7 +30,7 @@ export interface ImageInputHandle {
   getImageBlob: () => Blob | undefined;
 }
 
-export interface BasicDialogProps {
+export interface BasicDialogProps extends ClassListProp {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   title: string;

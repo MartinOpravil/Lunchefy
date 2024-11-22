@@ -29,6 +29,7 @@ import Recipe from "@/components/recipes/Recipe";
 import { RECIPES_INITIAL_COUNT } from "@/constants/pagination";
 import MultipleSelector, { Option } from "@/components/ui/multiple-selector";
 import { TagManager } from "@/lib/tags";
+import RecipeSearchInput from "@/components/RecipeSearchInput";
 
 interface GroupPageProps {
   groupPreloaded: Preloaded<typeof api.groups.getGroupById>;
@@ -48,7 +49,6 @@ const GroupPage = ({
 
   const [searchTerm, setSearchTerm] = useState("");
   const [searchTags, setSearchTags] = useState<Option[]>([]);
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
 
   const [resetForm, setResetForm] = useState<(() => void) | null>(null);
   const coverImageRef = useRef<ImageInputHandle>(null);
@@ -98,21 +98,6 @@ const GroupPage = ({
     } catch (error) {
       notifyError("Error creating group", error?.toString());
     }
-  };
-
-  const debouncedUpdate = useCallback(
-    debounce((value) => {
-      // setIsFiltering(true);
-      setDebouncedSearchTerm(value);
-      // setTimeout(() => setIsFiltering(false), 200);
-    }, 500), // 500ms delay, adjust as needed
-    []
-  );
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setSearchTerm(value); // Immediate state update for input
-    debouncedUpdate(value); // Debounced state for the query
   };
 
   if (!group.data) {
@@ -197,7 +182,16 @@ const GroupPage = ({
       <main className="page-content gap-6">
         <ErrorHandler convexResponse={group} />
         {!!initialRecipes.page.length && (
-          <div className="w-full flex flex-col gap-4 justify-start items-start sm:flex-row sm:items-start">
+          <>
+            <RecipeSearchInput
+              group={group}
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              searchTags={searchTags}
+              setSearchTags={setSearchTags}
+            />
+
+            {/* <div className="w-full flex flex-col gap-4 justify-start items-start sm:flex-row sm:items-start">
             <div className="flex gap-1 bg-accent p-2 rounded-lg text-white-1">
               <Search color="white" />
               Search:
@@ -216,20 +210,21 @@ const GroupPage = ({
               value={searchTags}
               onChange={setSearchTags}
             />
-          </div>
+          </div> */}
+          </>
         )}
 
-        {debouncedSearchTerm.length > 0 || searchTags.length ? (
+        {searchTerm.length > 0 || searchTags.length ? (
           <RecipeSearchResults
             groupId={group.data._id}
-            searchTerm={debouncedSearchTerm}
+            searchTerm={searchTerm}
             searchTags={TagManager.convertToValues(searchTags)}
             privilage={group.data.privilage}
           />
         ) : (
           <div className="w-full">
             <div className="w-full overflow-y-auto">
-              <div className="flex w-full flex-col items-center gap-3">
+              <div className="flex w-full flex-col items-center gap-3 @container">
                 {!initialRecipes.page.length ? (
                   <>
                     {group.data.privilage === Privilage.Viewer ? (
