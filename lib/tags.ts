@@ -29,8 +29,9 @@ export class TagManager {
   }
 
   // Convert string values (string[]) to tag options (Option[])
-  static convertToTags(values: string[]): Option[] {
+  static convertToTags(values: string): Option[] {
     return values
+      .split(" ")
       .map((value) =>
         this.tagOptions.find((option) => option.value === (value as Tag))
       )

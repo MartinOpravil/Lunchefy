@@ -3,10 +3,8 @@ import { mutation, query } from "./_generated/server";
 import { getLoggedUser } from "./users";
 import { HttpResponseCode, Privilage } from "@/enums";
 import { v } from "convex/values";
-import { paginationOptsValidator } from "convex/server";
-import { filter } from "convex-helpers/server/filter";
+import { paginationOptsValidator, QueryInitializer } from "convex/server";
 
-// TODO: Filter out by groupId, it is missing
 export const getRecipes = query({
   args: {
     groupId: v.string(),
@@ -15,30 +13,29 @@ export const getRecipes = query({
     paginationOpts: paginationOptsValidator,
   },
   handler: async (ctx, args) => {
-    const query = filter(ctx.db.query("recipes"), (recipe) => {
-      // If no search term or filters, return true (match all recipes)
-      if (!args.searchTerm && !args.searchTags) {
-        return true;
-      }
-      const matchesSearchTerm = args.searchTerm
-        ? recipe.name.toLowerCase().includes(args.searchTerm.toLowerCase())
-        : false;
+    let query;
 
-      const matchesSearchFilters = args.searchTags?.length
-        ? args.searchTags.some((tag) => recipe.tags?.includes(tag))
-        : false;
+    if (args.searchTerm) {
+      query = ctx.db
+        .query("recipes")
+        .withSearchIndex("nameSearch", (q) =>
+          q.search("name", args.searchTerm!)
+        );
+    } else if (args.searchTags?.length) {
+      query = ctx.db
+        .query("recipes")
+        .withSearchIndex("tagSearch", (q) =>
+          q.search("tags", args.searchTags!.join(" "))
+        );
+    } else {
+      query = ctx.db.query("recipes");
+    }
 
-      // If both searchTerm and searchFilters are provided, ensure both match
-      if (args.searchTerm && args.searchTags?.length) {
-        return matchesSearchTerm && matchesSearchFilters;
-      }
+    const filteredQuery = query.filter((q) =>
+      q.eq(q.field("groupId"), args.groupId)
+    );
 
-      // Otherwise, return true if either condition is met
-      return matchesSearchTerm || matchesSearchFilters;
-    });
-
-    const paginatedResult = await query.paginate(args.paginationOpts);
-    return paginatedResult;
+    return await filteredQuery.paginate(args.paginationOpts);
   },
 });
 // TODO: Check if I can use id of group directly instead of generic string
@@ -127,7 +124,7 @@ export const createRecipe = mutation({
       instructions: args.instructions,
       recipeImage: args.recipeImage,
       isImageRecipe: args.isImageRecipe,
-      tags: args.tags,
+      tags: args.tags?.join(" "),
     });
     if (!newGroupId) {
       return createBadResponse(
@@ -202,7 +199,7 @@ export const updateRecipe = mutation({
       instructions: args.instructions,
       recipeImage: args.isImageRecipe ? args.recipeImage : undefined,
       isImageRecipe: args.isImageRecipe,
-      tags: args.tags,
+      tags: args.tags?.join(" "),
     });
     return createOKResponse(true);
   },

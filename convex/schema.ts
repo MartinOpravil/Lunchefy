@@ -46,7 +46,7 @@ export default defineSchema({
       })
     ),
     isImageRecipe: v.boolean(),
-    tags: v.optional(v.array(v.string())),
+    tags: v.optional(v.string()),
     ingredients: v.optional(v.string()),
     instructions: v.optional(v.string()),
     recipeImage: v.optional(
@@ -55,8 +55,11 @@ export default defineSchema({
         storageId: v.optional(v.id("_storage")),
       })
     ),
-  }).searchIndex("search_name_tags", {
-    searchField: "name",
-    filterFields: ["tags"],
-  }),
+  })
+    .searchIndex("nameSearch", {
+      searchField: "name",
+    })
+    .searchIndex("tagSearch", {
+      searchField: "tags",
+    }),
 });

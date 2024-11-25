@@ -1,15 +1,23 @@
 "use client";
-import { Search } from "lucide-react";
+import { PencilLine, Search, Signature, Tags } from "lucide-react";
 import React, { Dispatch, SetStateAction, useCallback, useState } from "react";
 import MultipleSelector, { Option } from "./ui/multiple-selector";
 import { Input } from "./ui/input";
 import { debounce } from "lodash";
 import { TagManager } from "@/lib/tags";
-import RecipeSearchResults, {
-  RecipeSearchResultListVariant,
-} from "./RecipeSearchResults";
 import { getGroupById } from "@/convex/groups";
-import PlannerRecipeResultList from "./PlannerRecipeResultList";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+
+enum SearchBy {
+  Name = "name",
+  Tags = "tags",
+}
 
 export enum RecipeFilterVariant {
   Page = "page",
@@ -36,6 +44,7 @@ const RecipeSearchInput = ({
   setSearchTags,
 }: RecipeFilterProps) => {
   const [internalSearchTerm, setInternalSearchTerm] = useState(searchTerm);
+  const [searchBy, setSearchBy] = useState<SearchBy>(SearchBy.Name);
 
   const debouncedUpdate = useCallback(
     debounce((value) => {
@@ -52,41 +61,61 @@ const RecipeSearchInput = ({
     debouncedUpdate(value); // Debounced state for the query
   };
 
+  const handleSearchByChange = (value: SearchBy) => {
+    setInternalSearchTerm("");
+    setSearchTerm("");
+    setSearchTags([]);
+    setSearchBy(value);
+  };
+
   if (!group.data) return <></>;
 
   return (
     <div className="w-full @container z-50">
-      <div className="w-full flex flex-col gap-4 justify-start items-start @md:flex-row sm:items-start ">
-        {variant === RecipeFilterVariant.Page && (
-          <div className="flex gap-1 bg-accent p-2 rounded-lg text-white-1">
-            <Search color="white" />
-            Search:
-          </div>
-        )}
-        <Input
-          className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
-          placeholder="Recipe name"
-          type="text"
-          value={internalSearchTerm}
-          onChange={handleInputChange}
-        />
-        <MultipleSelector
-          className="input-class border-2 border-accent focus-visible:ring-secondary transition"
-          defaultOptions={TagManager.getTagOptions()}
-          placeholder="Tags"
-          value={searchTags}
-          onChange={setSearchTags}
-        />
+      <div className="w-full flex flex-col gap-2 justify-start items-start @md:flex-row ">
+        <div className="flex flex-shrink min-w-60">
+          <Select value={searchBy} onValueChange={handleSearchByChange}>
+            <SelectTrigger className="input-class h-full border-2 border-accent focus-visible:ring-secondary transition-all">
+              <SelectValue
+                className="placehold:text-secondary"
+                placeholder="Select a privilage"
+              />
+            </SelectTrigger>
+            <SelectContent className="bg-background">
+              <SelectItem value={SearchBy.Name}>
+                <div className="flex gap-2">
+                  <PencilLine /> Name
+                </div>
+              </SelectItem>
+              <SelectItem value={SearchBy.Tags}>
+                <div className="flex gap-2">
+                  <Tags /> Tags
+                </div>
+              </SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex flex-grow">
+          {searchBy === SearchBy.Name && (
+            <Input
+              className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
+              placeholder="Search by recipe name"
+              type="text"
+              value={internalSearchTerm}
+              onChange={handleInputChange}
+            />
+          )}
+          {searchBy === SearchBy.Tags && (
+            <MultipleSelector
+              className="input-class border-2 border-accent focus-visible:ring-secondary transition"
+              defaultOptions={TagManager.getTagOptions()}
+              placeholder="Search by tags"
+              value={searchTags}
+              onChange={setSearchTags}
+            />
+          )}
+        </div>
       </div>
-      {/* {!!(searchTerm.length > 0 || searchTags.length) && (
-        <RecipeSearchResults
-          groupId={group.data._id}
-          searchTerm={searchTerm}
-          searchTags={TagManager.convertToValues(searchTags)}
-          privilage={group.data.privilage}
-          variant={RecipeSearchResultListVariant.Planner}
-        />
-      )} */}
     </div>
   );
 };
