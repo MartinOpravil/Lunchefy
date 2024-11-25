@@ -17,14 +17,6 @@ export interface AuthButtonProps extends ClassListProp {
   title?: string;
 }
 
-export interface ImageInputProps {
-  image?: ImageStateProps;
-  setImage: Dispatch<SetStateAction<ImageStateProps | undefined>>;
-  label?: string;
-  title?: string;
-  description?: string;
-}
-
 export interface ImageInputHandle {
   commit: () => Promise<ImageStateProps | undefined>;
   getImageBlob: () => Blob | undefined;
@@ -58,7 +50,7 @@ export interface FormState {
 }
 
 export interface Plan {
-  planId: Id<"plannedGroupRecipes">;
+  planId: Id<"groupPlans">;
   date: "string";
   recipe: Doc<"recipes">;
 }

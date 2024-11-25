@@ -53,6 +53,7 @@ export const getGroupById = query({
     return createOKResponse({
       ...group,
       privilage: userGroupRelationship.privilage as Privilage,
+      isVerified: userResponse.data.isVerified,
     });
   },
 });
@@ -86,6 +87,7 @@ export const getGroupList = query({
       return {
         ...group,
         privilage: privilage as Privilage,
+        isVerified: userResponse.data?.isVerified ?? false,
       };
     });
 
@@ -126,6 +128,7 @@ export const getGroupSharedUsers = query({
         name: user.name,
         email: user.email,
         privilage: relationship?.privilage as Privilage,
+        isVerified: userResponse.data?.isVerified ?? false,
       };
     });
 
@@ -210,8 +213,18 @@ export const deleteGroup = mutation({
       .filter((q) => q.eq(q.field("groupId"), group._id))
       .collect();
     await Promise.all(
-      relationship.map(async (p) => {
-        await ctx.db.delete(p._id);
+      relationship.map(async (r) => {
+        ctx.db.delete(r._id);
+      })
+    );
+    // Delete all plans
+    const planList = await ctx.db
+      .query("groupPlans")
+      .filter((q) => q.eq(q.field("groupId"), group._id))
+      .collect();
+    await Promise.all(
+      planList.map(async (p) => {
+        ctx.db.delete(p._id);
       })
     );
 

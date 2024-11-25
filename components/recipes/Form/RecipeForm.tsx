@@ -106,6 +106,7 @@ const RecipeForm = ({ recipe }: RecipeDetailHeaderProps) => {
                       field.onChange(newImage);
                     }}
                     ref={coverImageRef}
+                    isVerified={recipe?.data?.isVerified}
                   />
                 )}
               />
@@ -208,6 +209,7 @@ const RecipeForm = ({ recipe }: RecipeDetailHeaderProps) => {
                     field.onChange(newImage);
                   }}
                   ref={recipeImageRef}
+                  isVerified={recipe?.data?.isVerified}
                 />
               )}
             />

@@ -84,6 +84,7 @@ export const getRecipeById = query({
     return createOKResponse({
       ...recipe,
       privilage: userGroupRelationship.privilage as Privilage,
+      isVerified: userEntityResponse.data.isVerified,
     });
   },
 });
@@ -221,6 +222,17 @@ export const deleteRecipe = mutation({
         "Recipe was not deleted."
       );
     }
+
+    // Delete all plans that contains recipeId
+    const planList = await ctx.db
+      .query("groupPlans")
+      .filter((q) => q.eq(q.field("recipeId"), args.recipeId))
+      .collect();
+    await Promise.all(
+      planList.map(async (p) => {
+        ctx.db.delete(p._id);
+      })
+    );
 
     // Delete image from storage
     if (recipe.coverImage?.storageId)

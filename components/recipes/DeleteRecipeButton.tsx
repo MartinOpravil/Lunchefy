@@ -42,13 +42,13 @@ const DeleteRecipeButton = ({
   const handleDeleteRecipe = async () => {
     setIsDeleting(true);
     try {
+      if (redirectAfterDelete) router.push(`/app/${groupId}`);
       const response = await deleteRecipe({ recipeId });
       setIsDeleting(false);
       if (!response.data)
         return notifyError(response.status.toString(), response.errorMessage);
       notifySuccess("Successfully deleted group");
       setIsDialogOpen(false);
-      if (redirectAfterDelete) router.push(`/app/${groupId}`);
     } catch (error) {
       console.error("Error deleting group", error);
       setIsDeleting(false);

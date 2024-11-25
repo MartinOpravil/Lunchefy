@@ -91,6 +91,7 @@ const GroupForm = ({ group }: GroupFormProps) => {
               field.onChange(newImage);
             }}
             ref={coverImageRef}
+            isVerified={group?.data?.isVerified}
           />
         )}
       />

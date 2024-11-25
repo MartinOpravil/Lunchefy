@@ -29,13 +29,7 @@ export const createUser = internalMutation({
       email: args.email,
       imageUrl: args.imageUrl,
       name: args.name,
-      appSettings: {
-        colors: {
-          background: "#1b1b1b",
-          font: "#FFFFFF",
-        },
-        language: "en",
-      },
+      isVerified: false,
     });
   },
 });

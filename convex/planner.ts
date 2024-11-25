@@ -12,14 +12,14 @@ export const getTodayRecipe = query({
   handler: async (ctx, args) => {
     const today = new Date();
     today.setUTCHours(0, 0, 0, 0);
-    const plannedGroupRecipes = await filter(
-      ctx.db.query("plannedGroupRecipes"),
+    const groupPlans = await filter(
+      ctx.db.query("groupPlans"),
       (plan) =>
         plan.groupId === args.groupId && plan.date === today.toISOString()
     ).collect();
 
-    // const plannedGroupRecipes = await ctx.db
-    //   .query("plannedGroupRecipes")
+    // const groupPlans = await ctx.db
+    //   .query("groupPlans")
     //   .filter(
     //     (q) =>
     //       q.eq(q.field("groupId"), args.groupId) &&
@@ -27,11 +27,11 @@ export const getTodayRecipe = query({
     //   )
     //   .collect();
 
-    if (!plannedGroupRecipes.length) {
+    if (!groupPlans.length) {
       return createOKResponse([]);
     }
 
-    const recipeIdList = plannedGroupRecipes.map((x) => x.recipeId);
+    const recipeIdList = groupPlans.map((x) => x.recipeId);
 
     const recipeList = await filter(ctx.db.query("recipes"), (recipe) =>
       recipeIdList.includes(recipe._id)
@@ -46,12 +46,12 @@ export const getGroupRecipeListForMonth = query({
     month: v.string(),
   },
   handler: async (ctx, args) => {
-    const plannedGroupRecipes = await filter(
-      ctx.db.query("plannedGroupRecipes"),
+    const groupPlans = await filter(
+      ctx.db.query("groupPlans"),
       (x) => x.groupId === args.groupId && x.date.startsWith(args.month)
     ).collect();
 
-    const recipeIdList = new Set(plannedGroupRecipes.map((x) => x.recipeId));
+    const recipeIdList = new Set(groupPlans.map((x) => x.recipeId));
 
     const recipes = await filter(ctx.db.query("recipes"), (recipe) =>
       recipeIdList.has(recipe._id)
@@ -59,7 +59,7 @@ export const getGroupRecipeListForMonth = query({
 
     const recipeMap = new Map(recipes.map((recipe) => [recipe._id, recipe]));
 
-    const plan = plannedGroupRecipes
+    const plan = groupPlans
       .map((plan) => {
         return {
           planId: plan._id,
@@ -80,21 +80,21 @@ export const assignRecipeToDate = mutation({
     date: v.string(),
   },
   handler: async (ctx, args) => {
-    const plannedGroupRecipes = await filter(
-      ctx.db.query("plannedGroupRecipes"),
+    const groupPlans = await filter(
+      ctx.db.query("groupPlans"),
       (plan) =>
         plan.groupId === args.groupId &&
         plan.recipeId === args.recipeId &&
         plan.date === args.date
     ).collect();
 
-    if (plannedGroupRecipes.length)
+    if (groupPlans.length)
       return createBadResponse(
         HttpResponseCode.Conflict,
         "Recipe is already assigned to date."
       );
 
-    const result = await ctx.db.insert("plannedGroupRecipes", {
+    const result = await ctx.db.insert("groupPlans", {
       groupId: args.groupId,
       recipeId: args.recipeId,
       date: args.date,
@@ -113,7 +113,7 @@ export const assignRecipeToDate = mutation({
 export const changeRecipeInDate = mutation({
   args: {
     newRecipeId: v.id("recipes"),
-    planId: v.id("plannedGroupRecipes"),
+    planId: v.id("groupPlans"),
   },
   handler: async (ctx, args) => {
     const plan = await ctx.db.get(args.planId);
@@ -132,7 +132,7 @@ export const changeRecipeInDate = mutation({
     }
 
     const newRecipePlanInDate = await filter(
-      ctx.db.query("plannedGroupRecipes"),
+      ctx.db.query("groupPlans"),
       (x) =>
         x.groupId === plan.groupId &&
         x.recipeId === args.newRecipeId &&
@@ -155,7 +155,7 @@ export const changeRecipeInDate = mutation({
 
 export const removeRecipeFromDate = mutation({
   args: {
-    planId: v.id("plannedGroupRecipes"),
+    planId: v.id("groupPlans"),
   },
   handler: async (ctx, args) => {
     const plan = await ctx.db.get(args.planId);

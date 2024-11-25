@@ -1,20 +1,31 @@
 "use client";
 import React, {
+  Dispatch,
   forwardRef,
   Ref,
+  SetStateAction,
   useImperativeHandle,
   useRef,
   useState,
 } from "react";
 import { Input } from "../ui/input";
 import Image from "next/image";
-import { Loader } from "lucide-react";
-import { ImageInputHandle, ImageInputProps, ImageStateProps } from "@/types";
+import { Ban, Loader } from "lucide-react";
+import { ImageInputHandle, ImageStateProps } from "@/types";
 import { FormLabel } from "../ui/form";
 import { Id } from "@/convex/_generated/dataModel";
 import { useUploadFiles } from "@xixixao/uploadstuff/react";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
+
+interface ImageInputProps {
+  image?: ImageStateProps;
+  setImage: Dispatch<SetStateAction<ImageStateProps | undefined>>;
+  label?: string;
+  title?: string;
+  description?: string;
+  isVerified?: boolean;
+}
 
 const ImageInput = (
   {
@@ -23,6 +34,7 @@ const ImageInput = (
     label = "Image",
     title = "Click to upload",
     description = "SVG, PNG, JPG or GIF",
+    isVerified = false,
   }: ImageInputProps,
   ref: Ref<ImageInputHandle>
 ) => {
@@ -109,42 +121,13 @@ const ImageInput = (
   };
 
   return (
-    <div className="image-input">
+    <div className="image-input relative">
       {label && (
         <FormLabel className="text-16 font-bold text-accent">{label}</FormLabel>
       )}
-      <div
-        className="image-input-inner"
-        onClick={() => inputRef?.current?.click()}
-      >
-        <Input
-          type="file"
-          className="hidden"
-          ref={inputRef}
-          onChange={(e) => changeImage(e)}
-        />
-
-        <div className="flex flex-col items-center gap-1">
-          {!isImageLoading ? (
-            <>
-              <Image
-                src="/icons/upload.svg"
-                width={40}
-                height={40}
-                alt="upload"
-              />
-              <h2 className="text-12 font-bold text-primary">{title}</h2>
-              <p className="text-12 font-normal text-gray-1">{description}</p>
-            </>
-          ) : (
-            <div className="flex flex-col justify-center items-center text-16 flex-center font-medium text-primary">
-              <Loader size={30} className="animate-spin text-black-1" />
-              Uploading
-            </div>
-          )}
-        </div>
-        {image?.imageUrl && (
-          <div className="flex-center w-full ">
+      {!isVerified ? (
+        <div className="relative flex justify-center items-center p-6 min-h-[160px]">
+          {image?.imageUrl && (
             <Image
               src={image.imageUrl}
               alt="thumbnail"
@@ -153,9 +136,60 @@ const ImageInput = (
               sizes="100vw"
               className="w-[100%] h-[100%] sm:w-[50%] max-h-[500px] object-contain"
             />
+          )}
+          <div className="absolute top-0 left-0 w-full h-full flex flex-col gap-2 justify-center items-center bg-primary/50 rounded text-white-1 p-6 backdrop-blur-sm">
+            <Ban />
+            <div className="text-center">
+              You dont have a permission to upload or manage images. Contact a
+              web admin to grant you a permission.
+            </div>
           </div>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div
+          className="image-input-inner"
+          onClick={() => inputRef?.current?.click()}
+        >
+          <Input
+            type="file"
+            className="hidden"
+            ref={inputRef}
+            onChange={(e) => changeImage(e)}
+          />
+
+          <div className="flex flex-col items-center gap-1">
+            {!isImageLoading ? (
+              <>
+                <Image
+                  src="/icons/upload.svg"
+                  width={40}
+                  height={40}
+                  alt="upload"
+                />
+                <h2 className="text-12 font-bold text-primary">{title}</h2>
+                <p className="text-12 font-normal text-gray-1">{description}</p>
+              </>
+            ) : (
+              <div className="flex flex-col justify-center items-center text-16 flex-center font-medium text-primary">
+                <Loader size={30} className="animate-spin text-black-1" />
+                Uploading
+              </div>
+            )}
+          </div>
+          {image?.imageUrl && (
+            <div className="flex-center w-full ">
+              <Image
+                src={image.imageUrl}
+                alt="thumbnail"
+                width={0}
+                height={0}
+                sizes="100vw"
+                className="w-[100%] h-[100%] sm:w-[50%] max-h-[500px] object-contain"
+              />
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

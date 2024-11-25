@@ -275,26 +275,26 @@ const PlannerPage = ({
               {date?.toLocaleDateString("cs")} -{" "}
               {date?.toLocaleDateString("cs", { weekday: "long" })}
             </div>
-            {selectedPlan ? (
+            {selectedPlanList?.length === 1 && selectedPlan ? (
               <>
-                <h3>{selectedPlan.recipe.name}</h3>
+                <h3>{selectedPlan?.recipe?.name}</h3>
                 <div
                   className="prose"
                   dangerouslySetInnerHTML={{
-                    __html: selectedPlan.recipe.ingredients ?? "",
+                    __html: selectedPlan?.recipe?.ingredients ?? "",
                   }}
                 />
                 <div
                   className="prose"
                   dangerouslySetInnerHTML={{
-                    __html: selectedPlan.recipe.instructions ?? "",
+                    __html: selectedPlan?.recipe?.instructions ?? "",
                   }}
                 />
               </>
             ) : (
               <div>Selected day has no recipe yet.</div>
             )}
-            {!!selectedPlanList?.length && (
+            {!!selectedPlanList?.length && selectedPlanList.length > 1 && (
               <Tabs value={selectedPlan?.planId} className="p-3 rounded">
                 <TabsList className="flex flex-col sm:flex-row gap-2">
                   {selectedPlanList.map((plan, index) => (
@@ -308,7 +308,7 @@ const PlannerPage = ({
                         );
                       }}
                     >
-                      {plan.recipe.name}
+                      {plan.recipe?.name}
                     </TabsTrigger>
                   ))}
                 </TabsList>
@@ -317,13 +317,13 @@ const PlannerPage = ({
                     <div
                       className="prose"
                       dangerouslySetInnerHTML={{
-                        __html: plan.recipe.ingredients ?? "",
+                        __html: plan.recipe?.ingredients ?? "",
                       }}
                     />
                     <div
                       className="prose"
                       dangerouslySetInnerHTML={{
-                        __html: plan.recipe.instructions ?? "",
+                        __html: plan.recipe?.instructions ?? "",
                       }}
                     />
                   </TabsContent>
@@ -337,7 +337,7 @@ const PlannerPage = ({
         isOpen={isRemoveDialogOpen}
         setIsOpen={setIsRemoveDialogOpen}
         title="Are you absolutely sure want to remove recipe from date?"
-        subject={selectedPlan?.recipe.name}
+        subject={selectedPlan?.recipe?.name}
         confirmAction={handleRemoveRecipeFromDate}
       />
       <BasicDialog

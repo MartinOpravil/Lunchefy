@@ -7,13 +7,7 @@ export default defineSchema({
     imageUrl: v.string(),
     clerkId: v.string(),
     name: v.string(),
-    appSettings: v.object({
-      colors: v.object({
-        background: v.string(),
-        font: v.string(),
-      }),
-      language: v.string(),
-    }),
+    isVerified: v.boolean(),
   }),
   groups: defineTable({
     name: v.string(),
@@ -30,7 +24,7 @@ export default defineSchema({
     groupId: v.id("groups"),
     privilage: v.string(),
   }),
-  plannedGroupRecipes: defineTable({
+  groupPlans: defineTable({
     date: v.string(),
     groupId: v.id("groups"),
     recipeId: v.id("recipes"),
