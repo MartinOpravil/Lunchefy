@@ -10,7 +10,7 @@ import { ButtonVariant } from "@/enums";
 import { ImageInputHandle, ImageStateProps } from "@/types";
 import NewGroupHeader from "@/components/groups/header/NewGroupHeader";
 import FormProviderWrapper from "@/components/FormProviderWrapper";
-import { groupFormSchema, GroupFormValues } from "@/constants/formSchemas";
+import { groupFormSchema, GroupFormValues } from "@/constants/formSchema";
 import GroupForm from "@/components/groups/form/GroupForm";
 import { SubmitHandler } from "react-hook-form";
 import { notifyError, notifySuccess } from "@/lib/notifications";

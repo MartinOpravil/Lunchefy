@@ -9,7 +9,7 @@ import NewRecipeHeader from "@/components/recipes/headers/NewRecipeHeader";
 import RecipesPaginated from "@/components/recipes/RecipeListPaginated";
 import RecipeSearchResults from "@/components/RecipeSearchResults";
 import { Input } from "@/components/ui/input";
-import { recipeFormSchema, RecipeFormValues } from "@/constants/formSchemas";
+import { recipeFormSchema, RecipeFormValues } from "@/constants/formSchema";
 import { api } from "@/convex/_generated/api";
 import { ButtonVariant, Privilage } from "@/enums";
 import { notifyError, notifySuccess } from "@/lib/notifications";
@@ -30,6 +30,7 @@ import { RECIPES_INITIAL_COUNT } from "@/constants/pagination";
 import MultipleSelector, { Option } from "@/components/ui/multiple-selector";
 import { TagManager } from "@/lib/tags";
 import RecipeSearchInput from "@/components/RecipeSearchInput";
+import { useTranslations } from "next-intl";
 
 interface GroupPageProps {
   groupPreloaded: Preloaded<typeof api.groups.getGroupById>;
@@ -42,6 +43,8 @@ const GroupPage = ({
   recipesPreloaded,
   todayRecipePreload,
 }: GroupPageProps) => {
+  const t = useTranslations("HomePage");
+
   const group = usePreloadedQuery(groupPreloaded);
   const initialRecipes = usePreloadedQuery(recipesPreloaded);
   const createRecipe = useMutation(api.recipes.createRecipe);
@@ -136,6 +139,7 @@ const GroupPage = ({
 
   return (
     <main className="page pb-8">
+      <div>{t("title")}</div>
       <PageHeader
         title={group.data.name}
         icon="recipe_book"

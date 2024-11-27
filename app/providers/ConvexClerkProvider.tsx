@@ -3,7 +3,8 @@ import { ClerkProvider, useAuth } from "@clerk/nextjs";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
 import { ConvexReactClient } from "convex/react";
 import { ReactNode } from "react";
-import { csCZ } from "@clerk/localizations";
+import { csCZ, enUS } from "@clerk/localizations";
+import { useLocale } from "next-intl";
 
 const convex = new ConvexReactClient(
   process.env.NEXT_PUBLIC_CONVEX_URL as string
@@ -12,7 +13,7 @@ const convex = new ConvexReactClient(
 const ConvexClerkProvider = ({ children }: { children: ReactNode }) => (
   <ClerkProvider
     publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY as string}
-    localization={csCZ}
+    localization={useLocale() === "cs" ? csCZ : enUS}
     signInForceRedirectUrl="/app"
     signUpForceRedirectUrl="/app"
     afterSignOutUrl="/sign-in?loggedOut=true"

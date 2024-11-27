@@ -3,7 +3,7 @@ import FormProviderWrapper from "@/components/FormProviderWrapper";
 import ErrorHandler from "@/components/global/ErrorHandler";
 import GroupForm from "@/components/groups/form/GroupForm";
 import GroupEditHeader from "@/components/groups/edit/GroupEditHeader";
-import { groupFormSchema, GroupFormValues } from "@/constants/formSchemas";
+import { groupFormSchema, GroupFormValues } from "@/constants/formSchema";
 import { api } from "@/convex/_generated/api";
 import { notifyError, notifySuccess } from "@/lib/notifications";
 import { ImageInputHandle, ImageStateProps } from "@/types";
