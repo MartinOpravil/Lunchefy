@@ -1,10 +1,12 @@
 import { Privilage } from "@/enums";
 import { cn } from "@/lib/utils";
 import { PrivilageBadgeProps } from "@/types";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import React, { useMemo } from "react";
 
 const PrivilageBadge = ({ privilage }: PrivilageBadgeProps) => {
+  const t = useTranslations("Groups");
   const privilageImage = useMemo(() => {
     switch (privilage) {
       case Privilage.Owner:
@@ -40,7 +42,7 @@ const PrivilageBadge = ({ privilage }: PrivilageBadgeProps) => {
         width={15}
         height={15}
       />
-      {privilage}
+      {t(`AccessManager.Privilage.${privilage}`)}
     </div>
   );
 };

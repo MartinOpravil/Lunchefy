@@ -116,7 +116,7 @@ export const createRecipe = mutation({
     if (!userResponse.data)
       return createBadResponse(userResponse.status, userResponse.errorMessage);
 
-    const newGroupId = await ctx.db.insert("recipes", {
+    const newRecipeId = await ctx.db.insert("recipes", {
       groupId: args.groupId,
       name: args.name,
       description: args.description,
@@ -127,15 +127,12 @@ export const createRecipe = mutation({
       isImageRecipe: args.isImageRecipe,
       tags: args.tags?.join(" "),
     });
-    if (!newGroupId) {
-      return createBadResponse(
-        HttpResponseCode.InternalServerError,
-        "Recipe was not created - Not able to insert into database."
-      );
+    if (!newRecipeId) {
+      return createBadResponse(HttpResponseCode.InternalServerError);
     }
 
     return createOKResponse({
-      groupId: newGroupId,
+      recipeId: newRecipeId,
     });
   },
 });
@@ -169,10 +166,7 @@ export const updateRecipe = mutation({
 
     const recipe = await ctx.db.get(args.id);
     if (!recipe) {
-      return createBadResponse(
-        HttpResponseCode.NotFound,
-        "Cannot update because Recipe was not found"
-      );
+      return createBadResponse(HttpResponseCode.NotFound);
     }
 
     // Handle cover photo deletion
@@ -217,10 +211,7 @@ export const deleteRecipe = mutation({
 
     const recipe = await ctx.db.get(args.recipeId);
     if (!recipe) {
-      return createBadResponse(
-        HttpResponseCode.InternalServerError,
-        "Recipe was not deleted."
-      );
+      return createBadResponse(HttpResponseCode.InternalServerError);
     }
 
     // Delete all plans that contains recipeId

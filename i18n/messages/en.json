@@ -1,5 +1,239 @@
 {
+  "Global": {
+    "Button": {
+      "Back": "Back",
+      "New": "New",
+      "Edit": "Edit",
+      "Save": "Save",
+      "Cancel": "Cancel",
+      "Delete": "Delete",
+      "Update": "Update",
+      "View": "View",
+      "Continue": "Continue"
+    },
+
+    "Image": {
+      "Title": "Click to upload",
+      "Description": "SVG, PNG, JPG or GIF",
+      "Uploading": "Uploading",
+      "NoAccess": "You dont have a permission to upload or manage images. Contact a web admin to grant you a permission."
+    },
+
+    "UnsavedChangesDialog": {
+      "Title": "Unsaved changes present",
+      "Disclaimer": "By proceeding your unsaved changes will be lost. Do you still want to continue?"
+    },
+
+    "Notification": {
+      "UnexpectedError": "There was an unexpected error. Please contact the site administrator."
+    },
+
+    "Validation": {
+      "NoContent": "Content does not exists.",
+      "NoPermission": "You don't have a permission to see this content."
+    }
+  },
   "HomePage": {
     "title": "Hello world!"
+  },
+  "Groups": {
+    "General": {
+      "Title": "Groups",
+      "NewGroupTitle": "New group",
+      "Button": {
+        "Share": "Share"
+      },
+      "Form": {
+        "Property": {
+          "Name": "Name",
+          "Description": "Description",
+          "CoverImage": "Image"
+        },
+        "Placeholder": {
+          "Name": "Name of this group",
+          "Description": "Optional group description"
+        }
+      },
+      "Action": {
+        "Delete": {
+          "Title": "Are you absolutely sure want to delete?",
+          "Disclaimer": "This action cannot be undone and will permanently delete group from our servers."
+        }
+      },
+      "Notification": {
+        "Success": {
+          "Create": "Group successfully created.",
+          "Update": "Group successfully updated.",
+          "Delete": "Group successfully deleted."
+        },
+        "Error": {
+          "Create": "Error when creating group",
+          "Update": "Error updating group",
+          "Get404": "Group not found",
+          "Get403View": "No permission to view group",
+          "Get403Edit": "You don't have access to edit this group.",
+          "Create500Database": "Group was not created - Not able to insert into database.",
+          "Create500UserGroupDatabase": "User-Group relation was not created - Relation was not able to be inserted to database.",
+          "Delete500": "Group was not deleted.",
+          "Update404": "Cannot update because Group was not found"
+        }
+      }
+    },
+
+    "AccessManager": {
+      "Title": "Access manager",
+      "Description": "Grant access for your family members or friends.",
+      "ListTitle": "Users with access:",
+      "ChangeAccessTitle": "Change access for",
+      "RevokeAccessTitle": "Are you sure you want to revoke access?",
+      "RevokeAccessDisclaimer": "User will lose access for this group.",
+      "Button": {
+        "Share": "Share with user",
+        "Revoke": "Revoke"
+      },
+      "Form": {
+        "Property": {
+          "Email": "Email",
+          "Privilage": "Privilage"
+        },
+        "Placeholder": {
+          "Email": "Email to share {groupName} with",
+          "Privilage": "Select a privilage"
+        }
+      },
+      "Notification": {
+        "Success": {
+          "Create": "Access granted to {email} ({privilage}).",
+          "Update": "Privilage updated to ({privilage}).",
+          "Revoke": "Access revoke for {name} ({email}) was successfull."
+        },
+        "Error": {
+          "Create404": "Cannot add access to user that is not registered yet.",
+          "Create409": "User already has access to this group",
+          "Create500": "Error when trying to add access to database.",
+          "Update403": "Cannot change access. User does not have access to this group yet.",
+          "Revoke403": "Cannot revoke access. User does not have access to this group yet."
+        }
+      },
+      "Privilage": {
+        "Owner": "Owner",
+        "Editor": "Editor",
+        "Viewer": "Guest"
+      }
+    },
+    "Planner": {
+      "Title": "Planner",
+      "RecipeListTitle": "Recipes for this month:",
+      "TodayNoRecipe": "No recipe",
+      "SelectedDateNoRecipe": "Selected day has no recipe yet.",
+      "Action": {
+        "AssignRecipeTitle": "Assign recipe",
+        "SwapRecipeTitle": "Swap recipe",
+        "DeleteRecipeTitle": "Are you absolutely sure want to remove recipe from date?"
+      },
+      "Button": {
+        "Today": "Today",
+        "Assign": "Assign",
+        "Swap": "Swap",
+        "Remove": "Remove"
+      },
+
+      "Notification": {
+        "Success": {
+          "Assign": "Recipe successfully assigned to date.",
+          "Swap": "Plan successfully updated.",
+          "Remove": "Recipe successfully removed from date."
+        },
+        "Error": {
+          "NoRecipeSelected": "No recipe was selected.",
+          "NoDatePicked": "No date was picked.",
+          "NoPlanSelected": "No plan was selected.",
+          "Assign": "Error assigning recipe",
+          "Swap": "Error swapping recipe",
+          "Remove": "Error removing recipe",
+          "Assign409": "Recipe is already assigned to date.",
+          "Assign500": "Recipe was not assign to date.",
+          "Update404": "Cannot update. Plan does not exists in database",
+          "Update400": "Recipe is already assigned to date.",
+          "Update409": "Recipe is already assigned to date.",
+          "Delete404": "Cannot delete. Plan does not exists in database"
+        }
+      }
+    }
+  },
+  "Recipes": {
+    "General": {
+      "NewRecipeTitle": "New recipe",
+      "ImageDeletionDisclaimer": "Keep in mind that using text will permanently delete previously uploaded image!",
+      "Form": {
+        "Property": {
+          "Name": "Name",
+          "Description": "Description",
+          "CoverImage": "Image",
+          "Tags": "Tags",
+          "Ingredients": "Ingredients",
+          "Instructions": "Instructions",
+          "RecipeImage": "Recipe image",
+          "UseText": "Use Text",
+          "UseImage": "Use Image"
+        },
+        "Placeholder": {
+          "Name": "Recipe name",
+          "Description": "Optional recipe description",
+          "Tags": "Select tags that match this recipe"
+        }
+      },
+      "Action": {
+        "Delete": {
+          "Title": "Are you absolutely sure want to delete?",
+          "Disclaimer": "This action cannot be undone and will permanently delete your recipe from our servers."
+        }
+      },
+      "Notification": {
+        "Success": {
+          "Create": "Recipe successfully created.",
+          "Update": "Recipe successfully updated.",
+          "Delete": "Recipe successfully deleted."
+        },
+        "Error": {
+          "Create": "Error when creating recipe",
+          "Update": "Error updating recipe",
+          "Get403View": "No permission to view recipe",
+          "Get403Edit": "You don't have access to edit this recipe.",
+          "Create500": "Recipe was not created - Not able to insert into database.",
+          "Update404": "Cannot update because Recipe was not found",
+          "Delete500": "Recipe was not deleted due to internal error."
+        }
+      }
+    },
+    "Tags": {
+      "Chicken": "Chicken",
+      "Pork": "Pork",
+      "Beef": "Beef",
+      "Pasta": "Pasta",
+      "Fish": "Fish",
+      "Rice": "Rice"
+    },
+    "SearchInput": {
+      "SortBy": {
+        "Name": "Name",
+        "Tags": "Tags"
+      },
+      "Placeholder": {
+        "Name": "Search by recipe name",
+        "Tags": "Searcb by tags"
+      }
+    }
+  },
+  "Users": {
+    "Notification": {
+      "Success": {
+        "Logout": "You have been logged out."
+      },
+      "Error": {
+        "Get401": "User is not authenticated",
+        "Get404": "User is not present in database."
+      }
+    }
   }
 }

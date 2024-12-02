@@ -13,7 +13,7 @@ import { api } from "@/convex/_generated/api";
 import PageHeader from "@/components/global/PageHeader";
 import LinkButton from "@/components/global/LinkButton";
 import { ArrowLeft, Pencil, Plus, Replace, Trash2 } from "lucide-react";
-import { ButtonVariant } from "@/enums";
+import { ButtonVariant, HttpResponseCode } from "@/enums";
 import ActionButton from "@/components/global/ActionButton";
 import { notifyError, notifySuccess } from "@/lib/notifications";
 import { Id } from "@/convex/_generated/dataModel";
@@ -32,6 +32,7 @@ import RecipeSearchInput, {
 } from "@/components/RecipeSearchInput";
 import { Option } from "@/components/ui/multiple-selector";
 import PlannerRecipeResultList from "@/components/PlannerRecipeResultList";
+import { useTranslations } from "next-intl";
 
 enum RecipeAction {
   Assign = "assign",
@@ -49,6 +50,7 @@ const PlannerPage = ({
   groupPreloaded,
   recipeListForMonthPreloaded,
 }: PlannerPageProps) => {
+  const t = useTranslations();
   const initialISOMonth = getISOMonth(new Date());
 
   const group = usePreloadedQuery(groupPreloaded);
@@ -94,8 +96,17 @@ const PlannerPage = ({
 
   const handleAssignRecipeToDate = async () => {
     if (!selectedRecipeIdForAction)
-      return notifyError("No recipe was selected.", null, 3000);
-    if (!date) return notifyError("No date was picked.", null, 3000);
+      return notifyError(
+        t("Groups.Planner.Notification.Error.NoRecipeSelected"),
+        null,
+        3000
+      );
+    if (!date)
+      return notifyError(
+        t("Groups.Planner.Notification.Error.NoDatePicked"),
+        null,
+        3000
+      );
 
     try {
       const result = await assignRecipeToDate({
@@ -103,31 +114,79 @@ const PlannerPage = ({
         recipeId: selectedRecipeIdForAction as Id<"recipes">,
         date: convertToServerTime(date),
       });
-      if (!result.data) return notifyError(result.errorMessage!);
+      if (!result.data) {
+        switch (result.status) {
+          case HttpResponseCode.Conflict:
+            return notifyError(
+              t("Groups.Planner.Notification.Error.Assign409")
+            );
+          case HttpResponseCode.InternalServerError:
+            return notifyError(
+              t("Groups.Planner.Notification.Error.Assign500")
+            );
+          default:
+            return notifyError(t("Global.Notification.UnexpectedError"));
+        }
+      }
 
       cleanModifyPopup();
-      notifySuccess("Recipe successfully assigned to date.");
+      notifySuccess(t("Groups.Planner.Notification.Success.Assign"));
     } catch (error) {
-      notifyError("Error assigning recipe", error?.toString());
+      notifyError(
+        t("Groups.Planner.Notification.Error.Assign"),
+        error?.toString()
+      );
     }
   };
   const handleChangeRecipeInDate = async () => {
-    if (!selectedPlan) return notifyError("No plan was selected.", null, 3000);
+    if (!selectedPlan)
+      return notifyError(
+        t("Groups.Planner.Notification.Error.NoPlanSelected"),
+        null,
+        3000
+      );
     if (!selectedRecipeIdForAction)
-      return notifyError("No new recipe was selected.", null, 3000);
-    if (!date) return notifyError("No date was picked.", null, 3000);
+      return notifyError(
+        t("Groups.Planner.Notification.Error.NoRecipeSelected"),
+        null,
+        3000
+      );
+    if (!date)
+      return notifyError(
+        t("Groups.Planner.Notification.Error.NoDatePicked"),
+        null,
+        3000
+      );
 
     try {
       const result = await changeRecipeInDate({
         planId: selectedPlan.planId,
         newRecipeId: selectedRecipeIdForAction as Id<"recipes">,
       });
-      if (!result.data) return notifyError(result.errorMessage!);
+      if (!result.data) {
+        switch (result.status) {
+          case HttpResponseCode.NotFound:
+            return notifyError(
+              t("Groups.Planner.Notification.Error.Update404")
+            );
+          case HttpResponseCode.BadRequest:
+          case HttpResponseCode.Conflict:
+            return notifyError(
+              t("Groups.Planner.Notification.Error.Assign409")
+            );
+
+          default:
+            return notifyError(t("Global.Notification.UnexpectedError"));
+        }
+      }
 
       cleanModifyPopup();
-      notifySuccess("Plan successfully updated.");
+      notifySuccess(t("Groups.Planner.Notification.Success.Swap"));
     } catch (error) {
-      notifyError("Error changing plan.", error?.toString());
+      notifyError(
+        t("Groups.Planner.Notification.Error.Swap"),
+        error?.toString()
+      );
     }
   };
   const cleanModifyPopup = () => {
@@ -138,20 +197,40 @@ const PlannerPage = ({
   };
   const handleRemoveRecipeFromDate = async () => {
     if (!selectedPlan)
-      return notifyError("No recipe was selected.", null, 3000);
-    if (!date) return notifyError("No date was picked.", null, 3000);
+      return notifyError(
+        t("Groups.Planner.Notification.Error.NoRecipeSelected"),
+        null,
+        3000
+      );
+    if (!date)
+      return notifyError(
+        t("Groups.Planner.Notification.Error.NoDatePicked"),
+        null,
+        3000
+      );
 
     try {
       const result = await removeRecipeFromDate({
         planId: selectedPlan.planId,
       });
-      // selectedRecipe.pl
-      if (!result.data) return notifyError(result.errorMessage!);
+      if (!result.data) {
+        switch (result.status) {
+          case HttpResponseCode.NotFound:
+            return notifyError(
+              t("Groups.Planner.Notification.Error.Delete404")
+            );
+          default:
+            return notifyError(t("Global.Notification.UnexpectedError"));
+        }
+      }
 
-      notifySuccess("Recipe successfully removed from date.");
+      notifySuccess(t("Groups.Planner.Notification.Success.Remove"));
       setIsRemoveDialogOpen(false);
     } catch (error) {
-      notifyError("Error removing recipe", error?.toString());
+      notifyError(
+        t("Groups.Planner.Notification.Error.Remove"),
+        error?.toString()
+      );
     }
   };
 
@@ -202,7 +281,7 @@ const PlannerPage = ({
   return (
     <main className="page pb-8">
       <PageHeader
-        title={`${group.data.name} - Planner`}
+        title={`${group.data.name} - ${t("Groups.Planner.Title")}`}
         icon="recipe_book"
         description={group.data.description}
         actionButton={
@@ -225,7 +304,7 @@ const PlannerPage = ({
               isDisabled={!selectedPlan}
             />
             <ActionButton
-              title="Add"
+              title={t("Groups.Planner.Button.Assign")}
               icon={<Plus />}
               onClick={() => handleOpenModifyDialog(RecipeAction.Assign)}
               variant={ButtonVariant.Positive}
@@ -247,7 +326,9 @@ const PlannerPage = ({
               onMonthChange={(e) => handleMonthChange(e)}
             />
             <div className="p-2 rounded w-full">
-              <div className="text-accent">Recipes for this month:</div>
+              <div className="text-accent">
+                {t("Groups.Planner.RecipeListTitle")}
+              </div>
               <div className="pt-2">
                 {planList?.map((plan, index) => {
                   return (
@@ -292,7 +373,7 @@ const PlannerPage = ({
                 />
               </>
             ) : (
-              <div>Selected day has no recipe yet.</div>
+              <div>{t("Groups.Planner.SelectedDateNoRecipe")}</div>
             )}
             {!!selectedPlanList?.length && selectedPlanList.length > 1 && (
               <Tabs value={selectedPlan?.planId} className="p-3 rounded">
@@ -336,16 +417,19 @@ const PlannerPage = ({
       <ActionDialog
         isOpen={isRemoveDialogOpen}
         setIsOpen={setIsRemoveDialogOpen}
-        title="Are you absolutely sure want to remove recipe from date?"
+        title={t("Groups.Planner.Action.DeleteRecipeTitle")}
         subject={selectedPlan?.recipe?.name}
         confirmAction={handleRemoveRecipeFromDate}
+        confirmButtonLabel={t("Groups.Planner.Button.Remove")}
       />
       <BasicDialog
         isOpen={isAssignDialogOpen}
         setIsOpen={setIsAssignDialogOpen}
         icon={recipeAction === RecipeAction.Assign ? <Plus /> : <Pencil />}
         title={
-          recipeAction === RecipeAction.Assign ? "Assign recipe" : "Swap recipe"
+          recipeAction === RecipeAction.Assign
+            ? t("Groups.Planner.Action.AssignRecipeTitle")
+            : t("Groups.Planner.Action.SwapRecipeTitle")
         }
         description={
           recipeAction === RecipeAction.Swap ? selectedPlan?.recipe.name : ""
@@ -370,7 +454,11 @@ const PlannerPage = ({
               selectedRecipeId={selectedRecipeIdForAction}
             />
             <ActionButton
-              title={recipeAction === RecipeAction.Assign ? "Assign" : "Swap"}
+              title={
+                recipeAction === RecipeAction.Assign
+                  ? t("Groups.Planner.Button.Assign")
+                  : t("Groups.Planner.Button.Swap")
+              }
               icon={
                 recipeAction === RecipeAction.Assign ? <Plus /> : <Pencil />
               }

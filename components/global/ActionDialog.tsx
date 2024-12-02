@@ -13,6 +13,7 @@ import {
 import ActionButton from "./ActionButton";
 import { Trash2 } from "lucide-react";
 import { ButtonVariant } from "@/enums";
+import { useTranslations } from "next-intl";
 
 interface AlertDialogProps {
   isOpen: boolean;
@@ -39,6 +40,8 @@ const ActionDialog = ({
   confirmButtonIcon = <Trash2 />,
   confirmButtonLabel = "Delete",
 }: AlertDialogProps) => {
+  const t = useTranslations("Global");
+
   const performCancel = () => {
     if (cancelAction) {
       cancelAction();
@@ -62,7 +65,7 @@ const ActionDialog = ({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <ActionButton title="Cancel" onClick={performCancel} />
+          <ActionButton title={t("Button.Cancel")} onClick={performCancel} />
           <ActionButton
             icon={useConfirmButtonIcon ? confirmButtonIcon : null}
             title={confirmButtonLabel}

@@ -3,6 +3,7 @@ import HorizontalSeparator from "@/components/global/HorizontalSeparator";
 import PageHeader from "@/components/global/PageHeader";
 import { ButtonVariant } from "@/enums";
 import { ArrowLeft, Save } from "lucide-react";
+import { useTranslations } from "next-intl";
 import React from "react";
 import { useFormContext } from "react-hook-form";
 
@@ -11,6 +12,8 @@ interface CustomFormContext {
 }
 
 const NewGroupHeader = () => {
+  const t = useTranslations();
+
   const {
     formState: { isDirty, isSubmitting },
     handleSubmit,
@@ -19,7 +22,7 @@ const NewGroupHeader = () => {
 
   return (
     <PageHeader
-      title="New group"
+      title={t("Groups.General.NewGroupTitle")}
       icon="recipe_book"
       actionButton={
         <>
@@ -30,7 +33,7 @@ const NewGroupHeader = () => {
           />
           <HorizontalSeparator />
           <ActionButton
-            title="Save"
+            title={t("Global.Button.Save")}
             icon={<Save />}
             variant={ButtonVariant.Positive}
             onClick={() => handleSubmit}

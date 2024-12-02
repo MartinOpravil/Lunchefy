@@ -160,10 +160,7 @@ export const createGroup = mutation({
       coverImage: args.coverImage,
     });
     if (!newGroupId) {
-      return createBadResponse(
-        HttpResponseCode.InternalServerError,
-        "Group was not created - Not able to insert into database."
-      );
+      return createBadResponse(HttpResponseCode.InternalServerError);
     }
 
     const userGroupRelationship = await ctx.db.insert("userGroupRelationship", {
@@ -197,10 +194,7 @@ export const deleteGroup = mutation({
 
     const group = await ctx.db.get(args.id);
     if (!group) {
-      return createBadResponse(
-        HttpResponseCode.InternalServerError,
-        "Group was not deleted."
-      );
+      return createBadResponse(HttpResponseCode.InternalServerError);
     }
 
     // Delete image from storage
@@ -252,10 +246,7 @@ export const updateGroup = mutation({
 
     const group = await ctx.db.get(args.id);
     if (!group) {
-      return createBadResponse(
-        HttpResponseCode.NotFound,
-        "Cannot update because Group was not found"
-      );
+      return createBadResponse(HttpResponseCode.NotFound);
     }
 
     // Delete previous image if image changes
@@ -292,10 +283,7 @@ export const addAccessToGroup = mutation({
       .unique();
 
     if (!emailUserEntity) {
-      return createBadResponse(
-        HttpResponseCode.NotFound,
-        "Cannot add access to user that is not registered yet"
-      );
+      return createBadResponse(HttpResponseCode.NotFound);
     }
 
     const userGroupRelationshipList = await ctx.db
@@ -309,10 +297,7 @@ export const addAccessToGroup = mutation({
       .collect();
 
     if (userGroupRelationshipList.length) {
-      return createBadResponse(
-        HttpResponseCode.Conflict,
-        "User already has access to this group"
-      );
+      return createBadResponse(HttpResponseCode.Conflict);
     }
 
     const insertResult = await ctx.db.insert("userGroupRelationship", {
@@ -321,10 +306,7 @@ export const addAccessToGroup = mutation({
       privilage: args.privilage,
     });
     if (!insertResult)
-      return createBadResponse(
-        HttpResponseCode.InternalServerError,
-        "Error when trying to add access to database."
-      );
+      return createBadResponse(HttpResponseCode.InternalServerError);
 
     return createOKResponse({
       relationId: insertResult,
@@ -344,10 +326,7 @@ export const changeAccessToGroup = mutation({
     const relationship = await ctx.db.get(args.relationshipId);
 
     if (!relationship) {
-      return createBadResponse(
-        HttpResponseCode.Forbidden,
-        "User does not have access to this group yet."
-      );
+      return createBadResponse(HttpResponseCode.Forbidden);
     }
 
     await ctx.db.patch(relationship._id, {
@@ -369,10 +348,7 @@ export const revokeAccessToGroup = mutation({
     const relationship = await ctx.db.get(args.relationshipId);
 
     if (!relationship) {
-      return createBadResponse(
-        HttpResponseCode.Forbidden,
-        "User does not have access to this group yet."
-      );
+      return createBadResponse(HttpResponseCode.Forbidden);
     }
 
     await ctx.db.delete(args.relationshipId);

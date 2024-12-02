@@ -6,7 +6,7 @@ import GroupList from "@/components/groups/GroupList";
 import { Preloaded, useMutation, usePreloadedQuery } from "convex/react";
 import ActionButton from "@/components/global/ActionButton";
 import { Plus } from "lucide-react";
-import { ButtonVariant } from "@/enums";
+import { ButtonVariant, HttpResponseCode } from "@/enums";
 import { ImageInputHandle, ImageStateProps } from "@/types";
 import NewGroupHeader from "@/components/groups/header/NewGroupHeader";
 import FormProviderWrapper from "@/components/FormProviderWrapper";
@@ -14,12 +14,20 @@ import { groupFormSchema, GroupFormValues } from "@/constants/formSchema";
 import GroupForm from "@/components/groups/form/GroupForm";
 import { SubmitHandler } from "react-hook-form";
 import { notifyError, notifySuccess } from "@/lib/notifications";
+import { useTranslations } from "next-intl";
 
 interface GroupListPageProps {
   groupListPreloaded: Preloaded<typeof api.groups.getGroupList>;
+  userPreloaded: Preloaded<typeof api.users.getLoggedUser>;
 }
 
-const GroupListPage = ({ groupListPreloaded }: GroupListPageProps) => {
+const GroupListPage = ({
+  groupListPreloaded,
+  userPreloaded,
+}: GroupListPageProps) => {
+  const t = useTranslations();
+
+  const user = usePreloadedQuery(userPreloaded);
   const groupList = usePreloadedQuery(groupListPreloaded);
   const createGroup = useMutation(api.groups.createGroup);
   const [isNewFormOpen, setIsNewFormOpen] = useState(false);
@@ -37,20 +45,26 @@ const GroupListPage = ({ groupListPreloaded }: GroupListPageProps) => {
         description: values.description,
         coverImage: updatedImage ?? (values.coverImage as ImageStateProps),
       });
-
-      if (response.data) {
-        notifySuccess("Group successfully created.");
-        setIsNewFormOpen(false);
-        return;
+      if (!response.data) {
+        switch (response.status) {
+          case HttpResponseCode.InternalServerError:
+            return notifyError(
+              t("Groups.General.Notification.Error.Create500Database")
+            );
+          default:
+            return notifyError(t("Global.Notification.UnexpectedError"));
+        }
       }
-      notifyError(response.status.toString(), response.errorMessage);
+
+      notifySuccess(t("Groups.General.Notification.Success.Create"));
+      setIsNewFormOpen(false);
     } catch (error) {
-      console.log("Error creating group", error);
+      t("Groups.General.Notification.Error.Create");
     }
   };
 
   // New Form
-  if (isNewFormOpen) {
+  if (isNewFormOpen && user.data) {
     return (
       <FormProviderWrapper
         onSubmit={handleSubmit}
@@ -67,7 +81,7 @@ const GroupListPage = ({ groupListPreloaded }: GroupListPageProps) => {
         <main className="page">
           <NewGroupHeader />
           <main className="page-content">
-            <GroupForm />
+            <GroupForm isVerified={user.data.isVerified} />
           </main>
         </main>
       </FormProviderWrapper>
@@ -78,11 +92,11 @@ const GroupListPage = ({ groupListPreloaded }: GroupListPageProps) => {
   return (
     <main className="page">
       <PageHeader
-        title="Groups"
+        title={t("Groups.General.Title")}
         icon="recipe_book"
         actionButton={
           <ActionButton
-            title="New"
+            title={t("Global.Button.New")}
             icon={<Plus />}
             onClick={() => setIsNewFormOpen(true)}
             variant={ButtonVariant.Positive}

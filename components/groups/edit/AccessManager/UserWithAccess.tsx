@@ -7,6 +7,7 @@ import UserAccessForm from "./UserAccessForm";
 import { Pencil } from "lucide-react";
 import { Privilage } from "@/enums";
 import { GenericId } from "convex/values";
+import { useTranslations } from "next-intl";
 
 export interface UserWithAccessProps {
   name: string;
@@ -21,6 +22,7 @@ const UserWithAccess = ({
   privilage,
   relationshipId,
 }: UserWithAccessProps) => {
+  const t = useTranslations();
   const [isUserUpdateOpen, setIsUserUpdateOpen] = useState(false);
 
   return (
@@ -51,7 +53,7 @@ const UserWithAccess = ({
             height={20}
           />
         }
-        title="Change access for"
+        title={t("Groups.AccessManager.ChangeAccessTitle")}
         description={`${name} (${email})`}
         content={
           <UserAccessForm

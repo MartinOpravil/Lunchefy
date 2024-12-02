@@ -24,7 +24,7 @@ export function createOKResponse<T>(data: T) {
 }
 export function createBadResponse(
   status: HttpResponseCode,
-  errorMessage: string | null
+  errorMessage?: string | null
 ) {
-  return createResponse(null, status, errorMessage);
+  return createResponse(null, status, errorMessage ?? "");
 }

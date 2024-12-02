@@ -11,7 +11,7 @@ import RecipeSearchResults from "@/components/RecipeSearchResults";
 import { Input } from "@/components/ui/input";
 import { recipeFormSchema, RecipeFormValues } from "@/constants/formSchema";
 import { api } from "@/convex/_generated/api";
-import { ButtonVariant, Privilage } from "@/enums";
+import { ButtonVariant, HttpResponseCode, Privilage } from "@/enums";
 import { notifyError, notifySuccess } from "@/lib/notifications";
 import { ImageInputHandle, ImageStateProps } from "@/types";
 import {
@@ -28,27 +28,32 @@ import NoContent from "@/components/global/NoContent";
 import Recipe from "@/components/recipes/Recipe";
 import { RECIPES_INITIAL_COUNT } from "@/constants/pagination";
 import MultipleSelector, { Option } from "@/components/ui/multiple-selector";
-import { TagManager } from "@/lib/tags";
 import RecipeSearchInput from "@/components/RecipeSearchInput";
 import { useTranslations } from "next-intl";
+import { useTagManager } from "@/components/recipes/TagManager";
 
 interface GroupPageProps {
+  userPreloaded: Preloaded<typeof api.users.getLoggedUser>;
   groupPreloaded: Preloaded<typeof api.groups.getGroupById>;
   recipesPreloaded: Preloaded<typeof api.recipes.getRecipes>;
   todayRecipePreload: Preloaded<typeof api.planner.getTodayRecipe>;
 }
 
 const GroupPage = ({
+  userPreloaded,
   groupPreloaded,
   recipesPreloaded,
   todayRecipePreload,
 }: GroupPageProps) => {
-  const t = useTranslations("HomePage");
+  const t = useTranslations();
 
+  const user = usePreloadedQuery(userPreloaded);
   const group = usePreloadedQuery(groupPreloaded);
   const initialRecipes = usePreloadedQuery(recipesPreloaded);
   const createRecipe = useMutation(api.recipes.createRecipe);
   const todayRecipe = usePreloadedQuery(todayRecipePreload);
+
+  const { convertToValues } = useTagManager();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [searchTags, setSearchTags] = useState<Option[]>([]);
@@ -70,9 +75,11 @@ const GroupPage = ({
   const handleSubmit: SubmitHandler<RecipeFormValues> = async (
     values: RecipeFormValues
   ) => {
-    console.log("Should trigger submit");
     if (!group.data?._id) {
-      notifyError("Error when creating recipe", "GroupId is empty");
+      notifyError(
+        t("Recipes.General.Notification.Error.Create"),
+        "GroupId is empty"
+      );
       return;
     }
 
@@ -89,17 +96,27 @@ const GroupPage = ({
         recipeImage:
           updatedRecipePhotoImage ?? (values.recipeImage as ImageStateProps),
         isImageRecipe: values.isImageRecipe,
-        tags: values.tags ? TagManager.convertToValues(values.tags) : undefined,
+        tags: values.tags ? convertToValues(values.tags) : undefined,
       });
 
-      if (response.data) {
-        notifySuccess("Group successfully created.");
-        setIsNewFormOpen(false);
-        return;
+      if (!response.data) {
+        switch (response.status) {
+          case HttpResponseCode.InternalServerError:
+            return notifyError(
+              t("Recipes.General.Notification.Error.Create500")
+            );
+          default:
+            return notifyError(t("Global.Notification.UnexpectedError"));
+        }
       }
-      notifyError(response.status.toString(), response.errorMessage);
+
+      notifySuccess(t("Recipes.General.Notification.Success.Create"));
+      setIsNewFormOpen(false);
     } catch (error) {
-      notifyError("Error creating group", error?.toString());
+      notifyError(
+        t("Recipes.General.Notification.Error.Create"),
+        error?.toString()
+      );
     }
   };
 
@@ -107,7 +124,7 @@ const GroupPage = ({
     return <></>;
   }
 
-  if (isNewFormOpen) {
+  if (isNewFormOpen && user.data) {
     return (
       <FormProviderWrapper
         onSubmit={handleSubmit}
@@ -130,7 +147,7 @@ const GroupPage = ({
         <main className="page">
           <NewRecipeHeader />
           <main className="page-content">
-            <RecipeForm />
+            <RecipeForm isVerified={user.data.isVerified} />
           </main>
         </main>
       </FormProviderWrapper>
@@ -139,7 +156,6 @@ const GroupPage = ({
 
   return (
     <main className="page pb-8">
-      <div>{t("title")}</div>
       <PageHeader
         title={group.data.name}
         icon="recipe_book"
@@ -157,11 +173,13 @@ const GroupPage = ({
                 href={`/app/${group.data._id}/planner`}
               />
               <div className="text-white-1 pr-2">
-                <div className="text-12">Today</div>
+                <div className="text-12">
+                  {t("Groups.Planner.Button.Today")}
+                </div>
                 <div>
                   {todayRecipe.data?.length
                     ? todayRecipe.data[0].name
-                    : "No recipe"}
+                    : t("Groups.Planner.TodayNoRecipe")}
                 </div>
               </div>
             </div>
@@ -173,7 +191,7 @@ const GroupPage = ({
             {group.data.privilage !== Privilage.Viewer && (
               <>
                 <ActionButton
-                  title="New"
+                  title={t("Global.Button.New")}
                   icon={<Plus />}
                   onClick={() => setIsNewFormOpen(true)}
                   variant={ButtonVariant.Positive}
@@ -194,27 +212,6 @@ const GroupPage = ({
               searchTags={searchTags}
               setSearchTags={setSearchTags}
             />
-
-            {/* <div className="w-full flex flex-col gap-4 justify-start items-start sm:flex-row sm:items-start">
-            <div className="flex gap-1 bg-accent p-2 rounded-lg text-white-1">
-              <Search color="white" />
-              Search:
-            </div>
-            <Input
-              className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
-              placeholder="Recipe name"
-              type="text"
-              value={searchTerm}
-              onChange={handleInputChange}
-            />
-            <MultipleSelector
-              className="input-class border-2 border-accent focus-visible:ring-secondary transition"
-              defaultOptions={TagManager.getTagOptions()}
-              placeholder="Tags"
-              value={searchTags}
-              onChange={setSearchTags}
-            />
-          </div> */}
           </>
         )}
 
@@ -222,7 +219,7 @@ const GroupPage = ({
           <RecipeSearchResults
             groupId={group.data._id}
             searchTerm={searchTerm}
-            searchTags={TagManager.convertToValues(searchTags)}
+            searchTags={convertToValues(searchTags)}
             privilage={group.data.privilage}
           />
         ) : (

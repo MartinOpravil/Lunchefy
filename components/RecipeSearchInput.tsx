@@ -4,7 +4,6 @@ import React, { Dispatch, SetStateAction, useCallback, useState } from "react";
 import MultipleSelector, { Option } from "./ui/multiple-selector";
 import { Input } from "./ui/input";
 import { debounce } from "lodash";
-import { TagManager } from "@/lib/tags";
 import { getGroupById } from "@/convex/groups";
 import {
   Select,
@@ -13,6 +12,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import { useTranslations } from "next-intl";
+import { useTagManager } from "./recipes/TagManager";
 
 enum SearchBy {
   Name = "name",
@@ -43,6 +44,10 @@ const RecipeSearchInput = ({
   searchTags,
   setSearchTags,
 }: RecipeFilterProps) => {
+  const t = useTranslations();
+
+  const { tagOptions } = useTagManager();
+
   const [internalSearchTerm, setInternalSearchTerm] = useState(searchTerm);
   const [searchBy, setSearchBy] = useState<SearchBy>(SearchBy.Name);
 
@@ -76,20 +81,17 @@ const RecipeSearchInput = ({
         <div className="flex flex-shrink min-w-60">
           <Select value={searchBy} onValueChange={handleSearchByChange}>
             <SelectTrigger className="input-class h-full border-2 border-accent focus-visible:ring-secondary transition-all">
-              <SelectValue
-                className="placehold:text-secondary"
-                placeholder="Select a privilage"
-              />
+              <SelectValue className="placeholder:text-secondary" />
             </SelectTrigger>
             <SelectContent className="bg-background">
               <SelectItem value={SearchBy.Name}>
                 <div className="flex gap-2">
-                  <PencilLine /> Name
+                  <PencilLine /> {t("Recipes.SearchInput.SortBy.Name")}
                 </div>
               </SelectItem>
               <SelectItem value={SearchBy.Tags}>
                 <div className="flex gap-2">
-                  <Tags /> Tags
+                  <Tags /> {t("Recipes.SearchInput.SortBy.Tags")}
                 </div>
               </SelectItem>
             </SelectContent>
@@ -99,7 +101,7 @@ const RecipeSearchInput = ({
           {searchBy === SearchBy.Name && (
             <Input
               className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
-              placeholder="Search by recipe name"
+              placeholder={t("Recipes.SearchInput.Placeholder.Name")}
               type="text"
               value={internalSearchTerm}
               onChange={handleInputChange}
@@ -108,8 +110,8 @@ const RecipeSearchInput = ({
           {searchBy === SearchBy.Tags && (
             <MultipleSelector
               className="input-class border-2 border-accent focus-visible:ring-secondary transition"
-              defaultOptions={TagManager.getTagOptions()}
-              placeholder="Search by tags"
+              options={tagOptions}
+              placeholder={t("Recipes.SearchInput.Placeholder.Tags")}
               value={searchTags}
               onChange={setSearchTags}
             />

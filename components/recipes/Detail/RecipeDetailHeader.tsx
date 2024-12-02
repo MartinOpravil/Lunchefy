@@ -7,12 +7,14 @@ import React from "react";
 import DeleteRecipeButton from "../DeleteRecipeButton";
 import { ArrowLeft, Book, Save } from "lucide-react";
 import { useFormContext } from "react-hook-form";
+import { useTranslations } from "next-intl";
 
 interface RecipeDetailHeaderProps {
   recipe: Awaited<ReturnType<typeof getRecipeById>>;
 }
 
 const RecipeDetailHeader = ({ recipe }: RecipeDetailHeaderProps) => {
+  const t = useTranslations();
   const {
     formState: { isDirty, isSubmitting },
     handleSubmit,
@@ -46,7 +48,7 @@ const RecipeDetailHeader = ({ recipe }: RecipeDetailHeaderProps) => {
             href={`/app/${recipe.data.groupId}/${recipe.data._id}`}
           />
           <ActionButton
-            title="Save"
+            title={t("Global.Button.Save")}
             icon={<Save />}
             variant={ButtonVariant.Positive}
             isDisabled={!isDirty}

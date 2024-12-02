@@ -15,6 +15,7 @@ const GroupServerPage = async ({
   params: { groupId },
 }: GroupServerPageProps) => {
   const token = await getAuthToken();
+  const userPreloadPromise = preloadQuery(api.users.getLoggedUser);
   const groupPreloadPromise = preloadQuery(
     api.groups.getGroupById,
     {
@@ -41,16 +42,19 @@ const GroupServerPage = async ({
     { token }
   );
 
-  const [groupPreload, recipesPreload, todayRecipePreload] = await Promise.all([
-    groupPreloadPromise,
-    recipesPreloadPromise,
-    todayRecipePreloadPromise,
-  ]);
+  const [userPreload, groupPreload, recipesPreload, todayRecipePreload] =
+    await Promise.all([
+      userPreloadPromise,
+      groupPreloadPromise,
+      recipesPreloadPromise,
+      todayRecipePreloadPromise,
+    ]);
 
   return (
     <>
       <ErrorHandlerPreloaded preloadedData={groupPreload} />
       <GroupPage
+        userPreloaded={userPreload}
         groupPreloaded={groupPreload}
         recipesPreloaded={recipesPreload}
         todayRecipePreload={todayRecipePreload}

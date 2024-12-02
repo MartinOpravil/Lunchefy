@@ -13,6 +13,7 @@ const GroupEditServerPage = async ({
   params: { groupId },
 }: GroupEditServerPageProps) => {
   const token = await getAuthToken();
+  const userPreload = await preloadQuery(api.users.getLoggedUser);
   const groupPreload = await preloadQuery(
     api.groups.getGroupById,
     {
@@ -22,7 +23,9 @@ const GroupEditServerPage = async ({
     { token }
   );
 
-  return <GroupEditPage groupPreloaded={groupPreload} />;
+  return (
+    <GroupEditPage groupPreloaded={groupPreload} userPreloaded={userPreload} />
+  );
 };
 
 export default GroupEditServerPage;

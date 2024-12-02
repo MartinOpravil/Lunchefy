@@ -19,10 +19,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FileImage, FileText, Image as ImageLucide, Text } from "lucide-react";
 import { AutosizeTextarea } from "@/components/ui/autosize-textarea";
 import MultipleSelector from "@/components/ui/multiple-selector";
-import { TagManager } from "@/lib/tags";
+import { useTranslations } from "next-intl";
+import { useTagManager } from "../TagManager";
 
 interface RecipeDetailHeaderProps {
   recipe?: Awaited<ReturnType<typeof getRecipeById>>;
+  isVerified: boolean;
 }
 
 interface CustomFormContext {
@@ -30,10 +32,12 @@ interface CustomFormContext {
   recipeImageRef?: React.RefObject<ImageInputHandle>;
 }
 
-const RecipeForm = ({ recipe }: RecipeDetailHeaderProps) => {
+const RecipeForm = ({ recipe, isVerified }: RecipeDetailHeaderProps) => {
+  const t = useTranslations();
   const { register, setValue, coverImageRef, recipeImageRef } =
     useFormContext() as ReturnType<typeof useFormContext> & CustomFormContext;
 
+  const { tagOptions } = useTagManager();
   // if (!recipe || !recipe.data) return <></>;
 
   return (
@@ -57,12 +61,12 @@ const RecipeForm = ({ recipe }: RecipeDetailHeaderProps) => {
                 render={({ field }) => (
                   <FormItem className="flex flex-col gap-1">
                     <FormLabel className="text-16 font-bold text-accent">
-                      Name*
+                      {t("Recipes.General.Form.Property.Name")}*
                     </FormLabel>
                     <FormControl>
                       <Input
                         className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
-                        placeholder="Recipe name"
+                        placeholder={t("Recipes.General.Form.Placeholder.Name")}
                         {...field}
                       />
                     </FormControl>
@@ -75,20 +79,17 @@ const RecipeForm = ({ recipe }: RecipeDetailHeaderProps) => {
                 render={({ field }) => (
                   <FormItem className="flex flex-col gap-1">
                     <FormLabel className="text-16 font-bold text-accent">
-                      Description
+                      {t("Recipes.General.Form.Property.Description")}
                     </FormLabel>
                     <FormControl>
                       <AutosizeTextarea
                         className="input-class border-2 border-accent focus-visible:ring-secondary transition"
-                        placeholder="Optional recipe description"
+                        placeholder={t(
+                          "Recipes.General.Form.Placeholder.Description"
+                        )}
                         {...field}
                         maxHeight={200}
                       />
-                      {/* <Textarea
-                        className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
-                        placeholder="Optional recipe book description"
-                        {...field}
-                      /> */}
                     </FormControl>
                     <FormMessage className="text-primary" />
                   </FormItem>
@@ -101,12 +102,13 @@ const RecipeForm = ({ recipe }: RecipeDetailHeaderProps) => {
                 {...{ ...register("coverImage"), ref: null }}
                 render={({ field }) => (
                   <ImageInput
+                    label={t("Recipes.General.Form.Property.CoverImage")}
                     image={field.value}
                     setImage={(newImage) => {
                       field.onChange(newImage);
                     }}
                     ref={coverImageRef}
-                    isVerified={recipe?.data?.isVerified}
+                    isVerified={isVerified}
                   />
                 )}
               />
@@ -117,13 +119,13 @@ const RecipeForm = ({ recipe }: RecipeDetailHeaderProps) => {
             render={({ field }) => (
               <FormItem className="flex flex-col gap-1">
                 <FormLabel className="text-16 font-bold text-accent">
-                  Tags
+                  {t("Recipes.General.Form.Property.Tags")}
                 </FormLabel>
                 <FormControl>
                   <MultipleSelector
                     className="input-class border-2 border-accent focus-visible:ring-secondary transition"
-                    defaultOptions={TagManager.getTagOptions()}
-                    placeholder="Select tags that match this recipe"
+                    options={tagOptions}
+                    placeholder={t("Recipes.General.Form.Placeholder.Tags")}
                     {...field}
                   />
                 </FormControl>
@@ -146,7 +148,7 @@ const RecipeForm = ({ recipe }: RecipeDetailHeaderProps) => {
               }
             >
               <FileText />
-              Use Text
+              {t("Recipes.General.Form.Property.UseText")}
             </TabsTrigger>
             <TabsTrigger
               value="true"
@@ -156,7 +158,7 @@ const RecipeForm = ({ recipe }: RecipeDetailHeaderProps) => {
               }
             >
               <FileImage />
-              Use Image
+              {t("Recipes.General.Form.Property.UseImage")}
             </TabsTrigger>
           </TabsList>
 
@@ -164,8 +166,7 @@ const RecipeForm = ({ recipe }: RecipeDetailHeaderProps) => {
             <div className="flex flex-col gap-[30px]">
               {recipe?.data?.recipeImage && (
                 <div className="text-12 text-primary text-center">
-                  Keep in mind that using text will permanently delete
-                  previously uploaded image!
+                  {t("Recipes.General.ImageDeletionDisclaimer")}
                 </div>
               )}
               <FormField
@@ -173,7 +174,7 @@ const RecipeForm = ({ recipe }: RecipeDetailHeaderProps) => {
                 render={({ field }) => (
                   <FormItem className="flex flex-col gap-1">
                     <FormLabel className="text-16 font-bold text-accent">
-                      Ingredients
+                      {t("Recipes.General.Form.Property.Ingredients")}
                     </FormLabel>
                     <FormControl>
                       <Editor name={field.name} value={field.value} />
@@ -187,7 +188,7 @@ const RecipeForm = ({ recipe }: RecipeDetailHeaderProps) => {
                 render={({ field }) => (
                   <FormItem className="flex flex-col gap-1">
                     <FormLabel className="text-16 font-bold text-accent">
-                      Instructions
+                      {t("Recipes.General.Form.Property.Instructions")}
                     </FormLabel>
                     <FormControl>
                       <Editor name={field.name} value={field.value} />
@@ -203,13 +204,13 @@ const RecipeForm = ({ recipe }: RecipeDetailHeaderProps) => {
               {...{ ...register("recipeImage"), ref: null }}
               render={({ field }) => (
                 <ImageInput
-                  label="Recipe image"
+                  label={t("Recipes.General.Form.Property.RecipeImage")}
                   image={field.value}
                   setImage={(newImage) => {
                     field.onChange(newImage);
                   }}
                   ref={recipeImageRef}
-                  isVerified={recipe?.data?.isVerified}
+                  isVerified={isVerified}
                 />
               )}
             />

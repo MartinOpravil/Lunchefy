@@ -3,24 +3,35 @@ import FormProviderWrapper from "@/components/FormProviderWrapper";
 import ErrorHandler from "@/components/global/ErrorHandler";
 import RecipeDetailHeader from "@/components/recipes/Detail/RecipeDetailHeader";
 import RecipeForm from "@/components/recipes/Form/RecipeForm";
+import { useTagManager } from "@/components/recipes/TagManager";
 import { recipeFormSchema, RecipeFormValues } from "@/constants/formSchema";
 import { api } from "@/convex/_generated/api";
+import { HttpResponseCode } from "@/enums";
 import { notifyError, notifySuccess } from "@/lib/notifications";
-import { TagManager } from "@/lib/tags";
 import { ImageInputHandle, ImageStateProps } from "@/types";
 import { Preloaded, useMutation, usePreloadedQuery } from "convex/react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import React, { useRef, useState } from "react";
 import { SubmitHandler } from "react-hook-form";
 
 interface RecipeDetailPageProps {
+  userPreload: Preloaded<typeof api.users.getLoggedUser>;
   recipePreloaded: Preloaded<typeof api.recipes.getRecipeById>;
 }
 
-const RecipeDetailPage = ({ recipePreloaded }: RecipeDetailPageProps) => {
+const RecipeDetailPage = ({
+  userPreload,
+  recipePreloaded,
+}: RecipeDetailPageProps) => {
+  const t = useTranslations();
   const router = useRouter();
+
+  const user = usePreloadedQuery(userPreload);
   const recipe = usePreloadedQuery(recipePreloaded);
   const updateRecipe = useMutation(api.recipes.updateRecipe);
+
+  const { convertToTags, convertToValues } = useTagManager();
 
   const [isFormDirty, setIsFormDirty] = useState(false);
   const [resetForm, setResetForm] = useState<(() => void) | null>(null);
@@ -45,18 +56,28 @@ const RecipeDetailPage = ({ recipePreloaded }: RecipeDetailPageProps) => {
         recipeImage:
           updatedRecipePhotoImage ?? (values.recipeImage as ImageStateProps),
         isImageRecipe: values.isImageRecipe,
-        tags: values.tags ? TagManager.convertToValues(values.tags) : undefined,
+        tags: values.tags ? convertToValues(values.tags) : undefined,
       });
-
-      if (!response.data)
-        return notifyError(response.status.toString(), response.errorMessage);
-      notifySuccess("Successfully updated recipe");
+      if (!response.data) {
+        switch (response.status) {
+          case HttpResponseCode.NotFound:
+            return notifyError(
+              t("Recipes.General.Notification.Error.Update404")
+            );
+          default:
+            return notifyError(t("Global.Notification.UnexpectedError"));
+        }
+      }
+      notifySuccess(t("Recipes.General.Notification.Success.Update"));
 
       // router.push(`/app/${recipe.data.recipeBookId}/${recipe.data._id}`);
       if (resetForm) resetForm();
       router.refresh();
     } catch (error) {
-      notifyError("Error updating recipe", error?.toString());
+      notifyError(
+        t("Recipes.General.Notification.Error.Update"),
+        error?.toString()
+      );
     }
   };
 
@@ -70,9 +91,7 @@ const RecipeDetailPage = ({ recipePreloaded }: RecipeDetailPageProps) => {
         description: recipe.data?.description,
         ingredients: recipe.data?.ingredients,
         coverImage: recipe.data?.coverImage,
-        tags: recipe.data?.tags
-          ? TagManager.convertToTags(recipe.data.tags)
-          : undefined,
+        tags: recipe.data?.tags ? convertToTags(recipe.data.tags) : undefined,
         recipeImage: recipe.data?.recipeImage,
         isImageRecipe: recipe.data?.isImageRecipe,
       }}
@@ -85,7 +104,9 @@ const RecipeDetailPage = ({ recipePreloaded }: RecipeDetailPageProps) => {
         <RecipeDetailHeader recipe={recipe} />
         <main className="page-content">
           <ErrorHandler convexResponse={recipe} />
-          <RecipeForm recipe={recipe} />
+          {user.data && (
+            <RecipeForm recipe={recipe} isVerified={user.data.isVerified} />
+          )}
         </main>
       </main>
     </FormProviderWrapper>

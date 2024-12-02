@@ -9,7 +9,8 @@ import { cn } from "@/lib/utils";
 import { GenericId } from "convex/values";
 import { ClassListProp } from "@/types";
 import { Trash2 } from "lucide-react";
-import { ButtonVariant } from "@/enums";
+import { ButtonVariant, HttpResponseCode } from "@/enums";
+import { useTranslations } from "next-intl";
 
 export interface DeleteGroupButtonProps extends ClassListProp {
   groupId: GenericId<"groups">;
@@ -23,6 +24,7 @@ const DeleteGroupButton = ({
   redirectAfterDelete = false,
   classList,
 }: DeleteGroupButtonProps) => {
+  const t = useTranslations();
   const router = useRouter();
   const [isDeleting, setIsDeleting] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -42,12 +44,21 @@ const DeleteGroupButton = ({
     try {
       const response = await deleteGroup({ id: groupId });
       setIsDeleting(false);
-      if (!response.data)
-        return notifyError(response.status.toString(), response.errorMessage);
-      notifySuccess("Successfully deleted group");
+      if (!response.data) {
+        switch (response.status) {
+          case HttpResponseCode.InternalServerError:
+            return notifyError(
+              t("Groups.General.Notification.Error.Delete500")
+            );
+          default:
+            return notifyError(t("Global.Notification.UnexpectedError"));
+        }
+      }
+      notifySuccess(t("Groups.General.Notification.Success.Delete"));
       if (redirectAfterDelete) router.push("/app");
     } catch (error) {
-      console.error("Error deleting group", error);
+      console.error(t("Groups.General.Notification.Error.Delete500"), error);
+      notifyError(t("Groups.General.Notification.Error.Delete500"));
       setIsDeleting(false);
     }
   };
@@ -64,10 +75,11 @@ const DeleteGroupButton = ({
       <ActionDialog
         isOpen={isDialogOpen}
         setIsOpen={setIsDialogOpen}
-        title="Are you absolutely sure want to delete?"
-        description="This action cannot be undone and will permanently delete group from our servers."
+        title={t("Groups.General.Action.Delete.Title")}
+        description={t("Groups.General.Action.Delete.Disclaimer")}
         subject={groupTitle}
         confirmAction={handleDeleteGroup}
+        confirmButtonLabel={t("Global.Button.Delete")}
       />
     </>
   );

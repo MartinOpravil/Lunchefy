@@ -14,6 +14,7 @@ import { z, ZodSchema } from "zod";
 import { ImageInputHandle } from "@/types";
 import ActionDialog from "./global/ActionDialog";
 import { usePathname, useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 interface FormContextProps<T extends FieldValues> extends UseFormReturn<T> {
   coverImageRef: Ref<ImageInputHandle>;
@@ -46,6 +47,7 @@ const FormProviderWrapper = <T extends FieldValues>({
   recipeImageRef,
   manualLeaveAction,
 }: FormProviderWrapperProps<T>) => {
+  const t = useTranslations();
   const router = useRouter();
   const currentPath = usePathname();
 
@@ -137,9 +139,9 @@ const FormProviderWrapper = <T extends FieldValues>({
         setIsOpen={setIsModalOpen}
         cancelAction={handleCancel}
         confirmAction={handleContinue}
-        title="Unsaved changes present"
-        description="By proceeding your unsaved changes will be lost. Do you still want to continue?"
-        confirmButtonLabel="Continue"
+        title={t("Global.UnsavedChangesDialog.Title")}
+        description={t("Global.UnsavedChangesDialog.Disclaimer")}
+        confirmButtonLabel={t("Global.Button.Continue")}
         useConfirmButtonIcon={false}
       />
       <FormStateWatcher onFormStateChange={onFormStateChange} />

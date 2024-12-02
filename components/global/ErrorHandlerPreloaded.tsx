@@ -6,6 +6,7 @@ import { HttpResponseCode } from "@/enums";
 import Image from "next/image";
 import LinkButton from "./LinkButton";
 import { ConvexResponse } from "@/lib/communication";
+import { useTranslations } from "next-intl";
 
 interface ErrorHandlerPreloadedProps {
   preloadedData: Preloaded<FunctionReference<"query">>; // Preloaded query data type
@@ -14,6 +15,7 @@ interface ErrorHandlerPreloadedProps {
 const ErrorHandlerPreloaded = ({
   preloadedData,
 }: ErrorHandlerPreloadedProps) => {
+  const t = useTranslations("Global");
   const response = usePreloadedQuery(preloadedData) as ConvexResponse<null>;
 
   const { title, image } = useMemo(() => {
@@ -22,11 +24,11 @@ const ErrorHandlerPreloaded = ({
 
     switch (response.status) {
       case HttpResponseCode.NotFound:
-        title = "Content does not exists.";
+        title = t("Validation.NoContent");
         image = "no_content";
         break;
       case HttpResponseCode.Forbidden:
-        title = "You don't have a permission to see this content.";
+        title = t("Validation.NoPermission");
         image = "no_access";
         break;
       default:
@@ -37,7 +39,7 @@ const ErrorHandlerPreloaded = ({
       title,
       image,
     };
-  }, [response.status]);
+  }, [response.status, t]);
 
   if (response.data) {
     return <></>;

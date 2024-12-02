@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { GenericId } from "convex/values";
 import { Trash2 } from "lucide-react";
 import { ButtonVariant } from "@/enums";
+import { useTranslations } from "next-intl";
 
 export interface DeleteRecipeButtonProps extends ClassListProp {
   recipeId: GenericId<"recipes">;
@@ -25,6 +26,7 @@ const DeleteRecipeButton = ({
   redirectAfterDelete = false,
   classList,
 }: DeleteRecipeButtonProps) => {
+  const t = useTranslations();
   const router = useRouter();
   const [isDeleting, setIsDeleting] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -46,11 +48,12 @@ const DeleteRecipeButton = ({
       const response = await deleteRecipe({ recipeId });
       setIsDeleting(false);
       if (!response.data)
-        return notifyError(response.status.toString(), response.errorMessage);
-      notifySuccess("Successfully deleted group");
+        return notifyError(t("Recipes.General.Notification.Error.Delete500"));
+
+      notifySuccess(t("Recipes.General.Notification.Success.Delete"));
       setIsDialogOpen(false);
     } catch (error) {
-      console.error("Error deleting group", error);
+      notifyError(t("Recipes.General.Notification.Error.Delete500"));
       setIsDeleting(false);
     }
   };
@@ -67,10 +70,11 @@ const DeleteRecipeButton = ({
       <ActionDialog
         isOpen={isDialogOpen}
         setIsOpen={setIsDialogOpen}
-        title="Are you absolutely sure want to delete?"
-        description="This action cannot be undone and will permanently delete your recipe from our servers."
+        title={t("Recipes.General.Action.Delete.Title")}
+        description={t("Recipes.General.Action.Delete.Disclaimer")}
         subject={recipeTitle}
         confirmAction={handleDeleteRecipe}
+        confirmButtonLabel={t("Global.Button.Delete")}
       />
     </>
   );

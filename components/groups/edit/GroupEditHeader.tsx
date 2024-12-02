@@ -12,12 +12,14 @@ import { getGroupById } from "@/convex/groups";
 import { ArrowLeft, Book, Save, Share2 } from "lucide-react";
 import HorizontalSeparator from "@/components/global/HorizontalSeparator";
 import { useFormContext } from "react-hook-form";
+import { useTranslations } from "next-intl";
 
 interface GroupEditHeaderProps {
   group: Awaited<ReturnType<typeof getGroupById>>;
 }
 
 const GroupEditHeader = ({ group }: GroupEditHeaderProps) => {
+  const t = useTranslations();
   const {
     formState: { isDirty, isSubmitting },
     handleSubmit,
@@ -55,7 +57,7 @@ const GroupEditHeader = ({ group }: GroupEditHeaderProps) => {
                   }}
                 />
                 <ActionButton
-                  title="Save"
+                  title={t("Global.Button.Save")}
                   icon={<Save />}
                   variant={ButtonVariant.Positive}
                   onClick={() => handleSubmit}
@@ -78,8 +80,8 @@ const GroupEditHeader = ({ group }: GroupEditHeaderProps) => {
             height={20}
           />
         }
-        title="Access manager"
-        description="Grant access for your family members or friends."
+        title={t("Groups.AccessManager.Title")}
+        description={t("Groups.AccessManager.Description")}
         content={
           <AccessManager groupName={group.data.name} groupId={group.data._id} />
         }

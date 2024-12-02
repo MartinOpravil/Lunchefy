@@ -16,16 +16,19 @@ import PrivilageBadge from "@/components/users/PrivilageBadge";
 import { getGroupById } from "@/convex/groups";
 import { Textarea } from "@/components/ui/textarea";
 import { AutosizeTextarea } from "@/components/ui/autosize-textarea";
+import { useTranslations } from "next-intl";
 
 interface GroupFormProps {
   group?: Awaited<ReturnType<typeof getGroupById>>;
+  isVerified: boolean;
 }
 
 interface CustomFormContext {
   coverImageRef: React.RefObject<ImageInputHandle>;
 }
 
-const GroupForm = ({ group }: GroupFormProps) => {
+const GroupForm = ({ group, isVerified = false }: GroupFormProps) => {
+  const t = useTranslations("Groups");
   const { register, coverImageRef } = useFormContext() as ReturnType<
     typeof useFormContext
   > &
@@ -44,12 +47,12 @@ const GroupForm = ({ group }: GroupFormProps) => {
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
               <FormLabel className="text-16 font-bold text-accent">
-                Name*
+                {t("General.Form.Property.Name")}*
               </FormLabel>
               <FormControl>
                 <Input
                   className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
-                  placeholder="Group name"
+                  placeholder={t("General.Form.Placeholder.Name")}
                   {...field}
                 />
               </FormControl>
@@ -62,20 +65,15 @@ const GroupForm = ({ group }: GroupFormProps) => {
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
               <FormLabel className="text-16 font-bold text-accent">
-                Description
+                {t("General.Form.Property.Description")}
               </FormLabel>
               <FormControl>
                 <AutosizeTextarea
                   className="input-class border-2 border-accent focus-visible:ring-secondary transition"
-                  placeholder="Optional group description"
+                  placeholder={t("General.Form.Placeholder.Description")}
                   {...field}
                   maxHeight={200}
                 />
-                {/* <Textarea
-                  className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
-                  placeholder="Optional recipe book description"
-                  {...field}
-                /> */}
               </FormControl>
               <FormMessage className="text-primary" />
             </FormItem>
@@ -86,12 +84,13 @@ const GroupForm = ({ group }: GroupFormProps) => {
         {...{ ...register("coverImage"), ref: null }}
         render={({ field }) => (
           <ImageInput
+            label={t("General.Form.Property.CoverImage")}
             image={field.value}
             setImage={(newImage) => {
               field.onChange(newImage);
             }}
             ref={coverImageRef}
-            isVerified={group?.data?.isVerified}
+            isVerified={isVerified}
           />
         )}
       />

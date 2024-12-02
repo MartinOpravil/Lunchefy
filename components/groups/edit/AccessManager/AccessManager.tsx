@@ -28,10 +28,11 @@ import LoaderSpinner from "@/components/global/LoaderSpinner";
 import PrivilageBadge from "@/components/users/PrivilageBadge";
 import BasicDialog from "@/components/global/BasicDialog";
 import UserWithAccess from "./UserWithAccess";
-import { Privilage } from "@/enums";
+import { HttpResponseCode, Privilage } from "@/enums";
 import { notifyError, notifySuccess } from "@/lib/notifications";
 import { Share2 } from "lucide-react";
 import { GenericId } from "convex/values";
+import { useTranslations } from "next-intl";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -48,6 +49,7 @@ export interface AccessManagerProps {
 }
 
 const AccessManager = ({ groupName, groupId }: AccessManagerProps) => {
+  const t = useTranslations();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const addAccessToGroup = useMutation(api.groups.addAccessToGroup);
@@ -75,11 +77,31 @@ const AccessManager = ({ groupName, groupId }: AccessManagerProps) => {
       setIsSubmitting(false);
       if (!result.data)
         return notifyError(result.status.toString(), result.errorMessage);
+      if (!result.data) {
+        switch (result.status) {
+          case HttpResponseCode.NotFound:
+            return notifyError(
+              t("Groups.AccessManager.Notification.Error.Create404")
+            );
+          case HttpResponseCode.Conflict:
+            return notifyError(
+              t("Groups.AccessManager.Notification.Error.Create409")
+            );
+          case HttpResponseCode.InternalServerError:
+            return notifyError(
+              t("Groups.AccessManager.Notification.Error.Create500")
+            );
+          default:
+            return notifyError(t("Global.Notification.UnexpectedError"));
+        }
+      }
 
       setIsFormOpen(false);
       notifySuccess(
-        "Access granted to:",
-        `${values.email} (${values.privilage})`
+        t("Groups.AccessManager.Notification.Success.Create", {
+          email: values.email,
+          privilage: values.privilage,
+        })
       );
       form.setValue("email", "");
       form.setValue("privilage", "");
@@ -95,7 +117,7 @@ const AccessManager = ({ groupName, groupId }: AccessManagerProps) => {
         <>
           <div className="flex flex-col">
             <ActionButton
-              title="Share with user"
+              title={t("Groups.AccessManager.Button.Share")}
               icon={<Share2 />}
               isLoading={isSubmitting}
               classList="min-w-32"
@@ -106,7 +128,9 @@ const AccessManager = ({ groupName, groupId }: AccessManagerProps) => {
             <>
               {!!groupSharedUsersData.length && (
                 <div className="access-manager-list pt-6 w-full">
-                  <h3 className="text-16 text-accent">Users with access:</h3>
+                  <h3 className="text-16 text-accent">
+                    {t("Groups.AccessManager.ListTitle")}
+                  </h3>
 
                   {groupSharedUsersData.map((user, index) => (
                     <UserWithAccess
@@ -140,12 +164,14 @@ const AccessManager = ({ groupName, groupId }: AccessManagerProps) => {
                   render={({ field }) => (
                     <FormItem className="flex flex-col gap-1">
                       <FormLabel className="text-16 font-bold text-accent">
-                        Email
+                        {t("Groups.AccessManager.Form.Property.Email")}
                       </FormLabel>
                       <FormControl>
                         <Input
                           className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
-                          placeholder={`Email to share "${groupName}" with`}
+                          placeholder={t(
+                            "Groups.AccessManager.Form.Placeholder.Email"
+                          )}
                           {...field}
                         />
                       </FormControl>
@@ -159,7 +185,7 @@ const AccessManager = ({ groupName, groupId }: AccessManagerProps) => {
                   render={({ field }) => (
                     <FormItem className="flex flex-col gap-1">
                       <FormLabel className="text-16 font-bold text-accent">
-                        Privilage
+                        {t("Groups.AccessManager.Form.Property.Privilage")}
                       </FormLabel>
                       <Select
                         onValueChange={field.onChange}
@@ -169,16 +195,22 @@ const AccessManager = ({ groupName, groupId }: AccessManagerProps) => {
                           <SelectTrigger>
                             <SelectValue
                               className="placehold:text-secondary"
-                              placeholder="Select a privilage"
+                              placeholder={t(
+                                "Groups.AccessManager.Form.Placeholder.Privilage"
+                              )}
                             />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent className="bg-background">
                           <SelectItem value={Privilage.Editor}>
-                            {Privilage.Editor}
+                            {t(
+                              `Groups.AccessManager.Privilage.${Privilage.Editor}`
+                            )}
                           </SelectItem>
                           <SelectItem value={Privilage.Viewer}>
-                            {Privilage.Viewer}
+                            {t(
+                              `Groups.AccessManager.Privilage.${Privilage.Viewer}`
+                            )}
                           </SelectItem>
                         </SelectContent>
                       </Select>
@@ -189,11 +221,11 @@ const AccessManager = ({ groupName, groupId }: AccessManagerProps) => {
               </div>
               <div className="flex justify-center gap-2">
                 <ActionButton
-                  title="Cancel"
+                  title={t("Global.Button.Cancel")}
                   onClick={() => setIsFormOpen(false)}
                 />
                 <ActionButton
-                  title="Share"
+                  title={t("Groups.AccessManager.Button.Share")}
                   icon={<Share2 />}
                   isLoading={isSubmitting}
                   classList="min-w-32"

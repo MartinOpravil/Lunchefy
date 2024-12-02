@@ -13,7 +13,8 @@ const RecipeDetailServerPage = async ({
   params: { recipeId },
 }: RecipeDetailServerPageProps) => {
   const token = await getAuthToken();
-  const recipePreload = await preloadQuery(
+  const userPreloadPromise = preloadQuery(api.users.getLoggedUser);
+  const recipePreloadPromise = preloadQuery(
     api.recipes.getRecipeById,
     {
       id: recipeId,
@@ -22,7 +23,17 @@ const RecipeDetailServerPage = async ({
     { token }
   );
 
-  return <RecipeDetailPage recipePreloaded={recipePreload} />;
+  const [userPreload, recipePreload] = await Promise.all([
+    userPreloadPromise,
+    recipePreloadPromise,
+  ]);
+
+  return (
+    <RecipeDetailPage
+      recipePreloaded={recipePreload}
+      userPreload={userPreload}
+    />
+  );
 };
 
 export default RecipeDetailServerPage;

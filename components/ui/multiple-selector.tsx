@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { useTagManager } from "../recipes/TagManager";
 
 export interface Option {
   value: string;
@@ -208,6 +209,8 @@ const MultipleSelector = React.forwardRef<
     }: MultipleSelectorProps,
     ref: React.Ref<MultipleSelectorRef>
   ) => {
+    const { valueToTag } = useTagManager();
+
     const inputRef = React.useRef<HTMLInputElement>(null);
     const [open, setOpen] = React.useState(false);
     const [onScrollbar, setOnScrollbar] = React.useState(false);
@@ -490,7 +493,7 @@ const MultipleSelector = React.forwardRef<
                     width={20}
                     height={20}
                   />
-                  {option.label}
+                  {valueToTag(option.value)?.label}
                   <button
                     className={cn(
                       "rounded-full outline-none ring-offset-background focus:ring-2 focus:ring-ring focus:ring-offset-2",

@@ -18,15 +18,6 @@ export const getTodayRecipe = query({
         plan.groupId === args.groupId && plan.date === today.toISOString()
     ).collect();
 
-    // const groupPlans = await ctx.db
-    //   .query("groupPlans")
-    //   .filter(
-    //     (q) =>
-    //       q.eq(q.field("groupId"), args.groupId) &&
-    //       q.eq(q.field("date"), today.toISOString())
-    //   )
-    //   .collect();
-
     if (!groupPlans.length) {
       return createOKResponse([]);
     }
@@ -88,11 +79,7 @@ export const assignRecipeToDate = mutation({
         plan.date === args.date
     ).collect();
 
-    if (groupPlans.length)
-      return createBadResponse(
-        HttpResponseCode.Conflict,
-        "Recipe is already assigned to date."
-      );
+    if (groupPlans.length) return createBadResponse(HttpResponseCode.Conflict);
 
     const result = await ctx.db.insert("groupPlans", {
       groupId: args.groupId,
@@ -100,11 +87,7 @@ export const assignRecipeToDate = mutation({
       date: args.date,
     });
 
-    if (!result)
-      return createBadResponse(
-        HttpResponseCode.InternalServerError,
-        "Recipe was not assign to date."
-      );
+    if (!result) return createBadResponse(HttpResponseCode.InternalServerError);
 
     return createOKResponse(true);
   },
@@ -118,17 +101,11 @@ export const changeRecipeInDate = mutation({
   handler: async (ctx, args) => {
     const plan = await ctx.db.get(args.planId);
     if (!plan) {
-      return createBadResponse(
-        HttpResponseCode.NotFound,
-        "Cannot change. Plan does not exists in databse"
-      );
+      return createBadResponse(HttpResponseCode.NotFound);
     }
 
     if (plan.recipeId === args.newRecipeId) {
-      return createBadResponse(
-        HttpResponseCode.BadRequest,
-        "Recipes is already assigned to date."
-      );
+      return createBadResponse(HttpResponseCode.BadRequest);
     }
 
     const newRecipePlanInDate = await filter(
@@ -140,10 +117,7 @@ export const changeRecipeInDate = mutation({
     ).unique();
 
     if (newRecipePlanInDate) {
-      return createBadResponse(
-        HttpResponseCode.Conflict,
-        "Recipe is already assigned to date."
-      );
+      return createBadResponse(HttpResponseCode.Conflict);
     }
 
     await ctx.db.patch(args.planId, {
@@ -160,10 +134,7 @@ export const removeRecipeFromDate = mutation({
   handler: async (ctx, args) => {
     const plan = await ctx.db.get(args.planId);
     if (!plan) {
-      createBadResponse(
-        HttpResponseCode.NotFound,
-        "Cannot delete. Plan does not exists in databse"
-      );
+      return createBadResponse(HttpResponseCode.NotFound);
     }
 
     await ctx.db.delete(args.planId);

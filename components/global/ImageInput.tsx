@@ -17,27 +17,21 @@ import { Id } from "@/convex/_generated/dataModel";
 import { useUploadFiles } from "@xixixao/uploadstuff/react";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { useTranslations } from "next-intl";
 
 interface ImageInputProps {
   image?: ImageStateProps;
   setImage: Dispatch<SetStateAction<ImageStateProps | undefined>>;
   label?: string;
-  title?: string;
-  description?: string;
   isVerified?: boolean;
 }
 
 const ImageInput = (
-  {
-    image,
-    setImage,
-    label = "Image",
-    title = "Click to upload",
-    description = "SVG, PNG, JPG or GIF",
-    isVerified = false,
-  }: ImageInputProps,
+  { image, setImage, label = "Image", isVerified = false }: ImageInputProps,
   ref: Ref<ImageInputHandle>
 ) => {
+  const t = useTranslations("Global");
+
   const inputRef = useRef<HTMLInputElement>(null);
   const [isImageLoading, setIsImageLoading] = useState(false);
   const [imageStorageId, setImageStorageId] = useState<Id<"_storage"> | null>(
@@ -139,10 +133,7 @@ const ImageInput = (
           )}
           <div className="absolute top-0 left-0 w-full h-full flex flex-col gap-2 justify-center items-center bg-primary/50 rounded text-white-1 p-6 backdrop-blur-sm">
             <Ban />
-            <div className="text-center">
-              You dont have a permission to upload or manage images. Contact a
-              web admin to grant you a permission.
-            </div>
+            <div className="text-center">{t("Image.NoAccess")}</div>
           </div>
         </div>
       ) : (
@@ -166,13 +157,17 @@ const ImageInput = (
                   height={40}
                   alt="upload"
                 />
-                <h2 className="text-12 font-bold text-primary">{title}</h2>
-                <p className="text-12 font-normal text-gray-1">{description}</p>
+                <h2 className="text-12 font-bold text-primary">
+                  {t("Image.Title")}
+                </h2>
+                <p className="text-12 font-normal text-gray-1">
+                  {t("Image.Description")}
+                </p>
               </>
             ) : (
               <div className="flex flex-col justify-center items-center text-16 flex-center font-medium text-primary">
                 <Loader size={30} className="animate-spin text-black-1" />
-                Uploading
+                {t("Image.Uploading")}
               </div>
             )}
           </div>

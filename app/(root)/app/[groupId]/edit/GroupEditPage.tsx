@@ -11,13 +11,21 @@ import { Preloaded, useMutation, usePreloadedQuery } from "convex/react";
 import { useRouter } from "next/navigation";
 import React, { useRef, useState } from "react";
 import { SubmitHandler } from "react-hook-form";
+import { HttpResponseCode } from "@/enums";
+import { useTranslations } from "next-intl";
 
 interface GroupEditPageProps {
   groupPreloaded: Preloaded<typeof api.groups.getGroupById>;
+  userPreloaded: Preloaded<typeof api.users.getLoggedUser>;
 }
 
-const GroupEditPage = ({ groupPreloaded }: GroupEditPageProps) => {
+const GroupEditPage = ({
+  groupPreloaded,
+  userPreloaded,
+}: GroupEditPageProps) => {
+  const t = useTranslations();
   const router = useRouter();
+  const user = usePreloadedQuery(userPreloaded);
   const group = usePreloadedQuery(groupPreloaded);
   const updateGroup = useMutation(api.groups.updateGroup);
 
@@ -39,14 +47,26 @@ const GroupEditPage = ({ groupPreloaded }: GroupEditPageProps) => {
         coverImage: updatedImage ?? (values.coverImage as ImageStateProps),
       });
 
-      if (!response.data)
-        return notifyError(response.status.toString(), response.errorMessage);
-      notifySuccess("Successfully updated group");
+      if (!response.data) {
+        switch (response.status) {
+          case HttpResponseCode.NotFound:
+            return notifyError(
+              t("Groups.General.Notification.Error.Update404")
+            );
+          default:
+            return notifyError(t("Global.Notification.UnexpectedError"));
+        }
+      }
+
+      notifySuccess(t("Groups.General.Notification.Success.Update"));
       // router.push("/app");
       if (resetForm) resetForm();
       router.refresh();
     } catch (error) {
-      notifyError("Error updating group", error?.toString());
+      notifyError(
+        t("Groups.General.Notification.Error.Update"),
+        error?.toString()
+      );
     }
   };
 
@@ -67,7 +87,9 @@ const GroupEditPage = ({ groupPreloaded }: GroupEditPageProps) => {
         <GroupEditHeader group={group} />
         <main className="page-content">
           <ErrorHandler convexResponse={group} />
-          <GroupForm group={group} />
+          {user.data && (
+            <GroupForm group={group} isVerified={user.data.isVerified} />
+          )}
         </main>
       </main>
     </FormProviderWrapper>

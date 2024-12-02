@@ -18,7 +18,7 @@ import {
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ButtonVariant, Privilage } from "@/enums";
+import { ButtonVariant, HttpResponseCode, Privilage } from "@/enums";
 import ActionButton from "@/components/global/ActionButton";
 import ActionDialog from "@/components/global/ActionDialog";
 import { useMutation } from "convex/react";
@@ -26,6 +26,7 @@ import { api } from "@/convex/_generated/api";
 import { notifyError, notifySuccess } from "@/lib/notifications";
 import { Save, Trash2 } from "lucide-react";
 import { GenericId } from "convex/values";
+import { useTranslations } from "next-intl";
 
 const formSchema = z.object({
   privilage: z.string({
@@ -48,6 +49,7 @@ const UserAccessForm = ({
   relationshipId,
   actionClicked,
 }: UserAccessFormProps) => {
+  const t = useTranslations();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -73,9 +75,22 @@ const UserAccessForm = ({
         privilage: form.getValues("privilage"),
       });
       setIsSubmitting(false);
-      if (!result.data)
-        return notifyError(result.status.toString(), result.errorMessage);
-      notifySuccess("Access privilage updated to:", values.privilage);
+      if (!result.data) {
+        switch (result.status) {
+          case HttpResponseCode.Forbidden:
+            return notifyError(
+              t("Groups.AccessManager.Notification.Error.Update403")
+            );
+          default:
+            return notifyError(t("Global.Notification.UnexpectedError"));
+        }
+      }
+
+      notifySuccess(
+        t("Groups.AccessManager.Notification.Success.Update", {
+          privilage: values.privilage,
+        })
+      );
       actionClicked();
       form.setValue("privilage", "");
     } catch (error) {
@@ -89,9 +104,19 @@ const UserAccessForm = ({
     try {
       const result = await revokeAccess({ relationshipId });
       setIsDeleting(false);
-      if (!result.data)
-        return notifyError(result.status.toString(), result.errorMessage);
-      notifySuccess("Revoke access for:", `${name} - (${email})`);
+      if (!result.data) {
+        switch (result.status) {
+          case HttpResponseCode.Forbidden:
+            return notifyError(
+              t("Groups.AccessManager.Notification.Error.Revoke403")
+            );
+          default:
+            return notifyError(t("Global.Notification.UnexpectedError"));
+        }
+      }
+      notifySuccess(
+        t("Groups.AccessManager.Notification.Success.Revoke", { name, email })
+      );
       actionClicked();
     } catch (error) {
       console.error("Error revoking access", error);
@@ -113,7 +138,7 @@ const UserAccessForm = ({
               render={({ field }) => (
                 <FormItem className="flex flex-col gap-1">
                   <FormLabel className="text-16 font-bold text-accent">
-                    Privilage
+                    {t("Groups.AccessManager.Form.Property.Privilage")}
                   </FormLabel>
                   <Select
                     onValueChange={field.onChange}
@@ -126,10 +151,14 @@ const UserAccessForm = ({
                     </FormControl>
                     <SelectContent className="bg-background">
                       <SelectItem value={Privilage.Editor}>
-                        {Privilage.Editor}
+                        {t(
+                          `Groups.AccessManager.Privilage.${Privilage.Editor}`
+                        )}
                       </SelectItem>
                       <SelectItem value={Privilage.Viewer}>
-                        {Privilage.Viewer}
+                        {t(
+                          `Groups.AccessManager.Privilage.${Privilage.Viewer}`
+                        )}
                       </SelectItem>
                     </SelectContent>
                   </Select>
@@ -148,7 +177,7 @@ const UserAccessForm = ({
               variant={ButtonVariant.Negative}
             />
             <ActionButton
-              title="Update"
+              title={t("Global.Button.Update")}
               icon={<Save />}
               variant={ButtonVariant.Positive}
               isLoading={isSubmitting}
@@ -162,10 +191,10 @@ const UserAccessForm = ({
       <ActionDialog
         isOpen={isDeleteDialogOpen}
         setIsOpen={setIsDeleteDialogOpen}
-        title="Are you sure you want to revoke access?"
+        title={t("Groups.AccessManager.RevokeAccessTitle")}
         subject={name}
-        description="User will lose access for this group."
-        confirmButtonLabel="Revoke"
+        description={t("Groups.AccessManager.RevokeAccessDisclaimer")}
+        confirmButtonLabel={t("Groups.AccessManager.Button.Revoke")}
         confirmAction={handleRevokeAccess}
       />
     </>

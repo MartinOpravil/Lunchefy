@@ -1,5 +1,239 @@
 {
+  "Global": {
+    "Button": {
+      "Back": "Zpět",
+      "New": "Nový",
+      "Edit": "Upravit",
+      "Save": "Uložit",
+      "Cancel": "Zrušit",
+      "Delete": "Smazat",
+      "Update": "Aktualizovat",
+      "View": "Zobrazit",
+      "Continue": "Pokračovat"
+    },
+
+    "Image": {
+      "Title": "Klikni pro zvolení obrázku",
+      "Description": "SVG, PNG, JPG or GIF",
+      "Uploading": "Nahrávám",
+      "NoAccess": "Nemáte oprávnění k nahrávání nebo správě obrázků. Kontaktujte správce webu, aby vám udělil oprávnění."
+    },
+
+    "UnsavedChangesDialog": {
+      "Title": "Neuložené změny přítomny!",
+      "Disclaimer": "Pokračováním budou neuložené změny ztraceny. Chcete stále pokračovat?"
+    },
+
+    "Notification": {
+      "UnexpectedError": "Došlo k neočekávané chybě. Kontaktujte prosím administrátora webu."
+    },
+
+    "Validation": {
+      "NoContent": "Content does not exists.",
+      "NoPermission": "You don't have a permission to see this content."
+    }
+  },
   "HomePage": {
-    "title": "Ahoj světe!"
+    "title": "Hello world!"
+  },
+  "Groups": {
+    "General": {
+      "Title": "Skupiny",
+      "NewGroupTitle": "Nová skupina",
+      "Button": {
+        "Share": "Sdílet"
+      },
+      "Form": {
+        "Property": {
+          "Name": "Jméno",
+          "Description": "Krátký popisek",
+          "CoverImage": "Obrázek"
+        },
+        "Placeholder": {
+          "Name": "Jméno této skupiny",
+          "Description": "Volitelný popis skupiny"
+        }
+      },
+      "Action": {
+        "Delete": {
+          "Title": "Jste si naprosto jisti, že chcete smazat tuto skupinu?",
+          "Disclaimer": "Tuto akci nelze vzít zpět a skupina bude z našich serverů trvale odstraněna."
+        }
+      },
+      "Notification": {
+        "Success": {
+          "Create": "Skupina byla úspěšně vytvořena.",
+          "Update": "Skupina byla úspěšně upravena.",
+          "Delete": "Skupina byla úspěšně smazána."
+        },
+        "Error": {
+          "Create": "Chyba při vytváření skupiny.",
+          "Update": "Chyba při aktualizaci skupiny.",
+          "Get404": "Skupina nebyla nalezena.",
+          "Get403View": "Nemáte povolení k zobrazení této skupiny.",
+          "Get403Edit": "Nemáte povolení k úpravám této skupiny.",
+          "Create500Database": "Skupina nebyla vytvořena - nelze vložit do databáze.",
+          "Create500UserGroupDatabase": "Nebyl vytvořen vztah Uživatel-Skupina - Vztah se nepodařilo vložit do databáze.",
+          "Delete500": "Skupina nebyla smazána.",
+          "Update404": "Nelze aktualizovat, protože skupina nebyla nalezena."
+        }
+      }
+    },
+
+    "AccessManager": {
+      "Title": "Správce přístupu",
+      "Description": "Udělte přístup svým rodinným příslušníkům nebo přátelům.",
+      "ListTitle": "Uživatelé s přístupem:",
+      "ChangeAccessTitle": "Změna přístupu pro",
+      "RevokeAccessTitle": "Jste si jisti, že chcete zrušit přístup uživateli?",
+      "RevokeAccessDisclaimer": "Uživatel ztratí přístup k této skupině.",
+      "Button": {
+        "Share": "Sdílet s uživatelem",
+        "Revoke": "Odebrat přístup"
+      },
+      "Form": {
+        "Property": {
+          "Email": "Email",
+          "Privilage": "Privilégium"
+        },
+        "Placeholder": {
+          "Email": "E-mail uživatele, kterého chcete pozvat do skupiny",
+          "Privilage": "Zvolte typ privilégia"
+        }
+      },
+      "Notification": {
+        "Success": {
+          "Create": "Přístup udělen pro {email} ({privilage}).",
+          "Update": "Úroveň přístup upravena na ({privilage}).",
+          "Revoke": "Přístup odebrán pro {name} ({email})."
+        },
+        "Error": {
+          "Create404": "Nelze přidat přístup uživateli, který ještě není registrován",
+          "Create409": "Uživatel již má přístup do této skupiny.",
+          "Create500": "Chyba při pokusu o přidání přístupu do databáze.",
+          "Update403": "Nelze změnit přístup. Uživatel zatím nemá přístup do této skupiny.",
+          "Revoke403": "Přístup nelze zrušit. Uživatel zatím nemá přístup do této skupiny."
+        }
+      },
+      "Privilage": {
+        "Owner": "Vlastník",
+        "Editor": "Redaktor",
+        "Viewer": "Host"
+      }
+    },
+    "Planner": {
+      "Title": "Plánovač",
+      "RecipeListTitle": "Recepty pro tento měsíc:",
+      "TodayNoRecipe": "Žádný recept",
+      "SelectedDateNoRecipe": "Vybraný den zatím nemá žádný recept.",
+      "Action": {
+        "AssignRecipeTitle": "Přiřadit recept",
+        "SwapRecipeTitle": "Vyměnit recept",
+        "DeleteRecipeTitle": "Jste si naprosto jisti, že chcete odebrat recept z tohoto data?"
+      },
+      "Button": {
+        "Today": "Dnes",
+        "Assign": "Přiřadit",
+        "Swap": "Vyměnit",
+        "Remove": "Odebrat"
+      },
+
+      "Notification": {
+        "Success": {
+          "Assign": "Recept úspěšně přiřazen.",
+          "Swap": "Recept úspěšně vyměněn.",
+          "Remove": "Recept úspěšně odebrán."
+        },
+        "Error": {
+          "NoRecipeSelected": "Nebyl vybrán žádný recept.",
+          "NoDatePicked": "Nebylo vybrané žádné datum.",
+          "NoPlanSelected": "Nebyl vybrán žádný plán.",
+          "Assign": "Chyba při přiřazování receptu.",
+          "Swap": "Chyba při výměně receptu.",
+          "Remove": "Chyba při odebírání receptu.",
+          "Assign409": "Recept je již k datu přiřazen.",
+          "Assign500": "Recept nebyl k datu přiřazen.",
+          "Update404": "Nelze aktualizovat. Plán v databázi neexistuje.",
+          "Update400": "Recept je již k datu přiřazen.",
+          "Update409": "Recept je již k datu přiřazen.",
+          "Delete404": "Nelze odebrat. Plán v databázi neexistuje."
+        }
+      }
+    }
+  },
+  "Recipes": {
+    "General": {
+      "NewRecipeTitle": "Nový recept",
+      "ImageDeletionDisclaimer": "Mějte na paměti, že použití textu trvale odstraní dříve nahraný obrázek!",
+      "Form": {
+        "Property": {
+          "Name": "Název",
+          "Description": "Krátký popisek",
+          "CoverImage": "Obrázek",
+          "Tags": "Značky",
+          "Ingredients": "Ingredience",
+          "Instructions": "Instrukce",
+          "RecipeImage": "Fotka receptu",
+          "UseText": "Použít text",
+          "UseImage": "Použít fotku"
+        },
+        "Placeholder": {
+          "Name": "Název receptu",
+          "Description": "Volitelný popis receptu",
+          "Tags": "Vyberte si značky, které odpovídají tomuto receptu"
+        }
+      },
+      "Action": {
+        "Delete": {
+          "Title": "Jste si naprosto jisti, že chcete smazat tento recept?",
+          "Disclaimer": "Tuto akci nelze vzít zpět a recept bude z našich serverů trvale odstraněn."
+        }
+      },
+      "Notification": {
+        "Success": {
+          "Create": "Recept úspěšně vytvořen.",
+          "Update": "Recept úspěšně upraven.",
+          "Delete": "Recept úspěšně smazán."
+        },
+        "Error": {
+          "Create": "Chyba při vytváření receptu.",
+          "Update": "Chyba při úpravě receptu.",
+          "Get403View": "Nemáte povolení k zobrazení tohoto receptu.",
+          "Get403Edit": "Nemáte povolení k úpravám tohoto receptu.",
+          "Create500": "Recept nebyl vytvořen - nelze vložit do databáze.",
+          "Update404": "Nelze aktualizovat, protože recept nebyl nalezen.",
+          "Delete500": "Recept nebyl smazán z důvodu chyby na straně serveru."
+        }
+      }
+    },
+    "Tags": {
+      "Chicken": "Kuřecí",
+      "Pork": "Vepřové",
+      "Beef": "Hovězí",
+      "Pasta": "Těstoviny",
+      "Fish": "Ryby",
+      "Rice": "Rýže"
+    },
+    "SearchInput": {
+      "SortBy": {
+        "Name": "Název",
+        "Tags": "Značky"
+      },
+      "Placeholder": {
+        "Name": "Vyhledávání podle názvu receptu",
+        "Tags": "Vyhledávání podle značek"
+      }
+    }
+  },
+  "Users": {
+    "Notification": {
+      "Success": {
+        "Logout": "Byl/a jste odhlášen/a."
+      },
+      "Error": {
+        "Get401": "Uživatel není ověřen.",
+        "Get404": "Uživatel není v databázi přítomen."
+      }
+    }
   }
 }
