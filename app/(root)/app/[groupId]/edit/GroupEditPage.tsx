@@ -1,6 +1,5 @@
 "use client";
 import FormProviderWrapper from "@/components/FormProviderWrapper";
-import ErrorHandler from "@/components/global/ErrorHandler";
 import GroupForm from "@/components/groups/form/GroupForm";
 import GroupEditHeader from "@/components/groups/edit/GroupEditHeader";
 import { groupFormSchema, GroupFormValues } from "@/constants/formSchema";
@@ -86,7 +85,6 @@ const GroupEditPage = ({
       <main className="page">
         <GroupEditHeader group={group} />
         <main className="page-content">
-          <ErrorHandler convexResponse={group} />
           {user.data && (
             <GroupForm group={group} isVerified={user.data.isVerified} />
           )}

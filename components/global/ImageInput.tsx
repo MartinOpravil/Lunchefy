@@ -10,7 +10,7 @@ import React, {
 } from "react";
 import { Input } from "../ui/input";
 import Image from "next/image";
-import { Ban, Loader } from "lucide-react";
+import { Ban, Loader, Trash2 } from "lucide-react";
 import { ImageInputHandle, ImageStateProps } from "@/types";
 import { FormLabel } from "../ui/form";
 import { Id } from "@/convex/_generated/dataModel";
@@ -18,6 +18,9 @@ import { useUploadFiles } from "@xixixao/uploadstuff/react";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useTranslations } from "next-intl";
+import { notifyError } from "@/lib/notifications";
+import { convertImageToWebP } from "@/lib/image";
+import ActionButton from "./ActionButton";
 
 interface ImageInputProps {
   image?: ImageStateProps;
@@ -25,6 +28,8 @@ interface ImageInputProps {
   label?: string;
   isVerified?: boolean;
 }
+
+const maxFileSizeMB = 1;
 
 const ImageInput = (
   { image, setImage, label = "Image", isVerified = false }: ImageInputProps,
@@ -34,6 +39,8 @@ const ImageInput = (
 
   const inputRef = useRef<HTMLInputElement>(null);
   const [isImageLoading, setIsImageLoading] = useState(false);
+  const [isImageConverting, setIsImageConverting] = useState(false);
+  const [isImageDeleting, setIsImageDeleting] = useState(false);
   const [imageStorageId, setImageStorageId] = useState<Id<"_storage"> | null>(
     null
   );
@@ -95,7 +102,18 @@ const ImageInput = (
     try {
       const files = e.target.files;
       if (!files) return;
-      const file = files[0];
+      let file = files[0];
+
+      if (file.type !== "image/webp") {
+        setIsImageConverting(true);
+        file = await convertImageToWebP(file);
+        setIsImageConverting(false);
+      }
+
+      if (file.size > maxFileSizeMB * 1024 * 1024) {
+        setIsImageLoading(false);
+        return notifyError(t("Image.TooBigNotification"));
+      }
       const blob = await file.arrayBuffer().then((ab) => new Blob([ab]));
       setImageBlob({
         blob: blob,
@@ -112,6 +130,18 @@ const ImageInput = (
       console.log(error);
       setIsImageLoading(false);
     }
+  };
+
+  const handleFileRemoval = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+    // setIsImageDeleting(true)
+    // if (image?.storageId) {
+    //   await deleteFile({storageId: image.storageId})
+    // }
+    setImage(undefined);
+    // setIsImageDeleting(false)
   };
 
   return (
@@ -137,51 +167,63 @@ const ImageInput = (
           </div>
         </div>
       ) : (
-        <div
-          className="image-input-inner"
-          onClick={() => inputRef?.current?.click()}
-        >
-          <Input
-            type="file"
-            className="hidden"
-            ref={inputRef}
-            onChange={(e) => changeImage(e)}
-          />
+        <div>
+          <div
+            className="image-input-inner"
+            onClick={() => inputRef?.current?.click()}
+          >
+            <Input
+              type="file"
+              className="hidden"
+              ref={inputRef}
+              onChange={(e) => changeImage(e)}
+              accept="image/*"
+            />
 
-          <div className="flex flex-col items-center gap-1">
-            {!isImageLoading ? (
-              <>
+            <div className="flex flex-col items-center gap-1">
+              {isImageLoading || isImageConverting ? (
+                <div className="flex flex-col justify-center items-center text-16 flex-center font-medium text-primary">
+                  <Loader size={30} className="animate-spin text-black-1" />
+                  {isImageConverting
+                    ? t("Image.Converting")
+                    : t("Image.Uploading")}
+                </div>
+              ) : (
+                <>
+                  <Image
+                    src="/icons/upload.svg"
+                    width={40}
+                    height={40}
+                    alt="upload"
+                  />
+                  <h2 className="text-12 font-bold text-primary">
+                    {t("Image.Title")}
+                  </h2>
+                  <p className="text-12 font-normal text-gray-1 text-center">
+                    {t("Image.Description")}
+                  </p>
+                </>
+              )}
+            </div>
+            {image?.imageUrl && (
+              <div className="flex-center w-full ">
                 <Image
-                  src="/icons/upload.svg"
-                  width={40}
-                  height={40}
-                  alt="upload"
+                  src={image.imageUrl}
+                  alt="thumbnail"
+                  width={0}
+                  height={0}
+                  sizes="100vw"
+                  className="w-[100%] h-[100%] sm:w-[50%] max-h-[500px] object-contain"
                 />
-                <h2 className="text-12 font-bold text-primary">
-                  {t("Image.Title")}
-                </h2>
-                <p className="text-12 font-normal text-gray-1">
-                  {t("Image.Description")}
-                </p>
-              </>
-            ) : (
-              <div className="flex flex-col justify-center items-center text-16 flex-center font-medium text-primary">
-                <Loader size={30} className="animate-spin text-black-1" />
-                {t("Image.Uploading")}
               </div>
             )}
           </div>
-          {image?.imageUrl && (
-            <div className="flex-center w-full ">
-              <Image
-                src={image.imageUrl}
-                alt="thumbnail"
-                width={0}
-                height={0}
-                sizes="100vw"
-                className="w-[100%] h-[100%] sm:w-[50%] max-h-[500px] object-contain"
-              />
-            </div>
+          {image && (
+            <ActionButton
+              title={t("Button.Delete")}
+              icon={<Trash2 />}
+              onClick={handleFileRemoval}
+            />
           )}
         </div>
       )}

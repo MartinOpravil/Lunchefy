@@ -34,7 +34,7 @@ interface CustomFormContext {
 
 const RecipeForm = ({ recipe, isVerified }: RecipeDetailHeaderProps) => {
   const t = useTranslations();
-  const { register, setValue, coverImageRef, recipeImageRef } =
+  const { register, setValue, coverImageRef, recipeImageRef, getValues } =
     useFormContext() as ReturnType<typeof useFormContext> & CustomFormContext;
 
   const { tagOptions } = useTagManager();
@@ -103,7 +103,7 @@ const RecipeForm = ({ recipe, isVerified }: RecipeDetailHeaderProps) => {
                 render={({ field }) => (
                   <ImageInput
                     label={t("Recipes.General.Form.Property.CoverImage")}
-                    image={field.value}
+                    image={getValues("coverImage")}
                     setImage={(newImage) => {
                       field.onChange(newImage);
                     }}
@@ -205,7 +205,7 @@ const RecipeForm = ({ recipe, isVerified }: RecipeDetailHeaderProps) => {
               render={({ field }) => (
                 <ImageInput
                   label={t("Recipes.General.Form.Property.RecipeImage")}
-                  image={field.value}
+                  image={getValues("recipeImage")}
                   setImage={(newImage) => {
                     field.onChange(newImage);
                   }}

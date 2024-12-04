@@ -14,9 +14,11 @@
 
     "Image": {
       "Title": "Click to upload",
-      "Description": "SVG, PNG, JPG or GIF",
+      "Description": "Preferably in WebP fomat. Other image formats will be automatically converted to WebP.",
       "Uploading": "Uploading",
-      "NoAccess": "You dont have a permission to upload or manage images. Contact a web admin to grant you a permission."
+      "Converting": "Optimizing. Converting to webp format",
+      "NoAccess": "You dont have a permission to upload or manage images. Contact a web admin to grant you a permission.",
+      "TooBigNotification": "Image is too big, try again with smaller file."
     },
 
     "UnsavedChangesDialog": {

@@ -29,7 +29,7 @@ interface CustomFormContext {
 
 const GroupForm = ({ group, isVerified = false }: GroupFormProps) => {
   const t = useTranslations("Groups");
-  const { register, coverImageRef } = useFormContext() as ReturnType<
+  const { register, coverImageRef, getValues } = useFormContext() as ReturnType<
     typeof useFormContext
   > &
     CustomFormContext;
@@ -85,7 +85,7 @@ const GroupForm = ({ group, isVerified = false }: GroupFormProps) => {
         render={({ field }) => (
           <ImageInput
             label={t("General.Form.Property.CoverImage")}
-            image={field.value}
+            image={getValues("coverImage")}
             setImage={(newImage) => {
               field.onChange(newImage);
             }}

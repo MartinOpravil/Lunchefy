@@ -7,7 +7,7 @@ import { Plan } from "@/types";
 
 export const getTodayRecipe = query({
   args: {
-    groupId: v.id("groups"),
+    groupId: v.string(),
   },
   handler: async (ctx, args) => {
     const today = new Date();
@@ -33,7 +33,7 @@ export const getTodayRecipe = query({
 });
 export const getGroupRecipeListForMonth = query({
   args: {
-    groupId: v.id("groups"),
+    groupId: v.string(),
     month: v.string(),
   },
   handler: async (ctx, args) => {

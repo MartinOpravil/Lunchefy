@@ -1,6 +1,4 @@
 "use client";
-import ErrorHandler from "@/components/global/ErrorHandler";
-import RecipeForm from "@/components/recipes/Form/RecipeForm";
 import RecipeHeader from "@/components/recipes/RecipeHeader";
 import { api } from "@/convex/_generated/api";
 import { Preloaded, usePreloadedQuery } from "convex/react";
@@ -27,8 +25,6 @@ const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
     <main className="page">
       <RecipeHeader recipe={recipe} />
       <main className="page-content">
-        <ErrorHandler convexResponse={recipe} />
-
         <div className="flex flex-col w-full">
           <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-4 w-full">
             {recipe.data.coverImage?.imageUrl && (

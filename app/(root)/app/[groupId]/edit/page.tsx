@@ -4,6 +4,7 @@ import React from "react";
 import { preloadQuery } from "convex/nextjs";
 import { getAuthToken } from "@/lib/authentication";
 import GroupEditPage from "./GroupEditPage";
+import ContentHandler from "@/components/global/ContentHandler";
 
 interface GroupEditServerPageProps {
   params: { groupId: Id<"groups"> };
@@ -24,7 +25,12 @@ const GroupEditServerPage = async ({
   );
 
   return (
-    <GroupEditPage groupPreloaded={groupPreload} userPreloaded={userPreload} />
+    <ContentHandler preloadedData={groupPreload}>
+      <GroupEditPage
+        groupPreloaded={groupPreload}
+        userPreloaded={userPreload}
+      />
+    </ContentHandler>
   );
 };
 

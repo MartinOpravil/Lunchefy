@@ -4,6 +4,7 @@ import { getAuthToken } from "@/lib/authentication";
 import { preloadQuery } from "convex/nextjs";
 import React from "react";
 import RecipeDetailPage from "./RecipeDetailPage";
+import ContentHandler from "@/components/global/ContentHandler";
 
 interface RecipeDetailServerPageProps {
   params: { recipeId: Id<"recipes"> };
@@ -29,10 +30,12 @@ const RecipeDetailServerPage = async ({
   ]);
 
   return (
-    <RecipeDetailPage
-      recipePreloaded={recipePreload}
-      userPreload={userPreload}
-    />
+    <ContentHandler preloadedData={recipePreload}>
+      <RecipeDetailPage
+        recipePreloaded={recipePreload}
+        userPreload={userPreload}
+      />
+    </ContentHandler>
   );
 };
 

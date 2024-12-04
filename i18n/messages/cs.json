@@ -14,9 +14,11 @@
 
     "Image": {
       "Title": "Klikni pro zvolení obrázku",
-      "Description": "SVG, PNG, JPG or GIF",
+      "Description": "Nejlépe ve formátu WebP. Ostatní obrázkové formáty budou automaticky převedeny na WebP.",
       "Uploading": "Nahrávám",
-      "NoAccess": "Nemáte oprávnění k nahrávání nebo správě obrázků. Kontaktujte správce webu, aby vám udělil oprávnění."
+      "Converting": "Optimalizuji. Převádím na webp formát",
+      "NoAccess": "Nemáte oprávnění k nahrávání nebo správě obrázků. Kontaktujte správce webu, aby vám udělil oprávnění.",
+      "TooBigNotification": "Obrázek je příliš velký, zkuste to znovu s menším souborem."
     },
 
     "UnsavedChangesDialog": {
@@ -29,8 +31,8 @@
     },
 
     "Validation": {
-      "NoContent": "Content does not exists.",
-      "NoPermission": "You don't have a permission to see this content."
+      "NoContent": "Obsah neexistuje.",
+      "NoPermission": "K zobrazení tohoto obsahu nemáte oprávnění.."
     }
   },
   "HomePage": {

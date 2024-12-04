@@ -1,14 +1,14 @@
 import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
 import { getAuthToken } from "@/lib/authentication";
 import { preloadQuery } from "convex/nextjs";
 import React from "react";
 import GroupPage from "./GroupPage";
-import ErrorHandlerPreloaded from "@/components/global/ErrorHandlerPreloaded";
 import { RECIPES_INITIAL_COUNT } from "@/constants/pagination";
+import { GenericId } from "convex/values";
+import ContentHandler from "@/components/global/ContentHandler";
 
 interface GroupServerPageProps {
-  params: { groupId: Id<"groups"> };
+  params: { groupId: GenericId<"groups"> };
 }
 
 const GroupServerPage = async ({
@@ -20,6 +20,7 @@ const GroupServerPage = async ({
     api.groups.getGroupById,
     {
       id: groupId,
+      checkPrivilages: false,
     },
     { token }
   );
@@ -51,15 +52,14 @@ const GroupServerPage = async ({
     ]);
 
   return (
-    <>
-      <ErrorHandlerPreloaded preloadedData={groupPreload} />
+    <ContentHandler preloadedData={groupPreload}>
       <GroupPage
         userPreloaded={userPreload}
         groupPreloaded={groupPreload}
         recipesPreloaded={recipesPreload}
         todayRecipePreload={todayRecipePreload}
       />
-    </>
+    </ContentHandler>
   );
 };
 

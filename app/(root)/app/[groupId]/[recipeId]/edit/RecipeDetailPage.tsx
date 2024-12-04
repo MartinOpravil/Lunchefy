@@ -1,6 +1,5 @@
 "use client";
 import FormProviderWrapper from "@/components/FormProviderWrapper";
-import ErrorHandler from "@/components/global/ErrorHandler";
 import RecipeDetailHeader from "@/components/recipes/Detail/RecipeDetailHeader";
 import RecipeForm from "@/components/recipes/Form/RecipeForm";
 import { useTagManager } from "@/components/recipes/TagManager";
@@ -103,7 +102,6 @@ const RecipeDetailPage = ({
       <main className="page">
         <RecipeDetailHeader recipe={recipe} />
         <main className="page-content">
-          <ErrorHandler convexResponse={recipe} />
           {user.data && (
             <RecipeForm recipe={recipe} isVerified={user.data.isVerified} />
           )}

@@ -1,14 +1,12 @@
 "use client";
 import FormProviderWrapper from "@/components/FormProviderWrapper";
 import ActionButton from "@/components/global/ActionButton";
-import ErrorHandler from "@/components/global/ErrorHandler";
 import LinkButton from "@/components/global/LinkButton";
 import PageHeader from "@/components/global/PageHeader";
 import RecipeForm from "@/components/recipes/Form/RecipeForm";
 import NewRecipeHeader from "@/components/recipes/headers/NewRecipeHeader";
 import RecipesPaginated from "@/components/recipes/RecipeListPaginated";
 import RecipeSearchResults from "@/components/RecipeSearchResults";
-import { Input } from "@/components/ui/input";
 import { recipeFormSchema, RecipeFormValues } from "@/constants/formSchema";
 import { api } from "@/convex/_generated/api";
 import { ButtonVariant, HttpResponseCode, Privilage } from "@/enums";
@@ -20,14 +18,13 @@ import {
   usePaginatedQuery,
   usePreloadedQuery,
 } from "convex/react";
-import { debounce } from "lodash";
 import { ArrowLeft, CalendarFold, Pencil, Plus, Search } from "lucide-react";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { SubmitHandler } from "react-hook-form";
 import NoContent from "@/components/global/NoContent";
 import Recipe from "@/components/recipes/Recipe";
 import { RECIPES_INITIAL_COUNT } from "@/constants/pagination";
-import MultipleSelector, { Option } from "@/components/ui/multiple-selector";
+import { Option } from "@/components/ui/multiple-selector";
 import RecipeSearchInput from "@/components/RecipeSearchInput";
 import { useTranslations } from "next-intl";
 import { useTagManager } from "@/components/recipes/TagManager";
@@ -183,13 +180,13 @@ const GroupPage = ({
                 </div>
               </div>
             </div>
-            <div className="bg-accent w-[1.5px] h-6 mx-2 rounded"></div>
-            <LinkButton
-              icon={<Pencil />}
-              href={`/app/${group.data._id}/edit`}
-            />
             {group.data.privilage !== Privilage.Viewer && (
               <>
+                <div className="bg-accent w-[1.5px] h-6 mx-2 rounded"></div>
+                <LinkButton
+                  icon={<Pencil />}
+                  href={`/app/${group.data._id}/edit`}
+                />
                 <ActionButton
                   title={t("Global.Button.New")}
                   icon={<Plus />}
@@ -202,7 +199,6 @@ const GroupPage = ({
         }
       />
       <main className="page-content gap-6">
-        <ErrorHandler convexResponse={group} />
         {!!initialRecipes.page.length && (
           <>
             <RecipeSearchInput
