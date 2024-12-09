@@ -1,9 +1,10 @@
 "use client";
+import Lightbox, { LightboxHandle } from "@/components/global/Lightbox";
 import RecipeHeader from "@/components/recipes/RecipeHeader";
 import { api } from "@/convex/_generated/api";
 import { Preloaded, usePreloadedQuery } from "convex/react";
 import Image from "next/image";
-import React from "react";
+import React, { useRef, useState } from "react";
 
 interface RecipePageProps {
   recipePreloaded: Preloaded<typeof api.recipes.getRecipeById>;
@@ -11,6 +12,7 @@ interface RecipePageProps {
 
 const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
   const recipe = usePreloadedQuery(recipePreloaded);
+  const lightboxRef = useRef<LightboxHandle>(null);
 
   const formatTextWithHTML = (text?: string) => {
     if (!text) return { __html: "" };
@@ -36,7 +38,12 @@ const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
                     width={0}
                     height={0}
                     sizes="100vw"
-                    className="w-[100%] h-[100%] object-contain"
+                    className="w-[100%] h-[100%] object-contain cursor-pointer"
+                    onClick={() =>
+                      lightboxRef.current?.setOpen(
+                        recipe.data?.coverImage?.imageUrl
+                      )
+                    }
                   />
                 </div>
               </div>
@@ -51,7 +58,12 @@ const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
                       width={0}
                       height={0}
                       sizes="100vw"
-                      className="w-[100%] h-[100%]"
+                      className="w-[100%] h-[100%] cursor-pointer"
+                      onClick={() =>
+                        lightboxRef.current?.setOpen(
+                          recipe.data?.recipeImage?.imageUrl
+                        )
+                      }
                     />
                   </div>
                 )}
@@ -97,6 +109,13 @@ const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
           )}
         </div>
       </main>
+      <Lightbox
+        ref={lightboxRef}
+        imageSrcList={[
+          recipe.data?.coverImage?.imageUrl,
+          recipe.data?.recipeImage?.imageUrl,
+        ].filter((x) => x !== undefined)}
+      />
     </main>
   );
 };
