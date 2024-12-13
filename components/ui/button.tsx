@@ -9,10 +9,11 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-accent hover:bg-opacity-75 text-primary-foreground",
-        dark: "bg-gray-700 hover:bg-opacity-75",
-        negative: "bg-primary hover:bg-opacity-75",
-        positive: "bg-secondary hover:bg-opacity-75",
+        default:
+          "bg-accent hover:bg-opacity-75 text-primary-foreground rounded-lg",
+        dark: "bg-gray-700 hover:bg-opacity-75 rounded-lg",
+        negative: "bg-primary hover:bg-opacity-75 rounded-lg",
+        positive: "bg-secondary hover:bg-opacity-75 rounded-lg",
         editor: "bg-accent hover:bg-opacity-75 !p-1 !h-fit",
       },
       size: {

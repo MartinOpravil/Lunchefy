@@ -35,7 +35,7 @@ const GroupForm = ({ group, isVerified = false }: GroupFormProps) => {
     CustomFormContext;
 
   return (
-    <div className="w-full">
+    <div className="w-full max-w-[600px]">
       <div className="flex justify-end">
         {group && group.data && (
           <PrivilageBadge privilage={group.data.privilage} />
@@ -46,12 +46,12 @@ const GroupForm = ({ group, isVerified = false }: GroupFormProps) => {
           {...{ ...register("name"), ref: null }}
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
-              <FormLabel className="text-16 font-bold text-accent">
+              <FormLabel className="input-label">
                 {t("General.Form.Property.Name")}*
               </FormLabel>
               <FormControl>
                 <Input
-                  className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
+                  className="input-class"
                   placeholder={t("General.Form.Placeholder.Name")}
                   {...field}
                 />
@@ -64,12 +64,12 @@ const GroupForm = ({ group, isVerified = false }: GroupFormProps) => {
           {...{ ...register("description"), ref: null }}
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
-              <FormLabel className="text-16 font-bold text-accent">
+              <FormLabel className="input-label">
                 {t("General.Form.Property.Description")}
               </FormLabel>
               <FormControl>
                 <AutosizeTextarea
-                  className="input-class border-2 border-accent focus-visible:ring-secondary transition"
+                  className="input-class transition"
                   placeholder={t("General.Form.Placeholder.Description")}
                   {...field}
                   maxHeight={200}

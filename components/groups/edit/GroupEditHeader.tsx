@@ -9,7 +9,7 @@ import { ButtonVariant, Privilage } from "@/enums";
 import Image from "next/image";
 import DeleteGroupButton from "../DeleteGroupButton";
 import { getGroupById } from "@/convex/groups";
-import { ArrowLeft, Book, Save, Share2 } from "lucide-react";
+import { ArrowLeft, Book, Save, Share2, Users } from "lucide-react";
 import HorizontalSeparator from "@/components/global/HorizontalSeparator";
 import { useFormContext } from "react-hook-form";
 import { useTranslations } from "next-intl";
@@ -32,15 +32,16 @@ const GroupEditHeader = ({ group }: GroupEditHeaderProps) => {
     <>
       <PageHeader
         title={`${group.data.name}`}
-        icon="recipe_book"
-        actionButton={
+        icon={<Users className="header-icon" />}
+        leftSide={
+          <LinkButton
+            icon={<ArrowLeft />}
+            href="/app"
+            variant={ButtonVariant.Dark}
+          />
+        }
+        rightSide={
           <>
-            <LinkButton
-              icon={<ArrowLeft />}
-              href="/app"
-              variant={ButtonVariant.Dark}
-            />
-            <HorizontalSeparator />
             {group.data.privilage === Privilage.Owner && (
               <>
                 <DeleteGroupButton

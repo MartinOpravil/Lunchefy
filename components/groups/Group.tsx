@@ -13,8 +13,9 @@ import { cn } from "@/lib/utils";
 import { Privilage } from "@/enums";
 import DeleteGroupButton from "./DeleteGroupButton";
 import LoaderSpinner from "../global/LoaderSpinner";
-import { Pencil } from "lucide-react";
+import { Pencil, Users } from "lucide-react";
 import { GenericId } from "convex/values";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export interface GroupProps {
   id: GenericId<"groups">;
@@ -29,64 +30,32 @@ const Group = ({ id, title, description, imageUrl, privilage }: GroupProps) => {
 
   return (
     <>
-      <Card
-        className={cn(
-          "relative hover:bg-secondary cursor-pointer transition-all bg-accent text-white-1 text-center overflow-hidden",
-          {
-            "bg-accent/80": imageUrl,
-            "hover:bg-secondary/80": imageUrl,
-          }
-        )}
-      >
+      <div className={cn("group-button group")}>
         <Link
           href={`/app/${id}`}
-          className="min-h-[300px] flex flex-col justify-center items-center"
+          className="link"
           onClick={() => setIsRoutingToOverview(true)}
         >
-          {imageUrl && (
-            <Image
+          <Avatar className="relative w-[100px] h-[100px]">
+            <AvatarImage
               src={imageUrl}
-              alt="Group cover"
-              className="absolute z-[-1]"
-              width={0}
-              height={0}
-              sizes="100vw"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-              }} // optional
+              alt="group"
+              className="transition-all group-hover:opacity-90"
             />
-          )}
-          {isRoutingToOverview && (
-            <LoaderSpinner classList="absolute top-2 right-2" />
-          )}
-          <CardHeader className="gap-2">
-            <CardTitle>{title}</CardTitle>
-            {description && <CardDescription>{description}</CardDescription>}
-          </CardHeader>
+            <AvatarFallback className="bg-[#EBEBEB]">
+              <Users className="!w-[50px] !h-[50px]" />
+            </AvatarFallback>
+            {isRoutingToOverview && (
+              <LoaderSpinner classList="text-primary/90 absolute !w-[130px] !h-[130px]" />
+            )}
+          </Avatar>
+
+          <div className="gap-2 transition-all group-hover:opacity-90">
+            <h3>{title}</h3>
+            {/* {description && <span>{description}</span>} */}
+          </div>
         </Link>
-        <div className="absolute w-full bottom-4 flex justify-between px-4 pointer-events-none">
-          {privilage === Privilage.Owner ? (
-            <DeleteGroupButton
-              groupId={id}
-              groupTitle={title}
-              classList="!bg-transparent hover:!bg-primary"
-            />
-          ) : (
-            <div></div>
-          )}
-          {privilage !== Privilage.Viewer ? (
-            <LinkButton
-              icon={<Pencil />}
-              href={`/app/${id}/edit`}
-              classList="!bg-transparent hover:!bg-accent pointer-events-auto"
-            />
-          ) : (
-            <div></div>
-          )}
-        </div>
-      </Card>
+      </div>
     </>
   );
 };

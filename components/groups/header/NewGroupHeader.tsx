@@ -2,7 +2,7 @@ import ActionButton from "@/components/global/ActionButton";
 import HorizontalSeparator from "@/components/global/HorizontalSeparator";
 import PageHeader from "@/components/global/PageHeader";
 import { ButtonVariant } from "@/enums";
-import { ArrowLeft, Save } from "lucide-react";
+import { ArrowLeft, Save, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
 import React from "react";
 import { useFormContext } from "react-hook-form";
@@ -23,7 +23,7 @@ const NewGroupHeader = () => {
   return (
     <PageHeader
       title={t("Groups.General.NewGroupTitle")}
-      icon="recipe_book"
+      icon={<Users className="header-icon" />}
       actionButton={
         <>
           <ActionButton

@@ -1,13 +1,23 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Playfair } from "next/font/google";
 import "./globals.css";
 import ConvexClerkProvider from "./providers/ConvexClerkProvider";
 import { Toaster } from "sonner";
 
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
+import { cn } from "@/lib/utils";
 
-const inter = Inter({ subsets: ["latin"] });
+const playfair = Playfair({
+  subsets: ["latin"],
+  weight: "700",
+  variable: "--font-playfair",
+});
+const inter = Inter({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-inter",
+});
 
 export const metadata: Metadata = {
   title: "Lunchefy",
@@ -26,8 +36,8 @@ export default async function RootLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale}>
-      <body className={inter.className}>
+    <html lang={locale} className={cn(playfair.variable, inter.variable)}>
+      <body>
         <NextIntlClientProvider messages={messages}>
           <ConvexClerkProvider>{children}</ConvexClerkProvider>
           <Toaster />

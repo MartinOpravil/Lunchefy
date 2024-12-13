@@ -10,7 +10,7 @@ import React, {
 } from "react";
 import { Input } from "../ui/input";
 import Image from "next/image";
-import { Ban, Loader, Trash2 } from "lucide-react";
+import { Ban, CloudUpload, Loader, Trash2 } from "lucide-react";
 import { ImageInputHandle, ImageStateProps } from "@/types";
 import { FormLabel } from "../ui/form";
 import { Id } from "@/convex/_generated/dataModel";
@@ -21,6 +21,7 @@ import { useTranslations } from "next-intl";
 import { notifyError } from "@/lib/notifications";
 import { convertImageToWebP } from "@/lib/image";
 import ActionButton from "./ActionButton";
+import { ButtonVariant } from "@/enums";
 
 interface ImageInputProps {
   image?: ImageStateProps;
@@ -144,11 +145,18 @@ const ImageInput = (
     // setIsImageDeleting(false)
   };
 
+  const handleFileOpen = (
+    e:
+      | React.MouseEvent<HTMLButtonElement, MouseEvent>
+      | React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+    inputRef?.current?.click();
+  };
+
   return (
     <div className="image-input relative">
-      {label && (
-        <FormLabel className="text-16 font-bold text-accent">{label}</FormLabel>
-      )}
+      {label && <FormLabel className="input-label">{label}</FormLabel>}
       {!isVerified ? (
         <div className="relative flex justify-center items-center p-6 min-h-[160px]">
           {image?.imageUrl && (
@@ -168,45 +176,36 @@ const ImageInput = (
         </div>
       ) : (
         <div>
-          <div
-            className="image-input-inner"
-            onClick={() => inputRef?.current?.click()}
-          >
-            <Input
-              type="file"
-              className="hidden"
-              ref={inputRef}
-              onChange={(e) => changeImage(e)}
-              accept="image/*"
-            />
-
-            <div className="flex flex-col items-center gap-1">
-              {isImageLoading || isImageConverting ? (
-                <div className="flex flex-col justify-center items-center text-16 flex-center font-medium text-primary">
-                  <Loader size={30} className="animate-spin text-black-1" />
+          <Input
+            type="file"
+            className="hidden"
+            ref={inputRef}
+            onChange={(e) => changeImage(e)}
+            accept="image/*"
+          />
+          {image?.imageUrl ? (
+            <div className="image-input-inner !cursor-default relative">
+              <div className="absolute top-1 left-1 bottom-1 flex flex-col gap-2 flex-wrap justify-between w-full">
+                <ActionButton
+                  icon={<CloudUpload />}
+                  title={t("Image.ChangeImage")}
+                  onClick={handleFileOpen}
+                />
+                <ActionButton
+                  icon={<Trash2 />}
+                  onClick={handleFileRemoval}
+                  variant={ButtonVariant.Negative}
+                />
+              </div>
+              {(isImageLoading || isImageConverting) && (
+                <div className="absolute z-50 flex flex-col justify-center items-center text-16 flex-center font-medium text-white-1 p-2 bg-primary rounded-lg">
+                  <Loader size={30} className="animate-spin text-white-1" />
                   {isImageConverting
                     ? t("Image.Converting")
                     : t("Image.Uploading")}
                 </div>
-              ) : (
-                <>
-                  <Image
-                    src="/icons/upload.svg"
-                    width={40}
-                    height={40}
-                    alt="upload"
-                  />
-                  <h2 className="text-12 font-bold text-primary">
-                    {t("Image.Title")}
-                  </h2>
-                  <p className="text-12 font-normal text-gray-1 text-center">
-                    {t("Image.Description")}
-                  </p>
-                </>
               )}
-            </div>
-            {image?.imageUrl && (
-              <div className="flex-center w-full ">
+              <div className="flex-center w-full rounded-lg overflow-hidden">
                 <Image
                   src={image.imageUrl}
                   alt="thumbnail"
@@ -216,14 +215,30 @@ const ImageInput = (
                   className="w-[100%] h-[100%] sm:w-[50%] max-h-[500px] object-contain"
                 />
               </div>
-            )}
-          </div>
-          {image && (
-            <ActionButton
-              title={t("Button.Delete")}
-              icon={<Trash2 />}
-              onClick={handleFileRemoval}
-            />
+            </div>
+          ) : (
+            <div className="image-input-inner" onClick={handleFileOpen}>
+              <div className="flex flex-col items-center gap-1">
+                {isImageLoading || isImageConverting ? (
+                  <div className="flex flex-col justify-center items-center text-16 flex-center font-medium text-primary">
+                    <Loader size={30} className="animate-spin text-black-1" />
+                    {isImageConverting
+                      ? t("Image.Converting")
+                      : t("Image.Uploading")}
+                  </div>
+                ) : (
+                  <>
+                    <CloudUpload className="text-primary !w-14 !h-14" />
+                    <h2 className="text-14 font-bold text-primary">
+                      {t("Image.Title")}
+                    </h2>
+                    <p className="text-12 font-normal text-[gray-1] text-center">
+                      {t("Image.Description")}
+                    </p>
+                  </>
+                )}
+              </div>
+            </div>
           )}
         </div>
       )}

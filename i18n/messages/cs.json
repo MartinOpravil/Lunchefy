@@ -13,6 +13,7 @@
     },
 
     "Image": {
+      "ChangeImage": "Změnit obrázek",
       "Title": "Klikni pro zvolení obrázku",
       "Description": "Nejlépe ve formátu WebP. Ostatní obrázkové formáty budou automaticky převedeny na WebP.",
       "Uploading": "Nahrávám",
@@ -43,7 +44,12 @@
       "Title": "Skupiny",
       "NewGroupTitle": "Nová skupina",
       "Button": {
+        "New": "Vytvořit novou",
         "Share": "Sdílet"
+      },
+      "Disclaimer": {
+        "Title": "Chcete se připojit k již existující skupině?",
+        "Text": "Kontaktujte majitele skupiny, aby vás přidal, a zadejte mu svou registrovanou e-mailovou adresu."
       },
       "Form": {
         "Property": {

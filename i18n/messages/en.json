@@ -13,6 +13,7 @@
     },
 
     "Image": {
+      "ChangeImage": "Change image",
       "Title": "Click to upload",
       "Description": "Preferably in WebP fomat. Other image formats will be automatically converted to WebP.",
       "Uploading": "Uploading",
@@ -43,7 +44,12 @@
       "Title": "Groups",
       "NewGroupTitle": "New group",
       "Button": {
+        "New": "Create new",
         "Share": "Share"
+      },
+      "Disclaimer": {
+        "Title": "Want to join an already existing group?",
+        "Text": "Contact the group owner to add you by giving them your registered email address."
       },
       "Form": {
         "Property": {

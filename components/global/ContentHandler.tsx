@@ -43,7 +43,7 @@ const ContentHandler = ({ children, preloadedData }: ContentHandlerProps) => {
 
   if (!response.data) {
     return (
-      <div className="w-full h-full flex flex-col justify-center items-center gap-10">
+      <div className="w-full flex flex-col flex-grow justify-center items-center gap-10 min-h-[600px]">
         <Image
           src={`/icons/${image}.svg`}
           alt="Error image"

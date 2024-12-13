@@ -90,8 +90,8 @@ const GroupListPage = ({
 
   // Overview
   return (
-    <main className="page">
-      <PageHeader
+    <main className="page gap-6">
+      {/* <PageHeader
         title={t("Groups.General.Title")}
         icon="recipe_book"
         actionButton={
@@ -102,10 +102,22 @@ const GroupListPage = ({
             variant={ButtonVariant.Positive}
           />
         }
-      />
-      <main className="page-content @container">
-        <GroupList groupList={groupList} />
+      /> */}
+      <main className="page-content @container !justify-center !items-center min-h-[300px]">
+        <GroupList
+          groupList={groupList}
+          onClick={() => setIsNewFormOpen(true)}
+        />
       </main>
+      <div className="flex flex-col gap-2 justify-center items-center">
+        <div className="w-24 h-[1px] bg-black-1 opacity-50 mb-1" />
+        <h3 className="text-16 text-primary">
+          {t("Groups.General.Disclaimer.Title")}
+        </h3>
+        <div className="text-12">{t("Groups.General.Disclaimer.Text")}</div>
+        {/* TODO: Implement a way to get owner email address */}
+        <h3 className="text-14">m.opravil@gmail.com</h3>
+      </div>
     </main>
   );
 };

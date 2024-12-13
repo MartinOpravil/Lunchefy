@@ -9,33 +9,45 @@
 }
 
 html {
-  background-color: var(--background);
-  background: linear-gradient(
+  background-color: var(--background); /*rgba(255, 98, 44, 0.05) #fff6f4*/
+  /* background: linear-gradient(
     90deg,
     rgba(236, 231, 220, 1) 0%,
     rgba(253, 248, 237, 1) 50%,
     rgba(236, 231, 220, 1) 100%
-  );
+  ); */
   color: var(--text);
 }
 
 :root {
-  --primary: #f2726e;
+  --primary: #ff622c;
   --primary-transparent: #f2726ed7;
   --secondary: #a4b476;
   --secondary-transparent: #a5b476d7;
   --accent: #235789;
   --accent-transparent: #235889d7;
-  --background: #fdf8ed;
+  --background: #ffffff;
   --background-dark: #d6d3ca;
   --background-transparent: #fdf8edd7;
-  --text: #57463e;
+  --text: #000000;
 }
 
 @layer utilities {
-  .input-class {
-    @apply text-16 placeholder:text-16 bg-background rounded-[6px] placeholder:text-secondary;
+  .input-label {
+    @apply font-bold text-xl;
+    font-family: var(--font-playfair);
   }
+  .input-class {
+    @apply w-full min-h-12 text-16 text-black-1 placeholder:text-16 rounded-[8px] bg-transparent placeholder:text-[#CECECE] border-2 border-[#CECECE] transition-all hover:border-primary focus-visible:border-primary outline-none focus-visible:outline-none;
+  }
+
+  .image-input {
+    @apply flex flex-col gap-4 w-full relative;
+    .image-input-inner {
+      @apply cursor-pointer outline-dashed outline-2 outline-[#CECECE] rounded-sm flex flex-col items-center justify-center p-6 gap-4 hover:outline-primary transition-all;
+    }
+  }
+
   .podcast_grid {
     @apply grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4;
   }
@@ -82,17 +94,27 @@ html {
     @apply text-[32px] leading-normal;
   }
 
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-playfair);
+  }
+
   h1 {
-    @apply text-5xl font-semibold text-primary;
+    @apply text-5xl font-semibold;
   }
   h2 {
-    @apply text-3xl font-semibold text-secondary;
+    @apply text-[36px] font-semibold;
   }
   h3 {
     @apply text-xl font-semibold;
   }
   p {
     @apply text-16 font-normal;
+  }
+
+  .header-icon {
+    @apply text-white-1 !w-6 !h-6;
   }
 
   .action-button {
@@ -104,25 +126,29 @@ html {
     }
   }
   .heading-underline {
-    @apply w-full bg-primary mt-3 rounded-md h-[2px];
+    @apply w-full bg-[#CECECE] mt-3 rounded-md h-[1px];
   }
 
   .page {
-    @apply flex flex-col py-6 min-h-[calc(100vh-72.4px)];
+    @apply flex flex-col py-6 min-h-[calc(100vh-118px)];
   }
   .page-content {
-    @apply relative h-full flex flex-col items-center justify-start py-8;
+    @apply relative h-full flex flex-col items-center justify-start py-12;
   }
 
-  .image-input {
-    @apply flex flex-col gap-4 w-full;
-    .image-input-inner {
-      @apply cursor-pointer outline-dashed outline-2 outline-accent rounded-sm flex flex-col items-center justify-center p-6 gap-4 hover:outline-secondary transition-all;
-    }
+  .group-grid {
+    @apply grid grid-cols-1 @sm:grid-cols-2 @lg:grid-cols-3 @2xl:grid-cols-4 gap-4;
   }
 
   .recipe-grid {
     @apply w-full grid grid-cols-1 @sm:grid-cols-2 @lg:grid-cols-3 @2xl:grid-cols-4 gap-4;
+  }
+
+  .group-button {
+    @apply relative cursor-pointer transition-all text-center;
+    .link {
+      @apply flex flex-col justify-center items-center gap-2;
+    }
   }
 }
 

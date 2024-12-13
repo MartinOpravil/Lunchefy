@@ -7,7 +7,7 @@ interface LoaderSpinnerProps {
   classList?: string;
 }
 
-const LoaderSpinner = ({ size = 30, classList }: LoaderSpinnerProps) => {
+const LoaderSpinner = ({ size = 100, classList }: LoaderSpinnerProps) => {
   return (
     <div className="absolute flex-center bg-inherit w-full h-full rounded-md pointer-events-none z-10">
       <LoaderCircle
