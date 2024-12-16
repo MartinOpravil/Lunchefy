@@ -10,11 +10,12 @@ import Link from "next/link";
 import LinkButton from "../global/LinkButton";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { Privilage } from "@/enums";
+import { ButtonVariant, Privilage } from "@/enums";
 import DeleteRecipeButton from "./DeleteRecipeButton";
 import { Pencil } from "lucide-react";
 import LoaderSpinner from "../global/LoaderSpinner";
 import { GenericId } from "convex/values";
+import { Image as ImageLucide } from "lucide-react";
 
 export interface RecipeProps {
   id: GenericId<"recipes">;
@@ -40,26 +41,22 @@ const Recipe = ({
   const [isRoutingToOverview, setIsRoutingToOverview] = useState(false);
 
   return (
-    <>
-      <Card
-        className={cn(
-          "relative hover:bg-secondary cursor-pointer transition-all bg-accent text-white-1 text-center overflow-hidden",
-          {
-            "bg-accent/80": imageUrl,
-            "hover:bg-secondary/80": imageUrl,
-          }
-        )}
+    <Card
+      className={cn(
+        "relative cursor-pointer transition-all overflow-hidden border hover:border-primary group"
+      )}
+    >
+      <Link
+        href={`/app/${groupId}/${id}`}
+        className="min-h-[300px] h-full flex flex-col justify-between items-center"
+        onClick={() => setIsRoutingToOverview(true)}
       >
-        <Link
-          href={`/app/${groupId}/${id}`}
-          className="min-h-[300px] flex flex-col justify-center items-center"
-          onClick={() => setIsRoutingToOverview(true)}
-        >
-          {imageUrl && (
+        <div className="relative w-full h-[180px] flex items-center justify-center overflow-hidden bg-[#cecece4b]">
+          {imageUrl ? (
             <Image
               src={imageUrl}
               alt="Recipe cover"
-              className="absolute z-[-1]"
+              className="transition-all group-hover:scale-105"
               width={0}
               height={0}
               sizes="100vw"
@@ -69,38 +66,44 @@ const Recipe = ({
                 objectFit: "cover",
               }} // optional
             />
+          ) : (
+            <ImageLucide className="!w-16 !h-16 text-[#CECECE] transition-all group-hover:scale-105" />
           )}
-          {isRoutingToOverview && (
-            <LoaderSpinner classList="absolute top-2 right-2" />
-          )}
-          <CardHeader>
-            <CardTitle>{title}</CardTitle>
-            {description && <CardDescription>{description}</CardDescription>}
-          </CardHeader>
-        </Link>
-        <div className="absolute w-full bottom-4 flex justify-between px-4 pointer-events-none">
-          {privilage === Privilage.Owner ? (
+        </div>
+        {isRoutingToOverview && (
+          <LoaderSpinner classList="absolute top-2 right-2 !text-primary" />
+        )}
+        <div className="flex flex-col justify-between w-full flex-grow p-2 gap-2">
+          <div className="flex flex-col pt-1 px-1 gap-2">
+            <h3 className="text-2xl group-hover:text-primary transition-all">
+              {title}
+            </h3>
+            {description && (
+              <div className="text-12 text-[#797979]">{description}</div>
+            )}
+          </div>
+          {(privilage === Privilage.Owner ||
+            privilage === Privilage.Editor) && <div className="h-10" />}
+        </div>
+      </Link>
+      {(privilage === Privilage.Owner || privilage === Privilage.Editor) && (
+        <div className="absolute bottom-0 w-full p-2 flex justify-between items-center pointer-events-none">
+          {privilage === Privilage.Owner && (
             <DeleteRecipeButton
               recipeId={id}
               groupId={groupId}
               recipeTitle={title}
-              classList="!bg-transparent hover:!bg-primary"
             />
-          ) : (
-            <div></div>
           )}
-          {privilage !== Privilage.Viewer ? (
-            <LinkButton
-              icon={<Pencil />}
-              href={`/app/${groupId}/${id}/edit`}
-              classList="!bg-transparent hover:!bg-accent pointer-events-auto"
-            />
-          ) : (
-            <div></div>
-          )}
+          <LinkButton
+            icon={<Pencil className="text-[#7f7f7f]" />}
+            href={`/app/${groupId}/${id}/edit`}
+            classList="pointer-events-auto"
+            variant={ButtonVariant.Minimalistic}
+          />
         </div>
-      </Card>
-    </>
+      )}
+    </Card>
   );
 };
 

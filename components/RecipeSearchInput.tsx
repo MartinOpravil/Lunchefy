@@ -80,7 +80,7 @@ const RecipeSearchInput = ({
       <div className="w-full flex flex-col gap-2 justify-start items-start @md:flex-row ">
         <div className="flex flex-shrink min-w-60">
           <Select value={searchBy} onValueChange={handleSearchByChange}>
-            <SelectTrigger className="input-class h-full border-2 border-accent focus-visible:ring-secondary transition-all">
+            <SelectTrigger className="input-class h-full transition-all">
               <SelectValue className="placeholder:text-secondary" />
             </SelectTrigger>
             <SelectContent className="bg-background">

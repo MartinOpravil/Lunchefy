@@ -231,6 +231,11 @@
         "Name": "Vyhledávání podle názvu receptu",
         "Tags": "Vyhledávání podle značek"
       }
+    },
+    "Scroll": {
+      "Full": "Posuňte se dolů pro načtení dalších",
+      "Top": "Posuňte se dolů pro",
+      "Bottom": "Načtení dalších"
     }
   },
   "Users": {

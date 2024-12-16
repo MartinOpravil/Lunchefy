@@ -38,11 +38,11 @@ const ActionButton = ({
       )}
       onClick={onClick}
       disabled={isDisabled}
-      variant={variant}
+      variant={isDisabled ? undefined : variant}
     >
       {iconName && <IconImage name={iconName} />}
       {icon && <div className={`${isLoading && "opacity-0"}`}>{icon}</div>}
-      {title && <div>{title}</div>}
+      {title && <div className="">{title}</div>}
       {isLoading && <LoaderSpinner />}
     </Button>
   );

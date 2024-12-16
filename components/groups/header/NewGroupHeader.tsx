@@ -24,23 +24,22 @@ const NewGroupHeader = () => {
     <PageHeader
       title={t("Groups.General.NewGroupTitle")}
       icon={<Users className="header-icon" />}
-      actionButton={
-        <>
-          <ActionButton
-            icon={<ArrowLeft />}
-            onClick={performManualLeaveAction}
-            variant={ButtonVariant.Dark}
-          />
-          <HorizontalSeparator />
-          <ActionButton
-            title={t("Global.Button.Save")}
-            icon={<Save />}
-            variant={ButtonVariant.Positive}
-            onClick={() => handleSubmit}
-            isDisabled={!isDirty}
-            isLoading={isSubmitting}
-          />
-        </>
+      leftSide={
+        <ActionButton
+          icon={<ArrowLeft />}
+          onClick={performManualLeaveAction}
+          variant={ButtonVariant.Minimalistic}
+        />
+      }
+      rightSide={
+        <ActionButton
+          title={t("Global.Button.Save")}
+          icon={<Save />}
+          variant={ButtonVariant.Positive}
+          onClick={() => handleSubmit}
+          isDisabled={!isDirty}
+          isLoading={isSubmitting}
+        />
       }
     />
   );

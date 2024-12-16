@@ -10,6 +10,7 @@ import { api } from "@/convex/_generated/api";
 import { RECIPES_NEXT_COUNT } from "@/constants/pagination";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 interface PlannerRecipeListPaginatedProps {
   recipeListPaginated: UsePaginatedQueryReturnType<
@@ -26,6 +27,7 @@ const PlannerRecipeListPaginated = ({
   selectResultAction,
   selectedRecipeId,
 }: PlannerRecipeListPaginatedProps) => {
+  const t = useTranslations("Recipes.Scroll");
   return (
     <>
       <div className="flex flex-col w-full gap-1 pt-2 h-40 relative overflow-y-auto">
@@ -69,7 +71,7 @@ const PlannerRecipeListPaginated = ({
               <Skeleton className="h-full w-full bg-accent/70" />
               <div className="absolute top-0 left-0 w-full h-full text-white-1 flex justify-center items-center gap-2">
                 <Mouse />
-                <div>Scroll down to Load more</div>
+                <div>{t("Full")}</div>
               </div>
             </div>
           )}

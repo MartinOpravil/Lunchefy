@@ -231,6 +231,11 @@
         "Name": "Search by recipe name",
         "Tags": "Searcb by tags"
       }
+    },
+    "Scroll": {
+      "Full": "Scroll down to load more",
+      "Top": "Scroll down to",
+      "Bottom": "Load more"
     }
   },
   "Users": {

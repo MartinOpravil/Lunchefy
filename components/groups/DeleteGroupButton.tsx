@@ -66,7 +66,9 @@ const DeleteGroupButton = ({
   return (
     <>
       <ActionButton
-        icon={<Trash2 />}
+        icon={
+          <Trash2 className="text-[#111111] group-hover:text-primary transition-all" />
+        }
         onClick={handleOpenDialog}
         isLoading={isDeleting}
         variant={ButtonVariant.Negative}

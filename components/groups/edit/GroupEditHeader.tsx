@@ -9,7 +9,15 @@ import { ButtonVariant, Privilage } from "@/enums";
 import Image from "next/image";
 import DeleteGroupButton from "../DeleteGroupButton";
 import { getGroupById } from "@/convex/groups";
-import { ArrowLeft, Book, Save, Share2, Users } from "lucide-react";
+import {
+  ArrowLeft,
+  Book,
+  BookOpenText,
+  ChefHat,
+  Save,
+  Share2,
+  Users,
+} from "lucide-react";
 import HorizontalSeparator from "@/components/global/HorizontalSeparator";
 import { useFormContext } from "react-hook-form";
 import { useTranslations } from "next-intl";
@@ -34,11 +42,18 @@ const GroupEditHeader = ({ group }: GroupEditHeaderProps) => {
         title={`${group.data.name}`}
         icon={<Users className="header-icon" />}
         leftSide={
-          <LinkButton
-            icon={<ArrowLeft />}
-            href="/app"
-            variant={ButtonVariant.Dark}
-          />
+          <>
+            <LinkButton
+              icon={<ArrowLeft className="text-[#111111]" />}
+              href="/app"
+              variant={ButtonVariant.Minimalistic}
+            />
+            <LinkButton
+              icon={<ChefHat className="text-[#111111]" />}
+              href={`/app/${group.data._id}`}
+              variant={ButtonVariant.Minimalistic}
+            />
+          </>
         }
         rightSide={
           <>
@@ -49,13 +64,13 @@ const GroupEditHeader = ({ group }: GroupEditHeaderProps) => {
                   groupTitle={group.data.name}
                   redirectAfterDelete
                 />
-                <LinkButton icon={<Book />} href={`/app/${group.data._id}`} />
                 <ActionButton
-                  icon={<Share2 />}
+                  icon={<Share2 className="text-[#111111]" />}
                   onClick={(e) => {
                     e.preventDefault();
                     setIsAccessManagerOpen(true);
                   }}
+                  variant={ButtonVariant.Minimalistic}
                 />
                 <ActionButton
                   title={t("Global.Button.Save")}

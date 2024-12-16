@@ -20,7 +20,7 @@ const ConvexClerkProvider = ({ children }: { children: ReactNode }) => (
     appearance={{
       layout: {},
       variables: {
-        colorBackground: "#fdf8ed",
+        colorBackground: "#ffffff",
         colorPrimary: "#f2726e",
         colorText: "#57463e",
         colorInputBackground: "#fdf8ed",

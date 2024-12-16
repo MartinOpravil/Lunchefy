@@ -90,7 +90,7 @@ const GroupListPage = ({
 
   // Overview
   return (
-    <main className="page gap-6">
+    <main className="page gap-6 justify-between">
       {/* <PageHeader
         title={t("Groups.General.Title")}
         icon="recipe_book"
@@ -103,7 +103,7 @@ const GroupListPage = ({
           />
         }
       /> */}
-      <main className="page-content @container !justify-center !items-center min-h-[300px]">
+      <main className="page-content @container !justify-center !items-center min-h-[300px] flex-grow">
         <GroupList
           groupList={groupList}
           onClick={() => setIsNewFormOpen(true)}
@@ -115,8 +115,6 @@ const GroupListPage = ({
           {t("Groups.General.Disclaimer.Title")}
         </h3>
         <div className="text-12">{t("Groups.General.Disclaimer.Text")}</div>
-        {/* TODO: Implement a way to get owner email address */}
-        <h3 className="text-14">m.opravil@gmail.com</h3>
       </div>
     </main>
   );

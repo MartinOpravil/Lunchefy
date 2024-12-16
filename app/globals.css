@@ -17,6 +17,7 @@ html {
     rgba(236, 231, 220, 1) 100%
   ); */
   color: var(--text);
+  font-family: var(--font-inter);
 }
 
 :root {
@@ -118,7 +119,8 @@ html {
   }
 
   .action-button {
-    @apply relative text-16 w-fit font-extrabold text-white-1 gap-2 transition-all p-2.5;
+    @apply relative text-16 w-fit font-medium gap-2 transition-all p-2.5;
+    font-family: var(--font-inter);
   }
   .icon-primary {
     .svg {
@@ -126,14 +128,14 @@ html {
     }
   }
   .heading-underline {
-    @apply w-full bg-[#CECECE] mt-3 rounded-md h-[1px];
+    @apply w-full bg-[#CECECE] my-4 rounded-md h-[1px];
   }
 
   .page {
-    @apply flex flex-col py-6 min-h-[calc(100vh-118px)];
+    @apply flex flex-col pb-6 min-h-[calc(100vh-118px)];
   }
   .page-content {
-    @apply relative h-full flex flex-col items-center justify-start py-12;
+    @apply relative h-full flex flex-col items-center justify-start pt-16 pb-4;
   }
 
   .group-grid {

@@ -3,7 +3,7 @@ import LinkButton from "@/components/global/LinkButton";
 import PageHeader from "@/components/global/PageHeader";
 import { getRecipeById } from "@/convex/recipes";
 import { ButtonVariant, Privilage } from "@/enums";
-import { ArrowLeft, Pencil } from "lucide-react";
+import { ArrowLeft, NotebookText, Pencil } from "lucide-react";
 import React from "react";
 
 interface RecipeHeaderProps {
@@ -16,23 +16,23 @@ const RecipeHeader = ({ recipe }: RecipeHeaderProps) => {
   return (
     <PageHeader
       title={recipe.data.name}
-      icon="recipe"
+      icon={<NotebookText className="text-white-1" />}
       description={recipe.data.description}
-      actionButton={
+      leftSide={
+        <LinkButton
+          icon={<ArrowLeft />}
+          href={`/app/${recipe.data.groupId}`}
+          variant={ButtonVariant.Minimalistic}
+        />
+      }
+      rightSide={
         <>
-          <LinkButton
-            icon={<ArrowLeft />}
-            href={`/app/${recipe.data.groupId}`}
-            variant={ButtonVariant.Dark}
-          />
           {recipe.data.privilage !== Privilage.Viewer && (
-            <>
-              <div className="bg-accent w-[1.5px] h-6 mx-2 rounded"></div>
-              <LinkButton
-                icon={<Pencil />}
-                href={`/app/${recipe.data.groupId}/${recipe.data._id}/edit`}
-              />
-            </>
+            <LinkButton
+              icon={<Pencil />}
+              href={`/app/${recipe.data.groupId}/${recipe.data._id}/edit`}
+              variant={ButtonVariant.Minimalistic}
+            />
           )}
         </>
       }

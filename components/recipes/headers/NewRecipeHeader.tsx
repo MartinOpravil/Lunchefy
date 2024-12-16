@@ -3,7 +3,7 @@ import ActionButton from "@/components/global/ActionButton";
 import HorizontalSeparator from "@/components/global/HorizontalSeparator";
 import PageHeader from "@/components/global/PageHeader";
 import { ButtonVariant } from "@/enums";
-import { ArrowLeft, Save } from "lucide-react";
+import { ArrowLeft, NotebookText, Save } from "lucide-react";
 import { useTranslations } from "next-intl";
 import React from "react";
 import { useFormContext } from "react-hook-form";
@@ -23,24 +23,23 @@ const NewRecipeHeader = () => {
   return (
     <PageHeader
       title={t("Recipes.General.NewRecipeTitle")}
-      icon="recipe"
-      actionButton={
-        <>
-          <ActionButton
-            icon={<ArrowLeft />}
-            onClick={performManualLeaveAction}
-            variant={ButtonVariant.Dark}
-          />
-          <HorizontalSeparator />
-          <ActionButton
-            title={t("Global.Button.Save")}
-            icon={<Save />}
-            variant={ButtonVariant.Positive}
-            onClick={() => handleSubmit}
-            isDisabled={!isDirty}
-            isLoading={isSubmitting}
-          />
-        </>
+      icon={<NotebookText className="text-white-1" />}
+      leftSide={
+        <ActionButton
+          icon={<ArrowLeft />}
+          onClick={performManualLeaveAction}
+          variant={ButtonVariant.Minimalistic}
+        />
+      }
+      rightSide={
+        <ActionButton
+          title={t("Global.Button.Save")}
+          icon={<Save />}
+          variant={ButtonVariant.Positive}
+          onClick={() => handleSubmit}
+          isDisabled={!isDirty}
+          isLoading={isSubmitting}
+        />
       }
     />
   );

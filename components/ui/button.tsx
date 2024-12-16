@@ -10,11 +10,13 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-accent hover:bg-opacity-75 text-primary-foreground rounded-lg",
-        dark: "bg-gray-700 hover:bg-opacity-75 rounded-lg",
-        negative: "bg-primary hover:bg-opacity-75 rounded-lg",
-        positive: "bg-secondary hover:bg-opacity-75 rounded-lg",
-        editor: "bg-accent hover:bg-opacity-75 !p-1 !h-fit",
+          "bg-background rounded-lg outline outline-1 outline-[#CECECE] hover:outline-primary",
+        minimalistic:
+          "bg-background outline outline-1 outline-transparent hover:outline-[#CECECE] rounded-lg",
+        negative:
+          "bg-background outline outline-1 outline-transparent hover:outline-primary rounded-lg group",
+        positive: "bg-[#A4B476] text-white-1 rounded-lg group hover:bg-primary",
+        editor: "bg-background bg-accent hover:bg-opacity-75 !p-1 !h-fit",
       },
       size: {
         default: "h-10 px-4 py-2",

@@ -5,7 +5,7 @@ import { getRecipeById } from "@/convex/recipes";
 import { ButtonVariant, Privilage } from "@/enums";
 import React from "react";
 import DeleteRecipeButton from "../DeleteRecipeButton";
-import { ArrowLeft, Book, Save } from "lucide-react";
+import { ArrowLeft, Book, NotebookText, Save } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import { useTranslations } from "next-intl";
 
@@ -25,16 +25,23 @@ const RecipeDetailHeader = ({ recipe }: RecipeDetailHeaderProps) => {
   return (
     <PageHeader
       title={`${recipe.data.name}`}
-      icon="recipe"
-      actionButton={
+      icon={<NotebookText className="text-white-1" />}
+      leftSide={
         <>
           <LinkButton
-            // iconName="back"
             icon={<ArrowLeft />}
             href={`/app/${recipe.data.groupId}`}
-            variant={ButtonVariant.Dark}
+            variant={ButtonVariant.Minimalistic}
           />
-          <div className="bg-accent w-[1.5px] h-6 mx-2 rounded"></div>
+          <LinkButton
+            icon={<Book />}
+            href={`/app/${recipe.data.groupId}/${recipe.data._id}`}
+            variant={ButtonVariant.Minimalistic}
+          />
+        </>
+      }
+      rightSide={
+        <>
           {recipe.data.privilage === Privilage.Owner && (
             <DeleteRecipeButton
               recipeId={recipe.data._id}
@@ -43,10 +50,7 @@ const RecipeDetailHeader = ({ recipe }: RecipeDetailHeaderProps) => {
               redirectAfterDelete
             />
           )}
-          <LinkButton
-            icon={<Book />}
-            href={`/app/${recipe.data.groupId}/${recipe.data._id}`}
-          />
+
           <ActionButton
             title={t("Global.Button.Save")}
             icon={<Save />}

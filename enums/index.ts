@@ -22,6 +22,6 @@ export enum ButtonVariant {
   // Default = "default",
   Negative = "negative",
   Positive = "positive",
-  Dark = "dark",
+  Minimalistic = "minimalistic",
   Editor = "editor",
 }

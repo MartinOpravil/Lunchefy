@@ -190,11 +190,15 @@ const ImageInput = (
                   icon={<CloudUpload />}
                   title={t("Image.ChangeImage")}
                   onClick={handleFileOpen}
+                  classList="outline-[#CECECE] hover:outline-primary"
                 />
                 <ActionButton
-                  icon={<Trash2 />}
+                  icon={
+                    <Trash2 className="group-hover:text-primary transition-all" />
+                  }
                   onClick={handleFileRemoval}
                   variant={ButtonVariant.Negative}
+                  classList="outline-[#CECECE]"
                 />
               </div>
               {(isImageLoading || isImageConverting) && (

@@ -1,6 +1,7 @@
 import { Privilage } from "@/enums";
 import { cn } from "@/lib/utils";
 import { PrivilageBadgeProps } from "@/types";
+import { User, UserCog, UserPen } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import React, { useMemo } from "react";
@@ -10,38 +11,33 @@ const PrivilageBadge = ({ privilage }: PrivilageBadgeProps) => {
   const privilageImage = useMemo(() => {
     switch (privilage) {
       case Privilage.Owner:
-        return "owner";
+        return <UserCog />;
       case Privilage.Editor:
-        return "edit";
+        return <UserPen />;
       default:
-        return "viewer";
+        return <User />;
     }
   }, [privilage]);
 
-  const privilageBackground = useMemo(() => {
-    switch (privilage) {
-      case Privilage.Owner:
-        return "bg-primary";
-      case Privilage.Editor:
-        return "bg-accent";
-      default:
-        return "bg-secondary";
-    }
-  }, [privilage]);
+  // const privilageStyles = useMemo(() => {
+  //   switch (privilage) {
+  //     case Privilage.Owner:
+  //       return "bg-primary bg-[#A4B476]";
+  //     case Privilage.Editor:
+  //       return "bg-accent";
+  //     default:
+  //       return "bg-secondary";
+  //   }
+  // }, [privilage]);
 
   return (
     <div
       className={cn(
-        "text-white-1 w-fit rounded-full px-3 py-1 select-none flex gap-2",
-        privilageBackground
+        "text-white-1 w-fit rounded-full px-3 py-1 select-none flex gap-2 outline outline-1 bg-[#A4B476]"
+        // privilageStyles
       )}
     >
-      <Image
-        src={`/icons/${privilageImage}.svg`}
-        alt="privilage"
-        width={15}
-        height={15}
-      />
+      {privilageImage}
       {t(`AccessManager.Privilage.${privilage}`)}
     </div>
   );

@@ -61,11 +61,13 @@ const DeleteRecipeButton = ({
   return (
     <>
       <ActionButton
-        icon={<Trash2 />}
+        icon={
+          <Trash2 className="group-hover/delete:text-primary transition-all" />
+        }
         onClick={handleOpenDialog}
         isLoading={isDeleting}
         variant={ButtonVariant.Negative}
-        classList={cn("pointer-events-auto", classList)}
+        classList={cn("pointer-events-auto group/delete", classList)}
       />
       <ActionDialog
         isOpen={isDialogOpen}

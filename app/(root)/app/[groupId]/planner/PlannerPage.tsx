@@ -12,7 +12,14 @@ import {
 import { api } from "@/convex/_generated/api";
 import PageHeader from "@/components/global/PageHeader";
 import LinkButton from "@/components/global/LinkButton";
-import { ArrowLeft, Pencil, Plus, Replace, Trash2 } from "lucide-react";
+import {
+  ArrowLeft,
+  CalendarFold,
+  Pencil,
+  Plus,
+  Replace,
+  Trash2,
+} from "lucide-react";
 import { ButtonVariant, HttpResponseCode } from "@/enums";
 import ActionButton from "@/components/global/ActionButton";
 import { notifyError, notifySuccess } from "@/lib/notifications";
@@ -281,19 +288,21 @@ const PlannerPage = ({
   return (
     <main className="page pb-8">
       <PageHeader
-        title={`${group.data.name} - ${t("Groups.Planner.Title")}`}
-        icon="recipe_book"
-        description={group.data.description}
-        actionButton={
+        title={t("Groups.Planner.Title")}
+        icon={<CalendarFold className="text-white-1" />}
+        leftSide={
+          <LinkButton
+            icon={<ArrowLeft />}
+            href={`/app/${group.data._id}`}
+            variant={ButtonVariant.Minimalistic}
+          />
+        }
+        rightSide={
           <>
-            <LinkButton
-              icon={<ArrowLeft />}
-              href={`/app/${group.data._id}`}
-              variant={ButtonVariant.Dark}
-            />
-            <div className="bg-accent w-[1.5px] h-6 mx-2 rounded"></div>
             <ActionButton
-              icon={<Trash2 />}
+              icon={
+                <Trash2 className="group-hover:text-primary transition-all" />
+              }
               onClick={() => setIsRemoveDialogOpen(true)}
               variant={ButtonVariant.Negative}
               isDisabled={!selectedPlan}
@@ -302,6 +311,7 @@ const PlannerPage = ({
               icon={<Pencil />}
               onClick={() => handleOpenModifyDialog(RecipeAction.Swap)}
               isDisabled={!selectedPlan}
+              variant={ButtonVariant.Minimalistic}
             />
             <ActionButton
               title={t("Groups.Planner.Button.Assign")}

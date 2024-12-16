@@ -18,7 +18,15 @@ import {
   usePaginatedQuery,
   usePreloadedQuery,
 } from "convex/react";
-import { ArrowLeft, CalendarFold, Pencil, Plus, Search } from "lucide-react";
+import {
+  ArrowLeft,
+  BookOpenText,
+  CalendarFold,
+  ChefHat,
+  Pencil,
+  Plus,
+  Search,
+} from "lucide-react";
 import React, { useRef, useState } from "react";
 import { SubmitHandler } from "react-hook-form";
 import NoContent from "@/components/global/NoContent";
@@ -28,6 +36,8 @@ import { Option } from "@/components/ui/multiple-selector";
 import RecipeSearchInput from "@/components/RecipeSearchInput";
 import { useTranslations } from "next-intl";
 import { useTagManager } from "@/components/recipes/TagManager";
+import Link from "next/link";
+import PlannerButton from "@/components/groups/PlannerButton";
 
 interface GroupPageProps {
   userPreloaded: Preloaded<typeof api.users.getLoggedUser>;
@@ -152,40 +162,28 @@ const GroupPage = ({
   }
 
   return (
-    <main className="page pb-8">
+    <main className="page pb-4">
       <PageHeader
         title={group.data.name}
-        icon="recipe_book"
+        icon={<ChefHat className="text-white-1" />}
         description={group.data.description}
-        actionButton={
+        leftSide={
           <>
             <LinkButton
               icon={<ArrowLeft />}
               href="/app"
-              variant={ButtonVariant.Dark}
+              variant={ButtonVariant.Minimalistic}
             />
-            <div className="flex gap-2 items-center bg-accent/70 rounded-md">
-              <LinkButton
-                icon={<CalendarFold />}
-                href={`/app/${group.data._id}/planner`}
-              />
-              <div className="text-white-1 pr-2">
-                <div className="text-12">
-                  {t("Groups.Planner.Button.Today")}
-                </div>
-                <div>
-                  {todayRecipe.data?.length
-                    ? todayRecipe.data[0].name
-                    : t("Groups.Planner.TodayNoRecipe")}
-                </div>
-              </div>
-            </div>
+          </>
+        }
+        rightSide={
+          <>
             {group.data.privilage !== Privilage.Viewer && (
               <>
-                <div className="bg-accent w-[1.5px] h-6 mx-2 rounded"></div>
                 <LinkButton
                   icon={<Pencil />}
                   href={`/app/${group.data._id}/edit`}
+                  variant={ButtonVariant.Minimalistic}
                 />
                 <ActionButton
                   title={t("Global.Button.New")}
@@ -196,6 +194,13 @@ const GroupPage = ({
               </>
             )}
           </>
+        }
+        topSide={
+          <PlannerButton
+            groupId={group.data._id}
+            todayRecipeName={todayRecipe.data?.[0]?.name}
+            todayRecipeCount={todayRecipe.data?.length}
+          />
         }
       />
       <main className="page-content gap-6">
@@ -220,7 +225,7 @@ const GroupPage = ({
           />
         ) : (
           <div className="w-full">
-            <div className="w-full overflow-y-auto">
+            <div className="w-full">
               <div className="flex w-full flex-col items-center gap-3 @container">
                 {!initialRecipes.page.length ? (
                   <>

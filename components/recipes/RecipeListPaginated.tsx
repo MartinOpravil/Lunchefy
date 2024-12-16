@@ -8,6 +8,7 @@ import { Skeleton } from "../ui/skeleton";
 import { UsePaginatedQueryReturnType } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { RECIPES_NEXT_COUNT } from "@/constants/pagination";
+import { useTranslations } from "next-intl";
 
 interface RecipeListPaginatedProps {
   recipeListPaginated: UsePaginatedQueryReturnType<
@@ -20,6 +21,7 @@ const RecipeListPaginated = ({
   recipeListPaginated,
   privilage,
 }: RecipeListPaginatedProps) => {
+  const t = useTranslations("Recipes.Scroll");
   return (
     <>
       <div className="recipe-grid">
@@ -42,12 +44,12 @@ const RecipeListPaginated = ({
         >
           {recipeListPaginated.status !== "Exhausted" && (
             <div className="h-full w-full relative">
-              <Skeleton className="h-full w-full bg-accent/70" />
+              <Skeleton className="h-full w-full bg-primary/30" />
               <div className="absolute top-0 left-0 w-full h-full text-white-1 flex flex-col justify-center items-center gap-2">
                 <Mouse />
                 <div className="text-center">
-                  Scroll down to
-                  <h3>Load more</h3>
+                  {t("Top")}
+                  <h3>{t("Bottom")}</h3>
                 </div>
               </div>
             </div>
