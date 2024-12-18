@@ -461,7 +461,7 @@ const MultipleSelector = React.forwardRef<
       >
         <div
           className={cn(
-            "min-h-10 rounded-md border border-input text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
+            "min-h-10 focus-within:border-primary flex w-full items-center",
             {
               "px-3 py-2": selected.length !== 0,
               "cursor-text": !disabled && selected.length !== 0,
@@ -473,13 +473,17 @@ const MultipleSelector = React.forwardRef<
             inputRef?.current?.focus();
           }}
         >
-          <div className="relative flex flex-wrap gap-1">
+          <div
+            className={cn("relative flex flex-wrap gap-1 w-full", {
+              "!pr-8": selected.length,
+            })}
+          >
             {selected.map((option) => {
               return (
                 <Badge
                   key={option.value}
                   className={cn(
-                    "flex gap-2",
+                    "flex gap-1 bg-secondary text-white-1 pl-1.5 pr-1",
                     "data-[disabled]:bg-muted-foreground data-[disabled]:text-muted data-[disabled]:hover:bg-muted-foreground",
                     "data-[fixed]:bg-muted-foreground data-[fixed]:text-muted data-[fixed]:hover:bg-muted-foreground",
                     badgeClassName
@@ -488,10 +492,13 @@ const MultipleSelector = React.forwardRef<
                   data-disabled={disabled || undefined}
                 >
                   <Image
+                    unoptimized
                     src={`/icons/tags/${option.value}.svg`}
                     alt="Tag"
                     width={20}
                     height={20}
+                    className="w-[20px] h-[20px]"
+                    style={{ filter: "invert(100%)" }}
                   />
                   {valueToTag(option.value)?.label}
                   <button
@@ -542,11 +549,11 @@ const MultipleSelector = React.forwardRef<
                   : placeholder
               }
               className={cn(
-                "flex-1 bg-transparent outline-none placeholder:text-secondary",
+                "flex-1 bg-transparent outline-none h-full px-3",
                 {
                   "w-full": hidePlaceholderWhenSelected,
-                  "px-3 py-2": selected.length === 0,
-                  "ml-1": selected.length !== 0,
+                  "": selected.length === 0,
+                  "": selected.length !== 0,
                 },
                 inputProps?.className
               )}
@@ -568,9 +575,7 @@ const MultipleSelector = React.forwardRef<
             >
               <X />
             </button>
-            {selected.length < 1 && (
-              <ChevronDown className="absolute right-2 top-2 h-6 w-6 p-0" />
-            )}
+            {selected.length < 1 && <ChevronDown className="h-6 w-6 mr-2" />}
           </div>
         </div>
         <div className="relative">
@@ -635,6 +640,7 @@ const MultipleSelector = React.forwardRef<
                                 alt="Tag"
                                 width={30}
                                 height={30}
+                                className=""
                               />
                               {option.label}
                             </CommandItem>

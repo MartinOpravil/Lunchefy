@@ -266,7 +266,13 @@ html {
     li {
       p {
         margin: 0 !important;
+        /* font-size: 20px; */
       }
+    }
+  }
+  .prose-big {
+    p {
+      font-size: 20px;
     }
   }
 }
@@ -280,7 +286,7 @@ html {
 .editor-button,
 .color-editor-button {
   .lucide {
-    color: var(--background);
+    /* color: var(--background); */
   }
 }
 

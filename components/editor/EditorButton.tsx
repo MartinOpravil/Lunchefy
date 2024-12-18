@@ -104,7 +104,7 @@ const EditorButton = ({ type, editor }: EditorButtonProps) => {
         isActive = () => editor.isActive("heading", { level: 3 });
         break;
       case EditorButtonType.Paragraph:
-        icon = <div className="text-white-1 text-16 w-[1.5rem]">P</div>;
+        icon = <div className="text-16 w-[1.5rem]">P</div>;
         action = () => editor.chain().focus().setParagraph().run();
         isDisabled = () => !editor.can().chain().focus().setParagraph().run();
         isActive = () => editor.isActive("paragraph");
@@ -223,7 +223,7 @@ const EditorButton = ({ type, editor }: EditorButtonProps) => {
       disabled={isDisabled()}
       className={cn(
         "editor-button",
-        isActive() ? "outline outline-[3px] outline-primary" : ""
+        isActive() ? "outline outline-[2px] outline-primary" : ""
       )}
       onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
         performAction(e, action)

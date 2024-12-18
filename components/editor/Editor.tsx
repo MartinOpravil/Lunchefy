@@ -61,9 +61,9 @@ const Editor = ({ value, name }: EditorProps) => {
 
   return (
     <>
-      <div className="p-2 rounded border-2 border-accent bg-background focus-within:outline focus-within:outline-2 focus-within:outline-secondary focus-within:outline-offset-2 transition-all">
+      <div className="input-class p-2">
         <EditorControlBar editor={editor} />
-        <div className="bg-accent h-[1px] w-full my-2" />
+        <div className="heading-underline !my-[0.5rem]" />
         {editor ? (
           <EditorContent editor={editor} className="editor-content" />
         ) : (

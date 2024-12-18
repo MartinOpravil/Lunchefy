@@ -1,15 +1,18 @@
 "use client";
+import { cn } from "@/lib/utils";
 import { Users } from "lucide-react";
 import Image from "next/image";
 import React, { ReactNode } from "react";
 
 interface PageHeaderProps {
-  icon: ReactNode;
+  icon?: ReactNode;
   title: string;
   description?: string;
   topSide?: ReactNode;
   leftSide?: ReactNode;
   rightSide?: ReactNode;
+  showIcon?: boolean;
+  titleClassName?: string;
 }
 
 const PageHeader = ({
@@ -19,13 +22,17 @@ const PageHeader = ({
   topSide,
   leftSide,
   rightSide,
+  showIcon = true,
+  titleClassName,
 }: PageHeaderProps) => {
   return (
     <nav className="relative">
       <div className="flex flex-wrap gap-2 gap-y-6 justify-between items-end">
         <div className="flex flex-col">
-          <h2 className="flex items-center gap-3">
-            <div className="rounded-full bg-primary p-2">{icon}</div>
+          <h2 className={cn("flex items-center gap-3", titleClassName)}>
+            {showIcon && (
+              <div className="rounded-full bg-primary p-2">{icon}</div>
+            )}
             {title}
           </h2>
           {description && <p className="text-14 italic">{`${description}`}</p>}

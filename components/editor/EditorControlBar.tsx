@@ -10,7 +10,7 @@ interface EditorControlBarProps {
 }
 
 const EditorControlBar = ({ editor }: EditorControlBarProps) => {
-  const classes = "h-8 w-8 bg-gray-200";
+  const skeletonClasses = "h-8 w-8 bg-gray-200";
 
   return (
     <div className="flex gap-x-4 gap-y-1 flex-wrap justify-between">
@@ -30,12 +30,12 @@ const EditorControlBar = ({ editor }: EditorControlBarProps) => {
           </>
         ) : (
           <>
-            <Skeleton className={classes} />
-            <Skeleton className={classes} />
-            <Skeleton className={classes} />
-            <Skeleton className={classes} />
-            <Skeleton className={classes} />
-            <Skeleton className={classes} />
+            <Skeleton className={skeletonClasses} />
+            <Skeleton className={skeletonClasses} />
+            <Skeleton className={skeletonClasses} />
+            <Skeleton className={skeletonClasses} />
+            <Skeleton className={skeletonClasses} />
+            <Skeleton className={skeletonClasses} />
           </>
         )}
       </div>
@@ -53,10 +53,10 @@ const EditorControlBar = ({ editor }: EditorControlBarProps) => {
           </>
         ) : (
           <>
-            <Skeleton className={classes} />
-            <Skeleton className={classes} />
-            <Skeleton className={classes} />
-            <Skeleton className={classes} />
+            <Skeleton className={skeletonClasses} />
+            <Skeleton className={skeletonClasses} />
+            <Skeleton className={skeletonClasses} />
+            <Skeleton className={skeletonClasses} />
           </>
         )}
       </div>

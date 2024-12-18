@@ -16,7 +16,8 @@ const buttonVariants = cva(
         negative:
           "bg-background outline outline-1 outline-transparent hover:outline-primary rounded-lg group",
         positive: "bg-[#A4B476] text-white-1 rounded-lg group hover:bg-primary",
-        editor: "bg-background bg-accent hover:bg-opacity-75 !p-1 !h-fit",
+        editor:
+          "bg-background outline outline-1 outline-transparent hover:outline-primary !p-1 !h-fit transition-all",
       },
       size: {
         default: "h-10 px-4 py-2",
