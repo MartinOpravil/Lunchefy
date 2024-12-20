@@ -2,28 +2,24 @@
 import Lightbox, { LightboxHandle } from "@/components/global/Lightbox";
 import LinkButton from "@/components/global/LinkButton";
 import PageHeader from "@/components/global/PageHeader";
-import { useTagManager } from "@/components/recipes/TagManager";
+import RecipeTagList from "@/components/recipes/RecipeTagList";
+import SimilarRecipes from "@/components/recipes/SimilarRecipes";
 import { api } from "@/convex/_generated/api";
 import { ButtonVariant, Privilage } from "@/enums";
 import { Preloaded, usePreloadedQuery } from "convex/react";
-import { ArrowLeft, Pencil } from "lucide-react";
+import { ArrowLeft, CalendarFold, Pencil } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 
 interface RecipePageProps {
   recipePreloaded: Preloaded<typeof api.recipes.getRecipeById>;
 }
 
 const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
+  const t = useTranslations("Recipes.General");
   const recipe = usePreloadedQuery(recipePreloaded);
   const lightboxRef = useRef<LightboxHandle>(null);
-
-  const { convertToTags } = useTagManager();
-
-  const formatTextWithHTML = (text?: string) => {
-    if (!text) return { __html: "" };
-    return { __html: text.replace(/\n/g, "<br />") };
-  };
 
   if (!recipe.data) {
     return <></>;
@@ -36,11 +32,18 @@ const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
         showIcon={false}
         titleClassName="md:text-[60px]"
         leftSide={
-          <LinkButton
-            icon={<ArrowLeft />}
-            href={`/app/${recipe.data.groupId}`}
-            variant={ButtonVariant.Minimalistic}
-          />
+          <>
+            <LinkButton
+              icon={<ArrowLeft />}
+              href={`/app/${recipe.data.groupId}`}
+              variant={ButtonVariant.Minimalistic}
+            />
+            <LinkButton
+              icon={<CalendarFold />}
+              href={`/app/${recipe.data.groupId}/planner`}
+              variant={ButtonVariant.Minimalistic}
+            />
+          </>
         }
         rightSide={
           <>
@@ -60,7 +63,7 @@ const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
             <div className="text-[20px]">{recipe.data.description}</div>
           )}
           {recipe.data.coverImage?.imageUrl && (
-            <div className="rounded-xl overflow-hidden w-full aspect-[16/10]">
+            <div className="rounded-xl overflow-hidden w-full aspect-[16/10] outline outline-2 outline-transparent hover:outline-primary transition-all">
               <Image
                 src={recipe.data.coverImage?.imageUrl}
                 alt="recipe image"
@@ -76,13 +79,15 @@ const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
               />
             </div>
           )}
-          <div className="flex flex-col sm:flex-row gap-8">
+          <div className="flex flex-col sm:flex-row gap-20">
             <div className="flex flex-col flex-grow">
               {!recipe.data.isImageRecipe ? (
                 <div className="flex flex-col gap-12">
                   {recipe.data.ingredients && (
                     <div className="flex flex-col gap-2">
-                      <h2>Ingredients:</h2>
+                      <h2 className="text-[28px]">
+                        {t("Form.Property.Ingredients")}
+                      </h2>
                       <div
                         className="prose prose-big"
                         dangerouslySetInnerHTML={{
@@ -93,7 +98,9 @@ const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
                   )}
                   {recipe.data.instructions && (
                     <div className="flex flex-col gap-2">
-                      <h2>Instrukce:</h2>
+                      <h2 className="text-[28px]">
+                        {t("Form.Property.Instructions")}
+                      </h2>
                       <div
                         className="prose prose-big"
                         dangerouslySetInnerHTML={{
@@ -107,9 +114,10 @@ const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
                 <>
                   {recipe.data.recipeImage?.imageUrl && (
                     <div className="flex flex-col gap-4">
-                      <h2 className="text-[28px]">Fotka receptu</h2>
-                      {/* <div className="heading-underline !mt-0" /> */}
-                      <div className="flex rounded-lg overflow-hidden h-full max-h-[800px]">
+                      <h2 className="text-[28px]">
+                        {t("Form.Property.RecipeImage")}
+                      </h2>
+                      <div className="flex rounded-lg overflow-hidden h-full max-h-[800px] outline outline-2 outline-transparent hover:outline-primary transition-all">
                         <Image
                           src={recipe.data.recipeImage?.imageUrl}
                           alt="recipe image"
@@ -129,31 +137,22 @@ const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
                 </>
               )}
             </div>
-            <div className="sm:min-w-[33%] flex flex-col gap-12">
+            <div className="sm:min-w-[33%] sm:w-[33%] flex flex-col gap-12">
               {recipe.data.tags && (
                 <div className="p-4 bg-[#f9f9f9] rounded-lg">
-                  <h2>Tagy</h2>
-                  <div className="flex flex-col gap-4 pt-8">
-                    {convertToTags(recipe.data.tags).map((tag, index) => (
-                      <div key={index} className="flex gap-4 items-center">
-                        <Image
-                          unoptimized
-                          src={`/icons/tags/${tag.value}.svg`}
-                          alt="Tag"
-                          width={40}
-                          height={40}
-                          className="w-[40px] h-[40px]"
-                        />
-                        <h3>{tag.label}</h3>
-                      </div>
-                    ))}
-                  </div>
+                  <h2 className="text-[28px] pb-6">
+                    {t("Form.Property.Tags")}
+                  </h2>
+                  <RecipeTagList recipeTags={recipe.data.tags} useName />
                 </div>
               )}
-              <div className="flex flex-col">
-                <h2>Podobné recepty</h2>
-                {/* <div className="heading-underline" /> */}
-              </div>
+              {recipe.data.tags && (
+                <SimilarRecipes
+                  groupId={recipe.data.groupId}
+                  recipeId={recipe.data._id}
+                  recipeTags={recipe.data.tags}
+                />
+              )}
             </div>
           </div>
         </div>

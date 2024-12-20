@@ -53,4 +53,5 @@ export interface Plan {
   planId: Id<"groupPlans">;
   date: "string";
   recipe: Doc<"recipes">;
+  creationTime: number;
 }

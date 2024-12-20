@@ -56,9 +56,10 @@ export const getGroupRecipeListForMonth = query({
           planId: plan._id,
           date: plan.date,
           recipe: recipeMap.get(plan.recipeId),
+          creationTime: plan._creationTime,
         } as Plan;
       })
-      .sort((a, b) => (a.date > b.date ? 1 : -1));
+      .sort((a, b) => (a.creationTime > b.creationTime ? 1 : -1));
 
     return createOKResponse(plan);
   },

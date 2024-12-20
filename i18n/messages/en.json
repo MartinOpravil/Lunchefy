@@ -1,5 +1,6 @@
 {
   "Global": {
+    "Loading": "Loading..",
     "Button": {
       "Back": "Back",
       "New": "New",
@@ -173,6 +174,7 @@
     "General": {
       "NewRecipeTitle": "New recipe",
       "ImageDeletionDisclaimer": "Keep in mind that using text will permanently delete previously uploaded image!",
+      "SimilarRecipes": "Similar recipes",
       "Form": {
         "Property": {
           "Name": "Name",

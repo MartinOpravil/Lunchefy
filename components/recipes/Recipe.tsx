@@ -28,6 +28,7 @@ export interface RecipeProps {
   ingredients?: string;
   recipe?: string;
   recipePhotoUrl?: string;
+  vertical?: boolean;
 }
 
 const Recipe = ({
@@ -37,6 +38,7 @@ const Recipe = ({
   privilage,
   description,
   imageUrl,
+  vertical = false,
 }: RecipeProps) => {
   const [isRoutingToOverview, setIsRoutingToOverview] = useState(false);
 
@@ -48,10 +50,20 @@ const Recipe = ({
     >
       <Link
         href={`/app/${groupId}/${id}`}
-        className="min-h-[300px] h-full flex flex-col justify-between items-center"
+        className={cn(
+          "relative min-h-[300px] h-full flex flex-col justify-between items-center",
+          { "min-h-[240px]": privilage === Privilage.Viewer },
+          { "flex-row": vertical },
+          { "min-h-fit": vertical }
+        )}
         onClick={() => setIsRoutingToOverview(true)}
       >
-        <div className="relative w-full h-[180px] flex items-center justify-center overflow-hidden bg-[#cecece4b]">
+        <div
+          className={cn(
+            "relative w-full h-[180px] flex items-center justify-center overflow-hidden bg-[#cecece4b]",
+            { "min-h-[110px] min-w-[110px] w-[110px] !h-[110px]": vertical }
+          )}
+        >
           {imageUrl ? (
             <Image
               src={imageUrl}
@@ -75,15 +87,21 @@ const Recipe = ({
         )}
         <div className="flex flex-col justify-between w-full flex-grow p-2 gap-2">
           <div className="flex flex-col pt-1 px-1 gap-2">
-            <h3 className="text-2xl group-hover:text-primary transition-all">
+            <h3
+              className={cn(
+                "text-2xl group-hover:text-primary transition-all line-clamp-3",
+                { "text-xl": vertical }
+              )}
+            >
               {title}
             </h3>
-            {description && (
-              <div className="text-12 text-[#797979]">{description}</div>
+            {!vertical && description && (
+              <div className="text-12 text-[#797979] pb-1 line-clamp-3">
+                {description}
+              </div>
             )}
           </div>
-          {(privilage === Privilage.Owner ||
-            privilage === Privilage.Editor) && <div className="h-10" />}
+          {privilage !== Privilage.Viewer && <div className="h-10" />}
         </div>
       </Link>
       {(privilage === Privilage.Owner || privilage === Privilage.Editor) && (
@@ -96,7 +114,7 @@ const Recipe = ({
             />
           )}
           <LinkButton
-            icon={<Pencil className="text-[#7f7f7f]" />}
+            icon={<Pencil />}
             href={`/app/${groupId}/${id}/edit`}
             classList="pointer-events-auto"
             variant={ButtonVariant.Minimalistic}

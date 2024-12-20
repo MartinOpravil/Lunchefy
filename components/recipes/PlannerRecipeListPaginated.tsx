@@ -11,6 +11,7 @@ import { RECIPES_NEXT_COUNT } from "@/constants/pagination";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { Image as ImageLucide } from "lucide-react";
 
 interface PlannerRecipeListPaginatedProps {
   recipeListPaginated: UsePaginatedQueryReturnType<
@@ -34,25 +35,36 @@ const PlannerRecipeListPaginated = ({
         {recipeListPaginated.results?.map((recipe, index) => (
           <div
             className={cn(
-              "flex gap-2 justify-between items-center p-1 rounded-lg hover:bg-primary/50 cursor-pointer transition",
+              "flex gap-2 justify-between items-center p-1 rounded-lg hover:bg-primary/50 cursor-pointer transition group",
               selectedRecipeId === recipe._id && "bg-secondary"
             )}
             key={index}
             onClick={() => selectResultAction && selectResultAction(recipe._id)}
           >
-            <div className="flex gap-3 items-center">
-              {recipe.coverImage?.imageUrl && (
-                <div className="rounded-lg overflow-hidden max-w-[50px] max-h-[50px]">
+            <div className="flex gap-3 items-center ">
+              <div
+                className={cn(
+                  "relative flex items-center justify-center rounded-lg overflow-hidden bg-[#cecece4b] min-h-[50px] min-w-[50px] w-[50px] !h-[50px]"
+                )}
+              >
+                {recipe.coverImage?.imageUrl ? (
                   <Image
-                    src={recipe.coverImage?.imageUrl}
-                    alt="recipe image"
+                    src={recipe.coverImage.imageUrl}
+                    alt="Recipe cover"
+                    className="transition-all group-hover:scale-105"
                     width={0}
                     height={0}
                     sizes="100vw"
-                    className="w-[100%] h-[100%] object-contain"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }} // optional
                   />
-                </div>
-              )}
+                ) : (
+                  <ImageLucide className="!w-8 !h-8 text-[#CECECE] transition-all group-hover:scale-110" />
+                )}
+              </div>
               <h4>{recipe.name}</h4>
             </div>
             <div className="pr-2">

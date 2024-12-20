@@ -15,12 +15,13 @@ import LinkButton from "@/components/global/LinkButton";
 import {
   ArrowLeft,
   CalendarFold,
+  ExternalLink,
   Pencil,
   Plus,
   Replace,
   Trash2,
 } from "lucide-react";
-import { ButtonVariant, HttpResponseCode } from "@/enums";
+import { ButtonVariant, HttpResponseCode, Privilage } from "@/enums";
 import ActionButton from "@/components/global/ActionButton";
 import { notifyError, notifySuccess } from "@/lib/notifications";
 import { Id } from "@/convex/_generated/dataModel";
@@ -31,7 +32,6 @@ import {
 } from "@/lib/time";
 import LoaderSpinner from "@/components/global/LoaderSpinner";
 import { Plan } from "@/types";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ActionDialog from "@/components/global/ActionDialog";
 import BasicDialog from "@/components/global/BasicDialog";
 import RecipeSearchInput, {
@@ -40,6 +40,9 @@ import RecipeSearchInput, {
 import { Option } from "@/components/ui/multiple-selector";
 import PlannerRecipeResultList from "@/components/PlannerRecipeResultList";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
+import { Image as ImageLucide } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 enum RecipeAction {
   Assign = "assign",
@@ -336,14 +339,12 @@ const PlannerPage = ({
               onMonthChange={(e) => handleMonthChange(e)}
             />
             <div className="p-2 rounded w-full">
-              <div className="text-accent">
-                {t("Groups.Planner.RecipeListTitle")}
-              </div>
+              <h3>{t("Groups.Planner.RecipeListTitle")}</h3>
               <div className="pt-2">
                 {planList?.map((plan, index) => {
                   return (
                     <div key={index} className="flex gap-2">
-                      <div className="w-6 text-accent">
+                      <div className="w-6 text-secondary">
                         {convertToClientTime(plan.date).toLocaleString("cs", {
                           day: "numeric",
                         })}
@@ -362,64 +363,67 @@ const PlannerPage = ({
                   <LoaderSpinner size={15} />
                 </div>
               )}
-            <div>
+            <h2 className="">
               {date?.toLocaleDateString("cs")} -{" "}
-              {date?.toLocaleDateString("cs", { weekday: "long" })}
-            </div>
-            {selectedPlanList?.length === 1 && selectedPlan ? (
-              <>
-                <h3>{selectedPlan?.recipe?.name}</h3>
-                <div
-                  className="prose"
-                  dangerouslySetInnerHTML={{
-                    __html: selectedPlan?.recipe?.ingredients ?? "",
-                  }}
-                />
-                <div
-                  className="prose"
-                  dangerouslySetInnerHTML={{
-                    __html: selectedPlan?.recipe?.instructions ?? "",
-                  }}
-                />
-              </>
-            ) : (
-              <div>{t("Groups.Planner.SelectedDateNoRecipe")}</div>
-            )}
-            {!!selectedPlanList?.length && selectedPlanList.length > 1 && (
-              <Tabs value={selectedPlan?.planId} className="p-3 rounded">
-                <TabsList className="flex flex-col sm:flex-row gap-2">
-                  {selectedPlanList.map((plan, index) => (
-                    <TabsTrigger
-                      key={index}
-                      value={plan.planId}
-                      className="flex gap-2"
-                      onClick={() => {
-                        setSelectedPlan(
-                          selectedPlanList.find((x) => x.planId === plan.planId)
-                        );
-                      }}
-                    >
-                      {plan.recipe?.name}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
-                {selectedPlanList.map((plan, index) => (
-                  <TabsContent key={index} value={plan.planId}>
-                    <div
-                      className="prose"
-                      dangerouslySetInnerHTML={{
-                        __html: plan.recipe?.ingredients ?? "",
-                      }}
+              <span className="capitalize">
+                {date?.toLocaleDateString("cs", {
+                  weekday: "long",
+                })}
+              </span>
+            </h2>
+            {selectedPlanList?.map((plan, index) => (
+              <div
+                key={index}
+                className={cn(
+                  "pr-4 relative cursor-pointer transition-all rounded-lg overflow-hidden border hover:border-primary group flex gap-4 items-center",
+                  { "border-primary": selectedPlan?.planId === plan.planId }
+                )}
+                onClick={() => {
+                  setSelectedPlan(
+                    selectedPlanList.find((x) => x.planId === plan.planId)
+                  );
+                }}
+              >
+                <div className="relative flex items-center justify-center overflow-hidden bg-[#cecece4b] min-h-[110px] min-w-[110px] w-[110px] !h-[110px]">
+                  {plan.recipe.coverImage?.imageUrl ? (
+                    <Image
+                      src={plan.recipe.coverImage.imageUrl}
+                      alt="Recipe cover"
+                      className="transition-all group-hover:scale-105"
+                      width={0}
+                      height={0}
+                      sizes="100vw"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                      }} // optional
                     />
-                    <div
-                      className="prose"
-                      dangerouslySetInnerHTML={{
-                        __html: plan.recipe?.instructions ?? "",
-                      }}
-                    />
-                  </TabsContent>
-                ))}
-              </Tabs>
+                  ) : (
+                    <ImageLucide className="!w-16 !h-16 text-[#CECECE] transition-all group-hover:scale-105" />
+                  )}
+                </div>
+                <div className="flex gap-2 justify-between items-center flex-grow">
+                  <h3
+                    className={cn(
+                      "text-xl group-hover:text-primary transition-all line-clamp-3"
+                    )}
+                  >
+                    {plan.recipe.name}
+                  </h3>
+                  <LinkButton
+                    icon={<ExternalLink className="text-[#7f7f7f]" />}
+                    href={`/app/${plan.recipe.groupId}/${plan.recipe._id}`}
+                    classList="pointer-events-auto"
+                    variant={ButtonVariant.Minimalistic}
+                  />
+                </div>
+              </div>
+            ))}
+            {selectedPlanList?.length === 0 && (
+              <div className="text-[20px] italic">
+                {t("Groups.Planner.SelectedDateNoRecipe")}
+              </div>
             )}
           </div>
         </div>

@@ -1,5 +1,6 @@
 {
   "Global": {
+    "Loading": "Načítám..",
     "Button": {
       "Back": "Zpět",
       "New": "Nový",
@@ -173,12 +174,13 @@
     "General": {
       "NewRecipeTitle": "Nový recept",
       "ImageDeletionDisclaimer": "Mějte na paměti, že použití textu trvale odstraní dříve nahraný obrázek!",
+      "SimilarRecipes": "Podobné recepty",
       "Form": {
         "Property": {
           "Name": "Název",
           "Description": "Krátký popisek",
           "CoverImage": "Obrázek",
-          "Tags": "Značky",
+          "Tags": "Štítky",
           "Ingredients": "Ingredience",
           "Instructions": "Instrukce",
           "RecipeImage": "Fotka receptu",
@@ -188,7 +190,7 @@
         "Placeholder": {
           "Name": "Název receptu",
           "Description": "Volitelný popis receptu",
-          "Tags": "Vyberte si značky, které odpovídají tomuto receptu"
+          "Tags": "Vyberte si štítky, které odpovídají tomuto receptu"
         }
       },
       "Action": {
@@ -225,11 +227,11 @@
     "SearchInput": {
       "SortBy": {
         "Name": "Název",
-        "Tags": "Značky"
+        "Tags": "Štítky"
       },
       "Placeholder": {
         "Name": "Vyhledávání podle názvu receptu",
-        "Tags": "Vyhledávání podle značek"
+        "Tags": "Vyhledávání podle štítků"
       }
     },
     "Scroll": {
