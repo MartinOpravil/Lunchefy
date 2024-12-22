@@ -7,6 +7,7 @@ import { Id } from "@/convex/_generated/dataModel";
 import { Loader2 } from "lucide-react";
 import NoContent from "./global/NoContent";
 import { RECIPES_SEARCH_INITIAL_COUNT } from "@/constants/pagination";
+import { useTranslations } from "next-intl";
 
 export enum RecipeSearchResultListVariant {
   Page = "page",
@@ -25,6 +26,8 @@ const RecipeSearchResults = ({
   searchTags,
   privilage,
 }: RecipeSearchResultsProps) => {
+  const t = useTranslations("Recipes.General");
+
   const filteredRecipesPaginated = usePaginatedQuery(
     api.recipes.getRecipes,
     {
@@ -36,8 +39,8 @@ const RecipeSearchResults = ({
   );
 
   return (
-    <div className="flex flex-col gap-2 justify-center items-start w-full @container">
-      <h3>Search results:</h3>
+    <div className="flex flex-col gap-4 justify-center items-start w-full @container">
+      <h3>{t("SearchResults")}</h3>
 
       {!filteredRecipesPaginated && (
         <Loader2 className="my-4 h-8 w-8 animate-spin" />

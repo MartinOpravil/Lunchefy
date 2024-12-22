@@ -15,10 +15,17 @@ import LinkButton from "@/components/global/LinkButton";
 import {
   ArrowLeft,
   CalendarFold,
+  Circle,
+  CircleCheck,
+  CircleCheckBig,
+  CircleDot,
+  CircleX,
   ExternalLink,
   Pencil,
   Plus,
   Replace,
+  Square,
+  SquareX,
   Trash2,
 } from "lucide-react";
 import { ButtonVariant, HttpResponseCode, Privilage } from "@/enums";
@@ -43,6 +50,7 @@ import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { Image as ImageLucide } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Recipe from "@/components/recipes/Recipe";
 
 enum RecipeAction {
   Assign = "assign",
@@ -356,7 +364,7 @@ const PlannerPage = ({
               </div>
             </div>
           </div>
-          <div className="flex flex-col gap-2 w-full">
+          <div className="flex flex-col gap-8 w-full">
             {recipeListForMonth === undefined &&
               initialISOMonth !== selectedISOMonth && (
                 <div className="absolute top-0 right-0 w-10">
@@ -372,53 +380,34 @@ const PlannerPage = ({
               </span>
             </h2>
             {selectedPlanList?.map((plan, index) => (
-              <div
+              <Recipe
                 key={index}
-                className={cn(
-                  "pr-4 relative cursor-pointer transition-all rounded-lg overflow-hidden border hover:border-primary group flex gap-4 items-center",
-                  { "border-primary": selectedPlan?.planId === plan.planId }
-                )}
-                onClick={() => {
-                  setSelectedPlan(
-                    selectedPlanList.find((x) => x.planId === plan.planId)
-                  );
-                }}
-              >
-                <div className="relative flex items-center justify-center overflow-hidden bg-[#cecece4b] min-h-[110px] min-w-[110px] w-[110px] !h-[110px]">
-                  {plan.recipe.coverImage?.imageUrl ? (
-                    <Image
-                      src={plan.recipe.coverImage.imageUrl}
-                      alt="Recipe cover"
-                      className="transition-all group-hover:scale-105"
-                      width={0}
-                      height={0}
-                      sizes="100vw"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                      }} // optional
-                    />
-                  ) : (
-                    <ImageLucide className="!w-16 !h-16 text-[#CECECE] transition-all group-hover:scale-105" />
-                  )}
-                </div>
-                <div className="flex gap-2 justify-between items-center flex-grow">
-                  <h3
-                    className={cn(
-                      "text-xl group-hover:text-primary transition-all line-clamp-3"
-                    )}
-                  >
-                    {plan.recipe.name}
-                  </h3>
-                  <LinkButton
-                    icon={<ExternalLink className="text-[#7f7f7f]" />}
-                    href={`/app/${plan.recipe.groupId}/${plan.recipe._id}`}
+                groupId={plan.recipe.groupId}
+                id={plan.recipe._id}
+                privilage={Privilage.Viewer}
+                title={plan.recipe.name}
+                imageUrl={plan.recipe.coverImage?.imageUrl}
+                vertical
+                useVerticalButton
+                verticalButton={
+                  <ActionButton
+                    icon={
+                      selectedPlan?.recipe._id === plan.recipe._id ? (
+                        <CircleDot className="text-[#7f7f7f]" />
+                      ) : (
+                        <Circle className="text-[#7f7f7f]" />
+                      )
+                    }
+                    onClick={() => {
+                      setSelectedPlan(
+                        selectedPlanList.find((x) => x.planId === plan.planId)
+                      );
+                    }}
                     classList="pointer-events-auto"
                     variant={ButtonVariant.Minimalistic}
                   />
-                </div>
-              </div>
+                }
+              />
             ))}
             {selectedPlanList?.length === 0 && (
               <div className="text-[20px] italic">

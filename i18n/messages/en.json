@@ -135,6 +135,7 @@
       "RecipeListTitle": "Recipes for this month:",
       "TodayNoRecipe": "No recipe",
       "SelectedDateNoRecipe": "Selected day has no recipe yet.",
+      "PlannedForDate": "Planned for:",
       "Action": {
         "AssignRecipeTitle": "Assign recipe",
         "SwapRecipeTitle": "Swap recipe",
@@ -175,6 +176,7 @@
       "NewRecipeTitle": "New recipe",
       "ImageDeletionDisclaimer": "Keep in mind that using text will permanently delete previously uploaded image!",
       "SimilarRecipes": "Similar recipes",
+      "SearchResults": "Search results:",
       "Form": {
         "Property": {
           "Name": "Name",

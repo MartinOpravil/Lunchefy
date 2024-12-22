@@ -212,6 +212,7 @@ const GroupPage = ({
               setSearchTerm={setSearchTerm}
               searchTags={searchTags}
               setSearchTags={setSearchTags}
+              classList="@sm:w-[700px]"
             />
           </>
         )}

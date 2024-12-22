@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 import {
   Card,
   CardDescription,
@@ -29,6 +29,8 @@ export interface RecipeProps {
   recipe?: string;
   recipePhotoUrl?: string;
   vertical?: boolean;
+  verticalButton?: ReactNode;
+  useVerticalButton?: boolean;
 }
 
 const Recipe = ({
@@ -39,6 +41,8 @@ const Recipe = ({
   description,
   imageUrl,
   vertical = false,
+  verticalButton,
+  useVerticalButton = false,
 }: RecipeProps) => {
   const [isRoutingToOverview, setIsRoutingToOverview] = useState(false);
 
@@ -103,24 +107,29 @@ const Recipe = ({
           </div>
           {privilage !== Privilage.Viewer && <div className="h-10" />}
         </div>
+        {useVerticalButton && <div className="w-28 h-10" />}
       </Link>
-      {(privilage === Privilage.Owner || privilage === Privilage.Editor) && (
+      {privilage !== Privilage.Viewer && (
         <div className="absolute bottom-0 w-full p-2 flex justify-between items-center pointer-events-none">
           {privilage === Privilage.Owner && (
             <DeleteRecipeButton
               recipeId={id}
               groupId={groupId}
               recipeTitle={title}
+              small
             />
           )}
           <LinkButton
-            icon={<Pencil />}
+            icon={<Pencil className="!w-5 text-[#4c4c4c]" />}
             href={`/app/${groupId}/${id}/edit`}
             classList="pointer-events-auto"
             variant={ButtonVariant.Minimalistic}
           />
         </div>
       )}
+      <div className="absolute top-[50%] translate-y-[-50%] right-6">
+        {verticalButton}
+      </div>
     </Card>
   );
 };

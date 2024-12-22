@@ -142,3 +142,29 @@ export const removeRecipeFromDate = mutation({
     return createOKResponse(true);
   },
 });
+
+export const getLatestRecipePlanDate = query({
+  args: {
+    groupId: v.string(),
+    recipeId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const planList = await ctx.db
+      .query("groupPlans")
+      .filter((q) =>
+        q.and(
+          q.eq(q.field("groupId"), args.groupId),
+          q.eq(q.field("recipeId"), args.recipeId)
+        )
+      )
+      .collect();
+
+    if (!planList.length) {
+      return createOKResponse(null);
+    }
+
+    const newestPlan = planList.sort((a, b) => (a.date < b.date ? 1 : -1))[0];
+
+    return createOKResponse(newestPlan.date);
+  },
+});

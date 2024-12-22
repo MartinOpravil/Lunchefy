@@ -209,7 +209,7 @@ const MultipleSelector = React.forwardRef<
     }: MultipleSelectorProps,
     ref: React.Ref<MultipleSelectorRef>
   ) => {
-    const { valueToTag } = useTagManager();
+    const { valueToTag, tagOptions } = useTagManager();
 
     const inputRef = React.useRef<HTMLInputElement>(null);
     const [open, setOpen] = React.useState(false);
@@ -449,7 +449,7 @@ const MultipleSelector = React.forwardRef<
           commandProps?.onKeyDown?.(e);
         }}
         className={cn(
-          "h-auto overflow-visible bg-transparent",
+          "h-auto overflow-visible bg-transparent cursor-pointer",
           commandProps?.className
         )}
         shouldFilter={
@@ -461,7 +461,7 @@ const MultipleSelector = React.forwardRef<
       >
         <div
           className={cn(
-            "min-h-10 focus-within:border-primary flex w-full items-center",
+            "min-h-10 focus-within:border-primary flex w-full items-center overflow-hidden",
             {
               "px-3 py-2": selected.length !== 0,
               "cursor-text": !disabled && selected.length !== 0,
@@ -544,12 +544,12 @@ const MultipleSelector = React.forwardRef<
                 inputProps?.onFocus?.(event);
               }}
               placeholder={
-                hidePlaceholderWhenSelected && selected.length !== 0
+                hidePlaceholderWhenSelected && selected.length
                   ? ""
                   : placeholder
               }
               className={cn(
-                "flex-1 bg-transparent outline-none h-full px-3",
+                "flex-1 bg-transparent outline-none h-full px-3 overflow-hidden",
                 {
                   "w-full": hidePlaceholderWhenSelected,
                   "": selected.length === 0,
@@ -575,85 +575,91 @@ const MultipleSelector = React.forwardRef<
             >
               <X />
             </button>
-            {selected.length < 1 && <ChevronDown className="h-6 w-6 mr-2" />}
+            {!selected.length && (
+              <div className="absolute right-0 pl-1 bg-background">
+                <ChevronDown className="h-6 w-6 p-0 mr-2.5 opacity-50 bg-background" />
+              </div>
+            )}
           </div>
         </div>
-        <div className="relative">
-          {open && (
-            <CommandList
-              className="absolute top-1 z-10 w-full rounded-md border bg-popover text-popover-foreground shadow-md outline-none animate-in bg-background"
-              onMouseLeave={() => {
-                setOnScrollbar(false);
-              }}
-              onMouseEnter={() => {
-                setOnScrollbar(true);
-              }}
-              onMouseUp={() => {
-                inputRef?.current?.focus();
-              }}
-            >
-              {isLoading ? (
-                <>{loadingIndicator}</>
-              ) : (
-                <>
-                  {EmptyItem()}
-                  {CreatableItem()}
-                  {!selectFirstItem && (
-                    <CommandItem value="-" className="hidden" />
-                  )}
-                  {Object.entries(selectables).map(([key, dropdowns]) => (
-                    <CommandGroup
-                      key={key}
-                      heading={key}
-                      className="h-full overflow-auto"
-                    >
-                      <>
-                        {dropdowns.map((option) => {
-                          return (
-                            <CommandItem
-                              key={option.value}
-                              value={option.value}
-                              disabled={option.disable}
-                              onMouseDown={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                              }}
-                              onSelect={() => {
-                                if (selected.length >= maxSelected) {
-                                  onMaxSelected?.(selected.length);
-                                  return;
-                                }
-                                setInputValue("");
-                                const newOptions = [...selected, option];
-                                setSelected(newOptions);
-                                onChange?.(newOptions);
-                              }}
-                              className={cn(
-                                "cursor-pointer",
-                                option.disable &&
-                                  "cursor-default text-muted-foreground"
-                              )}
-                            >
-                              {/* <div>[]</div> */}
-                              <Image
-                                src={`/icons/tags/${option.value}.svg`}
-                                alt="Tag"
-                                width={30}
-                                height={30}
-                                className=""
-                              />
-                              {option.label}
-                            </CommandItem>
-                          );
-                        })}
-                      </>
-                    </CommandGroup>
-                  ))}
-                </>
-              )}
-            </CommandList>
-          )}
-        </div>
+        {selected.length < tagOptions.length && (
+          <div className="relative">
+            {open && (
+              <CommandList
+                className="absolute top-1 z-10 w-full rounded-md border bg-popover text-popover-foreground shadow-md outline-none animate-in bg-background"
+                onMouseLeave={() => {
+                  setOnScrollbar(false);
+                }}
+                onMouseEnter={() => {
+                  setOnScrollbar(true);
+                }}
+                onMouseUp={() => {
+                  inputRef?.current?.focus();
+                }}
+              >
+                {isLoading ? (
+                  <>{loadingIndicator}</>
+                ) : (
+                  <>
+                    {EmptyItem()}
+                    {CreatableItem()}
+                    {!selectFirstItem && (
+                      <CommandItem value="-" className="hidden" />
+                    )}
+                    {Object.entries(selectables).map(([key, dropdowns]) => (
+                      <CommandGroup
+                        key={key}
+                        heading={key}
+                        className="h-full overflow-auto"
+                      >
+                        <>
+                          {dropdowns.map((option) => {
+                            return (
+                              <CommandItem
+                                key={option.value}
+                                value={option.value}
+                                disabled={option.disable}
+                                onMouseDown={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                }}
+                                onSelect={() => {
+                                  if (selected.length >= maxSelected) {
+                                    onMaxSelected?.(selected.length);
+                                    return;
+                                  }
+                                  setInputValue("");
+                                  const newOptions = [...selected, option];
+                                  setSelected(newOptions);
+                                  onChange?.(newOptions);
+                                }}
+                                className={cn(
+                                  "cursor-pointer",
+                                  option.disable &&
+                                    "cursor-default text-muted-foreground"
+                                )}
+                              >
+                                <Image
+                                  src={`/icons/tags/${option.value}.svg`}
+                                  alt="Tag"
+                                  width={30}
+                                  height={30}
+                                  className=""
+                                />
+                                {option.label}
+                              </CommandItem>
+                            );
+                          })}
+                          {!dropdowns.length && <>NOTHING..</>}
+                        </>
+                      </CommandGroup>
+                    ))}
+                  </>
+                )}
+              </CommandList>
+            )}
+          </div>
+        )}
       </Command>
     );
   }

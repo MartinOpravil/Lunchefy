@@ -44,8 +44,12 @@ const PageHeader = ({
       <div className="heading-underline" />
       {(leftSide || rightSide) && (
         <div className="flex justify-between items-center gap-2 flex-wrap">
-          {leftSide && <div className="flex gap-2">{leftSide}</div>}
-          {rightSide && <div className="flex gap-2">{rightSide}</div>}
+          {leftSide && (
+            <div className="flex gap-2 items-center">{leftSide}</div>
+          )}
+          {rightSide && (
+            <div className="flex gap-2 items-center">{rightSide}</div>
+          )}
         </div>
       )}
     </nav>

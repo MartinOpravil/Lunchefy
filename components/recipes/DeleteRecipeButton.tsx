@@ -17,6 +17,7 @@ export interface DeleteRecipeButtonProps extends ClassListProp {
   groupId: GenericId<"groups">;
   recipeTitle: string;
   redirectAfterDelete?: boolean;
+  small?: boolean;
 }
 
 const DeleteRecipeButton = ({
@@ -25,6 +26,7 @@ const DeleteRecipeButton = ({
   recipeTitle,
   redirectAfterDelete = false,
   classList,
+  small = false,
 }: DeleteRecipeButtonProps) => {
   const t = useTranslations();
   const router = useRouter();
@@ -62,7 +64,11 @@ const DeleteRecipeButton = ({
     <>
       <ActionButton
         icon={
-          <Trash2 className="group-hover/delete:text-primary transition-all" />
+          <Trash2
+            className={cn("group-hover/delete:text-primary transition-all", {
+              "!w-5 text-[#4c4c4c]": small,
+            })}
+          />
         }
         onClick={handleOpenDialog}
         isLoading={isDeleting}

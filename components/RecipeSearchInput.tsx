@@ -14,6 +14,7 @@ import {
 } from "./ui/select";
 import { useTranslations } from "next-intl";
 import { useTagManager } from "./recipes/TagManager";
+import { cn } from "@/lib/utils";
 
 enum SearchBy {
   Name = "name",
@@ -32,6 +33,7 @@ interface RecipeFilterProps {
   setSearchTerm: Dispatch<SetStateAction<string>>;
   searchTags: Option[];
   setSearchTags: Dispatch<SetStateAction<Option[]>>;
+  classList?: string;
 }
 
 const debounceDelay = 500;
@@ -43,6 +45,7 @@ const RecipeSearchInput = ({
   setSearchTerm,
   searchTags,
   setSearchTags,
+  classList,
 }: RecipeFilterProps) => {
   const t = useTranslations();
 
@@ -76,9 +79,14 @@ const RecipeSearchInput = ({
   if (!group.data) return <></>;
 
   return (
-    <div className="w-full @container z-50">
-      <div className="w-full flex flex-col gap-2 justify-start items-start @md:flex-row ">
-        <div className="flex flex-shrink min-w-60">
+    <div className="w-full @container z-50 flex justify-end">
+      <div
+        className={cn(
+          "w-full flex flex-col gap-2 justify-start items-start @md:flex-row",
+          classList
+        )}
+      >
+        <div className="flex flex-shrink w-full @md:max-w-44">
           <Select value={searchBy} onValueChange={handleSearchByChange}>
             <SelectTrigger className="input-class h-full transition-all">
               <SelectValue className="placeholder:text-secondary" />
@@ -97,7 +105,7 @@ const RecipeSearchInput = ({
             </SelectContent>
           </Select>
         </div>
-        <div className="flex flex-grow">
+        <div className="flex flex-grow w-full @md:w-auto">
           {searchBy === SearchBy.Name && (
             <Input
               className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
@@ -114,6 +122,7 @@ const RecipeSearchInput = ({
               placeholder={t("Recipes.SearchInput.Placeholder.Tags")}
               value={searchTags}
               onChange={setSearchTags}
+              hidePlaceholderWhenSelected
             />
           )}
         </div>

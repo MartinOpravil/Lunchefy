@@ -135,6 +135,7 @@
       "RecipeListTitle": "Recepty pro tento měsíc:",
       "TodayNoRecipe": "Žádný recept",
       "SelectedDateNoRecipe": "Vybraný den zatím nemá žádný recept.",
+      "PlannedForDate": "Naplánováno na:",
       "Action": {
         "AssignRecipeTitle": "Přiřadit recept",
         "SwapRecipeTitle": "Vyměnit recept",
@@ -175,6 +176,7 @@
       "NewRecipeTitle": "Nový recept",
       "ImageDeletionDisclaimer": "Mějte na paměti, že použití textu trvale odstraní dříve nahraný obrázek!",
       "SimilarRecipes": "Podobné recepty",
+      "SearchResults": "Výsledky vyhledávání:",
       "Form": {
         "Property": {
           "Name": "Název",

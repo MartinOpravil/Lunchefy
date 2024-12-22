@@ -2,6 +2,7 @@
 import Lightbox, { LightboxHandle } from "@/components/global/Lightbox";
 import LinkButton from "@/components/global/LinkButton";
 import PageHeader from "@/components/global/PageHeader";
+import LatestRecipeDateInPlanner from "@/components/recipes/LatestRecipeDateInPlanner";
 import RecipeTagList from "@/components/recipes/RecipeTagList";
 import SimilarRecipes from "@/components/recipes/SimilarRecipes";
 import { api } from "@/convex/_generated/api";
@@ -42,6 +43,10 @@ const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
               icon={<CalendarFold />}
               href={`/app/${recipe.data.groupId}/planner`}
               variant={ButtonVariant.Minimalistic}
+            />
+            <LatestRecipeDateInPlanner
+              groupId={recipe.data.groupId}
+              recipeId={recipe.data._id}
             />
           </>
         }

@@ -45,11 +45,11 @@ const PlannerButton = ({
       <div className="pr-2">
         <div className="text-12">{t("Groups.Planner.Button.Today")}</div>
         <div className="flex gap-2 items-center">
-          <h3 className="text-primary text-[26px]">
+          <span className="text-primary text-[18px]">
             {todayRecipeCount
               ? todayRecipeName
               : t("Groups.Planner.TodayNoRecipe")}
-          </h3>
+          </span>
         </div>
       </div>
       {(todayRecipeCount ?? 0) > 1 && (

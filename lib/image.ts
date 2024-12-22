@@ -1,4 +1,9 @@
-export const convertImageToWebP = async (file: File): Promise<File> => {
+const preferedImageMaxWidth = 1600;
+
+export const convertImageToWebP = async (
+  file: File,
+  quality: number = 0.8
+): Promise<File> => {
   if (!file.type.startsWith("image/")) {
     throw new Error("The provided file is not an image.");
   }
@@ -24,8 +29,13 @@ export const convertImageToWebP = async (file: File): Promise<File> => {
   const image = await createImageBitmapPromise();
 
   const canvas = document.createElement("canvas");
-  canvas.width = image.width;
-  canvas.height = image.height;
+  const scaleFactor =
+    image.width > preferedImageMaxWidth
+      ? image.width / preferedImageMaxWidth
+      : 1;
+  // console.log(`width: ${image.width}, scaleFactor: ${scaleFactor}`);
+  canvas.width = image.width / scaleFactor;
+  canvas.height = image.height / scaleFactor;
 
   const ctx = canvas.getContext("2d");
   if (!ctx) {
@@ -34,7 +44,7 @@ export const convertImageToWebP = async (file: File): Promise<File> => {
 
   ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
 
-  const webpDataUrl = canvas.toDataURL("image/webp");
+  const webpDataUrl = canvas.toDataURL("image/webp", quality);
 
   const response = await fetch(webpDataUrl);
   const blob = await response.blob();
