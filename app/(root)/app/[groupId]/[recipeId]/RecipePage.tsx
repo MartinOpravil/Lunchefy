@@ -65,7 +65,9 @@ const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
       <main className="page-content">
         <div className="flex flex-col w-full gap-16">
           {recipe.data.description && (
-            <div className="text-[20px]">{recipe.data.description}</div>
+            <div className="text-16 sm:text-[20px]">
+              {recipe.data.description}
+            </div>
           )}
           {recipe.data.coverImage?.imageUrl && (
             <div className="rounded-xl overflow-hidden w-full aspect-[16/10] outline outline-2 outline-transparent hover:outline-primary transition-all">
@@ -144,7 +146,7 @@ const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
             </div>
             <div className="sm:min-w-[33%] sm:w-[33%] flex flex-col gap-12">
               {recipe.data.tags && (
-                <div className="p-4 bg-[#f9f9f9] rounded-lg">
+                <div className="p-4 bg-secondary/15 rounded-lg">
                   <h2 className="text-[28px] pb-6">
                     {t("Form.Property.Tags")}
                   </h2>

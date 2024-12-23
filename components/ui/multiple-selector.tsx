@@ -457,7 +457,13 @@ const MultipleSelector = React.forwardRef<
             ? commandProps.shouldFilter
             : !onSearch
         } // When onSearch is provided, we don't want to filter the options. You can still override it.
-        filter={commandFilter()}
+        // filter={commandFilter()} // Default behavior
+        filter={(_value, search) => {
+          const tagOption = tagOptions.find((x) => x.value === _value);
+          return tagOption?.label.toLowerCase().includes(search.toLowerCase())
+            ? 1
+            : 0;
+        }}
       >
         <div
           className={cn(
@@ -650,7 +656,7 @@ const MultipleSelector = React.forwardRef<
                               </CommandItem>
                             );
                           })}
-                          {!dropdowns.length && <>NOTHING..</>}
+                          {!dropdowns && <>NOTHING..</>}
                         </>
                       </CommandGroup>
                     ))}

@@ -190,7 +190,7 @@ const ImageInput = (
                   icon={<CloudUpload />}
                   title={t("Image.ChangeImage")}
                   onClick={handleFileOpen}
-                  classList="outline-[#CECECE] hover:outline-primary"
+                  classList="outline-accent hover:outline-primary"
                 />
                 <ActionButton
                   icon={
@@ -198,7 +198,7 @@ const ImageInput = (
                   }
                   onClick={handleFileRemoval}
                   variant={ButtonVariant.Negative}
-                  classList="outline-[#CECECE]"
+                  classList="outline-accent"
                 />
               </div>
               {(isImageLoading || isImageConverting) && (

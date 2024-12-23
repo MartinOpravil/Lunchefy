@@ -44,7 +44,7 @@ const PlannerRecipeListPaginated = ({
             <div className="flex gap-3 items-center ">
               <div
                 className={cn(
-                  "relative flex items-center justify-center rounded-lg overflow-hidden bg-[#cecece4b] min-h-[50px] min-w-[50px] w-[50px] !h-[50px]"
+                  "relative flex items-center justify-center rounded-lg overflow-hidden bg-accent/30 min-h-[50px] min-w-[50px] w-[50px] !h-[50px]"
                 )}
               >
                 {recipe.coverImage?.imageUrl ? (
@@ -62,7 +62,7 @@ const PlannerRecipeListPaginated = ({
                     }} // optional
                   />
                 ) : (
-                  <ImageLucide className="!w-8 !h-8 text-[#CECECE] transition-all group-hover:scale-110" />
+                  <ImageLucide className="!w-8 !h-8 text-accent transition-all group-hover:scale-110" />
                 )}
               </div>
               <h4>{recipe.name}</h4>

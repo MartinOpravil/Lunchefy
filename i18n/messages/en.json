@@ -106,8 +106,12 @@
           "Privilage": "Privilage"
         },
         "Placeholder": {
-          "Email": "Email to share {groupName} with",
+          "Email": "E-mail of the user you want to invite to the group",
           "Privilage": "Select a privilage"
+        },
+        "Validation": {
+          "Email": "Please enter a valid email.",
+          "Privilage": "Please select a privilage."
         }
       },
       "Notification": {

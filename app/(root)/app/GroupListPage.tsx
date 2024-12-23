@@ -91,25 +91,13 @@ const GroupListPage = ({
   // Overview
   return (
     <main className="page gap-6 justify-between">
-      {/* <PageHeader
-        title={t("Groups.General.Title")}
-        icon="recipe_book"
-        actionButton={
-          <ActionButton
-            title={t("Global.Button.New")}
-            icon={<Plus />}
-            onClick={() => setIsNewFormOpen(true)}
-            variant={ButtonVariant.Positive}
-          />
-        }
-      /> */}
       <main className="page-content @container !justify-center !items-center min-h-[300px] flex-grow">
         <GroupList
           groupList={groupList}
           onClick={() => setIsNewFormOpen(true)}
         />
       </main>
-      <div className="flex flex-col gap-2 justify-center items-center">
+      <div className="flex flex-col gap-2 justify-center items-center text-center">
         <div className="w-24 h-[1px] bg-black-1 opacity-50 mb-1" />
         <h3 className="text-16 text-primary">
           {t("Groups.General.Disclaimer.Title")}

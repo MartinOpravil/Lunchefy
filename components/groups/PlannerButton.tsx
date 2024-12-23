@@ -31,7 +31,7 @@ const PlannerButton = ({
 
   return (
     <Link
-      className="flex gap-2 items-center outline outline-1 outline-[#CECECE] rounded-lg hover:outline-primary transition-all"
+      className="flex gap-2 items-center outline outline-1 outline-accent rounded-lg hover:outline-primary transition-all"
       href={`/app/${groupId}/planner`}
       onClick={visualizeRouting}
     >

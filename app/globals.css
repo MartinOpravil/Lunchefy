@@ -22,30 +22,26 @@ html {
 
 :root {
   --primary: #ff622c;
-  --primary-transparent: #f2726ed7;
   --secondary: #a4b476;
-  --secondary-transparent: #a5b476d7;
-  --accent: #235789;
-  --accent-transparent: #235889d7;
+  --accent: #cecece;
   --background: #ffffff;
-  --background-dark: #d6d3ca;
-  --background-transparent: #fdf8edd7;
   --text: #000000;
+  --text2: #7f7f7f;
 }
 
 @layer utilities {
   .input-label {
-    @apply font-bold text-xl;
+    @apply font-bold text-lg sm:text-xl;
     font-family: var(--font-playfair);
   }
   .input-class {
-    @apply w-full min-h-12 text-16 text-black-1 placeholder:text-16 rounded-[8px] bg-transparent placeholder:text-[#CECECE] border-2 border-[#CECECE] transition-all hover:border-primary focus-visible:border-primary outline-none focus-visible:outline-none;
+    @apply w-full min-h-12 text-16 text-black-1 placeholder:text-16 rounded-[8px] bg-transparent placeholder:text-accent border-2 border-accent transition-all hover:border-primary focus-visible:border-primary outline-none focus-visible:outline-none;
   }
 
   .image-input {
     @apply flex flex-col gap-4 w-full relative;
     .image-input-inner {
-      @apply cursor-pointer outline-dashed outline-2 outline-[#CECECE] rounded-sm flex flex-col items-center justify-center p-6 gap-4 hover:outline-primary transition-all;
+      @apply cursor-pointer outline-dashed outline-2 outline-accent rounded-sm flex flex-col items-center justify-center p-6 gap-4 hover:outline-primary transition-all;
     }
   }
 
@@ -102,16 +98,16 @@ html {
   }
 
   h1 {
-    @apply text-5xl font-semibold;
+    @apply text-2xl sm:text-5xl font-semibold;
   }
   h2 {
-    @apply text-[36px] font-semibold;
+    @apply text-[28px] sm:text-[36px] font-semibold;
   }
   h3 {
-    @apply text-xl font-semibold;
+    @apply text-lg sm:text-xl font-semibold;
   }
   p {
-    @apply text-16 font-normal;
+    @apply text-14 sm:text-16 font-normal;
   }
 
   .header-icon {
@@ -128,7 +124,7 @@ html {
     }
   }
   .heading-underline {
-    @apply w-full bg-[#CECECE] my-4 rounded-md h-[1px];
+    @apply w-full bg-accent my-4 rounded-md h-[1px];
   }
 
   .page {
@@ -272,7 +268,10 @@ html {
   }
   .prose-big {
     p {
-      font-size: 20px;
+      font-size: 16px;
+      @media screen and (min-width: 640px) {
+        font-size: 20px;
+      }
     }
   }
 }

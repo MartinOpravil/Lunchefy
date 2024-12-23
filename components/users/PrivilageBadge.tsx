@@ -22,7 +22,7 @@ const PrivilageBadge = ({ privilage }: PrivilageBadgeProps) => {
   // const privilageStyles = useMemo(() => {
   //   switch (privilage) {
   //     case Privilage.Owner:
-  //       return "bg-primary bg-[#A4B476]";
+  //       return "bg-primary bg-secondary";
   //     case Privilage.Editor:
   //       return "bg-accent";
   //     default:
@@ -33,7 +33,7 @@ const PrivilageBadge = ({ privilage }: PrivilageBadgeProps) => {
   return (
     <div
       className={cn(
-        "text-white-1 w-fit rounded-full px-3 py-1 select-none flex gap-2 outline outline-1 bg-[#A4B476]"
+        "text-white-1 w-fit rounded-full px-3 py-1 select-none flex gap-2 outline outline-1 bg-secondary"
         // privilageStyles
       )}
     >

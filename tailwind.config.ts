@@ -31,8 +31,8 @@ const config = {
         accent:
           "color-mix(in srgb, var(--accent) calc(100% * <alpha-value>), transparent)",
         background: "var(--background)",
-        backgroundDark: "var(--background-dark)",
         text: "var(--text)",
+        text2: "var(--text2)",
         white: {
           1: "#FFFFFF",
           2: "rgba(255, 255, 255, 0.72)",

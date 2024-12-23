@@ -7,7 +7,7 @@ const optionSchema = z.object({
 
 export const groupFormSchema = z.object({
   name: z.string().min(2, {
-    message: "Group name must be at least 2 characters.",
+    message: "",
   }),
   description: z.optional(z.string()),
   coverImage: z.optional(
@@ -21,7 +21,7 @@ export type GroupFormValues = z.infer<typeof groupFormSchema>;
 
 export const recipeFormSchema = z.object({
   name: z.string().min(2, {
-    message: "Recipe name must be at least 2 characters.",
+    message: "",
   }),
   description: z.optional(z.string()),
   ingredients: z.optional(z.string()),

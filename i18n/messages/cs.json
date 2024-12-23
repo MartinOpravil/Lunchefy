@@ -108,6 +108,10 @@
         "Placeholder": {
           "Email": "E-mail uživatele, kterého chcete pozvat do skupiny",
           "Privilage": "Zvolte typ privilégia"
+        },
+        "Validation": {
+          "Email": "Zadejte prosím platný e-mail.",
+          "Privilage": "Prosím, vyberte privilégium."
         }
       },
       "Notification": {

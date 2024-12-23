@@ -64,7 +64,7 @@ const Recipe = ({
       >
         <div
           className={cn(
-            "relative w-full h-[180px] flex items-center justify-center overflow-hidden bg-[#cecece4b]",
+            "relative w-full h-[180px] flex items-center justify-center overflow-hidden bg-accent/30",
             { "min-h-[110px] min-w-[110px] w-[110px] !h-[110px]": vertical }
           )}
         >
@@ -83,7 +83,7 @@ const Recipe = ({
               }} // optional
             />
           ) : (
-            <ImageLucide className="!w-16 !h-16 text-[#CECECE] transition-all group-hover:scale-105" />
+            <ImageLucide className="!w-16 !h-16 text-accent transition-all group-hover:scale-105" />
           )}
         </div>
         {isRoutingToOverview && (
@@ -93,14 +93,14 @@ const Recipe = ({
           <div className="flex flex-col pt-1 px-1 gap-2">
             <h3
               className={cn(
-                "text-2xl group-hover:text-primary transition-all line-clamp-3",
+                "text-xl sm:text-2xl group-hover:text-primary transition-all line-clamp-3",
                 { "text-xl": vertical }
               )}
             >
               {title}
             </h3>
             {!vertical && description && (
-              <div className="text-12 text-[#797979] pb-1 line-clamp-3">
+              <div className="text-12 text-text2 pb-1 line-clamp-3">
                 {description}
               </div>
             )}
@@ -120,7 +120,7 @@ const Recipe = ({
             />
           )}
           <LinkButton
-            icon={<Pencil className="!w-5 text-[#4c4c4c]" />}
+            icon={<Pencil className="!w-5 text-text2" />}
             href={`/app/${groupId}/${id}/edit`}
             classList="pointer-events-auto"
             variant={ButtonVariant.Minimalistic}

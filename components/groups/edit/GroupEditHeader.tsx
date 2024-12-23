@@ -44,12 +44,12 @@ const GroupEditHeader = ({ group }: GroupEditHeaderProps) => {
         leftSide={
           <>
             <LinkButton
-              icon={<ArrowLeft className="text-[#111111]" />}
+              icon={<ArrowLeft className="text-text" />}
               href="/app"
               variant={ButtonVariant.Minimalistic}
             />
             <LinkButton
-              icon={<ChefHat className="text-[#111111]" />}
+              icon={<ChefHat className="text-text" />}
               href={`/app/${group.data._id}`}
               variant={ButtonVariant.Minimalistic}
             />
@@ -65,7 +65,7 @@ const GroupEditHeader = ({ group }: GroupEditHeaderProps) => {
                   redirectAfterDelete
                 />
                 <ActionButton
-                  icon={<Share2 className="text-[#111111]" />}
+                  icon={<Share2 className="text-text" />}
                   onClick={(e) => {
                     e.preventDefault();
                     setIsAccessManagerOpen(true);

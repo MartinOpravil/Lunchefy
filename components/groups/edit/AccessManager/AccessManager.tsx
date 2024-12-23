@@ -25,23 +25,12 @@ import { Input } from "@/components/ui/input";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import LoaderSpinner from "@/components/global/LoaderSpinner";
-import PrivilageBadge from "@/components/users/PrivilageBadge";
-import BasicDialog from "@/components/global/BasicDialog";
 import UserWithAccess from "./UserWithAccess";
-import { HttpResponseCode, Privilage } from "@/enums";
+import { ButtonVariant, HttpResponseCode, Privilage } from "@/enums";
 import { notifyError, notifySuccess } from "@/lib/notifications";
 import { Share2 } from "lucide-react";
 import { GenericId } from "convex/values";
 import { useTranslations } from "next-intl";
-
-const formSchema = z.object({
-  email: z.string().email({
-    message: "Please enter a valid email.",
-  }),
-  privilage: z.string({
-    message: "Please select a valid privilage.",
-  }),
-});
 
 export interface AccessManagerProps {
   groupName: string;
@@ -50,6 +39,18 @@ export interface AccessManagerProps {
 
 const AccessManager = ({ groupName, groupId }: AccessManagerProps) => {
   const t = useTranslations();
+
+  const [formSchema, setFormSchema] = useState(
+    z.object({
+      email: z.string().email({
+        message: t("Groups.AccessManager.Form.Validation.Email"),
+      }),
+      privilage: z.string({
+        message: t("Groups.AccessManager.Form.Validation.Privilage"),
+      }),
+    })
+  );
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const addAccessToGroup = useMutation(api.groups.addAccessToGroup);
@@ -112,7 +113,7 @@ const AccessManager = ({ groupName, groupId }: AccessManagerProps) => {
   }
 
   return (
-    <div className="access-manager w-full transition-all">
+    <div className="access-manager @container w-full transition-all">
       {!isFormOpen && (
         <>
           <div className="flex flex-col">
@@ -128,7 +129,7 @@ const AccessManager = ({ groupName, groupId }: AccessManagerProps) => {
             <>
               {!!groupSharedUsersData.length && (
                 <div className="access-manager-list pt-6 w-full">
-                  <h3 className="text-16 text-accent">
+                  <h3 className="text-16 text-text">
                     {t("Groups.AccessManager.ListTitle")}
                   </h3>
 
@@ -163,12 +164,12 @@ const AccessManager = ({ groupName, groupId }: AccessManagerProps) => {
                   name="email"
                   render={({ field }) => (
                     <FormItem className="flex flex-col gap-1">
-                      <FormLabel className="text-16 font-bold text-accent">
+                      <FormLabel className="input-label">
                         {t("Groups.AccessManager.Form.Property.Email")}
                       </FormLabel>
                       <FormControl>
                         <Input
-                          className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
+                          className="input-class"
                           placeholder={t(
                             "Groups.AccessManager.Form.Placeholder.Email"
                           )}
@@ -184,17 +185,17 @@ const AccessManager = ({ groupName, groupId }: AccessManagerProps) => {
                   name="privilage"
                   render={({ field }) => (
                     <FormItem className="flex flex-col gap-1">
-                      <FormLabel className="text-16 font-bold text-accent">
+                      <FormLabel className="input-label">
                         {t("Groups.AccessManager.Form.Property.Privilage")}
                       </FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
-                        <FormControl className="input-class border-2 border-accent focus-visible:ring-secondary transition-all">
+                        <FormControl className="input-class">
                           <SelectTrigger>
                             <SelectValue
-                              className="placehold:text-secondary"
+                              className=""
                               placeholder={t(
                                 "Groups.AccessManager.Form.Placeholder.Privilage"
                               )}
@@ -219,7 +220,7 @@ const AccessManager = ({ groupName, groupId }: AccessManagerProps) => {
                   )}
                 />
               </div>
-              <div className="flex justify-center gap-2">
+              <div className="flex justify-between gap-2">
                 <ActionButton
                   title={t("Global.Button.Cancel")}
                   onClick={() => setIsFormOpen(false)}
@@ -231,6 +232,7 @@ const AccessManager = ({ groupName, groupId }: AccessManagerProps) => {
                   classList="min-w-32"
                   isDisabled={!form.formState.isDirty}
                   onClick={form.handleSubmit(onSubmit)}
+                  variant={ButtonVariant.Positive}
                 />
               </div>
             </form>

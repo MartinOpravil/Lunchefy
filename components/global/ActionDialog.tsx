@@ -53,12 +53,12 @@ const ActionDialog = ({
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogContent>
-        <AlertDialogHeader className="gap-2">
+        <AlertDialogHeader className="gap-4">
           <AlertDialogTitle className="text-primary">
             <h3>{title}</h3>
           </AlertDialogTitle>
           {subject && (
-            <AlertDialogTitle className="text-accent pb-2">
+            <AlertDialogTitle className="text-text2 pb-2">
               &quot;{subject}&quot;
             </AlertDialogTitle>
           )}
@@ -66,7 +66,7 @@ const ActionDialog = ({
             {description}
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter className="!justify-between pt-8">
+        <AlertDialogFooter className="justify-between pt-4">
           <ActionButton title={t("Button.Cancel")} onClick={performCancel} />
           <ActionButton
             icon={useConfirmButtonIcon ? confirmButtonIcon : null}

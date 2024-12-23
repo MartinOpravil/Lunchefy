@@ -27,13 +27,13 @@ const UserWithAccess = ({
 
   return (
     <>
-      <div className="w-full flex justify-between items-center gap-2 pt-2 flex-wrap">
-        <div className="flex flex-col">
+      <div className="w-full flex flex-col @sm:flex-row justify-between items-center gap-2 pt-2">
+        <div className="flex flex-col w-full">
           <div>{name}</div>
           <div className="text-12">{email}</div>
         </div>
-        <PrivilageBadge privilage={privilage} />
-        <div className="actions flex gap-2 w-full sm:w-fit justify-end">
+        <div className="actions flex gap-4 w-full sm:w-fit items-center justify-end">
+          <PrivilageBadge privilage={privilage} />
           <ActionButton
             icon={<Pencil />}
             onClick={() => {

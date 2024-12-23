@@ -6,8 +6,14 @@ import LocaleSwitcherSelect from "../global/LocaleSwitcherSelect";
 
 const Header = () => {
   return (
-    <div className="flex justify-between items-start py-8">
-      <Image src="/logo.svg" alt="logo" width={160} height={0} />
+    <div className="flex justify-between items-center py-8">
+      <Image
+        src="/logo.svg"
+        alt="logo"
+        width={160}
+        height={0}
+        className="w-[100px] sm:w-[160px]"
+      />
       <div className="flex gap-4 justify-center items-center">
         <LocaleSwitcherSelect />
         <UserButton

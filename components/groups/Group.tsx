@@ -42,7 +42,7 @@ const Group = ({ id, title, description, imageUrl, privilage }: GroupProps) => {
               alt="group"
               className="transition-all group-hover:opacity-90"
             />
-            <AvatarFallback className="bg-[#EBEBEB]">
+            <AvatarFallback className="bg-primary/20">
               <Users className="!w-[50px] !h-[50px]" />
             </AvatarFallback>
             {isRoutingToOverview && (

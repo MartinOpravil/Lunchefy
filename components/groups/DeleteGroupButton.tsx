@@ -67,7 +67,7 @@ const DeleteGroupButton = ({
     <>
       <ActionButton
         icon={
-          <Trash2 className="text-[#111111] group-hover:text-primary transition-all" />
+          <Trash2 className="text-text group-hover:text-primary transition-all" />
         }
         onClick={handleOpenDialog}
         isLoading={isDeleting}
@@ -79,7 +79,6 @@ const DeleteGroupButton = ({
         setIsOpen={setIsDialogOpen}
         title={t("Groups.General.Action.Delete.Title")}
         description={t("Groups.General.Action.Delete.Disclaimer")}
-        subject={groupTitle}
         confirmAction={handleDeleteGroup}
         confirmButtonLabel={t("Global.Button.Delete")}
       />

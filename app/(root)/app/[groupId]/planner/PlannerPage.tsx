@@ -393,9 +393,9 @@ const PlannerPage = ({
                   <ActionButton
                     icon={
                       selectedPlan?.recipe._id === plan.recipe._id ? (
-                        <CircleDot className="text-[#7f7f7f]" />
+                        <CircleDot className="text-text2" />
                       ) : (
-                        <Circle className="text-[#7f7f7f]" />
+                        <Circle className="text-text2" />
                       )
                     }
                     onClick={() => {

@@ -26,7 +26,7 @@ const LatestRecipeDateInPlanner = ({
   if (!latestDate?.data) return <></>;
 
   return (
-    <div className=" text-[#7f7f7f] flex gap-2 items-center">
+    <div className="text-text2 flex gap-2 items-center">
       <span className="hidden sm:block text-[14px]">{t("PlannedForDate")}</span>
       <h3 className="text-primary">
         {new Date(latestDate.data).toLocaleDateString("cs", {

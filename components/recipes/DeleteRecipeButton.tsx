@@ -66,7 +66,7 @@ const DeleteRecipeButton = ({
         icon={
           <Trash2
             className={cn("group-hover/delete:text-primary transition-all", {
-              "!w-5 text-[#4c4c4c]": small,
+              "!w-5 text-text2": small,
             })}
           />
         }

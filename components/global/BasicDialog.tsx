@@ -25,9 +25,9 @@ const BasicDialog = ({
         <DialogHeader>
           <DialogTitle className="text-primary flex gap-2 items-center">
             {icon}
-            {title}
+            <h3>{title}</h3>
           </DialogTitle>
-          <DialogDescription className="text-primary pb-2">
+          <DialogDescription className="text-text2 pb-2">
             {description}
           </DialogDescription>
           <div className="heading-underline" />
