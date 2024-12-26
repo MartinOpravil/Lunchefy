@@ -124,10 +124,7 @@ const RecipeForm = ({ recipe, isVerified }: RecipeDetailHeaderProps) => {
             )}
           />
         </section>
-        <Tabs
-          defaultValue={recipe?.data?.isImageRecipe.toString() ?? "false"}
-          className=""
-        >
+        <Tabs defaultValue={recipe?.data?.isImageRecipe.toString() ?? "false"}>
           <h3 className="input-label w-full text-center pt-4">Obsah</h3>
           {/* <div className="heading-underline" /> */}
           <TabsList className="w-full flex flex-col sm:flex-row my-6">

@@ -38,7 +38,54 @@
     }
   },
   "HomePage": {
-    "title": "Hello world!"
+    "Hero": {
+      "subTitle": "Simplify Your Meal Planning",
+      "title": "Plan, organize, and share your culinary creations with ease, one recipe at a time.",
+      "buttonText": "Go to the app"
+    },
+    "General": {
+      "title": "Why Choose Our App?",
+      "text": "<div>Managing recipes and meal planning can feel overwhelming, but our app makes it simple and enjoyable. Whether you’re a seasoned chef or a home cook, we provide a seamless way to organize recipes, plan meals, and collaborate with others.</div><div>Store your favorite recipes, search by name or tags, and tag them for better organization. Plan meals on the built-in calendar to stay ahead of the week and avoid last-minute stress. Share your ideas and meal plans with family or friends to make cooking a collective joy.</div><div>If you’re looking for an app that keeps your kitchen organized and inspires your cooking,<span class='logo-min'> Lunchefy </span>will keep you covered.</div>"
+    },
+    "Features": {
+      "title": "<div><span class='logo-features'>Lunchefy</span> is</div>",
+      "Manager": {
+        "title": "Recipe manager",
+        "description": "Your Recipes, Organized and Always Accessible."
+      },
+      "Planner": {
+        "title": "Planner",
+        "description": "Plan Your Meals, One Day at a Time."
+      },
+      "SharingPlatform": {
+        "title": "Sharing platform",
+        "description": "Collaborate and Cook Together."
+      }
+    },
+    "RecipeManager": {
+      "title": "Recipe manager",
+      "text": "<div>No more lost recipes or endless scrolling through notes and bookmarks! Our Recipe Manager lets you save and categorize your favorite recipes in one central location. Add meaningful tags like &quot;Chicken&quot;, &quot;Eggs&quot; or &quot;Fish&quot; to make searching easier than ever. You can also search recipes by name or tags, helping you quickly find the perfect dish for any occasion.</div><div>With its user-friendly design and seamless navigation, the RecipeManager is built to grow with your culinary creativity. Whether it’s for everyday meals or special occasions, keeping your recipes at your fingertips has never been this effortless.</div><div>If you want to keep all your recipes organized and easy to find,<span class='logo-min'> Lunchefy </span>is for you.</div>"
+    },
+    "Planner": {
+      "title": "Planner",
+      "text": "<div>Our Planner takes the stress out of answering the age-old question: “What’s for dinner?” Use the calendar to assign recipes to specificdates and create a visual roadmap of your meals for the week or month.</div><div>The Planner is designed to make meal prep simple and efficient.Whether you’re planning a quiet dinner at home or organizing meals for a big event, the built-in calendar helps you stay organized. By associating recipes with dates, you can streamline your shoppingtrips, reduce food waste, and save time in the kitchen.</div><div>If you love staying organized and planning ahead,<span class='logo-min'> Lunchefy </span>is for you.</div>"
+    },
+    "SharingPlatform": {
+      "title": "Sharing platform",
+      "text": "<div>Cooking is better when shared. Our Sharing Platform lets you inviteothers to join your groups and share recipe collections and mealplans effortlessly. Whether you’re cooking with family, meal prepping with a partner, or collaborating with a group of friends, sharing is seamless and intuitive.</div><div>Assign roles like Viewer or Editor to ensure everyone has the right level of access. Editors can add or modify recipes and plans, while Viewers can explore and enjoy the shared content without making changes. It’s perfect for everything from co-creating holiday menus to weekly meal planning.</div><div>If you value collaboration and sharing your kitchen creativity,<span class='logo-min'> Lunchefy </span>is for you.</div>"
+    },
+    "Next": {
+      "title": "What’s Coming Next?",
+      "text": "<ul><li>Dashboard with statistics</li><li>Recipe folders</li><li>Favorites</li><li>Recipe ranking</li><li>And more..</li></ul><div>If you like the sound of what is coming in the near future,<span class='logo-min'> Lunchefy </span> is for you.</div>"
+    },
+    "Banner": {
+      "title": "Interested?",
+      "text": "Start using <span class='logo-min'>Lunchefy</span> today",
+      "buttonText": "Start using"
+    },
+    "Footer": {
+      "text": "Your ultimate <span class='text-primary'>recipe manager</span> and <span class='text-primary'>planner</span>."
+    }
   },
   "Groups": {
     "General": {

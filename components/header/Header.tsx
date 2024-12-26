@@ -1,10 +1,8 @@
 "use client";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
-import Image from "next/image";
 import React from "react";
 import LocaleSwitcherSelect from "../global/LocaleSwitcherSelect";
 import ContinueButton from "../auth/ContinueButton";
-import LoginButton from "../auth/LoginButton";
 
 const Header = () => {
   return (

@@ -32,7 +32,7 @@ const LinkButton = ({
     setIsRouting(true);
     setTimeout(() => {
       setIsRouting(false);
-    }, 2000);
+    }, 5000);
   };
 
   return (

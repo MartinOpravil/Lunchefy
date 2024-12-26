@@ -20,7 +20,6 @@ html {
   font-family: var(--font-inter);
 }
 
-html,
 body {
   overflow-x: hidden;
 }
@@ -115,9 +114,23 @@ body {
     @apply text-14 sm:text-16 font-normal;
   }
 
-  .logo {
+  .logo,
+  .logo-min,
+  .logo-features {
     @apply text-primary;
     font-family: var(--font-marck);
+  }
+
+  .homepage {
+    .logo-min {
+      @apply text-[24px] sm:text-[28px];
+    }
+    .logo-features {
+      @apply text-[50px] sm:text-[60px];
+    }
+    ul {
+      @apply list-disc text-[20px] pl-5;
+    }
   }
 
   .header-icon {
