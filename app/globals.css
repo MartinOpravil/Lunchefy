@@ -20,6 +20,11 @@ html {
   font-family: var(--font-inter);
 }
 
+html,
+body {
+  overflow-x: hidden;
+}
+
 :root {
   --primary: #ff622c;
   --secondary: #a4b476;
@@ -108,6 +113,11 @@ html {
   }
   p {
     @apply text-14 sm:text-16 font-normal;
+  }
+
+  .logo {
+    @apply text-primary;
+    font-family: var(--font-marck);
   }
 
   .header-icon {
