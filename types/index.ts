@@ -1,12 +1,11 @@
 import { Doc, Id } from "@/convex/_generated/dataModel";
 import { Privilage } from "@/enums";
-import { GenericId } from "convex/values";
-import { Dispatch, ReactNode, RefObject, SetStateAction } from "react";
-import { UseFormReturn } from "react-hook-form";
+import { ReactNode } from "react";
 
 export interface ImageStateProps {
-  imageUrl: string;
+  imageUrl?: string;
   storageId?: Id<"_storage">;
+  externalUrl?: string;
 }
 
 export interface ClassListProp {

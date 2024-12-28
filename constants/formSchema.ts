@@ -12,8 +12,9 @@ export const groupFormSchema = z.object({
   description: z.optional(z.string()),
   coverImage: z.optional(
     z.object({
-      imageUrl: z.string(),
+      imageUrl: z.optional(z.string()),
       storageId: z.optional(z.string()),
+      externalUrl: z.optional(z.string()),
     })
   ),
 });
@@ -28,16 +29,18 @@ export const recipeFormSchema = z.object({
   instructions: z.optional(z.string()),
   coverImage: z.optional(
     z.object({
-      imageUrl: z.string(),
+      imageUrl: z.optional(z.string()),
       storageId: z.optional(z.string()),
+      externalUrl: z.optional(z.string()),
     })
   ),
   tags: z.optional(z.array(optionSchema)),
   isImageRecipe: z.boolean(),
   recipeImage: z.optional(
     z.object({
-      imageUrl: z.string(),
+      imageUrl: z.optional(z.string()),
       storageId: z.optional(z.string()),
+      externalUrl: z.optional(z.string()),
     })
   ),
 });

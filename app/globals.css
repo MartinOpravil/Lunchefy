@@ -151,7 +151,7 @@ body {
   }
 
   .page {
-    @apply flex flex-col pb-6 min-h-[calc(100vh-118px)];
+    @apply flex flex-col pb-6 min-h-[calc(100vh-124px)];
   }
   .page-content {
     @apply relative h-full flex flex-col items-center justify-start pt-16 pb-4;

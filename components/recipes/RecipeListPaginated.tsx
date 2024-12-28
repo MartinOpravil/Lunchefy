@@ -26,15 +26,7 @@ const RecipeListPaginated = ({
     <>
       <div className="recipe-grid">
         {recipeListPaginated.results?.map((recipe) => (
-          <Recipe
-            key={recipe._id}
-            id={recipe._id}
-            groupId={recipe.groupId}
-            title={recipe.name}
-            description={recipe.description}
-            imageUrl={recipe.coverImage?.imageUrl}
-            privilage={privilage}
-          />
+          <Recipe key={recipe._id} recipe={recipe} privilage={privilage} />
         ))}
         <InfiniteScroll
           hasMore={recipeListPaginated.status === "CanLoadMore"}

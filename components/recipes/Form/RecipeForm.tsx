@@ -100,6 +100,7 @@ const RecipeForm = ({ recipe, isVerified }: RecipeDetailHeaderProps) => {
                 }}
                 ref={coverImageRef}
                 isVerified={isVerified}
+                formPropertyName="coverImage"
               />
             )}
           />
@@ -131,7 +132,7 @@ const RecipeForm = ({ recipe, isVerified }: RecipeDetailHeaderProps) => {
             <TabsTrigger
               value="false"
               className="flex gap-2 w-full"
-              onClick={() =>
+              onMouseDown={() =>
                 setValue("isImageRecipe", false, { shouldDirty: true })
               }
             >
@@ -141,7 +142,7 @@ const RecipeForm = ({ recipe, isVerified }: RecipeDetailHeaderProps) => {
             <TabsTrigger
               value="true"
               className="flex gap-2 w-full"
-              onClick={() =>
+              onMouseDown={() =>
                 setValue("isImageRecipe", true, { shouldDirty: true })
               }
             >
@@ -199,6 +200,7 @@ const RecipeForm = ({ recipe, isVerified }: RecipeDetailHeaderProps) => {
                   }}
                   ref={recipeImageRef}
                   isVerified={isVerified}
+                  formPropertyName="recipeImage"
                 />
               )}
             />

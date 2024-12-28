@@ -20,7 +20,11 @@
       "Uploading": "Nahrávám",
       "Converting": "Optimalizuji. Převádím na webp formát",
       "NoAccess": "Nemáte oprávnění k nahrávání nebo správě obrázků. Kontaktujte správce webu, aby vám udělil oprávnění.",
-      "TooBigNotification": "Obrázek je příliš velký, zkuste to znovu s menším souborem."
+      "TooBigNotification": "Obrázek je příliš velký, zkuste to znovu s menším souborem.",
+      "UploadImage": "Nahrát obrázek",
+      "ExternalUrl": "Externí url",
+      "ExternalImageUrl": "Externí url obrázku",
+      "ExternalImageDiclaimer": "Při použití externí url nebudou obrázky optimalizovány a budou se pomaleji načítat!"
     },
 
     "UnsavedChangesDialog": {

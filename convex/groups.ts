@@ -144,8 +144,9 @@ export const createGroup = mutation({
     description: v.optional(v.string()),
     coverImage: v.optional(
       v.object({
-        imageUrl: v.string(),
+        imageUrl: v.optional(v.string()),
         storageId: v.optional(v.id("_storage")),
+        externalUrl: v.optional(v.string()),
       })
     ),
   },
@@ -234,8 +235,9 @@ export const updateGroup = mutation({
     description: v.optional(v.string()),
     coverImage: v.optional(
       v.object({
-        imageUrl: v.string(),
+        imageUrl: v.optional(v.string()),
         storageId: v.optional(v.id("_storage")),
+        externalUrl: v.optional(v.string()),
       })
     ),
   },

@@ -249,12 +249,8 @@ const GroupPage = ({
                       <div className="recipe-grid">
                         {initialRecipes.page.map((recipe) => (
                           <Recipe
+                            recipe={recipe}
                             key={recipe._id}
-                            id={recipe._id}
-                            groupId={recipe.groupId}
-                            title={recipe.name}
-                            description={recipe.description}
-                            imageUrl={recipe.coverImage?.imageUrl}
                             privilage={group.data?.privilage!}
                           />
                         ))}

@@ -16,35 +16,27 @@ import { Pencil } from "lucide-react";
 import LoaderSpinner from "../global/LoaderSpinner";
 import { GenericId } from "convex/values";
 import { Image as ImageLucide } from "lucide-react";
+import { Doc } from "@/convex/_generated/dataModel";
+import ChosenImage from "../global/ChosenImage";
 
 export interface RecipeProps {
-  id: GenericId<"recipes">;
-  groupId: GenericId<"groups">;
-  title: string;
+  recipe: Doc<"recipes">;
   privilage: Privilage;
-  description?: string;
-  imageUrl?: string;
-  tags?: Array<string>;
-  ingredients?: string;
-  recipe?: string;
-  recipePhotoUrl?: string;
   vertical?: boolean;
   verticalButton?: ReactNode;
   useVerticalButton?: boolean;
 }
 
 const Recipe = ({
-  id,
-  groupId,
-  title,
+  recipe,
   privilage,
-  description,
-  imageUrl,
   vertical = false,
   verticalButton,
   useVerticalButton = false,
 }: RecipeProps) => {
   const [isRoutingToOverview, setIsRoutingToOverview] = useState(false);
+
+  if (!recipe) return <></>;
 
   return (
     <Card
@@ -53,7 +45,7 @@ const Recipe = ({
       )}
     >
       <Link
-        href={`/app/${groupId}/${id}`}
+        href={`/app/${recipe.groupId}/${recipe._id}`}
         className={cn(
           "relative min-h-[300px] h-full flex flex-col justify-between items-center",
           { "min-h-[240px]": privilage === Privilage.Viewer },
@@ -68,23 +60,10 @@ const Recipe = ({
             { "min-h-[110px] min-w-[110px] w-[110px] !h-[110px]": vertical }
           )}
         >
-          {imageUrl ? (
-            <Image
-              src={imageUrl}
-              alt="Recipe cover"
-              className="transition-all group-hover:scale-105"
-              width={0}
-              height={0}
-              sizes="100vw"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-              }} // optional
-            />
-          ) : (
-            <ImageLucide className="!w-16 !h-16 text-accent transition-all group-hover:scale-105" />
-          )}
+          <ChosenImage
+            image={recipe.coverImage}
+            classList="transition-all group-hover:scale-105"
+          />
         </div>
         {isRoutingToOverview && (
           <LoaderSpinner classList="absolute top-2 right-2 !text-primary" />
@@ -97,11 +76,11 @@ const Recipe = ({
                 { "text-xl": vertical }
               )}
             >
-              {title}
+              {recipe.name}
             </h3>
-            {!vertical && description && (
+            {!vertical && recipe.description && (
               <div className="text-12 text-text2 pb-1 line-clamp-3">
-                {description}
+                {recipe.description}
               </div>
             )}
           </div>
@@ -113,15 +92,15 @@ const Recipe = ({
         <div className="absolute bottom-0 w-full p-2 flex justify-between items-center pointer-events-none">
           {privilage === Privilage.Owner && (
             <DeleteRecipeButton
-              recipeId={id}
-              groupId={groupId}
-              recipeTitle={title}
+              recipeId={recipe._id}
+              groupId={recipe.groupId}
+              recipeTitle={recipe.name}
               small
             />
           )}
           <LinkButton
             icon={<Pencil className="!w-5 text-text2" />}
-            href={`/app/${groupId}/${id}/edit`}
+            href={`/app/${recipe.groupId}/${recipe._id}/edit`}
             classList="pointer-events-auto"
             variant={ButtonVariant.Minimalistic}
           />

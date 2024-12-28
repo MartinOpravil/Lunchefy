@@ -28,14 +28,7 @@ const GroupList = ({ groupList, onClick }: GroupListProps) => {
       ) : (
         <div className="flex justify-center gap-4 flex-wrap">
           {groupList.data?.map((group) => (
-            <Group
-              key={group._id}
-              id={group._id}
-              title={group.name}
-              description={group.description}
-              imageUrl={group.coverImage?.imageUrl}
-              privilage={group.privilage}
-            />
+            <Group key={group._id} group={group} privilage={group.privilage} />
           ))}
           <div className="group-button group" onClick={onClick}>
             <div className="link">

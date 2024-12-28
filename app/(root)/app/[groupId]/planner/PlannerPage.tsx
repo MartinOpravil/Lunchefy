@@ -382,11 +382,8 @@ const PlannerPage = ({
             {selectedPlanList?.map((plan, index) => (
               <Recipe
                 key={index}
-                groupId={plan.recipe.groupId}
-                id={plan.recipe._id}
+                recipe={plan.recipe}
                 privilage={Privilage.Viewer}
-                title={plan.recipe.name}
-                imageUrl={plan.recipe.coverImage?.imageUrl}
                 vertical
                 useVerticalButton
                 verticalButton={

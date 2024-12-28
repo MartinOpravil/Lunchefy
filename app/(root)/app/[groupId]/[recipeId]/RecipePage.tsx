@@ -1,6 +1,7 @@
 "use client";
 import Lightbox, { LightboxHandle } from "@/components/global/Lightbox";
 import LinkButton from "@/components/global/LinkButton";
+import ChosenImage from "@/components/global/ChosenImage";
 import PageHeader from "@/components/global/PageHeader";
 import LatestRecipeDateInPlanner from "@/components/recipes/LatestRecipeDateInPlanner";
 import RecipeTagList from "@/components/recipes/RecipeTagList";
@@ -69,18 +70,13 @@ const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
               {recipe.data.description}
             </div>
           )}
-          {recipe.data.coverImage?.imageUrl && (
+          {recipe.data.coverImage && (
             <div className="rounded-xl overflow-hidden w-full aspect-[16/10] outline outline-2 outline-transparent hover:outline-primary transition-all">
-              <Image
-                src={recipe.data.coverImage?.imageUrl}
-                alt="recipe image"
-                width={0}
-                height={0}
-                sizes="100vw"
-                className="w-[100%] h-[100%] object-cover cursor-pointer"
+              <ChosenImage
+                image={recipe.data.coverImage}
                 onClick={() =>
                   lightboxRef.current?.setOpen(
-                    recipe.data?.coverImage?.imageUrl
+                    recipe.data?.coverImage?.externalUrl
                   )
                 }
               />
@@ -119,22 +115,17 @@ const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
                 </div>
               ) : (
                 <>
-                  {recipe.data.recipeImage?.imageUrl && (
+                  {recipe.data.recipeImage && (
                     <div className="flex flex-col gap-4">
                       <h2 className="text-[28px]">
                         {t("Form.Property.RecipeImage")}
                       </h2>
                       <div className="flex rounded-lg overflow-hidden h-full max-h-[800px] outline outline-2 outline-transparent hover:outline-primary transition-all">
-                        <Image
-                          src={recipe.data.recipeImage?.imageUrl}
-                          alt="recipe image"
-                          width={0}
-                          height={0}
-                          sizes="100vw"
-                          className="w-[100%] h-[100%] object-cover cursor-pointer"
+                        <ChosenImage
+                          image={recipe.data.recipeImage}
                           onClick={() =>
                             lightboxRef.current?.setOpen(
-                              recipe.data?.recipeImage?.imageUrl
+                              recipe.data?.recipeImage?.externalUrl
                             )
                           }
                         />
@@ -168,7 +159,9 @@ const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
         ref={lightboxRef}
         imageSrcList={[
           recipe.data?.coverImage?.imageUrl,
+          recipe.data?.coverImage?.externalUrl,
           recipe.data?.recipeImage?.imageUrl,
+          recipe.data?.recipeImage?.externalUrl,
         ].filter((x) => x !== undefined)}
       />
     </main>

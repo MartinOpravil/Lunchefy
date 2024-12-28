@@ -48,11 +48,7 @@ const SimilarRecipes = ({
           .map((recipe, index) => (
             <div key={index}>
               <Recipe
-                id={recipe._id}
-                groupId={recipe.groupId}
-                title={recipe.name}
-                description={recipe.description}
-                imageUrl={recipe.coverImage?.imageUrl}
+                recipe={recipe}
                 privilage={Privilage.Viewer}
                 vertical={true}
               />

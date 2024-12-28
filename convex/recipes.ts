@@ -28,7 +28,7 @@ export const getRecipes = query({
           q.search("tags", args.searchTags!.join(" "))
         );
     } else {
-      query = ctx.db.query("recipes");
+      query = ctx.db.query("recipes").order("desc");
     }
 
     const filteredQuery = query.filter((q) =>
@@ -96,8 +96,9 @@ export const createRecipe = mutation({
     description: v.optional(v.string()),
     coverImage: v.optional(
       v.object({
-        imageUrl: v.string(),
+        imageUrl: v.optional(v.string()),
         storageId: v.optional(v.id("_storage")),
+        externalUrl: v.optional(v.string()),
       })
     ),
     isImageRecipe: v.boolean(),
@@ -105,8 +106,9 @@ export const createRecipe = mutation({
     instructions: v.optional(v.string()),
     recipeImage: v.optional(
       v.object({
-        imageUrl: v.string(),
+        imageUrl: v.optional(v.string()),
         storageId: v.optional(v.id("_storage")),
+        externalUrl: v.optional(v.string()),
       })
     ),
     tags: v.optional(v.array(v.string())),
@@ -144,8 +146,9 @@ export const updateRecipe = mutation({
     description: v.optional(v.string()),
     coverImage: v.optional(
       v.object({
-        imageUrl: v.string(),
+        imageUrl: v.optional(v.string()),
         storageId: v.optional(v.id("_storage")),
+        externalUrl: v.optional(v.string()),
       })
     ),
     isImageRecipe: v.boolean(),
@@ -153,8 +156,9 @@ export const updateRecipe = mutation({
     instructions: v.optional(v.string()),
     recipeImage: v.optional(
       v.object({
-        imageUrl: v.string(),
+        imageUrl: v.optional(v.string()),
         storageId: v.optional(v.id("_storage")),
+        externalUrl: v.optional(v.string()),
       })
     ),
     tags: v.optional(v.array(v.string())),

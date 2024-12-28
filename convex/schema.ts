@@ -14,8 +14,9 @@ export default defineSchema({
     description: v.optional(v.string()),
     coverImage: v.optional(
       v.object({
-        imageUrl: v.string(),
+        imageUrl: v.optional(v.string()),
         storageId: v.optional(v.id("_storage")),
+        externalUrl: v.optional(v.string()),
       })
     ),
   }),
@@ -35,8 +36,9 @@ export default defineSchema({
     description: v.optional(v.string()),
     coverImage: v.optional(
       v.object({
-        imageUrl: v.string(),
+        imageUrl: v.optional(v.string()),
         storageId: v.optional(v.id("_storage")),
+        externalUrl: v.optional(v.string()),
       })
     ),
     isImageRecipe: v.boolean(),
@@ -45,8 +47,9 @@ export default defineSchema({
     instructions: v.optional(v.string()),
     recipeImage: v.optional(
       v.object({
-        imageUrl: v.string(),
+        imageUrl: v.optional(v.string()),
         storageId: v.optional(v.id("_storage")),
+        externalUrl: v.optional(v.string()),
       })
     ),
   })

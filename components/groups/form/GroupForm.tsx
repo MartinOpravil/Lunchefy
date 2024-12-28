@@ -91,6 +91,7 @@ const GroupForm = ({ group, isVerified = false }: GroupFormProps) => {
             }}
             ref={coverImageRef}
             isVerified={isVerified}
+            formPropertyName="coverImage"
           />
         )}
       />

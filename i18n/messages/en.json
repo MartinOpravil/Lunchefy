@@ -20,7 +20,11 @@
       "Uploading": "Uploading",
       "Converting": "Optimizing. Converting to webp format",
       "NoAccess": "You dont have a permission to upload or manage images. Contact a web admin to grant you a permission.",
-      "TooBigNotification": "Image is too big, try again with smaller file."
+      "TooBigNotification": "Image is too big, try again with smaller file.",
+      "UploadImage": "Upload image",
+      "ExternalUrl": "External URL",
+      "ExternalImageUrl": "External image url",
+      "ExternalImageDiclaimer": "When using an external url, images will not be optimized and will load slower!"
     },
 
     "UnsavedChangesDialog": {
