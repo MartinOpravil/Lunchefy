@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Image as ImageLucide } from "lucide-react";
+import ChosenImage from "../global/ChosenImage";
 
 interface PlannerRecipeListPaginatedProps {
   recipeListPaginated: UsePaginatedQueryReturnType<
@@ -47,23 +48,10 @@ const PlannerRecipeListPaginated = ({
                   "relative flex items-center justify-center rounded-lg overflow-hidden bg-accent/30 min-h-[50px] min-w-[50px] w-[50px] !h-[50px]"
                 )}
               >
-                {recipe.coverImage?.imageUrl ? (
-                  <Image
-                    src={recipe.coverImage.imageUrl}
-                    alt="Recipe cover"
-                    className="transition-all group-hover:scale-105"
-                    width={0}
-                    height={0}
-                    sizes="100vw"
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                    }} // optional
-                  />
-                ) : (
-                  <ImageLucide className="!w-8 !h-8 text-accent transition-all group-hover:scale-110" />
-                )}
+                <ChosenImage
+                  image={recipe.coverImage}
+                  classList="transition-all group-hover:scale-105"
+                />
               </div>
               <h4>{recipe.name}</h4>
             </div>

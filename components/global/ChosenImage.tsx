@@ -48,7 +48,7 @@ const ChosenImage = ({
 
   return (
     <div
-      className={cn("w-[100%] h-[100%] ", {
+      className={cn("w-[100%] h-[100%] select-none", {
         "sm:w-[75%] max-h-[500px]":
           variant === ChosenImageVariant.ImageInputPreview,
         "cursor-pointer": !!onClick,

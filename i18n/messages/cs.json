@@ -10,7 +10,8 @@
       "Delete": "Smazat",
       "Update": "Aktualizovat",
       "View": "Zobrazit",
-      "Continue": "Pokračovat"
+      "Continue": "Pokračovat",
+      "SignIn": "Přihlásit"
     },
 
     "Image": {
@@ -277,9 +278,28 @@
       "Chicken": "Kuřecí",
       "Pork": "Vepřové",
       "Beef": "Hovězí",
-      "Pasta": "Těstoviny",
+      "Rabbit": "Králičí",
       "Fish": "Ryby",
-      "Rice": "Rýže"
+      "Pasta": "Těstoviny",
+      "Rice": "Rýže",
+      "Potato": "Brambory",
+      "Vegetables": "Zelenina",
+      "Fruits": "Ovoce",
+      "Sweets": "Cukroví",
+      "Dessert": "Dezert",
+      "Cheese": "Sýr",
+      "Eggs": "Vejce",
+      "Pastry": "Pečivo",
+      "Mushrooms": "Houby",
+      "Sausages": "Uzeniny",
+      "CzechDumpling": "Knedlík",
+
+      "Baked": "Pečené",
+      "Fried": "Smažené",
+      "Boiled": "Vařené",
+
+      "Soup": "Polévka",
+      "MainDish": "Hlavní jídlo"
     },
     "SearchInput": {
       "SortBy": {

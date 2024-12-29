@@ -10,7 +10,8 @@
       "Delete": "Delete",
       "Update": "Update",
       "View": "View",
-      "Continue": "Continue"
+      "Continue": "Continue",
+      "SignIn": "Sign in"
     },
 
     "Image": {
@@ -277,9 +278,28 @@
       "Chicken": "Chicken",
       "Pork": "Pork",
       "Beef": "Beef",
-      "Pasta": "Pasta",
+      "Rabbit": "Rabbit",
       "Fish": "Fish",
-      "Rice": "Rice"
+      "Pasta": "Pasta",
+      "Rice": "Rice",
+      "Potato": "Potato",
+      "Vegetables": "Vegetables",
+      "Fruits": "Fruits",
+      "Sweets": "Sweets",
+      "Dessert": "Dessert",
+      "Cheese": "Cheese",
+      "Eggs": "Eggs",
+      "Pastry": "Pastry",
+      "Mushrooms": "Mushrooms",
+      "Sausages": "Sausages",
+      "CzechDumpling": "Czech Dumpling",
+
+      "Baked": "Baked",
+      "Fried": "Fried",
+      "Boiled": "Boiled",
+
+      "Soup": "Soup",
+      "MainDish": "Main Dish"
     },
     "SearchInput": {
       "SortBy": {

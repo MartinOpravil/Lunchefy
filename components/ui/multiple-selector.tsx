@@ -640,7 +640,7 @@ const MultipleSelector = React.forwardRef<
                                   onChange?.(newOptions);
                                 }}
                                 className={cn(
-                                  "cursor-pointer",
+                                  "cursor-pointer gap-4",
                                   option.disable &&
                                     "cursor-default text-muted-foreground"
                                 )}
