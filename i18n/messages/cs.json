@@ -140,7 +140,10 @@
         }
       }
     },
-
+    "Empty": {
+      "title": "Zatím nemáte žádnou skupinu",
+      "subTitle": "Začněte tím, že si ji vytvoříte"
+    },
     "AccessManager": {
       "Title": "Správce přístupu",
       "Description": "Udělte přístup svým rodinným příslušníkům nebo přátelům.",

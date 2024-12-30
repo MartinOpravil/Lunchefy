@@ -141,6 +141,11 @@
       }
     },
 
+    "Empty": {
+      "title": "You have no group yet",
+      "subTitle": "Start by creating one"
+    },
+
     "AccessManager": {
       "Title": "Access manager",
       "Description": "Grant access for your family members or friends.",

@@ -8,12 +8,11 @@ import { GenericId } from "convex/values";
 import ContentHandler from "@/components/global/ContentHandler";
 
 interface GroupServerPageProps {
-  params: { groupId: GenericId<"groups"> };
+  params: Promise<{ groupId: GenericId<"groups"> }>;
 }
 
-const GroupServerPage = async ({
-  params: { groupId },
-}: GroupServerPageProps) => {
+const GroupServerPage = async ({ params }: GroupServerPageProps) => {
+  const groupId = (await params).groupId;
   const token = await getAuthToken();
   const userPreloadPromise = preloadQuery(api.users.getLoggedUser);
   const groupPreloadPromise = preloadQuery(

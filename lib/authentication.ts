@@ -2,7 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
 export async function getAuthToken() {
-  const session = auth();
+  const session = await auth();
   if (!session.userId) {
     console.log("User is logged out");
     redirect("/sign-in?loggedOut=true");

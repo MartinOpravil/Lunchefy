@@ -14,8 +14,8 @@ const ConvexClerkProvider = ({ children }: { children: ReactNode }) => (
   <ClerkProvider
     publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY as string}
     localization={useLocale() === "cs" ? csCZ : enUS}
-    signInForceRedirectUrl="/app"
-    signUpForceRedirectUrl="/app"
+    // signInForceRedirectUrl="/app"
+    // signUpForceRedirectUrl="/app"
     afterSignOutUrl="/sign-in?loggedOut=true"
     appearance={{
       layout: {},

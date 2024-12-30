@@ -10,15 +10,15 @@ const NoContent = ({
 }) => {
   return (
     <div className="w-full flex flex-col items-center">
-      <h3 className="text-primary">{title}</h3>
-      <p>{subTitle}</p>
-      <Image
+      <h2 className="text-primary">{title}</h2>
+      <h3>{subTitle}</h3>
+      {/* <Image
         src="/icons/no_content.svg"
         alt="no_content"
         width={200}
         height={200}
         className="icon-primary pt-8"
-      />
+      /> */}
     </div>
   );
 };

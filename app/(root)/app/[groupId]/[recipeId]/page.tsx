@@ -7,12 +7,12 @@ import RecipePage from "./RecipePage";
 import ContentHandler from "@/components/global/ContentHandler";
 
 interface RecipeDetailServerPageProps {
-  params: { recipeId: Id<"recipes"> };
+  params: Promise<{ recipeId: Id<"recipes"> }>;
 }
 
-const RecipeServerPage = async ({
-  params: { recipeId },
-}: RecipeDetailServerPageProps) => {
+const RecipeServerPage = async ({ params }: RecipeDetailServerPageProps) => {
+  const recipeId = (await params).recipeId;
+
   const token = await getAuthToken();
   const recipePreload = await preloadQuery(
     api.recipes.getRecipeById,

@@ -6,6 +6,7 @@ import Group from "./Group";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { cn } from "@/lib/utils";
 
 interface GroupListProps {
   groupList: Awaited<ReturnType<typeof getGroupList>>;
@@ -16,38 +17,52 @@ const GroupList = ({ groupList, onClick }: GroupListProps) => {
   const t = useTranslations();
 
   return groupList.data ? (
-    <>
+    <div
+      className={cn(
+        "flex justify-center flex-wrap",
+        groupList.data.length ? "gap-4" : "gap-8"
+      )}
+    >
       {groupList.data.length === 0 ? (
-        <>
-          {/** TODO: Translate this!!! */}
-          <NoContent
-            title="You have no group yet"
-            subTitle="Start by creating one"
-          />
-        </>
+        <NoContent
+          title={t("Groups.Empty.title")}
+          subTitle={t("Groups.Empty.subTitle")}
+        />
       ) : (
-        <div className="flex justify-center gap-4 flex-wrap">
+        <>
           {groupList.data?.map((group) => (
             <Group key={group._id} group={group} privilage={group.privilage} />
           ))}
-          <div className="group-button group" onClick={onClick}>
-            <div className="link">
-              <Avatar className="relative w-[100px] h-[100px] transition-all group-hover:opacity-90">
-                <AvatarFallback className="bg-primary">
-                  <Plus className="text-white-1 !w-[50px] !h-[50px]" />
-                </AvatarFallback>
-              </Avatar>
-              <div className="gap-2 transition-all group-hover:opacity-90">
-                <h3>{t("Global.Button.New")}</h3>
-                {/* {description && <span>{description}</span>} */}
-              </div>
-            </div>
-          </div>
-        </div>
+        </>
       )}
-    </>
+      <NewGroupButton onClick={onClick} />
+    </div>
   ) : (
     <></>
+  );
+};
+
+interface NewGroupButtonProps {
+  onClick: () => void;
+}
+
+const NewGroupButton = ({ onClick }: NewGroupButtonProps) => {
+  const t = useTranslations();
+
+  return (
+    <div className="group-button group" onClick={onClick}>
+      <div className="link">
+        <Avatar className="relative w-[100px] h-[100px] transition-all group-hover:opacity-90">
+          <AvatarFallback className="bg-primary">
+            <Plus className="text-white-1 !w-[50px] !h-[50px]" />
+          </AvatarFallback>
+        </Avatar>
+        <div className="gap-2 transition-all group-hover:opacity-90">
+          <h3>{t("Global.Button.New")}</h3>
+          {/* {description && <span>{description}</span>} */}
+        </div>
+      </div>
+    </div>
   );
 };
 

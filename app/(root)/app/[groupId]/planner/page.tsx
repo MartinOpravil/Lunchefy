@@ -7,12 +7,12 @@ import { api } from "@/convex/_generated/api";
 import ContentHandler from "@/components/global/ContentHandler";
 
 interface PlannerServerPageProps {
-  params: { groupId: Id<"groups"> };
+  params: Promise<{ groupId: Id<"groups"> }>;
 }
 
-const PlannerServerPage = async ({
-  params: { groupId },
-}: PlannerServerPageProps) => {
+const PlannerServerPage = async ({ params }: PlannerServerPageProps) => {
+  const groupId = (await params).groupId;
+
   const month = new Date().toISOString().slice(0, 7);
 
   const token = await getAuthToken();
