@@ -30,7 +30,10 @@ function Calendar({
       className={cn("", className)}
       classNames={{
         root: cn(defaultClassNames.root, "p-3"),
-        month_caption: cn(defaultClassNames.month_caption, "capitalize"),
+        month_caption: cn(
+          defaultClassNames.month_caption,
+          "calendar-month capitalize"
+        ),
         weekdays: cn(defaultClassNames.weekdays, "capitalize"),
         day: cn(defaultClassNames.day, "rounded-full"),
         selected: "select-day",

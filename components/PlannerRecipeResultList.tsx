@@ -8,6 +8,7 @@ import { Loader2, Plus } from "lucide-react";
 import NoContent from "./global/NoContent";
 import { RECIPES_SEARCH_INITIAL_COUNT } from "@/constants/pagination";
 import PlannerRecipeListPaginated from "./recipes/PlannerRecipeListPaginated";
+import { useTranslations } from "next-intl";
 
 interface PlannerRecipeResultListProps {
   groupId: Id<"groups">;
@@ -26,6 +27,8 @@ const PlannerRecipeResultList = ({
   selectResultAction,
   selectedRecipeId,
 }: PlannerRecipeResultListProps) => {
+  const t = useTranslations("Recipes");
+
   const filteredRecipesPaginated = usePaginatedQuery(
     api.recipes.getRecipes,
     {
@@ -45,7 +48,7 @@ const PlannerRecipeResultList = ({
         !!(searchTerm || searchTags.length) && (
           <>
             {!filteredRecipesPaginated.results.length ? (
-              <NoContent title="No recipe match search criteria." />
+              <NoContent subTitle={t("SearchInput.Empty.Search")} />
             ) : (
               <PlannerRecipeListPaginated
                 recipeListPaginated={filteredRecipesPaginated}

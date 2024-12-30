@@ -26,7 +26,7 @@ const RecipeSearchResults = ({
   searchTags,
   privilage,
 }: RecipeSearchResultsProps) => {
-  const t = useTranslations("Recipes.General");
+  const t = useTranslations("Recipes");
 
   const filteredRecipesPaginated = usePaginatedQuery(
     api.recipes.getRecipes,
@@ -40,7 +40,7 @@ const RecipeSearchResults = ({
 
   return (
     <div className="flex flex-col gap-4 justify-center items-start w-full @container">
-      <h3>{t("SearchResults")}</h3>
+      <h3>{t("General.SearchResults")}</h3>
 
       {!filteredRecipesPaginated && (
         <Loader2 className="my-4 h-8 w-8 animate-spin" />
@@ -49,7 +49,7 @@ const RecipeSearchResults = ({
         !!(searchTerm || searchTags.length) && (
           <>
             {!filteredRecipesPaginated.results.length ? (
-              <NoContent title="No recipe match search criteria." />
+              <NoContent subTitle={t("SearchInput.Empty.Search")} />
             ) : (
               <RecipeListPaginated
                 recipeListPaginated={filteredRecipesPaginated}

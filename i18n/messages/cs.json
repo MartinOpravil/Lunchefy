@@ -97,12 +97,13 @@
       "Title": "Skupiny",
       "NewGroupTitle": "Nová skupina",
       "Button": {
-        "New": "Vytvořit novou",
+        "CreateNew": "Vytvořit novou skupinu",
+        "New": "Nová",
         "Share": "Sdílet"
       },
       "Disclaimer": {
         "Title": "Chcete se připojit k již existující skupině?",
-        "Text": "Kontaktujte majitele skupiny, aby vás přidal, a zadejte mu svou registrovanou e-mailovou adresu."
+        "Text": "Kontaktujte vlastníka skupiny, aby vás přidal, a zadejte mu svou registrovanou e-mailovou adresu."
       },
       "Form": {
         "Property": {
@@ -141,8 +142,15 @@
       }
     },
     "Empty": {
-      "title": "Zatím nemáte žádnou skupinu",
-      "subTitle": "Začněte tím, že si ji vytvoříte"
+      "Group": {
+        "title": "Zatím nemáte žádnou skupinu",
+        "subTitle": "Začněte tím, že si ji vytvoříte"
+      },
+      "Recipes": {
+        "title": "Tato skupina zatím nemá žádné recepty",
+        "subTitle": "Začněte tím, že si ho vytvoříte",
+        "subTitleNoPermission": "Obraťte se na odpovědnou osobu, aby nějaké přidala"
+      }
     },
     "AccessManager": {
       "Title": "Správce přístupu",
@@ -312,6 +320,9 @@
       "Placeholder": {
         "Name": "Vyhledávání podle názvu receptu",
         "Tags": "Vyhledávání podle štítků"
+      },
+      "Empty": {
+        "Search": "Žádný recept neodpovídá vyhledávacím kritériím."
       }
     },
     "Scroll": {

@@ -97,7 +97,8 @@
       "Title": "Groups",
       "NewGroupTitle": "New group",
       "Button": {
-        "New": "Create new",
+        "CreateNew": "Create new group",
+        "New": "New",
         "Share": "Share"
       },
       "Disclaimer": {
@@ -142,8 +143,15 @@
     },
 
     "Empty": {
-      "title": "You have no group yet",
-      "subTitle": "Start by creating one"
+      "Group": {
+        "title": "You have no group yet",
+        "subTitle": "Start by creating one"
+      },
+      "Recipes": {
+        "title": "This group has no recipes yet",
+        "subTitle": "Start by creating one",
+        "subTitleNoPermission": "Contact a responsible person to add some"
+      }
     },
 
     "AccessManager": {
@@ -314,6 +322,9 @@
       "Placeholder": {
         "Name": "Search by recipe name",
         "Tags": "Searcb by tags"
+      },
+      "Empty": {
+        "Search": "No recipe match search criteria."
       }
     },
     "Scroll": {

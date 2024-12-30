@@ -225,46 +225,42 @@ const GroupPage = ({
             privilage={group.data.privilage}
           />
         ) : (
-          <div className="w-full">
-            <div className="w-full">
-              <div className="flex w-full flex-col items-center gap-3 @container">
-                {!initialRecipes.page.length ? (
-                  <>
-                    {group.data.privilage === Privilage.Viewer ? (
-                      <NoContent
-                        title="This group has no recipes yet"
-                        subTitle="Contact a responsible person to add some"
-                      />
-                    ) : (
-                      <NoContent
-                        title="This group has no recipes yet"
-                        subTitle="Start by creating one"
-                      />
-                    )}
-                  </>
+          <div className="flex w-full h-full flex-col flex-grow items-center gap-3 @container">
+            {!initialRecipes.page.length ? (
+              <div className="w-full h-full flex flex-col flex-grow items-center justify-center pb-[64px]">
+                {group.data.privilage === Privilage.Viewer ? (
+                  <NoContent
+                    title={t("Groups.Empty.Recipes.title")}
+                    subTitle={t("Groups.Empty.Recipes.subTitleNoPermission")}
+                  />
                 ) : (
-                  <>
-                    {!recipeListPaginated.results.length &&
-                    !!initialRecipes.page.length ? (
-                      <div className="recipe-grid">
-                        {initialRecipes.page.map((recipe) => (
-                          <Recipe
-                            recipe={recipe}
-                            key={recipe._id}
-                            privilage={group.data?.privilage!}
-                          />
-                        ))}
-                      </div>
-                    ) : (
-                      <RecipesPaginated
-                        recipeListPaginated={recipeListPaginated}
-                        privilage={group.data.privilage}
-                      />
-                    )}
-                  </>
+                  <NoContent
+                    title={t("Groups.Empty.Recipes.title")}
+                    subTitle={t("Groups.Empty.Recipes.subTitle")}
+                  />
                 )}
               </div>
-            </div>
+            ) : (
+              <>
+                {!recipeListPaginated.results.length &&
+                !!initialRecipes.page.length ? (
+                  <div className="recipe-grid">
+                    {initialRecipes.page.map((recipe) => (
+                      <Recipe
+                        recipe={recipe}
+                        key={recipe._id}
+                        privilage={group.data?.privilage!}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <RecipesPaginated
+                    recipeListPaginated={recipeListPaginated}
+                    privilage={group.data.privilage}
+                  />
+                )}
+              </>
+            )}
           </div>
         )}
       </main>

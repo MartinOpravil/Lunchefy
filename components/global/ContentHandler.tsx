@@ -41,7 +41,7 @@ const ContentHandler = ({ children, preloadedData }: ContentHandlerProps) => {
     };
   }, [response.status, t]);
 
-  if (!response.data) {
+  if (!response.data && response.status !== HttpResponseCode.OK) {
     return (
       <div className="w-full flex flex-col flex-grow justify-center items-center gap-10 min-h-[600px]">
         <Image

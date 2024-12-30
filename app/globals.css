@@ -154,7 +154,7 @@ body {
     @apply flex flex-col pb-6 min-h-[calc(100vh-124px)];
   }
   .page-content {
-    @apply relative h-full flex flex-col items-center justify-start pt-16 pb-4;
+    @apply relative h-full flex flex-col items-center justify-start pt-16 pb-4 flex-grow;
   }
 
   .group-grid {
@@ -166,12 +166,17 @@ body {
   }
 
   .group-button {
-    @apply relative cursor-pointer transition-all text-center;
+    @apply relative cursor-pointer transition-all text-center w-[130px];
     .link {
       @apply flex flex-col justify-center items-center gap-2;
     }
   }
 
+  /* Calendar */
+  .calendar-month {
+    @apply font-[400] !text-[20px];
+    font-family: var(--font-playfair);
+  }
   .event-day,
   .select-day {
     @apply relative z-10 text-background;

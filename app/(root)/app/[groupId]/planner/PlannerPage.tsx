@@ -46,7 +46,7 @@ import RecipeSearchInput, {
 } from "@/components/RecipeSearchInput";
 import { Option } from "@/components/ui/multiple-selector";
 import PlannerRecipeResultList from "@/components/PlannerRecipeResultList";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import { Image as ImageLucide } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -272,6 +272,21 @@ const PlannerPage = ({
     setIsAssignDialogOpen(true);
   };
 
+  const getGroupedData = (planList: Plan[]) => {
+    return Object.values(
+      planList.reduce(
+        (acc, item) => {
+          if (!acc[item.date]) {
+            acc[item.date] = { date: item.date, names: [] };
+          }
+          acc[item.date].names.push(item.recipe.name);
+          return acc;
+        },
+        {} as Record<string, { date: string; names: string[] }>
+      )
+    ).sort((a, b) => (a.date > b.date ? 1 : -1));
+  };
+
   useEffect(() => {
     if (!date) return;
     const updatedSelectedPlanList = planList?.filter(
@@ -335,10 +350,10 @@ const PlannerPage = ({
       />
       <main className="page-content">
         <div className="flex gap-8 w-full relative flex-col sm:flex-row">
-          <div className="flex flex-col gap-2 items-center">
+          <div className="flex flex-col gap-8 items-center">
             <Calendar
               mode="single"
-              locale={cs}
+              locale={useLocale() === "cs" ? cs : enUS}
               ISOWeek
               selected={date}
               onSelect={handleSelect}
@@ -346,21 +361,31 @@ const PlannerPage = ({
               className="rounded-md border"
               onMonthChange={(e) => handleMonthChange(e)}
             />
-            <div className="p-2 rounded w-full">
-              <h3>{t("Groups.Planner.RecipeListTitle")}</h3>
-              <div className="pt-2">
-                {planList?.map((plan, index) => {
-                  return (
-                    <div key={index} className="flex gap-2">
-                      <div className="w-6 text-secondary">
-                        {convertToClientTime(plan.date).toLocaleString("cs", {
-                          day: "numeric",
-                        })}
+            <div className="flex flex-col gap-4 w-full">
+              <h3 className="text-[24px]">
+                {t("Groups.Planner.RecipeListTitle")}
+              </h3>
+              <div className="pt-2 flex flex-col gap-2">
+                {planList &&
+                  getGroupedData(planList)?.map((plan, index) => {
+                    return (
+                      <div key={index} className="flex gap-3">
+                        <div className="w-6 text-secondary text-[18px] text-right">
+                          {convertToClientTime(plan.date).toLocaleString(
+                            useLocale() === "cs" ? "cs" : "en-GB",
+                            {
+                              day: "numeric",
+                            }
+                          )}
+                        </div>
+                        <div className="flex flex-col text-[18px]">
+                          {plan.names.map((name, i) => (
+                            <div key={i}>{name}</div>
+                          ))}
+                        </div>
                       </div>
-                      <div>{plan.recipe?.name}</div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
               </div>
             </div>
           </div>
@@ -372,11 +397,15 @@ const PlannerPage = ({
                 </div>
               )}
             <h2 className="">
-              {date?.toLocaleDateString("cs")} -{" "}
+              {date?.toLocaleDateString(useLocale() === "cs" ? "cs" : "en-GB")}{" "}
+              -{" "}
               <span className="capitalize">
-                {date?.toLocaleDateString("cs", {
-                  weekday: "long",
-                })}
+                {date?.toLocaleDateString(
+                  useLocale() === "cs" ? "cs" : "en-GB",
+                  {
+                    weekday: "long",
+                  }
+                )}
               </span>
             </h2>
             {selectedPlanList?.map((plan, index) => (

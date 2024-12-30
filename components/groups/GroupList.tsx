@@ -25,8 +25,8 @@ const GroupList = ({ groupList, onClick }: GroupListProps) => {
     >
       {groupList.data.length === 0 ? (
         <NoContent
-          title={t("Groups.Empty.title")}
-          subTitle={t("Groups.Empty.subTitle")}
+          title={t("Groups.Empty.Group.title")}
+          subTitle={t("Groups.Empty.Group.subTitle")}
         />
       ) : (
         <>
@@ -35,7 +35,7 @@ const GroupList = ({ groupList, onClick }: GroupListProps) => {
           ))}
         </>
       )}
-      <NewGroupButton onClick={onClick} />
+      <NewGroupButton onClick={onClick} hasGroups={!!groupList.data.length} />
     </div>
   ) : (
     <></>
@@ -44,13 +44,19 @@ const GroupList = ({ groupList, onClick }: GroupListProps) => {
 
 interface NewGroupButtonProps {
   onClick: () => void;
+  hasGroups?: boolean;
 }
 
-const NewGroupButton = ({ onClick }: NewGroupButtonProps) => {
+const NewGroupButton = ({ onClick, hasGroups }: NewGroupButtonProps) => {
   const t = useTranslations();
 
   return (
-    <div className="group-button group" onClick={onClick}>
+    <div
+      className={cn("group-button group", {
+        "opacity-50 hover:opacity-100": hasGroups,
+      })}
+      onClick={onClick}
+    >
       <div className="link">
         <Avatar className="relative w-[100px] h-[100px] transition-all group-hover:opacity-90">
           <AvatarFallback className="bg-primary">
@@ -58,7 +64,9 @@ const NewGroupButton = ({ onClick }: NewGroupButtonProps) => {
           </AvatarFallback>
         </Avatar>
         <div className="gap-2 transition-all group-hover:opacity-90">
-          <h3>{t("Global.Button.New")}</h3>
+          <h3 className="text-primary">
+            {t("Groups.General.Button.CreateNew")}
+          </h3>
           {/* {description && <span>{description}</span>} */}
         </div>
       </div>

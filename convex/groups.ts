@@ -77,7 +77,7 @@ export const getGroupList = query({
     const groupList = await filter(ctx.db.query("groups"), (group) =>
       groupIdList.includes(group._id)
     )
-      .order("desc")
+      .order("asc")
       .collect();
 
     const groupListWithPrivilage = groupList.map((group) => {

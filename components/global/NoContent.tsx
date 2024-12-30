@@ -1,17 +1,18 @@
+import { cn } from "@/lib/utils";
 import Image from "next/image";
 import React from "react";
 
 const NoContent = ({
-  title = "No content",
+  title,
   subTitle,
 }: {
   title?: string;
   subTitle?: string;
 }) => {
   return (
-    <div className="w-full flex flex-col items-center">
+    <div className="w-full flex flex-col items-center text-center gap-3">
       <h2 className="text-primary">{title}</h2>
-      <h3>{subTitle}</h3>
+      <h3 className={cn({ "text-text2": !title })}>{subTitle}</h3>
       {/* <Image
         src="/icons/no_content.svg"
         alt="no_content"

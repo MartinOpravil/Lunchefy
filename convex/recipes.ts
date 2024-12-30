@@ -38,7 +38,7 @@ export const getRecipes = query({
     return await filteredQuery.paginate(args.paginationOpts);
   },
 });
-// TODO: Check if I can use id of group directly instead of generic string
+
 export const getRecipeById = query({
   args: { id: v.string(), checkPrivilages: v.optional(v.boolean()) },
   handler: async (ctx, args) => {
