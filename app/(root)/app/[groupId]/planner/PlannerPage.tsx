@@ -16,16 +16,9 @@ import {
   ArrowLeft,
   CalendarFold,
   Circle,
-  CircleCheck,
-  CircleCheckBig,
   CircleDot,
-  CircleX,
-  ExternalLink,
   Pencil,
   Plus,
-  Replace,
-  Square,
-  SquareX,
   Trash2,
 } from "lucide-react";
 import { ButtonVariant, HttpResponseCode, Privilage } from "@/enums";
@@ -47,9 +40,6 @@ import RecipeSearchInput, {
 import { Option } from "@/components/ui/multiple-selector";
 import PlannerRecipeResultList from "@/components/PlannerRecipeResultList";
 import { useLocale, useTranslations } from "next-intl";
-import Image from "next/image";
-import { Image as ImageLucide } from "lucide-react";
-import { cn } from "@/lib/utils";
 import Recipe from "@/components/recipes/Recipe";
 
 enum RecipeAction {
@@ -71,6 +61,8 @@ const PlannerPage = ({
   const t = useTranslations();
   const initialISOMonth = getISOMonth(new Date());
 
+  const locale = useLocale() === "cs" ? "cs" : "en-GB";
+
   const group = usePreloadedQuery(groupPreloaded);
   const initialRecipeListForMonth = usePreloadedQuery(
     recipeListForMonthPreloaded
@@ -87,8 +79,7 @@ const PlannerPage = ({
     RecipeAction.Assign
   );
   const [isRemoveDialogOpen, setIsRemoveDialogOpen] = useState(false);
-  const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
-  const [isChangeDialogOpen, setIsChangeDialogOpen] = useState(false);
+  const [isActionDialogOpen, setIsActionDialogOpen] = useState(false);
   const [selectedRecipeIdForAction, setSelectedRecipeIdForAction] = useState<
     string | undefined
   >(undefined);
@@ -208,7 +199,7 @@ const PlannerPage = ({
     }
   };
   const cleanModifyPopup = () => {
-    setIsAssignDialogOpen(false);
+    setIsActionDialogOpen(false);
     setSelectedRecipeIdForAction(undefined);
     setSearchTerm("");
     setSearchTags([]);
@@ -269,7 +260,7 @@ const PlannerPage = ({
 
   const handleOpenModifyDialog = (action: RecipeAction) => {
     setRecipeAction(action);
-    setIsAssignDialogOpen(true);
+    setIsActionDialogOpen(true);
   };
 
   const getGroupedData = (planList: Plan[]) => {
@@ -330,7 +321,7 @@ const PlannerPage = ({
                 <Trash2 className="group-hover:text-primary transition-all" />
               }
               onClick={() => setIsRemoveDialogOpen(true)}
-              variant={ButtonVariant.Negative}
+              variant={ButtonVariant.NegativeMinimalistic}
               isDisabled={!selectedPlan}
             />
             <ActionButton
@@ -396,16 +387,12 @@ const PlannerPage = ({
                   <LoaderSpinner size={15} />
                 </div>
               )}
-            <h2 className="">
-              {date?.toLocaleDateString(useLocale() === "cs" ? "cs" : "en-GB")}{" "}
-              -{" "}
+            <h2>
+              {date?.toLocaleDateString(locale)} -{" "}
               <span className="capitalize">
-                {date?.toLocaleDateString(
-                  useLocale() === "cs" ? "cs" : "en-GB",
-                  {
-                    weekday: "long",
-                  }
-                )}
+                {date?.toLocaleDateString(locale, {
+                  weekday: "long",
+                })}
               </span>
             </h2>
             {selectedPlanList?.map((plan, index) => (
@@ -452,8 +439,8 @@ const PlannerPage = ({
         confirmButtonLabel={t("Groups.Planner.Button.Remove")}
       />
       <BasicDialog
-        isOpen={isAssignDialogOpen}
-        setIsOpen={setIsAssignDialogOpen}
+        isOpen={isActionDialogOpen}
+        setIsOpen={setIsActionDialogOpen}
         icon={recipeAction === RecipeAction.Assign ? <Plus /> : <Pencil />}
         title={
           recipeAction === RecipeAction.Assign

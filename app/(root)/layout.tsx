@@ -1,13 +1,14 @@
 import Header from "@/components/header/Header";
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
-export const metadata: Metadata = {
-  title: "Lunchefy",
-  description: "Your ultimate recipe manager and dish decider.",
-  icons: {
-    icon: "/logo_mini.svg",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Global.Metadata");
+  return {
+    title: "Lunchefy",
+    description: t("Description"),
+  };
+}
 
 export default function RootLayout({
   children,

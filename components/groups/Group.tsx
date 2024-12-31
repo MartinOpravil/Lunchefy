@@ -1,20 +1,9 @@
 "use client";
 import React, { useState } from "react";
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import Link from "next/link";
-import LinkButton from "../global/LinkButton";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { Privilage } from "@/enums";
-import DeleteGroupButton from "./DeleteGroupButton";
 import LoaderSpinner from "../global/LoaderSpinner";
-import { Pencil, Users } from "lucide-react";
-import { GenericId } from "convex/values";
+import { Users } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Doc } from "@/convex/_generated/dataModel";
 

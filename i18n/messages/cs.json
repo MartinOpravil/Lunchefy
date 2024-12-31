@@ -39,7 +39,11 @@
 
     "Validation": {
       "NoContent": "Obsah neexistuje.",
-      "NoPermission": "K zobrazení tohoto obsahu nemáte oprávnění.."
+      "NoPermission": "K zobrazení tohoto obsahu nemáte oprávnění."
+    },
+
+    "Metadata": {
+      "Description": "Váš dokonalý správce a plánovač receptů."
     }
   },
   "HomePage": {
@@ -50,7 +54,7 @@
     },
     "General": {
       "title": "Proč si vybrat naši aplikaci?",
-      "text": "<div>Správa receptů a plánování jídel může být zdrcující, ale díky aplikaci ourapp je to jednoduché a příjemné. Ať už jste zkušený šéfkuchař nebo domácí kuchař, nabízíme vám bezproblémový způsob, jak organizovat recepty, plánovat jídla a spolupracovat s ostatními.</div><div>Ukládejte své oblíbené recepty, vyhledávejte je podle názvu nebo značek a označujte je pro lepší organizaci. Plánujte si jídla v zabudovaném kalendáři, abyste měli náskok na celý týden a vyhnuli se stresu na poslední chvíli. Sdílejte své nápady a plány jídel s rodinou nebo přáteli, aby se vaření stalo společnou radostí.</div><div>Pokud hledáte aplikaci, která vám zajistí pořádek v kuchyni a bude vás inspirovat při vaření, <span class='logo-min'> Lunchefy </span>vám pomůže.</div>"
+      "text": "<div>Správa receptů a plánování jídel může být zdrcující, ale díky aplikaci ourapp je to jednoduché a příjemné. Ať už jste zkušený šéfkuchař nebo domácí kuchař, nabízíme vám bezproblémový způsob, jak organizovat recepty, plánovat jídla a spolupracovat s ostatními.</div><div>Ukládejte své oblíbené recepty, vyhledávejte je podle názvu nebo štítků a označujte je pro lepší organizaci. Plánujte si jídla v zabudovaném kalendáři, abyste měli náskok na celý týden a vyhnuli se stresu na poslední chvíli. Sdílejte své nápady a plány jídel s rodinou nebo přáteli, aby se vaření stalo společnou radostí.</div><div>Pokud hledáte aplikaci, která vám zajistí pořádek v kuchyni a bude vás inspirovat při vaření, <span class='logo-min'> Lunchefy </span>vám pomůže.</div>"
     },
     "Features": {
       "title": "<div><span class='logo-features'>Lunchefy</span> je</div>",
@@ -69,15 +73,15 @@
     },
     "RecipeManager": {
       "title": "Správce receptů",
-      "text": "<div>Už žádné ztracené recepty nebo nekonečné procházení poznámek a záložek! Náš Správce receptů vám umožní ukládat a kategorizovat oblíbené recepty na jednom centrálním místě. Přidejte smysluplné značky jako &quot;Kuřecí&quot;, &quot;Vejce&quot; nebo &quot;Ryby&quot; a usnadněte si vyhledávání. Recepty můžete vyhledávat také podle názvu nebo štítků, což vám pomůže rychle najít dokonalý pokrm pro každou příležitost.</div><div>Díky uživatelsky přívětivému designu a bezproblémové navigaci je aplikace RecipeManager navržena tak, aby rostla spolu s vaší kulinářskou kreativitou. Ať už se jedná o každodenní jídla nebo speciální příležitosti, udržování receptů na dosah ruky nebylo nikdy tak snadné.</div><div>Pokud chcete mít všechny své recepty uspořádané a snadno je najít,<span class='logo-min'> Lunchefy </span>vám pomůže.</div>"
+      "text": "<div>Už žádné ztracené recepty nebo nekonečné procházení poznámek a záložek! Náš Správce receptů vám umožní ukládat a kategorizovat oblíbené recepty na jednom centrálním místě. Přidejte smysluplné štítky jako &quot;Kuřecí&quot;, &quot;Vejce&quot; nebo &quot;Ryby&quot; a usnadněte si vyhledávání. Recepty můžete vyhledávat také podle názvu nebo štítků, což vám pomůže rychle najít dokonalý pokrm pro každou příležitost.</div><div>Díky uživatelsky přívětivému designu a bezproblémové navigaci je aplikace RecipeManager navržena tak, aby rostla spolu s vaší kulinářskou kreativitou. Ať už se jedná o každodenní jídla nebo speciální příležitosti, udržování receptů na dosah ruky nebylo nikdy tak snadné.</div><div>Pokud chcete mít všechny své recepty uspořádané a snadno je najít,<span class='logo-min'> Lunchefy </span>je pro Vás.</div>"
     },
     "Planner": {
       "title": "Plánovač",
-      "text": "<div>Náš plánovač vás zbaví stresu z odpovědi na věčnou otázku: „Co bude k večeři?“ Pomocí kalendáře můžete přiřadit recepty ke konkrétním datům a vytvořit si vizuální plán jídel na týden nebo měsíc.</div><div>Plánovač je navržen tak, aby příprava jídla byla jednoduchá a efektivní.Ať už plánujete klidnou domácí večeři, nebo jídlo na velkou akci, vestavěný kalendář vám pomůže udržet si pořádek. Přiřazením receptů k datům můžete zefektivnit své nákupy, omezit plýtvání potravinami a ušetřit čas v kuchyni.</div><div>Pokud si rádi udržujete pořádek a plánujete dopředu,<span class='logo-min'> Lunchefy </span>vám pomůže.</div>"
+      "text": "<div>Náš plánovač vás zbaví stresu z odpovědi na věčnou otázku: „Co bude k večeři?“ Pomocí kalendáře můžete přiřadit recepty ke konkrétním datům a vytvořit si vizuální plán jídel na týden nebo měsíc.</div><div>Plánovač je navržen tak, aby příprava jídla byla jednoduchá a efektivní.Ať už plánujete klidnou domácí večeři, nebo jídlo na velkou akci, vestavěný kalendář vám pomůže udržet si pořádek. Přiřazením receptů k datům můžete zefektivnit své nákupy, omezit plýtvání potravinami a ušetřit čas v kuchyni.</div><div>Pokud si rádi udržujete pořádek a plánujete dopředu,<span class='logo-min'> Lunchefy </span>je pro Vás.</div>"
     },
     "SharingPlatform": {
       "title": "Platforma pro sdílení",
-      "text": "<div>Vaření je lepší, když se o něj dělíte. Naše platforma pro sdílení vám umožní pozvat ostatní do svých skupin a snadno sdílet sbírky receptů a jídelní plány. Ať už vaříte s rodinou, připravujete jídlo s partnerem nebo spolupracujete se skupinou přátel, sdílení je bezproblémové a intuitivní.</div><div>Přiřazením rolí, jako je Prohlížeč nebo Editor, zajistíte, že každý bude mít správnou úroveň přístupu. Redaktoři mohou přidávat nebo upravovat recepty a plány, zatímco Prohlížeči mohou sdílený obsah prozkoumávat a užívat si ho bez provádění změn. Je to ideální řešení pro vše od spoluvytváření svátečních jídelníčků až po týdenní plánování jídla.</div><div>Pokud si ceníte spolupráce a sdílení kreativity v kuchyni,<span class='logo-min'> Lunchefy </span>is for you.</div>"
+      "text": "<div>Vaření je lepší, když se o něj dělíte. Naše platforma pro sdílení vám umožní pozvat ostatní do svých skupin a snadno sdílet sbírky receptů a jídelní plány. Ať už vaříte s rodinou, připravujete jídlo s partnerem nebo spolupracujete se skupinou přátel, sdílení je bezproblémové a intuitivní.</div><div>Přiřazením rolí, jako je Prohlížeč nebo Editor, zajistíte, že každý bude mít správnou úroveň přístupu. Redaktoři mohou přidávat nebo upravovat recepty a plány, zatímco Prohlížeči mohou sdílený obsah prozkoumávat a užívat si ho bez provádění změn. Je to ideální řešení pro vše od spoluvytváření svátečních jídelníčků až po týdenní plánování jídla.</div><div>Pokud si ceníte spolupráce a sdílení kreativity v kuchyni,<span class='logo-min'> Lunchefy </span>je pro Vás.</div>"
     },
     "Next": {
       "title": "Co bude dál?",
@@ -89,7 +93,7 @@
       "buttonText": "Začněte používat"
     },
     "Footer": {
-      "text": "Váš dokonalý <span class='text-primary'>správce</span> and <span class='text-primary'>plánovač receptů</span>."
+      "text": "Váš dokonalý <span class='text-primary'>správce</span> a <span class='text-primary'>plánovač receptů</span>."
     }
   },
   "Groups": {
@@ -206,7 +210,7 @@
       "Action": {
         "AssignRecipeTitle": "Přiřadit recept",
         "SwapRecipeTitle": "Vyměnit recept",
-        "DeleteRecipeTitle": "Jste si naprosto jisti, že chcete odebrat recept z tohoto data?"
+        "DeleteRecipeTitle": "Jste si jisti, že chcete odebrat recept z tohoto data?"
       },
       "Button": {
         "Today": "Dnes",
@@ -244,6 +248,7 @@
       "ImageDeletionDisclaimer": "Mějte na paměti, že použití textu trvale odstraní dříve nahraný obrázek!",
       "SimilarRecipes": "Podobné recepty",
       "SearchResults": "Výsledky vyhledávání:",
+      "Content": "Obsah",
       "Form": {
         "Property": {
           "Name": "Název",

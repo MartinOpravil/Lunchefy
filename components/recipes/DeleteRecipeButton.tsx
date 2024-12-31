@@ -72,7 +72,7 @@ const DeleteRecipeButton = ({
         }
         onClick={handleOpenDialog}
         isLoading={isDeleting}
-        variant={ButtonVariant.Negative}
+        variant={ButtonVariant.NegativeMinimalistic}
         classList={cn("pointer-events-auto group/delete", classList)}
       />
       <ActionDialog

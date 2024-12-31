@@ -1,13 +1,7 @@
 import { Locale } from "@/i18n/config";
-import { setUserLocale, getUserLocale } from "@/lib/locale";
+import { setUserLocale } from "@/lib/locale";
 import React, { useState, useTransition } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger } from "../ui/select";
 import { useLocale } from "next-intl";
 import { LoaderCircle } from "lucide-react";
 import Flag from "react-world-flags";
@@ -42,8 +36,6 @@ const LocaleSwitcherSelect = () => {
           useArrow={false}
           className="input-class !border-transparent relative flex gap-2"
         >
-          {/* <SelectValue className="placehold:text-secondary" />
-          {language} */}
           {isPending && (
             <LoaderCircle className="animate-spin text-primary !w-6 !h-6" />
           )}

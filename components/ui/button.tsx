@@ -13,9 +13,10 @@ const buttonVariants = cva(
           "bg-background rounded-lg outline outline-1 outline-accent hover:outline-primary",
         minimalistic:
           "bg-background outline outline-1 outline-transparent hover:outline-accent rounded-lg",
-        negative:
+        negative_minimalistic:
           "bg-background outline outline-1 outline-transparent hover:outline-primary rounded-lg group",
         positive: "bg-secondary text-white-1 rounded-lg group hover:bg-primary",
+        negative: "bg-primary text-white-1 rounded-lg group hover:bg-red-500",
         editor:
           "bg-background outline outline-1 outline-transparent hover:outline-primary !p-1 !h-fit transition-all",
       },

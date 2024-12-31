@@ -2,8 +2,6 @@
 import React from "react";
 import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -31,7 +29,7 @@ interface AlertDialogProps {
 const ActionDialog = ({
   isOpen,
   setIsOpen,
-  title = "Are you absolutely sure want to delete",
+  title,
   description,
   subject,
   cancelAction,
@@ -54,23 +52,25 @@ const ActionDialog = ({
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogContent>
         <AlertDialogHeader className="gap-4">
-          <AlertDialogTitle className="text-primary">{title}</AlertDialogTitle>
+          <AlertDialogTitle className="text-black-2 !text-[22px] sm:!text-[26px] text-center">
+            {title}
+          </AlertDialogTitle>
           {subject && (
-            <AlertDialogTitle className="text-text2 pb-2">
-              &quot;{subject}&quot;
+            <AlertDialogTitle className="text-primary text-center !text-[18px] sm:!text-[24px] whitespace-pre-line">
+              {subject}
             </AlertDialogTitle>
           )}
-          <AlertDialogDescription className="">
+          <AlertDialogDescription className="text-center !text-[14px] sm:!text-[16px] pb-4 text-text2">
             {description}
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter className="justify-between pt-4">
+        <AlertDialogFooter className="justify-between">
           <ActionButton title={t("Button.Cancel")} onClick={performCancel} />
           <ActionButton
             icon={useConfirmButtonIcon ? confirmButtonIcon : null}
             title={confirmButtonLabel}
             onClick={confirmAction}
-            variant={ButtonVariant.Positive}
+            variant={ButtonVariant.Negative}
           />
         </AlertDialogFooter>
       </AlertDialogContent>

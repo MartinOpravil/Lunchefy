@@ -38,14 +38,12 @@ const PlannerServerPage = async ({ params }: PlannerServerPageProps) => {
   ]);
 
   return (
-    <>
-      <ContentHandler preloadedData={groupPreload}>
-        <PlannerPage
-          groupPreloaded={groupPreload}
-          recipeListForMonthPreloaded={recipeListForMonthPreload}
-        />
-      </ContentHandler>
-    </>
+    <ContentHandler preloadedData={groupPreload}>
+      <PlannerPage
+        groupPreloaded={groupPreload}
+        recipeListForMonthPreloaded={recipeListForMonthPreload}
+      />
+    </ContentHandler>
   );
 };
 

@@ -11,7 +11,6 @@ import { ButtonVariant, Privilage } from "@/enums";
 import { Preloaded, usePreloadedQuery } from "convex/react";
 import { ArrowLeft, CalendarFold, Pencil } from "lucide-react";
 import { useTranslations } from "next-intl";
-import Image from "next/image";
 import React, { useRef } from "react";
 
 interface RecipePageProps {

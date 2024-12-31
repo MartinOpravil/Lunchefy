@@ -14,7 +14,6 @@ import ImageInput from "@/components/global/ImageInput";
 import { ImageInputHandle } from "@/types";
 import PrivilageBadge from "@/components/users/PrivilageBadge";
 import { getGroupById } from "@/convex/groups";
-import { Textarea } from "@/components/ui/textarea";
 import { AutosizeTextarea } from "@/components/ui/autosize-textarea";
 import { useTranslations } from "next-intl";
 

@@ -1,10 +1,9 @@
 import ActionButton from "@/components/global/ActionButton";
 import BasicDialog from "@/components/global/BasicDialog";
 import PrivilageBadge from "@/components/users/PrivilageBadge";
-import Image from "next/image";
 import React, { useState } from "react";
 import UserAccessForm from "./UserAccessForm";
-import { Pencil } from "lucide-react";
+import { Pencil, Share2 } from "lucide-react";
 import { Privilage } from "@/enums";
 import { GenericId } from "convex/values";
 import { useTranslations } from "next-intl";
@@ -45,14 +44,7 @@ const UserWithAccess = ({
       <BasicDialog
         isOpen={isUserUpdateOpen}
         setIsOpen={setIsUserUpdateOpen}
-        icon={
-          <Image
-            src="/icons/share_primary.svg"
-            alt="access"
-            width={20}
-            height={20}
-          />
-        }
+        icon={<Share2 className="ml-[-2px]" />}
         title={t("Groups.AccessManager.ChangeAccessTitle")}
         description={`${name} (${email})`}
         content={

@@ -18,15 +18,7 @@ import {
   usePaginatedQuery,
   usePreloadedQuery,
 } from "convex/react";
-import {
-  ArrowLeft,
-  BookOpenText,
-  CalendarFold,
-  ChefHat,
-  Pencil,
-  Plus,
-  Search,
-} from "lucide-react";
+import { ArrowLeft, ChefHat, Pencil, Plus } from "lucide-react";
 import React, { useRef, useState } from "react";
 import { SubmitHandler } from "react-hook-form";
 import NoContent from "@/components/global/NoContent";
@@ -36,7 +28,6 @@ import { Option } from "@/components/ui/multiple-selector";
 import RecipeSearchInput from "@/components/RecipeSearchInput";
 import { useTranslations } from "next-intl";
 import { useTagManager } from "@/components/recipes/TagManager";
-import Link from "next/link";
 import PlannerButton from "@/components/groups/PlannerButton";
 
 interface GroupPageProps {

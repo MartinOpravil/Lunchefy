@@ -40,11 +40,6 @@ enum ImageType {
   External = "external",
 }
 
-interface CustomFormContext {
-  coverImageRef: React.RefObject<ImageInputHandle>;
-  recipeImageRef?: React.RefObject<ImageInputHandle>;
-}
-
 interface ImageInputProps {
   image?: ImageStateProps;
   setImage: Dispatch<SetStateAction<ImageStateProps | undefined>>;
@@ -270,7 +265,7 @@ const ImageInput = (
                         <Trash2 className="group-hover:text-primary transition-all" />
                       }
                       onClick={handleFileRemoval}
-                      variant={ButtonVariant.Negative}
+                      variant={ButtonVariant.NegativeMinimalistic}
                       classList="outline-accent"
                     />
                   </div>

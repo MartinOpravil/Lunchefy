@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Loader, LoaderCircle } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 import React from "react";
 
 interface LoaderSpinnerProps {

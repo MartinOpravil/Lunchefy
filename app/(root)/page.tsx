@@ -1,11 +1,8 @@
-import ContinueButton from "@/components/auth/ContinueButton";
-import LoginButton from "@/components/auth/LoginButton";
-import LogoutButton from "@/components/auth/LogoutButton";
 import LinkButton from "@/components/global/LinkButton";
 import { Card } from "@/components/ui/card";
 import { ButtonVariant } from "@/enums";
-import { SignedIn, SignedOut } from "@clerk/nextjs";
-import { BookOpenText, CalendarFold, Share, Share2 } from "lucide-react";
+import { SignedIn } from "@clerk/nextjs";
+import { BookOpenText, CalendarFold, Share2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { ReactNode } from "react";
@@ -205,7 +202,7 @@ const Home = () => {
         </div>
       </section>
       <section className="pt-16 flex flex-col items-center">
-        <div className="flex flex-col items-center gap-2 w-full">
+        <div className="flex flex-col items-center gap-2 w-full text-center">
           <div className="logo text-[60px]">Lunchefy</div>
           <div
             dangerouslySetInnerHTML={{
@@ -214,7 +211,7 @@ const Home = () => {
           />
           <div className="w-full pt-4">
             <div className="heading-underline" />
-            <section className="pb-8">© Martin Opravil - 2024</section>
+            <section className="pb-8 text-center">{`© Martin Opravil - ${new Date().getFullYear()}`}</section>
           </div>
         </div>
       </section>

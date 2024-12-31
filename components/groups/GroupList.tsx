@@ -3,7 +3,7 @@ import React from "react";
 import NoContent from "../global/NoContent";
 import { getGroupList } from "@/convex/groups";
 import Group from "./Group";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";

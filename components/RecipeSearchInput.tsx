@@ -1,5 +1,5 @@
 "use client";
-import { PencilLine, Search, Signature, Tags } from "lucide-react";
+import { PencilLine, Tags } from "lucide-react";
 import React, { Dispatch, SetStateAction, useCallback, useState } from "react";
 import MultipleSelector, { Option } from "./ui/multiple-selector";
 import { Input } from "./ui/input";

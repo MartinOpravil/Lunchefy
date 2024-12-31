@@ -1,9 +1,10 @@
 "use client";
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { SignedOut, UserButton } from "@clerk/nextjs";
 import React from "react";
 import LocaleSwitcherSelect from "../global/LocaleSwitcherSelect";
-import ContinueButton from "../auth/ContinueButton";
 import { useTranslations } from "next-intl";
+import LinkButton from "../global/LinkButton";
+import { ButtonVariant } from "@/enums";
 
 const Header = () => {
   const t = useTranslations("Global.Button");
@@ -14,7 +15,12 @@ const Header = () => {
       <div className="flex gap-4 justify-center items-center">
         <LocaleSwitcherSelect />
         <SignedOut>
-          <ContinueButton classList="!px-5 !py-3" title={t("SignIn")} />
+          <LinkButton
+            classList="!px-5 !py-3 uppercase"
+            title={t("SignIn")}
+            href="/app"
+            variant={ButtonVariant.Positive}
+          />
         </SignedOut>
         <UserButton
           appearance={{ elements: { userButtonAvatarBox: "w-10 h-10" } }}

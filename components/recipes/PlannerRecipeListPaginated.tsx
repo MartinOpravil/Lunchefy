@@ -1,6 +1,5 @@
 "use client";
 import React, { Dispatch, SetStateAction } from "react";
-import Recipe from "./Recipe";
 import { Privilage } from "@/enums";
 import InfiniteScroll from "../ui/infinite-scroll";
 import { Mouse, Plus } from "lucide-react";
@@ -9,9 +8,7 @@ import { UsePaginatedQueryReturnType } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { RECIPES_NEXT_COUNT } from "@/constants/pagination";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { Image as ImageLucide } from "lucide-react";
 import ChosenImage from "../global/ChosenImage";
 
 interface PlannerRecipeListPaginatedProps {

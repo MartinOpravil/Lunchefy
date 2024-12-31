@@ -20,8 +20,9 @@ export enum HttpResponseCode {
 
 export enum ButtonVariant {
   // Default = "default",
-  Negative = "negative",
-  Positive = "positive",
-  Minimalistic = "minimalistic",
   Editor = "editor",
+  Minimalistic = "minimalistic",
+  NegativeMinimalistic = "negative_minimalistic",
+  Positive = "positive",
+  Negative = "negative",
 }

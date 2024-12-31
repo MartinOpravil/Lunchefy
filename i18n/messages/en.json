@@ -40,6 +40,10 @@
     "Validation": {
       "NoContent": "Content does not exists.",
       "NoPermission": "You don't have a permission to see this content."
+    },
+
+    "Metadata": {
+      "Description": "Your ultimate recipe manager and planner."
     }
   },
   "HomePage": {
@@ -246,6 +250,7 @@
       "ImageDeletionDisclaimer": "Keep in mind that using text will permanently delete previously uploaded image!",
       "SimilarRecipes": "Similar recipes",
       "SearchResults": "Search results:",
+      "Content": "Content",
       "Form": {
         "Property": {
           "Name": "Name",

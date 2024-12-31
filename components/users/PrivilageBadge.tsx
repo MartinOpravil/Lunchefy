@@ -3,7 +3,6 @@ import { cn } from "@/lib/utils";
 import { PrivilageBadgeProps } from "@/types";
 import { User, UserCog, UserPen } from "lucide-react";
 import { useTranslations } from "next-intl";
-import Image from "next/image";
 import React, { useMemo } from "react";
 
 const PrivilageBadge = ({ privilage }: PrivilageBadgeProps) => {

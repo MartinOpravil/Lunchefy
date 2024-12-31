@@ -16,9 +16,11 @@ const ConvexClerkProvider = ({ children }: { children: ReactNode }) => (
     localization={useLocale() === "cs" ? csCZ : enUS}
     // signInForceRedirectUrl="/app"
     // signUpForceRedirectUrl="/app"
-    afterSignOutUrl="/sign-in?loggedOut=true"
+    // afterSignOutUrl="/sign-in?loggedOut=true"
     appearance={{
-      layout: {},
+      layout: {
+        logoImageUrl: "/logo.svg",
+      },
       variables: {
         colorBackground: "#ffffff",
         colorPrimary: "#ff622c",

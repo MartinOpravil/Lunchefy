@@ -1,10 +1,9 @@
 import { api } from "@/convex/_generated/api";
-import { usePaginatedQuery, useQuery } from "convex/react";
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import RecipeListPaginated from "./recipes/RecipeListPaginated";
+import { usePaginatedQuery } from "convex/react";
+import React, { Dispatch, SetStateAction } from "react";
 import { Privilage } from "@/enums";
 import { Id } from "@/convex/_generated/dataModel";
-import { Loader2, Plus } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import NoContent from "./global/NoContent";
 import { RECIPES_SEARCH_INITIAL_COUNT } from "@/constants/pagination";
 import PlannerRecipeListPaginated from "./recipes/PlannerRecipeListPaginated";

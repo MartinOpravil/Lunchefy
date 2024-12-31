@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -29,9 +28,7 @@ import { GenericId } from "convex/values";
 import { useTranslations } from "next-intl";
 
 const formSchema = z.object({
-  privilage: z.string({
-    message: "Please select a valid privilage.",
-  }),
+  privilage: z.string(),
 });
 
 export interface UserAccessFormProps {
@@ -137,16 +134,16 @@ const UserAccessForm = ({
               name="privilage"
               render={({ field }) => (
                 <FormItem className="flex flex-col gap-1">
-                  <FormLabel className="text-16 font-bold text-accent">
+                  <FormLabel className="input-label">
                     {t("Groups.AccessManager.Form.Property.Privilage")}
                   </FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
-                    <FormControl className="input-class border-2 border-accent focus-visible:ring-secondary transition-all">
+                    <FormControl className="input-class">
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a verified email to display" />
+                        <SelectValue placeholder="" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent className="bg-background">
@@ -169,12 +166,14 @@ const UserAccessForm = ({
           </div>
           <div className="flex justify-between gap-2">
             <ActionButton
-              icon={<Trash2 />}
+              icon={
+                <Trash2 className="group-hover:text-primary transition-all" />
+              }
               onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
                 e.preventDefault();
                 setIsDeleteDialogOpen(true);
               }}
-              variant={ButtonVariant.Negative}
+              variant={ButtonVariant.NegativeMinimalistic}
             />
             <ActionButton
               title={t("Global.Button.Update")}
@@ -192,7 +191,7 @@ const UserAccessForm = ({
         isOpen={isDeleteDialogOpen}
         setIsOpen={setIsDeleteDialogOpen}
         title={t("Groups.AccessManager.RevokeAccessTitle")}
-        subject={name}
+        subject={`${name}\n(${email})`}
         description={t("Groups.AccessManager.RevokeAccessDisclaimer")}
         confirmButtonLabel={t("Groups.AccessManager.Button.Revoke")}
         confirmAction={handleRevokeAccess}

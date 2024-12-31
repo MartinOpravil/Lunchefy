@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/form";
 import PrivilageBadge from "@/components/users/PrivilageBadge";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import ImageInput from "@/components/global/ImageInput";
 import Editor from "@/components/editor/Editor";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -38,7 +37,6 @@ const RecipeForm = ({ recipe, isVerified }: RecipeDetailHeaderProps) => {
     useFormContext() as ReturnType<typeof useFormContext> & CustomFormContext;
 
   const { tagOptions } = useTagManager();
-  // if (!recipe || !recipe.data) return <></>;
 
   return (
     <div className="w-full max-w-[600px]">
@@ -126,8 +124,9 @@ const RecipeForm = ({ recipe, isVerified }: RecipeDetailHeaderProps) => {
           />
         </section>
         <Tabs defaultValue={recipe?.data?.isImageRecipe.toString() ?? "false"}>
-          <h3 className="input-label w-full text-center pt-4">Obsah</h3>
-          {/* <div className="heading-underline" /> */}
+          <h3 className="input-label w-full text-center pt-4">
+            {t("Recipes.General.Content")}
+          </h3>
           <TabsList className="w-full flex flex-col sm:flex-row my-6">
             <TabsTrigger
               value="false"

@@ -68,19 +68,6 @@ export const updateUser = internalMutation({
       imageUrl: args.imageUrl,
       email: args.email,
     });
-
-    // const podcast = await ctx.db
-    //   .query("collections")
-    //   .filter((q) => q.eq(q.field("authorId"), args.clerkId))
-    //   .collect();
-
-    // await Promise.all(
-    //   podcast.map(async (p) => {
-    //     await ctx.db.patch(p._id, {
-    //       authorImageUrl: args.imageUrl,
-    //     });
-    //   })
-    // );
   },
 });
 

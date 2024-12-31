@@ -2,7 +2,6 @@ import React from "react";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -13,7 +12,7 @@ const BasicDialog = ({
   isOpen,
   setIsOpen,
   icon,
-  title = "asfagsa",
+  title,
   description,
   content,
   action,
@@ -22,14 +21,14 @@ const BasicDialog = ({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className={classList}>
-        <DialogHeader>
-          <DialogTitle className="text-primary flex gap-2 items-center">
-            {icon}
+        <DialogHeader className="gap-2">
+          <DialogTitle className="flex gap-4 items-center text-black-2 !text-[22px] sm:!text-[26px] text-center">
             {title}
+            {icon}
           </DialogTitle>
-          <DialogDescription className="text-text2 pb-2">
+          <div className="text-text2 !text-[14px] sm:!text-[16px] text-left">
             {description}
-          </DialogDescription>
+          </div>
           <div className="heading-underline" />
         </DialogHeader>
         {content}

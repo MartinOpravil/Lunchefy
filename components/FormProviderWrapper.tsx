@@ -1,5 +1,5 @@
 "use client";
-import React, { ReactNode, Ref, useEffect, useRef, useState } from "react";
+import React, { ReactNode, Ref, useEffect, useState } from "react";
 import {
   useForm,
   FormProvider,
@@ -90,8 +90,6 @@ const FormProviderWrapper = <T extends FieldValues>({
   const handleContinue = () => {
     setIsModalOpen(false);
     if (pendingNavigation) {
-      console.log("Should navigate to: ", pendingNavigation);
-
       form.reset();
       setTimeout(() => {
         router.push(pendingNavigation);

@@ -71,7 +71,7 @@ const DeleteGroupButton = ({
         }
         onClick={handleOpenDialog}
         isLoading={isDeleting}
-        variant={ButtonVariant.Negative}
+        variant={ButtonVariant.NegativeMinimalistic}
         classList={cn("pointer-events-auto", classList)}
       />
       <ActionDialog

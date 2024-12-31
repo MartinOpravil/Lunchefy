@@ -4,8 +4,6 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import React, { useState } from "react";
 import LoaderSpinner from "../global/LoaderSpinner";
-import { Avatar } from "../ui/avatar";
-import { AvatarFallback } from "@radix-ui/react-avatar";
 
 interface PlannerButtonProps {
   groupId: string;

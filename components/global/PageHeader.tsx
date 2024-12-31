@@ -1,7 +1,5 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { Users } from "lucide-react";
-import Image from "next/image";
 import React, { ReactNode } from "react";
 
 interface PageHeaderProps {

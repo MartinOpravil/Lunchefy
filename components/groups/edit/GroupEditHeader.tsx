@@ -6,19 +6,9 @@ import ActionButton from "@/components/global/ActionButton";
 import BasicDialog from "@/components/global/BasicDialog";
 import AccessManager from "./AccessManager/AccessManager";
 import { ButtonVariant, Privilage } from "@/enums";
-import Image from "next/image";
 import DeleteGroupButton from "../DeleteGroupButton";
 import { getGroupById } from "@/convex/groups";
-import {
-  ArrowLeft,
-  Book,
-  BookOpenText,
-  ChefHat,
-  Save,
-  Share2,
-  Users,
-} from "lucide-react";
-import HorizontalSeparator from "@/components/global/HorizontalSeparator";
+import { ArrowLeft, ChefHat, Save, Share2, Users } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import { useTranslations } from "next-intl";
 
@@ -88,14 +78,7 @@ const GroupEditHeader = ({ group }: GroupEditHeaderProps) => {
       <BasicDialog
         isOpen={isAccessManagerOpen}
         setIsOpen={setIsAccessManagerOpen}
-        icon={
-          <Image
-            src="/icons/share_primary.svg"
-            alt="access"
-            width={20}
-            height={20}
-          />
-        }
+        icon={<Share2 className="ml-[-2px]" />}
         title={t("Groups.AccessManager.Title")}
         description={t("Groups.AccessManager.Description")}
         content={
