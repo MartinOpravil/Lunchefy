@@ -21,7 +21,6 @@ import {
 import { ImageInputHandle, ImageStateProps } from "@/types";
 import { FormLabel } from "../ui/form";
 import { Id } from "@/convex/_generated/dataModel";
-import { useUploadFiles } from "@xixixao/uploadstuff/react";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useTranslations } from "next-intl";
@@ -75,7 +74,6 @@ const ImageInput = (
   );
   const generateUploadUrl = useMutation(api.files.generateUploadUrl);
   const deleteFile = useMutation(api.files.deleteFile);
-  const { startUpload } = useUploadFiles(generateUploadUrl);
   const getImageUrl = useMutation(api.files.getUrl);
   const [imageStorageIdBackup, setImageStorageIdBackup] = useState(
     image?.storageId
@@ -106,9 +104,13 @@ const ImageInput = (
         type: "image/png",
       });
 
-      const uploaded = await startUpload([file]);
-      const storageId = (uploaded[0].response as any).storageId;
-
+      const postUrl = await generateUploadUrl();
+      const result = await fetch(postUrl, {
+        method: "POST",
+        headers: { "Content-Type": file.type },
+        body: file,
+      });
+      const storageId = (await result.json()).storageId;
       const imageUrl = await getImageUrl({ storageId });
 
       setImage({
