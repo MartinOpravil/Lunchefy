@@ -13,7 +13,7 @@ const Page = () => {
       notifySuccess(t("Logout"));
       window.history.replaceState(null, "", "/sign-in");
     }
-  }, [searchParams]);
+  }, [searchParams, t]);
 
   return (
     <div className="flex-center glassmorphism-auth h-screen w-full">

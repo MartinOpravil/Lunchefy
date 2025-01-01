@@ -1,6 +1,5 @@
 "use client";
 import ActionButton from "@/components/global/ActionButton";
-import HorizontalSeparator from "@/components/global/HorizontalSeparator";
 import PageHeader from "@/components/global/PageHeader";
 import { ButtonVariant } from "@/enums";
 import { ArrowLeft, NotebookText, Save } from "lucide-react";

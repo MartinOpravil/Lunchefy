@@ -62,6 +62,7 @@ const PlannerPage = ({
   const initialISOMonth = getISOMonth(new Date());
 
   const locale = useLocale() === "cs" ? "cs" : "en-GB";
+  const localeForCalendar = useLocale() === "cs" ? cs : enUS;
 
   const group = usePreloadedQuery(groupPreloaded);
   const initialRecipeListForMonth = usePreloadedQuery(
@@ -330,7 +331,7 @@ const PlannerPage = ({
           <div className="flex flex-col gap-8 items-center">
             <Calendar
               mode="single"
-              locale={useLocale() === "cs" ? cs : enUS}
+              locale={localeForCalendar}
               ISOWeek
               selected={date}
               onSelect={handleSelect}

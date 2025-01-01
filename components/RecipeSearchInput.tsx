@@ -1,6 +1,12 @@
 "use client";
 import { PencilLine, Tags } from "lucide-react";
-import React, { Dispatch, SetStateAction, useCallback, useState } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import MultipleSelector, { Option } from "./ui/multiple-selector";
 import { Input } from "./ui/input";
 import { debounce } from "lodash";
@@ -56,12 +62,17 @@ const RecipeSearchInput = ({
 
   const debouncedUpdate = useCallback(
     debounce((value) => {
-      // setIsFiltering(true);
       setSearchTerm(value);
-      // setTimeout(() => setIsFiltering(false), 200);
     }, debounceDelay),
-    []
+    [debounceDelay]
   );
+
+  useEffect(() => {
+    return () => {
+      // Cleanup
+      debouncedUpdate.cancel();
+    };
+  }, [debouncedUpdate]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;

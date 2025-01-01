@@ -35,7 +35,7 @@ const ChosenImage = ({
   const [key, setKey] = useState(0);
 
   useEffect(() => {
-    setKey(key + 1);
+    setKey((prevKey) => prevKey + 1);
   }, [image]);
 
   const imageSrc = useMemo(() => {
@@ -44,7 +44,7 @@ const ChosenImage = ({
     if (content !== ChosenImageContent.Internal && image?.externalUrl)
       return image.externalUrl;
     return "";
-  }, [image]);
+  }, [image, content]);
 
   return (
     <div
