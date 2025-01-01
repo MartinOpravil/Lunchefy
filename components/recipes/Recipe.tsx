@@ -17,6 +17,7 @@ export interface RecipeProps {
   vertical?: boolean;
   verticalButton?: ReactNode;
   useVerticalButton?: boolean;
+  classList?: string;
 }
 
 const Recipe = ({
@@ -25,6 +26,7 @@ const Recipe = ({
   vertical = false,
   verticalButton,
   useVerticalButton = false,
+  classList,
 }: RecipeProps) => {
   const [isRoutingToOverview, setIsRoutingToOverview] = useState(false);
 
@@ -33,7 +35,8 @@ const Recipe = ({
   return (
     <Card
       className={cn(
-        "relative cursor-pointer transition-all overflow-hidden border hover:border-primary group"
+        "relative cursor-pointer transition-all overflow-hidden border hover:border-primary group",
+        classList
       )}
     >
       <Link
@@ -64,7 +67,7 @@ const Recipe = ({
           <div className="flex flex-col pt-1 px-1 gap-2">
             <h3
               className={cn(
-                "text-xl sm:text-2xl group-hover:text-primary transition-all line-clamp-3",
+                "text-xl sm:text-2xl sm:leading-7 group-hover:text-primary transition-all line-clamp-3",
                 { "text-xl": vertical }
               )}
             >

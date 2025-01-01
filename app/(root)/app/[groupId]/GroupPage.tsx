@@ -159,34 +159,34 @@ const GroupPage = ({
         icon={<ChefHat className="text-white-1" />}
         description={group.data.description}
         leftSide={
-          <>
-            <LinkButton
-              icon={<ArrowLeft />}
-              href="/app"
-              variant={ButtonVariant.Minimalistic}
-            />
-          </>
+          <LinkButton
+            icon={<ArrowLeft />}
+            href="/app"
+            variant={ButtonVariant.Minimalistic}
+          />
         }
         rightSide={
           <>
             {group.data.privilage !== Privilage.Viewer && (
-              <>
-                <LinkButton
-                  icon={<Pencil />}
-                  href={`/app/${group.data._id}/edit`}
-                  variant={ButtonVariant.Minimalistic}
-                />
-                <ActionButton
-                  title={t("Global.Button.New")}
-                  icon={<Plus />}
-                  onClick={() => setIsNewFormOpen(true)}
-                  variant={ButtonVariant.Positive}
-                />
-              </>
+              <ActionButton
+                title={t("Global.Button.New")}
+                icon={<Plus />}
+                onClick={() => setIsNewFormOpen(true)}
+                variant={ButtonVariant.Positive}
+              />
             )}
           </>
         }
-        topSide={
+        topLeftSide={
+          <LinkButton
+            icon={
+              <Pencil className="text-text2 group-hover:text-text transition-all" />
+            }
+            href={`/app/${group.data._id}/edit`}
+            variant={ButtonVariant.Minimalistic}
+          />
+        }
+        topRightSide={
           <PlannerButton
             groupId={group.data._id}
             todayRecipeName={todayRecipe.data?.[0]?.name}

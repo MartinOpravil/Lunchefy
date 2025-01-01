@@ -20,7 +20,7 @@ const EditorControlBar = ({ editor }: EditorControlBarProps) => {
             <EditorButton editor={editor} type={EditorButtonType.Bold} />
             <EditorButton editor={editor} type={EditorButtonType.Italic} />
             <EditorButton editor={editor} type={EditorButtonType.Strike} />
-            <EditorButton editor={editor} type={EditorButtonType.Paragraph} />
+            {/* <EditorButton editor={editor} type={EditorButtonType.Paragraph} /> */}
             <EditorButton editor={editor} type={EditorButtonType.H1} />
             <EditorButton editor={editor} type={EditorButtonType.H2} />
             <EditorButton editor={editor} type={EditorButtonType.H3} />

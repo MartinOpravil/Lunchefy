@@ -317,20 +317,6 @@ const PlannerPage = ({
         rightSide={
           <>
             <ActionButton
-              icon={
-                <Trash2 className="group-hover:text-primary transition-all" />
-              }
-              onClick={() => setIsRemoveDialogOpen(true)}
-              variant={ButtonVariant.NegativeMinimalistic}
-              isDisabled={!selectedPlan}
-            />
-            <ActionButton
-              icon={<Pencil />}
-              onClick={() => handleOpenModifyDialog(RecipeAction.Swap)}
-              isDisabled={!selectedPlan}
-              variant={ButtonVariant.Minimalistic}
-            />
-            <ActionButton
               title={t("Groups.Planner.Button.Assign")}
               icon={<Plus />}
               onClick={() => handleOpenModifyDialog(RecipeAction.Assign)}
@@ -363,7 +349,7 @@ const PlannerPage = ({
                       <div key={index} className="flex gap-3">
                         <div className="w-6 text-secondary text-[18px] text-right">
                           {convertToClientTime(plan.date).toLocaleString(
-                            useLocale() === "cs" ? "cs" : "en-GB",
+                            locale,
                             {
                               day: "numeric",
                             }
@@ -380,7 +366,7 @@ const PlannerPage = ({
               </div>
             </div>
           </div>
-          <div className="flex flex-col gap-8 w-full">
+          <div className="flex flex-col gap-8 w-full @container">
             {recipeListForMonth === undefined &&
               initialISOMonth !== selectedISOMonth && (
                 <div className="absolute top-0 right-0 w-10">
@@ -396,31 +382,42 @@ const PlannerPage = ({
               </span>
             </h2>
             {selectedPlanList?.map((plan, index) => (
-              <Recipe
+              <div
                 key={index}
-                recipe={plan.recipe}
-                privilage={Privilage.Viewer}
-                vertical
-                useVerticalButton
-                verticalButton={
+                className="w-full flex flex-col @sm:flex-row gap-2"
+              >
+                <Recipe
+                  recipe={plan.recipe}
+                  privilage={Privilage.Viewer}
+                  vertical
+                  useVerticalButton
+                  classList="w-full flex-shrink-0 @sm:flex-shrink"
+                />
+                <div className="flex flex-row @sm:flex-col gap-2 h-full justify-end @sm:justify-start flex-shrink">
+                  <ActionButton
+                    icon={<Pencil />}
+                    onClick={() => {
+                      setSelectedPlan(
+                        selectedPlanList.find((x) => x.planId === plan.planId)
+                      );
+                      handleOpenModifyDialog(RecipeAction.Swap);
+                    }}
+                    isDisabled={!selectedPlan}
+                  />
                   <ActionButton
                     icon={
-                      selectedPlan?.recipe._id === plan.recipe._id ? (
-                        <CircleDot className="text-text2" />
-                      ) : (
-                        <Circle className="text-text2" />
-                      )
+                      <Trash2 className="group-hover:text-primary transition-all" />
                     }
                     onClick={() => {
                       setSelectedPlan(
                         selectedPlanList.find((x) => x.planId === plan.planId)
                       );
+                      setIsRemoveDialogOpen(true);
                     }}
-                    classList="pointer-events-auto"
-                    variant={ButtonVariant.Minimalistic}
+                    isDisabled={!selectedPlan}
                   />
-                }
-              />
+                </div>
+              </div>
             ))}
             {selectedPlanList?.length === 0 && (
               <div className="text-[20px] italic">

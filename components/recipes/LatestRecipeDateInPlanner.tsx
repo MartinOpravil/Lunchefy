@@ -2,8 +2,8 @@
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
 import React from "react";
-import { Skeleton } from "../ui/skeleton";
 import { useLocale, useTranslations } from "next-intl";
+import { LoaderCircle } from "lucide-react";
 
 interface LatestRecipeDateInPlannerProps {
   groupId: string;
@@ -23,9 +23,7 @@ const LatestRecipeDateInPlanner = ({
   const locale = useLocale() === "cs" ? "cs" : "en-GB";
 
   if (latestDate === undefined)
-    return (
-      <Skeleton className="w-16 sm:w-[160px] h-8 bg-primary/20 rounded-xl" />
-    );
+    return <LoaderCircle className="animate-spin text-primary !w-8 !h-8" />;
   if (!latestDate?.data) return <></>;
 
   return (

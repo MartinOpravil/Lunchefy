@@ -214,9 +214,9 @@ const EditorButton = ({ type, editor }: EditorButtonProps) => {
     };
   }, [type, editor]);
 
-  if (isDisabled()) {
-    return <></>;
-  }
+  // if (isDisabled()) {
+  //   return <></>;
+  // }
 
   return (
     <Button

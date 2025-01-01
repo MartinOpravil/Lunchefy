@@ -10,9 +10,9 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-background rounded-lg outline outline-1 outline-accent hover:outline-primary",
+          "bg-background rounded-lg outline outline-1 outline-accent hover:outline-primary group",
         minimalistic:
-          "bg-background outline outline-1 outline-transparent hover:outline-accent rounded-lg",
+          "bg-background outline outline-1 outline-transparent hover:outline-accent rounded-lg group",
         negative_minimalistic:
           "bg-background outline outline-1 outline-transparent hover:outline-primary rounded-lg group",
         positive: "bg-secondary text-white-1 rounded-lg group hover:bg-primary",

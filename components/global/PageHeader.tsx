@@ -6,7 +6,8 @@ interface PageHeaderProps {
   icon?: ReactNode;
   title: string;
   description?: string;
-  topSide?: ReactNode;
+  topLeftSide?: ReactNode;
+  topRightSide?: ReactNode;
   leftSide?: ReactNode;
   rightSide?: ReactNode;
   showIcon?: boolean;
@@ -17,7 +18,8 @@ const PageHeader = ({
   icon,
   title,
   description,
-  topSide,
+  topLeftSide,
+  topRightSide,
   leftSide,
   rightSide,
   showIcon = true,
@@ -32,11 +34,12 @@ const PageHeader = ({
               <div className="rounded-full bg-primary p-2">{icon}</div>
             )}
             {title}
+            {topLeftSide}
           </h2>
           {description && <p className="text-14 italic">{`${description}`}</p>}
         </div>
         <div className="flex flex-grow items-center justify-end gap-2 flex-wrap">
-          {topSide}
+          {topRightSide}
         </div>
       </div>
       <div className="heading-underline" />
