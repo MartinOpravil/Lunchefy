@@ -142,7 +142,7 @@ const GroupPage = ({
         recipeImageRef={recipeImageRef}
         manualLeaveAction={() => setIsNewFormOpen(false)}
       >
-        <main className="page">
+        <main className="page page-width-normal">
           <NewRecipeHeader />
           <main className="page-content">
             <RecipeForm isVerified={user.data.isVerified} />
@@ -153,7 +153,7 @@ const GroupPage = ({
   }
 
   return (
-    <main className="page pb-4">
+    <main className="page pb-4 page-width-normal">
       <PageHeader
         title={group.data.name}
         icon={<ChefHat className="text-white-1" />}
@@ -194,7 +194,7 @@ const GroupPage = ({
           />
         }
       />
-      <main className="page-content gap-6">
+      <section className="page-content gap-6">
         {!!initialRecipes.page.length && (
           <>
             <RecipeSearchInput
@@ -254,7 +254,7 @@ const GroupPage = ({
             )}
           </div>
         )}
-      </main>
+      </section>
     </main>
   );
 };

@@ -82,13 +82,13 @@ const GroupEditPage = ({
       passResetToParent={setResetForm}
       coverImageRef={coverImageRef}
     >
-      <main className="page">
+      <main className="page page-width-normal">
         <GroupEditHeader group={group} />
-        <main className="page-content">
+        <section className="page-content">
           {user.data && (
             <GroupForm group={group} isVerified={user.data.isVerified} />
           )}
-        </main>
+        </section>
       </main>
     </FormProviderWrapper>
   );

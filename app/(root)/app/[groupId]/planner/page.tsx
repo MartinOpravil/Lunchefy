@@ -5,6 +5,7 @@ import { getAuthToken } from "@/lib/authentication";
 import { preloadQuery } from "convex/nextjs";
 import { api } from "@/convex/_generated/api";
 import ContentHandler from "@/components/global/ContentHandler";
+import { getISOMonth } from "@/lib/time";
 
 interface PlannerServerPageProps {
   params: Promise<{ groupId: Id<"groups"> }>;
@@ -13,7 +14,7 @@ interface PlannerServerPageProps {
 const PlannerServerPage = async ({ params }: PlannerServerPageProps) => {
   const groupId = (await params).groupId;
 
-  const month = new Date().toISOString().slice(0, 7);
+  const month = getISOMonth(new Date());
 
   const token = await getAuthToken();
   const groupPreloadPromise = preloadQuery(

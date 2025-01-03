@@ -27,7 +27,7 @@ const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
   }
 
   return (
-    <main className="page">
+    <main className="page page-width-normal">
       <PageHeader
         title={recipe.data.name}
         showIcon={false}
@@ -62,7 +62,7 @@ const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
           </>
         }
       />
-      <main className="page-content">
+      <section className="page-content">
         <div className="flex flex-col w-full gap-16">
           {recipe.data.description && (
             <div className="text-16 sm:text-[20px]">
@@ -153,7 +153,7 @@ const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
             </div>
           </div>
         </div>
-      </main>
+      </section>
       <Lightbox
         ref={lightboxRef}
         imageSrcList={[

@@ -75,7 +75,7 @@ const GroupListPage = ({
         coverImageRef={coverImageRef}
         manualLeaveAction={() => setIsNewFormOpen(false)}
       >
-        <main className="page">
+        <main className="page page-width-normal">
           <NewGroupHeader />
           <main className="page-content">
             <GroupForm isVerified={user.data.isVerified} />
@@ -87,20 +87,20 @@ const GroupListPage = ({
 
   // Overview
   return (
-    <main className="page gap-6 justify-between">
-      <main className="page-content @container !justify-center !items-center min-h-[300px] flex-grow">
+    <main className="page page-width-normal gap-6 justify-between">
+      <section className="page-content @container !justify-center !items-center min-h-[300px] flex-grow">
         <GroupList
           groupList={groupList}
           onClick={() => setIsNewFormOpen(true)}
         />
-      </main>
-      <div className="flex flex-col gap-2 justify-center items-center text-center">
+      </section>
+      <section className="flex flex-col gap-2 justify-center items-center text-center">
         <div className="w-24 h-[1px] bg-black-1 opacity-50 mb-1" />
         <h3 className="text-16 text-primary">
           {t("Groups.General.Disclaimer.Title")}
         </h3>
         <div className="text-12">{t("Groups.General.Disclaimer.Text")}</div>
-      </div>
+      </section>
     </main>
   );
 };

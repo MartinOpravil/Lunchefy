@@ -5,7 +5,7 @@ import ConvexClerkProvider from "./providers/ConvexClerkProvider";
 import { Toaster } from "sonner";
 
 import { NextIntlClientProvider } from "next-intl";
-import { getLocale, getMessages } from "next-intl/server";
+import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import { cn } from "@/lib/utils";
 
 const playfair = Playfair({
@@ -24,13 +24,16 @@ const marckScript = Marck_Script({
   variable: "--font-marck",
 });
 
-export const metadata: Metadata = {
-  title: "Lunchefy",
-  description: "Your ultimate recipe manager and dish decider.",
-  icons: {
-    icon: "/logo_mini.svg",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Global.Metadata");
+  return {
+    title: "Lunchefy",
+    description: t("Description"),
+    icons: {
+      icon: "/logo_mini.svg",
+    },
+  };
+}
 
 export default async function RootLayout({
   children,
@@ -45,7 +48,7 @@ export default async function RootLayout({
       lang={locale}
       className={cn(playfair.variable, inter.variable, marckScript.variable)}
     >
-      <body>
+      <body className="flex flex-col relative w-full bg-background">
         <NextIntlClientProvider messages={messages}>
           <ConvexClerkProvider>{children}</ConvexClerkProvider>
           <Toaster />

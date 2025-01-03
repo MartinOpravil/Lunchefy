@@ -1,17 +1,16 @@
 "use client";
 
 import * as React from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, LoaderCircle } from "lucide-react";
 import { DayPicker, getDefaultClassNames } from "react-day-picker";
 import "react-day-picker/style.css";
 import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
-import { convertToServerTime } from "@/lib/time";
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
 type CalendarWithEventsProps = CalendarProps & {
   events?: string[];
+  isLoading: boolean;
 };
 
 function Calendar({
@@ -19,6 +18,7 @@ function Calendar({
   classNames,
   showOutsideDays = false,
   events,
+  isLoading,
   ...props
 }: CalendarWithEventsProps) {
   const eventDays = Array.from(new Set(events)).map((x) => new Date(x));
@@ -36,6 +36,7 @@ function Calendar({
         ),
         weekdays: cn(defaultClassNames.weekdays, "capitalize"),
         day: cn(defaultClassNames.day, "rounded-full"),
+        day_button: cn(defaultClassNames.day_button, "min-w-full"),
         selected: "select-day",
         today: "bg-secondary/25",
         chevron: "",
@@ -47,6 +48,16 @@ function Calendar({
         events: "event-day",
       }}
       components={{
+        CaptionLabel: (props) => {
+          return (
+            <span {...props} className={cn(props.className, "flex gap-3")}>
+              {props.children}
+              {isLoading && (
+                <LoaderCircle className="animate-spin text-primary !w-6 !h-6" />
+              )}
+            </span>
+          );
+        },
         Chevron: (props) => {
           if (props.orientation === "left") {
             return <ChevronLeft {...props} />;

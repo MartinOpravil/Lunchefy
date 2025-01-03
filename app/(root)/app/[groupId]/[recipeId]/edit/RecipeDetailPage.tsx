@@ -99,7 +99,7 @@ const RecipeDetailPage = ({
       coverImageRef={coverImageRef}
       recipeImageRef={recipeImageRef}
     >
-      <main className="page">
+      <main className="page page-width-normal">
         <RecipeDetailHeader recipe={recipe} />
         <main className="page-content">
           {user.data && (
