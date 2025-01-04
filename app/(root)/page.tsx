@@ -2,7 +2,7 @@ import LinkButton from "@/components/global/LinkButton";
 import { Card } from "@/components/ui/card";
 import { ButtonVariant } from "@/enums";
 import { SignedIn } from "@clerk/nextjs";
-import { BookOpenText, CalendarFold, Lightbulb, Share2 } from "lucide-react";
+import { BookOpenText, CalendarFold, CookingPot, Share2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { ReactNode } from "react";
@@ -45,7 +45,7 @@ const Home = () => {
             <span className="text-primary text-14 sm:text-[20px] uppercase font-[700] tracking-wider">
               {t("Hero.subTitle")}
             </span>
-            <p className="text-20 sm:text-[36px] font-[700]">
+            <p className="text-20 sm:text-[36px] font-[700] whitespace-pre-line">
               {t("Hero.title")}
             </p>
             <SignedIn>
@@ -168,7 +168,7 @@ const Home = () => {
           className="w-[100%] h-[100%] object-contain max-h-[575px] sm:w-[50%]"
         />
       </section>
-      <section className="page-width-normal relative py-16 lg:py-32 flex flex-col items-center sm:flex-row gap-16">
+      <section className="page-width-normal relative pt-16 pb-32 lg:pt-32 lg:pb-48 flex flex-col items-center sm:flex-row gap-16">
         <div className="flex flex-col gap-8 w-full sm:w-[50%] md:order-2">
           <h2>{t("Next.title")}</h2>
           <div
@@ -179,7 +179,7 @@ const Home = () => {
           />
         </div>
         <div className="w-[100%] h-[100%] object-contain max-h-[575px] sm:w-[50%] md:order-1">
-          <Lightbulb className="!w-[200px] !h-[200px] text-secondary m-auto" />
+          <CookingPot className="!w-[200px] !h-[200px] text-secondary m-auto" />
         </div>
       </section>
 

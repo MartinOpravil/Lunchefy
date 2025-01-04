@@ -128,6 +128,9 @@ html {
     ul {
       @apply list-disc text-[20px] pl-5;
     }
+    .homepage-bold {
+      @apply text-secondary font-bold;
+    }
   }
 
   .header-icon {

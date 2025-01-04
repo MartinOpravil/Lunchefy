@@ -17,9 +17,9 @@
     "Image": {
       "ChangeImage": "Change image",
       "Title": "Click to upload",
-      "Description": "Preferably in WebP fomat. Other image formats will be automatically converted to WebP.",
+      "Description": "Preferably in WebP fomat. Other image formats will be automatically optimized.",
       "Uploading": "Uploading",
-      "Converting": "Optimizing. Converting to webp format",
+      "Converting": "Optimizing..",
       "NoAccess": "You dont have a permission to upload or manage images. Contact a web admin to grant you a permission.",
       "TooBigNotification": "Image is too big, try again with smaller file.",
       "UploadImage": "Upload image",
@@ -29,7 +29,7 @@
     },
 
     "UnsavedChangesDialog": {
-      "Title": "Unsaved changes present",
+      "Title": "Unsaved changes present!",
       "Disclaimer": "By proceeding your unsaved changes will be lost. Do you still want to continue?"
     },
 
@@ -49,12 +49,12 @@
   "HomePage": {
     "Hero": {
       "subTitle": "Simplify Your Meal Planning",
-      "title": "Plan, organize, and share your culinary creations with ease, one recipe at a time.",
+      "title": "Plan, organize, and share your culinary creations with ease.\nOne recipe at a time.",
       "buttonText": "Go to the app"
     },
     "General": {
-      "title": "Why Choose Our App?",
-      "text": "<div>Managing recipes and meal planning can feel overwhelming, but our app makes it simple and enjoyable. Whether you’re a seasoned chef or a home cook, we provide a seamless way to organize recipes, plan meals, and collaborate with others.</div><div>Store your favorite recipes, search by name or tags, and tag them for better organization. Plan meals on the built-in calendar to stay ahead of the week and avoid last-minute stress. Share your ideas and meal plans with family or friends to make cooking a collective joy.</div><div>If you’re looking for an app that keeps your kitchen organized and inspires your cooking,<span class='logo-min'> Lunchefy </span>will keep you covered.</div>"
+      "title": "Why Use Our App?",
+      "text": "<div>Do you cook home-cooked meals? Do you have many recipes? Can't often decide what to cook?</div><div>Our <span class='logo-min'> Lunchefy </span> app makes meal planning simple and, thanks to its modern design, enjoyable. It is designed for both experienced chefs and amateurs. It offers you the opportunity to not only organize recipes, plan your meals and also share them with others.</div><div>Transfer your recipes collected over the years. Then, when you need them, you can find them quickly and easily, both by <span class='homepage-bold'>Name</span> or by the <span class='homepage-bold'>Tags</span> that you can assign to your recipes.</div><div>Plan your meals in our built-in calendar so you can prepare what you'll cook in advance and also look back at what you've cooked. Connect with family or friends and share your ideas and plans for the days ahead.</div>"
     },
     "Features": {
       "title": "<div><span class='logo-features'>Lunchefy</span> is</div>",
@@ -73,19 +73,19 @@
     },
     "RecipeManager": {
       "title": "Recipe manager",
-      "text": "<div>No more lost recipes or endless scrolling through notes and bookmarks! Our Recipe Manager lets you save and categorize your favorite recipes in one central location. Add meaningful tags like &quot;Chicken&quot;, &quot;Eggs&quot; or &quot;Fish&quot; to make searching easier than ever. You can also search recipes by name or tags, helping you quickly find the perfect dish for any occasion.</div><div>With its user-friendly design and seamless navigation, the RecipeManager is built to grow with your culinary creativity. Whether it’s for everyday meals or special occasions, keeping your recipes at your fingertips has never been this effortless.</div><div>If you want to keep all your recipes organized and easy to find,<span class='logo-min'> Lunchefy </span>is for you.</div>"
+      "text": "<div>No more lost recipes or endless scrolling through notes or bookmarks! <span class='logo-min'> Lunchefy </span> lets you store and categorize your favorite recipes in one central location.</div><div>Assign appropriate tags to recipes such as <span class='homepage-bold'>Dessert</span>, <span class='homepage-bold'>Eggs</span> or <span class='homepage-bold'>Fish</span>, helping you quickly find the perfect dish for any occasion.</div><div>With a user-friendly design and seamless navigation, the app is designed to grow with your culinary creativity. Whether it's everyday meals or special occasions.</div>"
     },
     "Planner": {
       "title": "Planner",
-      "text": "<div>Our Planner takes the stress out of answering the age-old question: “What’s for dinner?” Use the calendar to assign recipes to specificdates and create a visual roadmap of your meals for the week or month.</div><div>The Planner is designed to make meal prep simple and efficient.Whether you’re planning a quiet dinner at home or organizing meals for a big event, the built-in calendar helps you stay organized. By associating recipes with dates, you can streamline your shoppingtrips, reduce food waste, and save time in the kitchen.</div><div>If you love staying organized and planning ahead,<span class='logo-min'> Lunchefy </span>is for you.</div>"
+      "text": "<div>The <span class='logo-min'> Lunchefy </span> app takes away the eternal question: <br><span class='font-bold italic'>„What's for lunch today?“</span></div><div>With our planner, you can easily assign recipes to specific days and create a visual plan for the whole week or month.</div><div>If you are planning not only lunch, but also dinner or a dessert for a given day. No problem. You can assign any number of recipes to each day, so there's no limit to your creativity.</div><div>By assigning recipes to dates, you can streamline your shopping, reduce food waste and save time in the kitchen.</div>"
     },
     "SharingPlatform": {
       "title": "Sharing platform",
-      "text": "<div>Cooking is better when shared. Our Sharing Platform lets you inviteothers to join your groups and share recipe collections and mealplans effortlessly. Whether you’re cooking with family, meal prepping with a partner, or collaborating with a group of friends, sharing is seamless and intuitive.</div><div>Assign roles like Viewer or Editor to ensure everyone has the right level of access. Editors can add or modify recipes and plans, while Viewers can explore and enjoy the shared content without making changes. It’s perfect for everything from co-creating holiday menus to weekly meal planning.</div><div>If you value collaboration and sharing your kitchen creativity,<span class='logo-min'> Lunchefy </span>is for you.</div>"
+      "text": "<div>Cooking is better when you share it. <span class='logo-min'> Lunchefy </span> allows you to connect with others and easily share your recipe collection as well as the built-in planner. Whether you're cooking with your family, preparing a meal with a partner or with a group of friends, sharing is seamless and intuitive.</div><div>Assigning roles such as <span class='homepage-bold'>Guest</span> or <span class='homepage-bold'>Editor</span> ensures that everyone has the right level of access. <span class='homepage-bold'>Editors</span> can add or edit recipes. While <span class='homepage-bold'>Guests</span> While Guests can browse and enjoy shared content without making changes.</div><div>Both groups of users can participate in the planning together. It's up to you with whom you share the responsibility.</div>"
     },
     "Next": {
-      "title": "What’s Coming Next?",
-      "text": "<ul><li>Dashboard with statistics</li><li>Recipe folders</li><li>Favorites</li><li>Recipe ranking</li><li>And more..</li></ul><div>If you like the sound of what is coming in the near future,<span class='logo-min'> Lunchefy </span> is for you.</div>"
+      "title": "What’s Cooking?",
+      "text": "<ul><li>Dashboard with statistics</li><li>Recipe folders</li><li>Favorite recipes</li><li>Recipe rankings</li><li>and more..</li></ul></div>"
     },
     "Banner": {
       "title": "Interested?",
@@ -172,15 +172,15 @@
       "Form": {
         "Property": {
           "Email": "Email",
-          "Privilage": "Privilage"
+          "Privilage": "Role"
         },
         "Placeholder": {
           "Email": "E-mail of the user you want to invite to the group",
-          "Privilage": "Select a privilage"
+          "Privilage": "Select a role"
         },
         "Validation": {
           "Email": "Please enter a valid email.",
-          "Privilage": "Please select a privilage."
+          "Privilage": "Please select a role."
         }
       },
       "Notification": {
