@@ -1,5 +1,5 @@
 "use client";
-import { SignedOut, UserButton } from "@clerk/nextjs";
+import { SignedOut, UserButton, useUser } from "@clerk/nextjs";
 import React from "react";
 import LocaleSwitcherSelect from "../global/LocaleSwitcherSelect";
 import { useTranslations } from "next-intl";
@@ -9,6 +9,7 @@ import Link from "next/link";
 
 const Header = () => {
   const t = useTranslations("Global.Button");
+  const { user } = useUser();
 
   return (
     <nav className="page-width-normal flex justify-between items-center py-8">
@@ -26,7 +27,13 @@ const Header = () => {
           />
         </SignedOut>
         <UserButton
-          appearance={{ elements: { userButtonAvatarBox: "w-10 h-10" } }}
+          appearance={{
+            elements: {
+              userButtonAvatarBox: "w-10 h-10",
+              userButtonPopoverActionButton__manageAccount:
+                user?.publicMetadata?.preventEditProfile && "hidden",
+            },
+          }}
         />
       </div>
     </nav>

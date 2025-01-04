@@ -178,13 +178,17 @@ const GroupPage = ({
           </>
         }
         topLeftSide={
-          <LinkButton
-            icon={
-              <Pencil className="text-text2 group-hover:text-text transition-all" />
-            }
-            href={`/app/${group.data._id}/edit`}
-            variant={ButtonVariant.Minimalistic}
-          />
+          <>
+            {group.data.privilage === Privilage.Owner && (
+              <LinkButton
+                icon={
+                  <Pencil className="text-text2 group-hover:text-text transition-all" />
+                }
+                href={`/app/${group.data._id}/edit`}
+                variant={ButtonVariant.Minimalistic}
+              />
+            )}
+          </>
         }
         topRightSide={
           <PlannerButton

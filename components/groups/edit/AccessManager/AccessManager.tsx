@@ -121,6 +121,7 @@ const AccessManager = ({ groupName, groupId }: AccessManagerProps) => {
               isLoading={isSubmitting}
               classList="min-w-32"
               onClick={() => setIsFormOpen(true)}
+              variant={ButtonVariant.Positive}
             />
           </div>
           {groupSharedUsersData ? (

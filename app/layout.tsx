@@ -46,7 +46,12 @@ export default async function RootLayout({
   return (
     <html
       lang={locale}
-      className={cn(playfair.variable, inter.variable, marckScript.variable)}
+      className={cn(
+        playfair.variable,
+        inter.variable,
+        marckScript.variable,
+        "overflow-x-hidden"
+      )}
     >
       <body className="flex flex-col relative w-full bg-background">
         <NextIntlClientProvider messages={messages}>
