@@ -62,15 +62,17 @@ const GroupEditHeader = ({ group }: GroupEditHeaderProps) => {
                   }}
                   variant={ButtonVariant.Minimalistic}
                 />
-                <ActionButton
-                  title={t("Global.Button.Save")}
-                  icon={<Save />}
-                  variant={ButtonVariant.Positive}
-                  onClick={() => handleSubmit}
-                  isLoading={isSubmitting}
-                  isDisabled={!isDirty}
-                />
               </>
+            )}
+            {group.data.privilage !== Privilage.Viewer && (
+              <ActionButton
+                title={t("Global.Button.Save")}
+                icon={<Save />}
+                variant={ButtonVariant.Positive}
+                onClick={() => handleSubmit}
+                isLoading={isSubmitting}
+                isDisabled={!isDirty}
+              />
             )}
           </>
         }

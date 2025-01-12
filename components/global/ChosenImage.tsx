@@ -22,6 +22,7 @@ interface ChosenImageProps {
   variant?: ChosenImageVariant;
   content?: ChosenImageContent;
   classList?: string;
+  emptyIcon?: React.ReactNode;
 }
 
 const ChosenImage = ({
@@ -30,6 +31,7 @@ const ChosenImage = ({
   variant = ChosenImageVariant.Fullscreen,
   content = ChosenImageContent.All,
   classList,
+  emptyIcon,
 }: ChosenImageProps) => {
   const [isVisible, setIsVisible] = useState(true);
   const [key, setKey] = useState(0);
@@ -55,7 +57,7 @@ const ChosenImage = ({
       })}
       onClick={onClick}
     >
-      {image && (
+      {image && imageSrc && (
         <Image
           unoptimized={
             content !== ChosenImageContent.External && image.storageId
@@ -85,7 +87,7 @@ const ChosenImage = ({
           }} // Show the image when it successfully loads
         />
       )}
-      {(!isVisible || !image) && (
+      {(!imageSrc || !isVisible || !image) && (
         <div
           className={cn(
             "w-full h-full rounded-xl flex justify-center items-center",
@@ -95,7 +97,11 @@ const ChosenImage = ({
             }
           )}
         >
-          <ImageLucide className="!w-16 !h-16 text-accent transition-all group-hover:scale-105" />
+          {emptyIcon ? (
+            emptyIcon
+          ) : (
+            <ImageLucide className="!w-16 !h-16 text-accent transition-all group-hover:scale-105" />
+          )}
         </div>
       )}
     </div>

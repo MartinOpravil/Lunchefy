@@ -69,18 +69,20 @@ const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
               {recipe.data.description}
             </div>
           )}
-          {recipe.data.coverImage && (
-            <div className="rounded-xl overflow-hidden w-full aspect-[16/10] outline outline-2 outline-transparent hover:outline-primary transition-all">
-              <ChosenImage
-                image={recipe.data.coverImage}
-                onClick={() =>
-                  lightboxRef.current?.setOpen(
-                    recipe.data?.coverImage?.externalUrl
-                  )
-                }
-              />
-            </div>
-          )}
+          {recipe.data.coverImage &&
+            (recipe.data.coverImage.imageUrl ||
+              recipe.data.coverImage.externalUrl) && (
+              <div className="rounded-xl overflow-hidden w-full aspect-[16/10] outline outline-2 outline-transparent hover:outline-primary transition-all">
+                <ChosenImage
+                  image={recipe.data.coverImage}
+                  onClick={() =>
+                    lightboxRef.current?.setOpen(
+                      recipe.data?.coverImage?.externalUrl
+                    )
+                  }
+                />
+              </div>
+            )}
           <div className="flex flex-col sm:flex-row gap-20">
             <div className="flex flex-col flex-grow">
               {!recipe.data.isImageRecipe ? (
@@ -119,16 +121,20 @@ const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
                       <h2 className="text-[28px]">
                         {t("Form.Property.RecipeImage")}
                       </h2>
-                      <div className="flex rounded-lg overflow-hidden h-full max-h-[800px] outline outline-2 outline-transparent hover:outline-primary transition-all">
-                        <ChosenImage
-                          image={recipe.data.recipeImage}
-                          onClick={() =>
-                            lightboxRef.current?.setOpen(
-                              recipe.data?.recipeImage?.externalUrl
-                            )
-                          }
-                        />
-                      </div>
+                      {recipe.data.recipeImage &&
+                        (recipe.data.recipeImage.imageUrl ||
+                          recipe.data.recipeImage.externalUrl) && (
+                          <div className="flex rounded-lg overflow-hidden h-full max-h-[800px] outline outline-2 outline-transparent hover:outline-primary transition-all">
+                            <ChosenImage
+                              image={recipe.data.recipeImage}
+                              onClick={() =>
+                                lightboxRef.current?.setOpen(
+                                  recipe.data?.recipeImage?.externalUrl
+                                )
+                              }
+                            />
+                          </div>
+                        )}
                     </div>
                   )}
                 </>

@@ -4,8 +4,9 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import LoaderSpinner from "../global/LoaderSpinner";
 import { Users } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Avatar } from "../ui/avatar";
 import { Doc } from "@/convex/_generated/dataModel";
+import ChosenImage from "../global/ChosenImage";
 
 export interface GroupProps {
   group: Doc<"groups">;
@@ -25,21 +26,17 @@ const Group = ({ group, privilage }: GroupProps) => {
           className="link"
           onClick={() => setIsRoutingToOverview(true)}
         >
-          <Avatar className="relative w-[100px] h-[100px]">
-            <AvatarImage
-              src={group.coverImage?.imageUrl || group.coverImage?.externalUrl}
-              alt="group"
-              className="transition-all group-hover:opacity-90 object-cover"
+          <Avatar className="relative w-[100px] h-[100px] bg-gray-400/20 transition-opacity group-hover:opacity-80">
+            <ChosenImage
+              image={group.coverImage}
+              classList="relative w-[100px] h-[100px]"
+              emptyIcon={<Users className="!w-[50px] !h-[50px]" />}
             />
-            <AvatarFallback className="bg-primary/20">
-              <Users className="!w-[50px] !h-[50px]" />
-            </AvatarFallback>
             {isRoutingToOverview && (
               <LoaderSpinner classList="text-primary/90 absolute !w-[130px] !h-[130px]" />
             )}
           </Avatar>
-
-          <div className="gap-2 transition-all group-hover:opacity-90">
+          <div className="gap-2 transition-all group-hover:opacity-80">
             <h3>{group.name}</h3>
             {/* {description && <span>{description}</span>} */}
           </div>

@@ -179,7 +179,7 @@ const GroupPage = ({
         }
         topLeftSide={
           <>
-            {group.data.privilage === Privilage.Owner && (
+            {group.data.privilage !== Privilage.Viewer && (
               <LinkButton
                 icon={
                   <Pencil className="text-text2 group-hover:text-text transition-all" />
