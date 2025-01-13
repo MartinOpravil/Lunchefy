@@ -8,56 +8,186 @@ export enum Tag {
   Beef = "beef",
   Fish = "fish",
   Rabbit = "rabbit",
+
   Potato = "potato",
   Rice = "rice",
   Pasta = "pasta",
+  CzechDumpling = "czech_dumpling",
+  Fries = "fries",
+  Soup = "soup",
+
   Vegetables = "vegetables",
   Fruits = "fruits",
-  Sweets = "sweets",
-  Dessert = "dessert",
+  Mushrooms = "mushrooms",
+  Salad = "salad",
+  Paprika = "paprika",
+  Tomato = "tomato",
+  Cucumber = "cucumber",
+  Onion = "onion",
+  Garlic = "garlic",
+
+  Milk = "milk",
   Cheese = "cheese",
   Eggs = "eggs",
+
+  Sweets = "sweets",
+  Dessert = "dessert",
   Pastry = "pastry",
-  Mushrooms = "mushrooms",
   Sausages = "sausages",
-  CzechDumpling = "czech_dumpling",
 
   Baked = "baked",
   Fried = "fried",
   Boiled = "boiled",
 
-  Soup = "soup",
-  MainDish = "main_dish",
+  Lunch = "lunch",
+  Dinner = "dinner",
+  Breakfast = "breakfast",
+  Snack = "snack",
 }
 
 export function useTagManager() {
-  const t = useTranslations("Recipes");
+  const t = useTranslations("Recipes.Tags");
 
   const tagOptions = useMemo<Option[]>(() => {
     return [
-      { label: t("Tags.Chicken"), value: Tag.Chicken },
-      { label: t("Tags.Beef"), value: Tag.Beef },
-      { label: t("Tags.Pork"), value: Tag.Pork },
-      { label: t("Tags.Fish"), value: Tag.Fish },
-      { label: t("Tags.Rabbit"), value: Tag.Rabbit },
-      { label: t("Tags.Rice"), value: Tag.Rice },
-      { label: t("Tags.Pasta"), value: Tag.Pasta },
-      { label: t("Tags.CzechDumpling"), value: Tag.CzechDumpling },
-      { label: t("Tags.Potato"), value: Tag.Potato },
-      { label: t("Tags.Cheese"), value: Tag.Cheese },
-      { label: t("Tags.Pastry"), value: Tag.Pastry },
-      { label: t("Tags.Mushrooms"), value: Tag.Mushrooms },
-      { label: t("Tags.Eggs"), value: Tag.Eggs },
-      { label: t("Tags.Vegetables"), value: Tag.Vegetables },
-      { label: t("Tags.Fruits"), value: Tag.Fruits },
-      { label: t("Tags.Sausages"), value: Tag.Sausages },
-      { label: t("Tags.Dessert"), value: Tag.Dessert },
-      { label: t("Tags.Sweets"), value: Tag.Sweets },
-      { label: t("Tags.Soup"), value: Tag.Soup },
-      { label: t("Tags.MainDish"), value: Tag.MainDish },
-      { label: t("Tags.Boiled"), value: Tag.Boiled },
-      { label: t("Tags.Baked"), value: Tag.Baked },
-      { label: t("Tags.Fried"), value: Tag.Fried },
+      // Meat
+      {
+        label: t("Labels.Chicken"),
+        value: Tag.Chicken,
+        group: t("Groups.Meat"),
+      },
+      { label: t("Labels.Beef"), value: Tag.Beef, group: t("Groups.Meat") },
+      { label: t("Labels.Pork"), value: Tag.Pork, group: t("Groups.Meat") },
+      { label: t("Labels.Fish"), value: Tag.Fish, group: t("Groups.Meat") },
+      { label: t("Labels.Rabbit"), value: Tag.Rabbit, group: t("Groups.Meat") },
+      {
+        label: t("Labels.Sausages"),
+        value: Tag.Sausages,
+        group: t("Groups.Meat"),
+      },
+      // Sides
+      { label: t("Labels.Rice"), value: Tag.Rice, group: t("Groups.Sides") },
+      { label: t("Labels.Pasta"), value: Tag.Pasta, group: t("Groups.Sides") },
+      {
+        label: t("Labels.CzechDumpling"),
+        value: Tag.CzechDumpling,
+        group: t("Groups.Sides"),
+      },
+      {
+        label: t("Labels.Potato"),
+        value: Tag.Potato,
+        group: t("Groups.Sides"),
+      },
+      { label: t("Labels.Fries"), value: Tag.Fries, group: t("Groups.Sides") },
+      { label: t("Labels.Soup"), value: Tag.Soup, group: t("Groups.Sides") },
+      // Fruits & Vegetables
+      {
+        label: t("Labels.Fruits"),
+        value: Tag.Fruits,
+        group: t("Groups.Vegetables"),
+      },
+      {
+        label: t("Labels.Vegetables"),
+        value: Tag.Vegetables,
+        group: t("Groups.Vegetables"),
+      },
+      {
+        label: t("Labels.Mushrooms"),
+        value: Tag.Mushrooms,
+        group: t("Groups.Vegetables"),
+      },
+      {
+        label: t("Labels.Salad"),
+        value: Tag.Salad,
+        group: t("Groups.Vegetables"),
+      },
+      {
+        label: t("Labels.Paprika"),
+        value: Tag.Paprika,
+        group: t("Groups.Vegetables"),
+      },
+      {
+        label: t("Labels.Tomato"),
+        value: Tag.Tomato,
+        group: t("Groups.Vegetables"),
+      },
+      {
+        label: t("Labels.Cucumber"),
+        value: Tag.Cucumber,
+        group: t("Groups.Vegetables"),
+      },
+      {
+        label: t("Labels.Onion"),
+        value: Tag.Onion,
+        group: t("Groups.Vegetables"),
+      },
+      {
+        label: t("Labels.Garlic"),
+        value: Tag.Garlic,
+        group: t("Groups.Vegetables"),
+      },
+      // Dairy & Eggs
+      { label: t("Labels.Milk"), value: Tag.Milk, group: t("Groups.Dairy") },
+      {
+        label: t("Labels.Cheese"),
+        value: Tag.Cheese,
+        group: t("Groups.Dairy"),
+      },
+      { label: t("Labels.Eggs"), value: Tag.Eggs, group: t("Groups.Dairy") },
+      // Deserts
+      {
+        label: t("Labels.Pastry"),
+        value: Tag.Pastry,
+        group: t("Groups.Pastry"),
+      },
+      {
+        label: t("Labels.Dessert"),
+        value: Tag.Dessert,
+        group: t("Groups.Pastry"),
+      },
+      {
+        label: t("Labels.Sweets"),
+        value: Tag.Sweets,
+        group: t("Groups.Pastry"),
+      },
+      // Dish types
+
+      {
+        label: t("Labels.Lunch"),
+        value: Tag.Lunch,
+        group: t("Groups.DishType"),
+      },
+      {
+        label: t("Labels.Dinner"),
+        value: Tag.Dinner,
+        group: t("Groups.DishType"),
+      },
+      {
+        label: t("Labels.Breakfast"),
+        value: Tag.Breakfast,
+        group: t("Groups.DishType"),
+      },
+      {
+        label: t("Labels.Snack"),
+        value: Tag.Snack,
+        group: t("Groups.DishType"),
+      },
+      // Cooking Methods
+      {
+        label: t("Labels.Boiled"),
+        value: Tag.Boiled,
+        group: t("Groups.CookingMethods"),
+      },
+      {
+        label: t("Labels.Baked"),
+        value: Tag.Baked,
+        group: t("Groups.CookingMethods"),
+      },
+      {
+        label: t("Labels.Fried"),
+        value: Tag.Fried,
+        group: t("Groups.CookingMethods"),
+      },
     ].sort((a, b) => (a.label > b.label ? 1 : -1));
   }, [t]);
 

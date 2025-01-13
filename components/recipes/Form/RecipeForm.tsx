@@ -116,6 +116,7 @@ const RecipeForm = ({ recipe, isVerified }: RecipeDetailHeaderProps) => {
                     placeholder={t("Recipes.General.Form.Placeholder.Tags")}
                     hidePlaceholderWhenSelected
                     {...field}
+                    groupBy="group"
                   />
                 </FormControl>
                 <FormMessage className="text-primary" />

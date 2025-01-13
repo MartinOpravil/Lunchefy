@@ -134,6 +134,7 @@ const RecipeSearchInput = ({
               value={searchTags}
               onChange={setSearchTags}
               hidePlaceholderWhenSelected
+              groupBy="group"
             />
           )}
         </div>

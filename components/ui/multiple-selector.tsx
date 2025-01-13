@@ -582,7 +582,7 @@ const MultipleSelector = React.forwardRef<
               <X />
             </button>
             {!selected.length && (
-              <div className="absolute right-0 pl-1 bg-background">
+              <div className="absolute right-0 pl-1 bg-background top-[-2px]">
                 <ChevronDown className="h-6 w-6 p-0 mr-2.5 opacity-50 bg-background" />
               </div>
             )}
@@ -612,54 +612,56 @@ const MultipleSelector = React.forwardRef<
                     {!selectFirstItem && (
                       <CommandItem value="-" className="hidden" />
                     )}
-                    {Object.entries(selectables).map(([key, dropdowns]) => (
-                      <CommandGroup
-                        key={key}
-                        heading={key}
-                        className="h-full overflow-auto"
-                      >
-                        <>
-                          {dropdowns.map((option) => {
-                            return (
-                              <CommandItem
-                                key={option.value}
-                                value={option.value}
-                                disabled={option.disable}
-                                onMouseDown={(e) => {
-                                  e.preventDefault();
-                                  e.stopPropagation();
-                                }}
-                                onSelect={() => {
-                                  if (selected.length >= maxSelected) {
-                                    onMaxSelected?.(selected.length);
-                                    return;
-                                  }
-                                  setInputValue("");
-                                  const newOptions = [...selected, option];
-                                  setSelected(newOptions);
-                                  onChange?.(newOptions);
-                                }}
-                                className={cn(
-                                  "cursor-pointer gap-4",
-                                  option.disable &&
-                                    "cursor-default text-muted-foreground"
-                                )}
-                              >
-                                <Image
-                                  src={`/icons/tags/${option.value}.svg`}
-                                  alt="Tag"
-                                  width={30}
-                                  height={30}
-                                  className=""
-                                />
-                                {option.label}
-                              </CommandItem>
-                            );
-                          })}
-                          {!dropdowns && <>NOTHING..</>}
-                        </>
-                      </CommandGroup>
-                    ))}
+                    {Object.entries(selectables)
+                      .sort((a, b) => (a[0] > b[0] ? 1 : -1))
+                      .map(([key, dropdowns]) => (
+                        <CommandGroup
+                          key={key}
+                          heading={key}
+                          className="h-full overflow-auto"
+                        >
+                          <>
+                            {dropdowns.map((option) => {
+                              return (
+                                <CommandItem
+                                  key={option.value}
+                                  value={option.value}
+                                  disabled={option.disable}
+                                  onMouseDown={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                  }}
+                                  onSelect={() => {
+                                    if (selected.length >= maxSelected) {
+                                      onMaxSelected?.(selected.length);
+                                      return;
+                                    }
+                                    setInputValue("");
+                                    const newOptions = [...selected, option];
+                                    setSelected(newOptions);
+                                    onChange?.(newOptions);
+                                  }}
+                                  className={cn(
+                                    "cursor-pointer gap-4",
+                                    option.disable &&
+                                      "cursor-default text-muted-foreground"
+                                  )}
+                                >
+                                  <Image
+                                    src={`/icons/tags/${option.value}.svg`}
+                                    alt="Tag"
+                                    width={30}
+                                    height={30}
+                                    className=""
+                                  />
+                                  {option.label}
+                                </CommandItem>
+                              );
+                            })}
+                            {!dropdowns && <>NOTHING..</>}
+                          </>
+                        </CommandGroup>
+                      ))}
                   </>
                 )}
               </CommandList>

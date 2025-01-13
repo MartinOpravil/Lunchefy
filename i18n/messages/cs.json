@@ -291,31 +291,57 @@
       }
     },
     "Tags": {
-      "Chicken": "Kuřecí",
-      "Pork": "Vepřové",
-      "Beef": "Hovězí",
-      "Rabbit": "Králičí",
-      "Fish": "Ryby",
-      "Pasta": "Těstoviny",
-      "Rice": "Rýže",
-      "Potato": "Brambory",
-      "Vegetables": "Zelenina",
-      "Fruits": "Ovoce",
-      "Sweets": "Cukroví",
-      "Dessert": "Dezert",
-      "Cheese": "Sýr",
-      "Eggs": "Vejce",
-      "Pastry": "Pečivo",
-      "Mushrooms": "Houby",
-      "Sausages": "Uzeniny",
-      "CzechDumpling": "Knedlík",
+      "Groups": {
+        "Meat": "Maso",
+        "Sides": "Přílohy",
+        "Vegetables": "Ovoce a zelenina",
+        "Dairy": "Mléčné výrobky a vejce",
+        "Pastry": "Pečivo a cukrářské výrobky",
+        "CookingMethods": "Způsoby vaření",
+        "DishType": "Typ jídla"
+      },
+      "Labels": {
+        "Chicken": "Kuřecí",
+        "Pork": "Vepřové",
+        "Beef": "Hovězí",
+        "Rabbit": "Králičí",
+        "Fish": "Ryby",
 
-      "Baked": "Pečené",
-      "Fried": "Smažené",
-      "Boiled": "Vařené",
+        "Pasta": "Těstoviny",
+        "Rice": "Rýže",
+        "Potato": "Brambory",
+        "CzechDumpling": "Knedlík",
+        "Fries": "Hranolky",
+        "Soup": "Polévka",
 
-      "Soup": "Polévka",
-      "MainDish": "Hlavní jídlo"
+        "Vegetables": "Zelenina",
+        "Fruits": "Ovoce",
+        "Mushrooms": "Houby",
+        "Salad": "Salát",
+        "Paprika": "Paprika",
+        "Tomato": "Rajče",
+        "Cucumber": "Okurka",
+        "Onion": "Cibule",
+        "Garlic": "Česnek",
+
+        "Milk": "Mléko",
+        "Cheese": "Sýr",
+        "Eggs": "Vejce",
+
+        "Sweets": "Cukroví",
+        "Dessert": "Dezert",
+        "Pastry": "Pečivo",
+        "Sausages": "Uzeniny",
+
+        "Baked": "Pečené",
+        "Fried": "Smažené",
+        "Boiled": "Vařené",
+
+        "Lunch": "Oběd",
+        "Dinner": "Večeře",
+        "Breakfast": "Snídaně",
+        "Snack": "Svačina"
+      }
     },
     "SearchInput": {
       "SortBy": {

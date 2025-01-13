@@ -293,31 +293,57 @@
       }
     },
     "Tags": {
-      "Chicken": "Chicken",
-      "Pork": "Pork",
-      "Beef": "Beef",
-      "Rabbit": "Rabbit",
-      "Fish": "Fish",
-      "Pasta": "Pasta",
-      "Rice": "Rice",
-      "Potato": "Potato",
-      "Vegetables": "Vegetables",
-      "Fruits": "Fruits",
-      "Sweets": "Sweets",
-      "Dessert": "Dessert",
-      "Cheese": "Cheese",
-      "Eggs": "Eggs",
-      "Pastry": "Pastry",
-      "Mushrooms": "Mushrooms",
-      "Sausages": "Sausages",
-      "CzechDumpling": "Czech Dumpling",
+      "Groups": {
+        "Meat": "Meat",
+        "Sides": "Sides",
+        "Vegetables": "Fruits & Vegetables",
+        "Dairy": "Dairy & Eggs",
+        "Pastry": "Pastry & Sweets",
+        "CookingMethods": "Cooking Methods",
+        "DishType": "Dish Type"
+      },
+      "Labels": {
+        "Chicken": "Chicken",
+        "Pork": "Pork",
+        "Beef": "Beef",
+        "Rabbit": "Rabbit",
+        "Fish": "Fish",
 
-      "Baked": "Baked",
-      "Fried": "Fried",
-      "Boiled": "Boiled",
+        "Pasta": "Pasta",
+        "Rice": "Rice",
+        "Potato": "Potato",
+        "CzechDumpling": "Czech Dumpling",
+        "Fries": "Fries",
+        "Soup": "Soup",
 
-      "Soup": "Soup",
-      "MainDish": "Main Dish"
+        "Vegetables": "Vegetables",
+        "Fruits": "Fruits",
+        "Mushrooms": "Mushrooms",
+        "Salad": "Salad",
+        "Paprika": "Paprika",
+        "Tomato": "Tomato",
+        "Cucumber": "Cucumber",
+        "Onion": "Onion",
+        "Garlic": "Garlic",
+
+        "Milk": "Milk",
+        "Cheese": "Cheese",
+        "Eggs": "Eggs",
+
+        "Sweets": "Sweets",
+        "Dessert": "Dessert",
+        "Pastry": "Pastry",
+        "Sausages": "Sausages",
+
+        "Baked": "Baked",
+        "Fried": "Fried",
+        "Boiled": "Boiled",
+
+        "Lunch": "Lunch",
+        "Dinner": "Dinner",
+        "Breakfast": "Breakfast",
+        "Snack": "Snack"
+      }
     },
     "SearchInput": {
       "SortBy": {
