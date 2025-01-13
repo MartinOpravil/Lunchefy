@@ -480,7 +480,7 @@ const MultipleSelector = React.forwardRef<
           }}
         >
           <div
-            className={cn("relative flex flex-wrap gap-1 w-full", {
+            className={cn("relative flex flex-wrap items-center gap-1 w-full", {
               "!pr-8": selected.length,
             })}
           >
@@ -582,7 +582,7 @@ const MultipleSelector = React.forwardRef<
               <X />
             </button>
             {!selected.length && (
-              <div className="absolute right-0 pl-1 bg-background top-[-2px]">
+              <div className="bg-background h-full">
                 <ChevronDown className="h-6 w-6 p-0 mr-2.5 opacity-50 bg-background" />
               </div>
             )}

@@ -19,7 +19,6 @@ export enum Tag {
   Vegetables = "vegetables",
   Fruits = "fruits",
   Mushrooms = "mushrooms",
-  Salad = "salad",
   Paprika = "paprika",
   Tomato = "tomato",
   Cucumber = "cucumber",
@@ -94,11 +93,6 @@ export function useTagManager() {
       {
         label: t("Labels.Mushrooms"),
         value: Tag.Mushrooms,
-        group: t("Groups.Vegetables"),
-      },
-      {
-        label: t("Labels.Salad"),
-        value: Tag.Salad,
         group: t("Groups.Vegetables"),
       },
       {
