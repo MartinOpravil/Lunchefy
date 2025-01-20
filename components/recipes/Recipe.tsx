@@ -10,6 +10,7 @@ import { Pencil } from "lucide-react";
 import LoaderSpinner from "../global/LoaderSpinner";
 import { Doc } from "@/convex/_generated/dataModel";
 import ChosenImage from "../global/ChosenImage";
+import RecipeTagList from "./RecipeTagList";
 
 export interface RecipeProps {
   recipe: Doc<"recipes">;
@@ -42,7 +43,7 @@ const Recipe = ({
       <Link
         href={`/app/${recipe.groupId}/${recipe._id}`}
         className={cn(
-          "relative min-h-[300px] h-full flex flex-col justify-between items-center",
+          "relative min-h-[200px] h-full flex flex-col justify-between items-center",
           { "min-h-[240px]": privilage === Privilage.Viewer },
           { "flex-row": vertical },
           { "min-h-fit": vertical }
@@ -59,12 +60,17 @@ const Recipe = ({
             image={recipe.coverImage}
             classList="transition-all group-hover:scale-105"
           />
+          {recipe.tags && !vertical && (
+            <div className="transition-all absolute top-2 bg-background px-2 rounded-xl opacity-60 group-hover:opacity-80">
+              <RecipeTagList recipeTags={recipe.tags} useName={false} dense />
+            </div>
+          )}
         </div>
         {isRoutingToOverview && (
           <LoaderSpinner classList="absolute top-2 right-2 !text-primary" />
         )}
-        <div className="flex flex-col justify-between w-full flex-grow p-2 gap-2">
-          <div className="flex flex-col pt-1 px-1 gap-2">
+        <div className="flex flex-col justify-between w-full flex-grow p-2 gap-2 ">
+          <div className="flex flex-col pt-1 px-1 gap-2 pb-2">
             <h3
               className={cn(
                 "text-xl sm:text-2xl sm:leading-7 group-hover:text-primary transition-all line-clamp-3",
@@ -74,29 +80,30 @@ const Recipe = ({
               {recipe.name}
             </h3>
             {!vertical && recipe.description && (
-              <div className="text-12 text-text2 pb-1 line-clamp-3">
+              <div className="text-12 text-text2 line-clamp-3">
                 {recipe.description}
               </div>
             )}
           </div>
-          {privilage !== Privilage.Viewer && <div className="h-10" />}
+          {/* {privilage !== Privilage.Viewer && <div className="h-10" />} */}
         </div>
         {useVerticalButton && <div className="w-28 h-10" />}
       </Link>
       {privilage !== Privilage.Viewer && (
-        <div className="absolute bottom-0 w-full p-2 flex justify-between items-center pointer-events-none">
+        <div className="absolute top-[7.75rem] w-full p-2 flex justify-between items-center pointer-events-none">
           {privilage === Privilage.Owner && (
             <DeleteRecipeButton
               recipeId={recipe._id}
               groupId={recipe.groupId}
               recipeTitle={recipe.name}
               small
+              classList="opacity-60 group-hover:opacity-80 hover:!opacity-100"
             />
           )}
           <LinkButton
             icon={<Pencil className="!w-5 text-text2" />}
             href={`/app/${recipe.groupId}/${recipe._id}/edit`}
-            classList="pointer-events-auto"
+            classList="pointer-events-auto opacity opacity-60 group-hover:opacity-80 hover:!opacity-100 ml-auto"
             variant={ButtonVariant.Minimalistic}
           />
         </div>
