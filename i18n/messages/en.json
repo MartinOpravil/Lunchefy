@@ -361,6 +361,10 @@
       "Full": "Scroll down to load more",
       "Top": "Scroll down to",
       "Bottom": "Load more"
+    },
+    "View": {
+      "View": "View",
+      "ShowTags": "Show tags"
     }
   },
   "Users": {

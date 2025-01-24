@@ -3,12 +3,8 @@ import { Calendar } from "@/components/ui/calendar";
 import React, { useEffect, useState } from "react";
 import { enUS, cs } from "date-fns/locale";
 import { isSameDay } from "date-fns";
-import {
-  Preloaded,
-  useMutation,
-  usePreloadedQuery,
-  useQuery,
-} from "convex/react";
+import { Preloaded, useMutation, usePreloadedQuery } from "convex/react";
+import { useQuery } from "convex-helpers/react/cache";
 import { api } from "@/convex/_generated/api";
 import PageHeader from "@/components/global/PageHeader";
 import LinkButton from "@/components/global/LinkButton";
@@ -22,7 +18,6 @@ import {
   convertToServerTime,
   getISOMonth,
 } from "@/lib/time";
-import LoaderSpinner from "@/components/global/LoaderSpinner";
 import { Plan } from "@/types";
 import ActionDialog from "@/components/global/ActionDialog";
 import BasicDialog from "@/components/global/BasicDialog";

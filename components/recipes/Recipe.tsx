@@ -18,6 +18,7 @@ export interface RecipeProps {
   vertical?: boolean;
   verticalButton?: ReactNode;
   useVerticalButton?: boolean;
+  showTags?: boolean;
   classList?: string;
 }
 
@@ -27,6 +28,7 @@ const Recipe = ({
   vertical = false,
   verticalButton,
   useVerticalButton = false,
+  showTags = false,
   classList,
 }: RecipeProps) => {
   const [isRoutingToOverview, setIsRoutingToOverview] = useState(false);
@@ -60,7 +62,7 @@ const Recipe = ({
             image={recipe.coverImage}
             classList="transition-all group-hover:scale-105"
           />
-          {recipe.tags && !vertical && (
+          {showTags && recipe.tags && !vertical && (
             <div className="transition-all absolute top-2 bg-background px-2 rounded-xl opacity-60 group-hover:opacity-80">
               <RecipeTagList recipeTags={recipe.tags} useName={false} dense />
             </div>

@@ -1,6 +1,6 @@
 "use client";
 import { api } from "@/convex/_generated/api";
-import { useQuery } from "convex/react";
+import { useQuery } from "convex-helpers/react/cache";
 import React from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { LoaderCircle } from "lucide-react";

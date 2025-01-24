@@ -29,6 +29,7 @@ import RecipeSearchInput from "@/components/RecipeSearchInput";
 import { useTranslations } from "next-intl";
 import { useTagManager } from "@/components/recipes/TagManager";
 import PlannerButton from "@/components/groups/PlannerButton";
+import { DropdownMenuCheckboxItem } from "@/components/ui/dropdown-menu";
 
 interface GroupPageProps {
   userPreloaded: Preloaded<typeof api.users.getLoggedUser>;
@@ -61,6 +62,7 @@ const GroupPage = ({
   const recipeImageRef = useRef<ImageInputHandle>(null);
 
   const [isNewFormOpen, setIsNewFormOpen] = useState(false);
+  const [isShowingRecipeTags, setIsShowingRecipeTags] = useState(false);
 
   const recipeListPaginated = usePaginatedQuery(
     api.recipes.getRecipes,
@@ -200,7 +202,7 @@ const GroupPage = ({
       />
       <section className="page-content gap-6">
         {!!initialRecipes.page.length && (
-          <>
+          <div className="w-full flex-row flex-nowrap justify-center items-center">
             <RecipeSearchInput
               group={group}
               searchTerm={searchTerm}
@@ -208,8 +210,17 @@ const GroupPage = ({
               searchTags={searchTags}
               setSearchTags={setSearchTags}
               classList="@sm:w-[700px]"
+              showSettings
+              settingItems={
+                <DropdownMenuCheckboxItem
+                  checked={isShowingRecipeTags}
+                  onCheckedChange={setIsShowingRecipeTags}
+                >
+                  {t("Recipes.View.ShowTags")}
+                </DropdownMenuCheckboxItem>
+              }
             />
-          </>
+          </div>
         )}
 
         {searchTerm.length > 0 || searchTags.length ? (
@@ -218,6 +229,7 @@ const GroupPage = ({
             searchTerm={searchTerm}
             searchTags={convertToValues(searchTags)}
             privilage={group.data.privilage}
+            showTags={isShowingRecipeTags}
           />
         ) : (
           <div className="flex w-full h-full flex-col flex-grow items-center gap-3 @container">
@@ -245,6 +257,7 @@ const GroupPage = ({
                         recipe={recipe}
                         key={recipe._id}
                         privilage={group.data?.privilage!}
+                        showTags={isShowingRecipeTags}
                       />
                     ))}
                   </div>
@@ -252,6 +265,7 @@ const GroupPage = ({
                   <RecipesPaginated
                     recipeListPaginated={recipeListPaginated}
                     privilage={group.data.privilage}
+                    showTags={isShowingRecipeTags}
                   />
                 )}
               </>

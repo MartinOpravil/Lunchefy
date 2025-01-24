@@ -3,7 +3,7 @@ import { Inter, Playfair, Marck_Script } from "next/font/google";
 import "./globals.css";
 import ConvexClerkProvider from "./providers/ConvexClerkProvider";
 import { Toaster } from "sonner";
-
+import { ConvexQueryCacheProvider } from "convex-helpers/react/cache/provider";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import { cn } from "@/lib/utils";
@@ -55,7 +55,9 @@ export default async function RootLayout({
     >
       <body className="flex flex-col relative w-full bg-background">
         <NextIntlClientProvider messages={messages}>
-          <ConvexClerkProvider>{children}</ConvexClerkProvider>
+          <ConvexClerkProvider>
+            <ConvexQueryCacheProvider>{children}</ConvexQueryCacheProvider>
+          </ConvexClerkProvider>
           <Toaster />
         </NextIntlClientProvider>
       </body>

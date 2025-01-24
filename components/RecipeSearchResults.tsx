@@ -18,6 +18,7 @@ interface RecipeSearchResultsProps {
   searchTerm: string;
   searchTags: string[];
   privilage: Privilage;
+  showTags?: boolean;
 }
 
 const RecipeSearchResults = ({
@@ -25,6 +26,7 @@ const RecipeSearchResults = ({
   searchTerm,
   searchTags,
   privilage,
+  showTags = false,
 }: RecipeSearchResultsProps) => {
   const t = useTranslations("Recipes");
 
@@ -54,6 +56,7 @@ const RecipeSearchResults = ({
               <RecipeListPaginated
                 recipeListPaginated={filteredRecipesPaginated}
                 privilage={privilage}
+                showTags={showTags}
               />
             )}
           </>

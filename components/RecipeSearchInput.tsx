@@ -1,5 +1,5 @@
 "use client";
-import { PencilLine, Tags } from "lucide-react";
+import { PencilLine, SlidersHorizontal, Tags } from "lucide-react";
 import React, {
   Dispatch,
   SetStateAction,
@@ -21,6 +21,13 @@ import {
 import { useTranslations } from "next-intl";
 import { useTagManager } from "./recipes/TagManager";
 import { cn } from "@/lib/utils";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
 
 enum SearchBy {
   Name = "name",
@@ -40,6 +47,8 @@ interface RecipeFilterProps {
   searchTags: Option[];
   setSearchTags: Dispatch<SetStateAction<Option[]>>;
   classList?: string;
+  showSettings?: boolean;
+  settingItems?: React.ReactNode;
 }
 
 const debounceDelay = 500;
@@ -52,6 +61,8 @@ const RecipeSearchInput = ({
   searchTags,
   setSearchTags,
   classList,
+  showSettings = false,
+  settingItems,
 }: RecipeFilterProps) => {
   const t = useTranslations();
 
@@ -138,6 +149,18 @@ const RecipeSearchInput = ({
             />
           )}
         </div>
+        {showSettings && (
+          <DropdownMenu>
+            <DropdownMenuTrigger className="transition-all flex self-end @md:self-center p-1 text-text2 hover:text-text outline-none">
+              <SlidersHorizontal />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuLabel>{t("Recipes.View.View")}</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {settingItems}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
       </div>
     </div>
   );

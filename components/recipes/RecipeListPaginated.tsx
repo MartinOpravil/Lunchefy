@@ -15,18 +15,25 @@ interface RecipeListPaginatedProps {
     typeof api.recipes.getRecipes
   >;
   privilage: Privilage;
+  showTags?: boolean;
 }
 
 const RecipeListPaginated = ({
   recipeListPaginated,
   privilage,
+  showTags = false,
 }: RecipeListPaginatedProps) => {
   const t = useTranslations("Recipes.Scroll");
   return (
     <>
       <div className="recipe-grid">
         {recipeListPaginated.results?.map((recipe) => (
-          <Recipe key={recipe._id} recipe={recipe} privilage={privilage} />
+          <Recipe
+            key={recipe._id}
+            recipe={recipe}
+            privilage={privilage}
+            showTags={showTags}
+          />
         ))}
         <InfiniteScroll
           hasMore={recipeListPaginated.status === "CanLoadMore"}
