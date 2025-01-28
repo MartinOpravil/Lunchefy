@@ -30,7 +30,7 @@ const PageHeader = ({
   return (
     <nav className="relative">
       <div className="flex flex-wrap gap-2 gap-y-6 justify-between items-end">
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col flex-grow">
           <h2 className={cn("flex items-center gap-3", titleClassName)}>
             {showIcon && (
               <div className="rounded-full bg-primary p-2">{icon}</div>
