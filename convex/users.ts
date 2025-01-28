@@ -53,6 +53,7 @@ export const updateUser = internalMutation({
     clerkId: v.string(),
     imageUrl: v.string(),
     email: v.string(),
+    name: v.string(),
   },
   async handler(ctx, args) {
     const user = await ctx.db
@@ -67,6 +68,7 @@ export const updateUser = internalMutation({
     await ctx.db.patch(user._id, {
       imageUrl: args.imageUrl,
       email: args.email,
+      name: args.name,
     });
   },
 });

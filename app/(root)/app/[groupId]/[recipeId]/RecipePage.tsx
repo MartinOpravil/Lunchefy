@@ -9,9 +9,10 @@ import SimilarRecipes from "@/components/recipes/SimilarRecipes";
 import { api } from "@/convex/_generated/api";
 import { ButtonVariant, Privilage } from "@/enums";
 import { Preloaded, usePreloadedQuery } from "convex/react";
-import { ArrowLeft, CalendarFold, Pencil } from "lucide-react";
+import { ArrowLeft, CalendarDays, Pencil } from "lucide-react";
 import { useTranslations } from "next-intl";
 import React, { useRef } from "react";
+import RecipeChangeBanner from "@/components/recipes/RecipeChangeBanner";
 
 interface RecipePageProps {
   recipePreloaded: Preloaded<typeof api.recipes.getRecipeById>;
@@ -32,6 +33,13 @@ const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
         title={recipe.data.name}
         showIcon={false}
         titleClassName="md:text-[60px]"
+        descriptionSlot={
+          <>
+            {recipe.data.author && (
+              <RecipeChangeBanner author={recipe.data.author} />
+            )}
+          </>
+        }
         leftSide={
           <>
             <LinkButton
@@ -40,7 +48,7 @@ const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
               variant={ButtonVariant.Minimalistic}
             />
             <LinkButton
-              icon={<CalendarFold />}
+              icon={<CalendarDays />}
               href={`/app/${recipe.data.groupId}/planner`}
               variant={ButtonVariant.Minimalistic}
             />

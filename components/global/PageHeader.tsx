@@ -6,6 +6,7 @@ interface PageHeaderProps {
   icon?: ReactNode;
   title: string;
   description?: string;
+  descriptionSlot?: ReactNode;
   topLeftSide?: ReactNode;
   topRightSide?: ReactNode;
   leftSide?: ReactNode;
@@ -18,6 +19,7 @@ const PageHeader = ({
   icon,
   title,
   description,
+  descriptionSlot,
   topLeftSide,
   topRightSide,
   leftSide,
@@ -28,7 +30,7 @@ const PageHeader = ({
   return (
     <nav className="relative">
       <div className="flex flex-wrap gap-2 gap-y-6 justify-between items-end">
-        <div className="flex flex-col">
+        <div className="flex flex-col w-full">
           <h2 className={cn("flex items-center gap-3", titleClassName)}>
             {showIcon && (
               <div className="rounded-full bg-primary p-2">{icon}</div>
@@ -37,10 +39,13 @@ const PageHeader = ({
             {topLeftSide}
           </h2>
           {description && <p className="text-14 italic">{`${description}`}</p>}
+          {descriptionSlot}
         </div>
-        <div className="flex flex-grow items-center justify-end gap-2 flex-wrap">
-          {topRightSide}
-        </div>
+        {topRightSide && (
+          <div className="flex flex-grow items-center justify-end gap-2 flex-wrap">
+            {topRightSide}
+          </div>
+        )}
       </div>
       <div className="heading-underline" />
       {(leftSide || rightSide) && (

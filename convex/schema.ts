@@ -31,6 +31,12 @@ export default defineSchema({
     recipeId: v.id("recipes"),
   }),
   recipes: defineTable({
+    lastChange: v.optional(
+      v.object({
+        date: v.number(),
+        authorId: v.string(),
+      })
+    ),
     groupId: v.id("groups"),
     name: v.string(),
     description: v.optional(v.string()),

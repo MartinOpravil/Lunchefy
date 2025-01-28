@@ -8,6 +8,7 @@ import DeleteRecipeButton from "../DeleteRecipeButton";
 import { ArrowLeft, Book, NotebookText, Save } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import { useTranslations } from "next-intl";
+import RecipeChangeBanner from "../RecipeChangeBanner";
 
 interface RecipeDetailHeaderProps {
   recipe: Awaited<ReturnType<typeof getRecipeById>>;
@@ -26,6 +27,13 @@ const RecipeDetailHeader = ({ recipe }: RecipeDetailHeaderProps) => {
     <PageHeader
       title={`${recipe.data.name}`}
       icon={<NotebookText className="text-white-1" />}
+      descriptionSlot={
+        <>
+          {recipe.data.author && (
+            <RecipeChangeBanner author={recipe.data.author} className="!pt-2" />
+          )}
+        </>
+      }
       leftSide={
         <>
           <LinkButton

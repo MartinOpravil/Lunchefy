@@ -28,10 +28,15 @@ const handleClerkWebhook = httpAction(async (ctx, request) => {
       });
       break;
     case "user.updated":
+      let name = "";
+      if (event.data.first_name) name += event.data.first_name;
+      if (event.data.last_name) name += ` ${event.data.last_name}`;
+
       await ctx.runMutation(internal.users.updateUser, {
         clerkId: event.data.id,
         imageUrl: event.data.image_url,
         email: event.data.email_addresses[0].email_address,
+        name,
       });
       break;
     case "user.deleted":

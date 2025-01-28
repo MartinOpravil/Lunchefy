@@ -4,6 +4,7 @@ import { getLoggedUser } from "./users";
 import { HttpResponseCode, Privilage } from "@/enums";
 import { v } from "convex/values";
 import { paginationOptsValidator, QueryInitializer } from "convex/server";
+import { Author } from "@/types";
 
 export const getRecipes = query({
   args: {
@@ -81,10 +82,29 @@ export const getRecipeById = query({
       );
     }
 
+    let author: Author | undefined = undefined;
+
+    if (recipe.lastChange && recipe.lastChange.authorId) {
+      const authorResult = await ctx.db
+        .query("users")
+        .filter((q) => q.eq(q.field("_id"), recipe.lastChange!.authorId))
+        .unique();
+
+      if (authorResult) {
+        author = {
+          id: authorResult._id,
+          imageSrc: authorResult.imageUrl,
+          name: authorResult.name,
+          date: recipe.lastChange.date,
+        };
+      }
+    }
+
     return createOKResponse({
       ...recipe,
       privilage: userGroupRelationship.privilage as Privilage,
       isVerified: userEntityResponse.data.isVerified,
+      author,
     });
   },
 });
@@ -128,6 +148,10 @@ export const createRecipe = mutation({
       recipeImage: args.recipeImage,
       isImageRecipe: args.isImageRecipe,
       tags: args.tags?.join(" "),
+      lastChange: {
+        authorId: userResponse.data._id,
+        date: Date.now(),
+      },
     });
     if (!newRecipeId) {
       return createBadResponse(HttpResponseCode.InternalServerError);
@@ -199,6 +223,10 @@ export const updateRecipe = mutation({
       recipeImage: args.isImageRecipe ? args.recipeImage : undefined,
       isImageRecipe: args.isImageRecipe,
       tags: args.tags?.join(" "),
+      lastChange: {
+        authorId: userResponse.data._id,
+        date: Date.now(),
+      },
     });
     return createOKResponse(true);
   },

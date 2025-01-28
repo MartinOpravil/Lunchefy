@@ -54,3 +54,10 @@ export interface Plan {
   recipe: Doc<"recipes">;
   creationTime: number;
 }
+
+export interface Author {
+  id: string;
+  name: string;
+  date: number;
+  imageSrc: string;
+}
