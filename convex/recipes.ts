@@ -12,6 +12,7 @@ export const getRecipes = query({
     searchTerm: v.optional(v.string()),
     searchTags: v.optional(v.array(v.string())),
     paginationOpts: paginationOptsValidator,
+    dateMiliseconds: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
     let query;
@@ -32,9 +33,20 @@ export const getRecipes = query({
       query = ctx.db.query("recipes").order("desc");
     }
 
-    const filteredQuery = query.filter((q) =>
-      q.eq(q.field("groupId"), args.groupId)
-    );
+    let filteredQuery;
+
+    if (args.dateMiliseconds) {
+      filteredQuery = query.filter((q) =>
+        q.and(
+          q.eq(q.field("groupId"), args.groupId),
+          q.lt(q.field("_creationTime"), args.dateMiliseconds!)
+        )
+      );
+    } else {
+      filteredQuery = query.filter((q) =>
+        q.eq(q.field("groupId"), args.groupId)
+      );
+    }
 
     return await filteredQuery.paginate(args.paginationOpts);
   },

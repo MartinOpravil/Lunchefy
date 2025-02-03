@@ -59,6 +59,7 @@ export default defineSchema({
       })
     ),
   })
+    // .index("by_planner_date", ["_creationTime"])
     .searchIndex("nameSearch", {
       searchField: "name",
     })

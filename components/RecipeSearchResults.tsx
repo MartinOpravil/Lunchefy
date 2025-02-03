@@ -19,6 +19,7 @@ interface RecipeSearchResultsProps {
   searchTags: string[];
   privilage: Privilage;
   showTags?: boolean;
+  dateMiliseconds?: number;
 }
 
 const RecipeSearchResults = ({
@@ -27,6 +28,7 @@ const RecipeSearchResults = ({
   searchTags,
   privilage,
   showTags = false,
+  dateMiliseconds,
 }: RecipeSearchResultsProps) => {
   const t = useTranslations("Recipes");
 
@@ -36,6 +38,7 @@ const RecipeSearchResults = ({
       groupId,
       searchTerm: searchTerm,
       searchTags: searchTags,
+      dateMiliseconds,
     },
     { initialNumItems: RECIPES_SEARCH_INITIAL_COUNT }
   );

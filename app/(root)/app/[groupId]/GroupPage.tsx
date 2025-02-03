@@ -29,13 +29,26 @@ import RecipeSearchInput from "@/components/RecipeSearchInput";
 import { useTranslations } from "next-intl";
 import { useTagManager } from "@/components/recipes/TagManager";
 import PlannerButton from "@/components/groups/PlannerButton";
-import { DropdownMenuCheckboxItem } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenuCheckboxItem,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+} from "@/components/ui/dropdown-menu";
 
 interface GroupPageProps {
   userPreloaded: Preloaded<typeof api.users.getLoggedUser>;
   groupPreloaded: Preloaded<typeof api.groups.getGroupById>;
   recipesPreloaded: Preloaded<typeof api.recipes.getRecipes>;
   todayRecipePreload: Preloaded<typeof api.planner.getTodayRecipe>;
+}
+const currentDate = Date.now();
+
+enum PlannerAge {
+  Disabled = "Disabled",
+  OneWeek = "One week",
+  TwoWeeks = "Two weeks",
+  OneMonth = "One month",
 }
 
 const GroupPage = ({
@@ -64,10 +77,40 @@ const GroupPage = ({
   const [isNewFormOpen, setIsNewFormOpen] = useState(false);
   const [isShowingRecipeTags, setIsShowingRecipeTags] = useState(false);
 
+  const [planAge, setPlanAge] = useState<string | undefined>(
+    PlannerAge.Disabled
+  );
+  const [recipeListAge, setRecipeListAge] = useState<number | undefined>(
+    undefined
+  );
+
+  function handleAgeSelect(plannerAge: PlannerAge) {
+    const currDate = new Date(currentDate);
+    let time: number | undefined = undefined;
+
+    switch (plannerAge) {
+      case PlannerAge.Disabled:
+        time = undefined;
+        break;
+      case PlannerAge.OneWeek:
+        time = new Date(currDate.setDate(currDate.getDate() - 7)).getTime();
+        break;
+      case PlannerAge.TwoWeeks:
+        time = new Date(currDate.setDate(currDate.getDate() - 14)).getTime();
+        break;
+      case PlannerAge.OneMonth:
+        time = new Date(currDate.setDate(currDate.getDate() - 28)).getTime();
+        break;
+    }
+
+    setRecipeListAge(time);
+  }
+
   const recipeListPaginated = usePaginatedQuery(
     api.recipes.getRecipes,
     {
       groupId: group.data?._id!,
+      dateMiliseconds: recipeListAge,
     },
     { initialNumItems: RECIPES_INITIAL_COUNT }
   );
@@ -212,12 +255,47 @@ const GroupPage = ({
               classList="@sm:w-[700px]"
               showSettings
               settingItems={
-                <DropdownMenuCheckboxItem
-                  checked={isShowingRecipeTags}
-                  onCheckedChange={setIsShowingRecipeTags}
-                >
-                  {t("Recipes.View.ShowTags")}
-                </DropdownMenuCheckboxItem>
+                <>
+                  <DropdownMenuCheckboxItem
+                    checked={isShowingRecipeTags}
+                    onCheckedChange={setIsShowingRecipeTags}
+                  >
+                    {t("Recipes.View.ShowTags")}
+                  </DropdownMenuCheckboxItem>
+                  <DropdownMenuLabel>Naposledy plánováno</DropdownMenuLabel>
+                  <DropdownMenuRadioGroup
+                    value={planAge}
+                    onValueChange={setPlanAge}
+                  >
+                    <DropdownMenuRadioItem
+                      value={PlannerAge.Disabled}
+                      onClick={() => handleAgeSelect(PlannerAge.Disabled)}
+                    >
+                      Vypnuto
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuLabel className="text-12">
+                      Starší než
+                    </DropdownMenuLabel>
+                    <DropdownMenuRadioItem
+                      value={PlannerAge.OneWeek}
+                      onClick={() => handleAgeSelect(PlannerAge.OneWeek)}
+                    >
+                      1 týden
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem
+                      value={PlannerAge.TwoWeeks}
+                      onClick={() => handleAgeSelect(PlannerAge.TwoWeeks)}
+                    >
+                      2 týdny
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem
+                      value={PlannerAge.OneMonth}
+                      onClick={() => handleAgeSelect(PlannerAge.OneMonth)}
+                    >
+                      Měsíc
+                    </DropdownMenuRadioItem>
+                  </DropdownMenuRadioGroup>
+                </>
               }
             />
           </div>
@@ -230,6 +308,7 @@ const GroupPage = ({
             searchTags={convertToValues(searchTags)}
             privilage={group.data.privilage}
             showTags={isShowingRecipeTags}
+            dateMiliseconds={recipeListAge}
           />
         ) : (
           <div className="flex w-full h-full flex-col flex-grow items-center gap-3 @container">
