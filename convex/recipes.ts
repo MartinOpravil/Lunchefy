@@ -54,7 +54,6 @@ export const getRecipes = query({
       filteredQuery = query.filter((q) =>
         q.and(
           q.eq(q.field("groupId"), args.groupId),
-          q.neq(q.field("plannerDate"), undefined),
           q.lt(q.field("plannerDate"), args.dateMiliseconds!)
         )
       );
