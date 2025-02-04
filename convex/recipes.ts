@@ -18,11 +18,19 @@ export const getRecipes = query({
     let query;
 
     if (args.searchTerm) {
-      query = ctx.db
-        .query("recipes")
-        .withSearchIndex("nameSearch", (q) =>
-          q.search("name", args.searchTerm!)
-        );
+      if (args.dateMiliseconds) {
+        query = ctx.db
+          .query("recipes")
+          .withSearchIndex("nameSearch", (q) =>
+            q.search("name", args.searchTerm!)
+          );
+      } else {
+        query = ctx.db
+          .query("recipes")
+          .withSearchIndex("nameSearch", (q) =>
+            q.search("name", args.searchTerm!)
+          );
+      }
     } else if (args.searchTags?.length) {
       query = ctx.db
         .query("recipes")
@@ -30,7 +38,14 @@ export const getRecipes = query({
           q.search("tags", args.searchTags!.join(" "))
         );
     } else {
-      query = ctx.db.query("recipes").order("desc");
+      if (args.dateMiliseconds) {
+        query = ctx.db
+          .query("recipes")
+          .withIndex("by_planner_date")
+          .order("desc");
+      } else {
+        query = ctx.db.query("recipes").order("desc");
+      }
     }
 
     let filteredQuery;
@@ -39,7 +54,8 @@ export const getRecipes = query({
       filteredQuery = query.filter((q) =>
         q.and(
           q.eq(q.field("groupId"), args.groupId),
-          q.lt(q.field("_creationTime"), args.dateMiliseconds!)
+          q.neq(q.field("plannerDate"), undefined),
+          q.lt(q.field("plannerDate"), args.dateMiliseconds!)
         )
       );
     } else {

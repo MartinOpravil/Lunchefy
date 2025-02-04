@@ -347,11 +347,21 @@
     "SearchInput": {
       "SortBy": {
         "Name": "Name",
-        "Tags": "Tags"
+        "Tags": "Tags",
+        "Planner": "Planner"
       },
       "Placeholder": {
         "Name": "Search by recipe name",
-        "Tags": "Searcb by tags"
+        "Tags": "Searcb by tags",
+        "Planner": "Show older than.."
+      },
+      "Values": {
+        "Planner": {
+          "OneWeek": "Older than 1 week",
+          "TwoWeeks": "Older than 2 weeks",
+          "ThreeWeeks": "Older than 3 weeks",
+          "OneMonth": "Older than 1 month"
+        }
       },
       "Empty": {
         "Search": "No recipe match search criteria."

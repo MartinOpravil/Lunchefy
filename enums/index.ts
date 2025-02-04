@@ -26,3 +26,10 @@ export enum ButtonVariant {
   Positive = "positive",
   Negative = "negative",
 }
+
+export enum PlannerAge {
+  OneWeek = "One week",
+  TwoWeeks = "Two weeks",
+  ThreeWeeks = "Three weeks",
+  OneMonth = "One month",
+}

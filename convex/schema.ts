@@ -58,8 +58,9 @@ export default defineSchema({
         externalUrl: v.optional(v.string()),
       })
     ),
+    plannerDate: v.optional(v.number()),
   })
-    // .index("by_planner_date", ["_creationTime"])
+    .index("by_planner_date", ["plannerDate"])
     .searchIndex("nameSearch", {
       searchField: "name",
     })

@@ -16,6 +16,7 @@ interface PlannerRecipeResultListProps {
   privilage: Privilage;
   selectResultAction: Dispatch<SetStateAction<string | undefined>>;
   selectedRecipeId?: string;
+  dateMiliseconds?: number;
 }
 
 const PlannerRecipeResultList = ({
@@ -25,6 +26,7 @@ const PlannerRecipeResultList = ({
   privilage,
   selectResultAction,
   selectedRecipeId,
+  dateMiliseconds,
 }: PlannerRecipeResultListProps) => {
   const t = useTranslations("Recipes");
 
@@ -34,6 +36,7 @@ const PlannerRecipeResultList = ({
       groupId,
       searchTerm: searchTerm,
       searchTags: searchTags,
+      dateMiliseconds,
     },
     { initialNumItems: RECIPES_SEARCH_INITIAL_COUNT }
   );
@@ -44,7 +47,7 @@ const PlannerRecipeResultList = ({
         <Loader2 className="my-4 h-8 w-8 animate-spin" />
       )}
       {filteredRecipesPaginated.status !== "LoadingFirstPage" &&
-        !!(searchTerm || searchTags.length) && (
+        !!(searchTerm || searchTags.length || dateMiliseconds) && (
           <>
             {!filteredRecipesPaginated.results.length ? (
               <NoContent subTitle={t("SearchInput.Empty.Search")} />

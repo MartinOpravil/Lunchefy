@@ -1,5 +1,10 @@
 "use client";
-import { PencilLine, SlidersHorizontal, Tags } from "lucide-react";
+import {
+  CalendarDays,
+  PencilLine,
+  SlidersHorizontal,
+  Tags,
+} from "lucide-react";
 import React, {
   Dispatch,
   SetStateAction,
@@ -28,10 +33,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import { PlannerAge } from "@/enums";
 
 enum SearchBy {
   Name = "name",
   Tags = "tags",
+  Planner = "planner",
 }
 
 export enum RecipeFilterVariant {
@@ -46,6 +53,8 @@ interface RecipeFilterProps {
   setSearchTerm: Dispatch<SetStateAction<string>>;
   searchTags: Option[];
   setSearchTags: Dispatch<SetStateAction<Option[]>>;
+  plannerAge?: string;
+  setPlannerAge: Dispatch<SetStateAction<string | undefined>>;
   classList?: string;
   showSettings?: boolean;
   settingItems?: React.ReactNode;
@@ -60,6 +69,8 @@ const RecipeSearchInput = ({
   setSearchTerm,
   searchTags,
   setSearchTags,
+  plannerAge,
+  setPlannerAge,
   classList,
   showSettings = false,
   settingItems,
@@ -95,6 +106,9 @@ const RecipeSearchInput = ({
     setInternalSearchTerm("");
     setSearchTerm("");
     setSearchTags([]);
+    value === SearchBy.Planner
+      ? setPlannerAge(PlannerAge.TwoWeeks)
+      : setPlannerAge(undefined);
     setSearchBy(value);
   };
 
@@ -115,13 +129,18 @@ const RecipeSearchInput = ({
             </SelectTrigger>
             <SelectContent className="bg-background">
               <SelectItem value={SearchBy.Name}>
-                <div className="flex gap-2">
+                <div className="flex gap-2 items-center">
                   <PencilLine /> {t("Recipes.SearchInput.SortBy.Name")}
                 </div>
               </SelectItem>
               <SelectItem value={SearchBy.Tags}>
-                <div className="flex gap-2">
+                <div className="flex gap-2 items-center">
                   <Tags /> {t("Recipes.SearchInput.SortBy.Tags")}
+                </div>
+              </SelectItem>
+              <SelectItem value={SearchBy.Planner}>
+                <div className="flex gap-2 items-center">
+                  <CalendarDays /> {t("Recipes.SearchInput.SortBy.Planner")}
                 </div>
               </SelectItem>
             </SelectContent>
@@ -147,6 +166,38 @@ const RecipeSearchInput = ({
               hidePlaceholderWhenSelected
               groupBy="group"
             />
+          )}
+          {searchBy === SearchBy.Planner && (
+            <Select value={plannerAge} onValueChange={setPlannerAge}>
+              <SelectTrigger className="input-class h-full transition-all">
+                <SelectValue
+                  className="placeholder:text-secondary"
+                  placeholder={t("Recipes.SearchInput.Placeholder.Planner")}
+                />
+              </SelectTrigger>
+              <SelectContent className="bg-background">
+                <SelectItem value={PlannerAge.OneWeek}>
+                  <div className="flex gap-2">
+                    {t("Recipes.SearchInput.Values.Planner.OneWeek")}
+                  </div>
+                </SelectItem>
+                <SelectItem value={PlannerAge.TwoWeeks}>
+                  <div className="flex gap-2">
+                    {t("Recipes.SearchInput.Values.Planner.TwoWeeks")}
+                  </div>
+                </SelectItem>
+                <SelectItem value={PlannerAge.ThreeWeeks}>
+                  <div className="flex gap-2">
+                    {t("Recipes.SearchInput.Values.Planner.ThreeWeeks")}
+                  </div>
+                </SelectItem>
+                <SelectItem value={PlannerAge.OneMonth}>
+                  <div className="flex gap-2">
+                    {t("Recipes.SearchInput.Values.Planner.OneMonth")}
+                  </div>
+                </SelectItem>
+              </SelectContent>
+            </Select>
           )}
         </div>
         {showSettings && (

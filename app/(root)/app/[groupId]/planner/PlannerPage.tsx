@@ -1,6 +1,6 @@
 "use client";
 import { Calendar } from "@/components/ui/calendar";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { enUS, cs } from "date-fns/locale";
 import { isSameDay } from "date-fns";
 import { Preloaded, useMutation, usePreloadedQuery } from "convex/react";
@@ -9,7 +9,12 @@ import { api } from "@/convex/_generated/api";
 import PageHeader from "@/components/global/PageHeader";
 import LinkButton from "@/components/global/LinkButton";
 import { ArrowLeft, CalendarFold, Pencil, Plus, Trash2 } from "lucide-react";
-import { ButtonVariant, HttpResponseCode, Privilage } from "@/enums";
+import {
+  ButtonVariant,
+  HttpResponseCode,
+  PlannerAge,
+  Privilage,
+} from "@/enums";
 import ActionButton from "@/components/global/ActionButton";
 import { notifyError, notifySuccess } from "@/lib/notifications";
 import { Id } from "@/convex/_generated/dataModel";
@@ -17,6 +22,7 @@ import {
   convertToClientTime,
   convertToServerTime,
   getISOMonth,
+  getPlannerAgeMiliseconds,
 } from "@/lib/time";
 import { Plan } from "@/types";
 import ActionDialog from "@/components/global/ActionDialog";
@@ -41,6 +47,8 @@ interface PlannerPageProps {
     typeof api.planner.getGroupRecipeListForMonth
   >;
 }
+
+const currentDate = Date.now();
 
 const PlannerPage = ({
   groupPreloaded,
@@ -78,6 +86,11 @@ const PlannerPage = ({
     groupId: group.data!._id,
     month: selectedISOMonth,
   });
+
+  const [planAge, setPlanAge] = useState<string | undefined>(undefined);
+  const recipeListAge = useMemo(() => {
+    return getPlannerAgeMiliseconds(currentDate, planAge as PlannerAge);
+  }, [planAge]);
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -427,6 +440,8 @@ const PlannerPage = ({
               setSearchTerm={setSearchTerm}
               searchTags={searchTags}
               setSearchTags={setSearchTags}
+              plannerAge={planAge}
+              setPlannerAge={setPlanAge}
             />
             <PlannerRecipeResultList
               groupId={group.data._id}
@@ -435,6 +450,7 @@ const PlannerPage = ({
               searchTags={searchTags.map((x) => x.value)}
               selectResultAction={setSelectedRecipeIdForAction}
               selectedRecipeId={selectedRecipeIdForAction}
+              dateMiliseconds={recipeListAge}
             />
             <ActionButton
               title={

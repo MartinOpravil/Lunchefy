@@ -82,13 +82,27 @@ export const assignRecipeToDate = mutation({
 
     if (groupPlans.length) return createBadResponse(HttpResponseCode.Conflict);
 
-    const result = await ctx.db.insert("groupPlans", {
+    const insertResult = await ctx.db.insert("groupPlans", {
       groupId: args.groupId,
       recipeId: args.recipeId,
       date: args.date,
     });
 
-    if (!result) return createBadResponse(HttpResponseCode.InternalServerError);
+    const latestPreviousRecipePlanDate = await getLatestRecipePlanDate(ctx, {
+      groupId: args.groupId,
+      recipeId: args.recipeId,
+    });
+
+    const patchResult = await ctx.db.patch(args.recipeId, {
+      plannerDate: new Date(
+        latestPreviousRecipePlanDate.data
+          ? latestPreviousRecipePlanDate.data
+          : args.date
+      ).getTime(),
+    });
+
+    if (!insertResult || patchResult)
+      return createBadResponse(HttpResponseCode.InternalServerError);
 
     return createOKResponse(true);
   },
@@ -124,6 +138,59 @@ export const changeRecipeInDate = mutation({
     await ctx.db.patch(args.planId, {
       recipeId: args.newRecipeId,
     });
+
+    const latestPreviousRecipePlanDate = await getLatestRecipePlanDate(ctx, {
+      groupId: plan.groupId,
+      recipeId: plan.recipeId,
+    });
+    if (!latestPreviousRecipePlanDate.data) {
+      await ctx.db.patch(plan.recipeId, {
+        plannerDate: undefined,
+      });
+    } else {
+      const latestRecipePlanDateMiliseconds = new Date(
+        latestPreviousRecipePlanDate.data
+      ).getTime();
+
+      const recipe = await ctx.db.get(plan.recipeId);
+      if (
+        recipe &&
+        (!recipe.plannerDate ||
+          (recipe.plannerDate &&
+            recipe.plannerDate < latestRecipePlanDateMiliseconds))
+      ) {
+        await ctx.db.patch(recipe._id, {
+          plannerDate: latestRecipePlanDateMiliseconds,
+        });
+      }
+    }
+
+    const latestNewRecipePlanDate = await getLatestRecipePlanDate(ctx, {
+      groupId: plan.groupId,
+      recipeId: args.newRecipeId,
+    });
+    if (!latestNewRecipePlanDate.data) {
+      await ctx.db.patch(args.newRecipeId, {
+        plannerDate: undefined,
+      });
+    } else {
+      const latestRecipePlanDateMiliseconds = new Date(
+        latestNewRecipePlanDate.data
+      ).getTime();
+
+      const recipe = await ctx.db.get(args.newRecipeId);
+      if (
+        recipe &&
+        (!recipe.plannerDate ||
+          (recipe.plannerDate &&
+            recipe.plannerDate < latestRecipePlanDateMiliseconds))
+      ) {
+        await ctx.db.patch(recipe._id, {
+          plannerDate: latestRecipePlanDateMiliseconds,
+        });
+      }
+    }
+
     return createOKResponse(true);
   },
 });
@@ -139,6 +206,28 @@ export const removeRecipeFromDate = mutation({
     }
 
     await ctx.db.delete(args.planId);
+
+    const latestRecipePlanDate = await getLatestRecipePlanDate(ctx, {
+      groupId: plan.groupId,
+      recipeId: plan.recipeId,
+    });
+    if (latestRecipePlanDate.data) {
+      const latestRecipePlanDateMiliseconds = new Date(
+        latestRecipePlanDate.data
+      ).getTime();
+
+      const recipe = await ctx.db.get(plan.recipeId);
+      if (
+        recipe &&
+        recipe.plannerDate &&
+        recipe.plannerDate < latestRecipePlanDateMiliseconds
+      ) {
+        await ctx.db.patch(recipe._id, {
+          plannerDate: latestRecipePlanDateMiliseconds,
+        });
+      }
+    }
+
     return createOKResponse(true);
   },
 });

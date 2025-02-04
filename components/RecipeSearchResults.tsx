@@ -51,7 +51,7 @@ const RecipeSearchResults = ({
         <Loader2 className="my-4 h-8 w-8 animate-spin" />
       )}
       {filteredRecipesPaginated.status !== "LoadingFirstPage" &&
-        !!(searchTerm || searchTags.length) && (
+        !!(searchTerm || searchTags.length || dateMiliseconds) && (
           <>
             {!filteredRecipesPaginated.results.length ? (
               <NoContent subTitle={t("SearchInput.Empty.Search")} />

@@ -345,11 +345,21 @@
     "SearchInput": {
       "SortBy": {
         "Name": "Název",
-        "Tags": "Štítky"
+        "Tags": "Štítky",
+        "Planner": "Plánovač"
       },
       "Placeholder": {
         "Name": "Vyhledávání podle názvu receptu",
-        "Tags": "Vyhledávání podle štítků"
+        "Tags": "Vyhledávání podle štítků",
+        "Planner": "Zobrazit starší jak.."
+      },
+      "Values": {
+        "Planner": {
+          "OneWeek": "Starší více jak 1 týden",
+          "TwoWeeks": "Starší více jak 2 týdny",
+          "ThreeWeeks": "Starší více jak 3 týdny",
+          "OneMonth": "Starší více jak 1 měsíc"
+        }
       },
       "Empty": {
         "Search": "Žádný recept neodpovídá vyhledávacím kritériím."

@@ -9,7 +9,12 @@ import RecipesPaginated from "@/components/recipes/RecipeListPaginated";
 import RecipeSearchResults from "@/components/RecipeSearchResults";
 import { recipeFormSchema, RecipeFormValues } from "@/constants/formSchema";
 import { api } from "@/convex/_generated/api";
-import { ButtonVariant, HttpResponseCode, Privilage } from "@/enums";
+import {
+  ButtonVariant,
+  HttpResponseCode,
+  PlannerAge,
+  Privilage,
+} from "@/enums";
 import { notifyError, notifySuccess } from "@/lib/notifications";
 import { ImageInputHandle, ImageStateProps } from "@/types";
 import {
@@ -19,7 +24,7 @@ import {
   usePreloadedQuery,
 } from "convex/react";
 import { ArrowLeft, ChefHat, Pencil, Plus } from "lucide-react";
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { SubmitHandler } from "react-hook-form";
 import NoContent from "@/components/global/NoContent";
 import Recipe from "@/components/recipes/Recipe";
@@ -29,12 +34,8 @@ import RecipeSearchInput from "@/components/RecipeSearchInput";
 import { useTranslations } from "next-intl";
 import { useTagManager } from "@/components/recipes/TagManager";
 import PlannerButton from "@/components/groups/PlannerButton";
-import {
-  DropdownMenuCheckboxItem,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenuCheckboxItem } from "@/components/ui/dropdown-menu";
+import { getPlannerAgeMiliseconds } from "@/lib/time";
 
 interface GroupPageProps {
   userPreloaded: Preloaded<typeof api.users.getLoggedUser>;
@@ -43,13 +44,6 @@ interface GroupPageProps {
   todayRecipePreload: Preloaded<typeof api.planner.getTodayRecipe>;
 }
 const currentDate = Date.now();
-
-enum PlannerAge {
-  Disabled = "Disabled",
-  OneWeek = "One week",
-  TwoWeeks = "Two weeks",
-  OneMonth = "One month",
-}
 
 const GroupPage = ({
   userPreloaded,
@@ -77,40 +71,16 @@ const GroupPage = ({
   const [isNewFormOpen, setIsNewFormOpen] = useState(false);
   const [isShowingRecipeTags, setIsShowingRecipeTags] = useState(false);
 
-  const [planAge, setPlanAge] = useState<string | undefined>(
-    PlannerAge.Disabled
-  );
-  const [recipeListAge, setRecipeListAge] = useState<number | undefined>(
-    undefined
-  );
+  const [planAge, setPlanAge] = useState<string | undefined>(undefined);
 
-  function handleAgeSelect(plannerAge: PlannerAge) {
-    const currDate = new Date(currentDate);
-    let time: number | undefined = undefined;
-
-    switch (plannerAge) {
-      case PlannerAge.Disabled:
-        time = undefined;
-        break;
-      case PlannerAge.OneWeek:
-        time = new Date(currDate.setDate(currDate.getDate() - 7)).getTime();
-        break;
-      case PlannerAge.TwoWeeks:
-        time = new Date(currDate.setDate(currDate.getDate() - 14)).getTime();
-        break;
-      case PlannerAge.OneMonth:
-        time = new Date(currDate.setDate(currDate.getDate() - 28)).getTime();
-        break;
-    }
-
-    setRecipeListAge(time);
-  }
+  const recipeListAge = useMemo(() => {
+    return getPlannerAgeMiliseconds(currentDate, planAge as PlannerAge);
+  }, [planAge]);
 
   const recipeListPaginated = usePaginatedQuery(
     api.recipes.getRecipes,
     {
       groupId: group.data?._id!,
-      dateMiliseconds: recipeListAge,
     },
     { initialNumItems: RECIPES_INITIAL_COUNT }
   );
@@ -252,6 +222,8 @@ const GroupPage = ({
               setSearchTerm={setSearchTerm}
               searchTags={searchTags}
               setSearchTags={setSearchTags}
+              plannerAge={planAge}
+              setPlannerAge={setPlanAge}
               classList="@sm:w-[700px]"
               showSettings
               settingItems={
@@ -262,46 +234,13 @@ const GroupPage = ({
                   >
                     {t("Recipes.View.ShowTags")}
                   </DropdownMenuCheckboxItem>
-                  <DropdownMenuLabel>Naposledy plánováno</DropdownMenuLabel>
-                  <DropdownMenuRadioGroup
-                    value={planAge}
-                    onValueChange={setPlanAge}
-                  >
-                    <DropdownMenuRadioItem
-                      value={PlannerAge.Disabled}
-                      onClick={() => handleAgeSelect(PlannerAge.Disabled)}
-                    >
-                      Vypnuto
-                    </DropdownMenuRadioItem>
-                    <DropdownMenuLabel className="text-12">
-                      Starší než
-                    </DropdownMenuLabel>
-                    <DropdownMenuRadioItem
-                      value={PlannerAge.OneWeek}
-                      onClick={() => handleAgeSelect(PlannerAge.OneWeek)}
-                    >
-                      1 týden
-                    </DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem
-                      value={PlannerAge.TwoWeeks}
-                      onClick={() => handleAgeSelect(PlannerAge.TwoWeeks)}
-                    >
-                      2 týdny
-                    </DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem
-                      value={PlannerAge.OneMonth}
-                      onClick={() => handleAgeSelect(PlannerAge.OneMonth)}
-                    >
-                      Měsíc
-                    </DropdownMenuRadioItem>
-                  </DropdownMenuRadioGroup>
                 </>
               }
             />
           </div>
         )}
 
-        {searchTerm.length > 0 || searchTags.length ? (
+        {searchTerm.length > 0 || searchTags.length || recipeListAge ? (
           <RecipeSearchResults
             groupId={group.data._id}
             searchTerm={searchTerm}
