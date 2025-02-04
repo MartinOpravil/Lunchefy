@@ -34,9 +34,10 @@ export function getPlannerAgeMiliseconds(
   const currDate = new Date(currentDate);
 
   switch (plannerAge) {
+    case PlannerAge.Latest:
+      return currDate.getTime();
     case PlannerAge.OneWeek:
       return new Date(currDate.setDate(currDate.getDate() - 7)).getTime();
-
     case PlannerAge.TwoWeeks:
       return new Date(currDate.setDate(currDate.getDate() - 14)).getTime();
 

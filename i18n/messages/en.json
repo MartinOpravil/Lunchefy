@@ -357,6 +357,7 @@
       },
       "Values": {
         "Planner": {
+          "Latest": "Latest",
           "OneWeek": "Older than 1 week",
           "TwoWeeks": "Older than 2 weeks",
           "ThreeWeeks": "Older than 3 weeks",

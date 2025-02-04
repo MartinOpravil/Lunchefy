@@ -28,6 +28,7 @@ export enum ButtonVariant {
 }
 
 export enum PlannerAge {
+  Latest = "Latest",
   OneWeek = "One week",
   TwoWeeks = "Two weeks",
   ThreeWeeks = "Three weeks",

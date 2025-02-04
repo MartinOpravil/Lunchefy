@@ -355,6 +355,7 @@
       },
       "Values": {
         "Planner": {
+          "Latest": "Nejnovější",
           "OneWeek": "Starší více jak 1 týden",
           "TwoWeeks": "Starší více jak 2 týdny",
           "ThreeWeeks": "Starší více jak 3 týdny",
