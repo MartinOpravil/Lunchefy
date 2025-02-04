@@ -93,7 +93,7 @@ export const assignRecipeToDate = mutation({
       recipeId: args.recipeId,
     });
 
-    const patchResult = await ctx.db.patch(args.recipeId, {
+    await ctx.db.patch(args.recipeId, {
       plannerDate: new Date(
         latestPreviousRecipePlanDate.data
           ? latestPreviousRecipePlanDate.data
@@ -101,7 +101,7 @@ export const assignRecipeToDate = mutation({
       ).getTime(),
     });
 
-    if (!insertResult || patchResult)
+    if (!insertResult)
       return createBadResponse(HttpResponseCode.InternalServerError);
 
     return createOKResponse(true);
