@@ -152,17 +152,9 @@ export const changeRecipeInDate = mutation({
         latestPreviousRecipePlanDate.data
       ).getTime();
 
-      const recipe = await ctx.db.get(plan.recipeId);
-      if (
-        recipe &&
-        (!recipe.plannerDate ||
-          (recipe.plannerDate &&
-            recipe.plannerDate < latestRecipePlanDateMiliseconds))
-      ) {
-        await ctx.db.patch(recipe._id, {
-          plannerDate: latestRecipePlanDateMiliseconds,
-        });
-      }
+      await ctx.db.patch(plan.recipeId, {
+        plannerDate: latestRecipePlanDateMiliseconds,
+      });
     }
 
     const latestNewRecipePlanDate = await getLatestRecipePlanDate(ctx, {
@@ -178,17 +170,9 @@ export const changeRecipeInDate = mutation({
         latestNewRecipePlanDate.data
       ).getTime();
 
-      const recipe = await ctx.db.get(args.newRecipeId);
-      if (
-        recipe &&
-        (!recipe.plannerDate ||
-          (recipe.plannerDate &&
-            recipe.plannerDate < latestRecipePlanDateMiliseconds))
-      ) {
-        await ctx.db.patch(recipe._id, {
-          plannerDate: latestRecipePlanDateMiliseconds,
-        });
-      }
+      await ctx.db.patch(args.newRecipeId, {
+        plannerDate: latestRecipePlanDateMiliseconds,
+      });
     }
 
     return createOKResponse(true);
@@ -216,16 +200,9 @@ export const removeRecipeFromDate = mutation({
         latestRecipePlanDate.data
       ).getTime();
 
-      const recipe = await ctx.db.get(plan.recipeId);
-      if (
-        recipe &&
-        recipe.plannerDate &&
-        recipe.plannerDate < latestRecipePlanDateMiliseconds
-      ) {
-        await ctx.db.patch(recipe._id, {
-          plannerDate: latestRecipePlanDateMiliseconds,
-        });
-      }
+      await ctx.db.patch(plan.recipeId, {
+        plannerDate: latestRecipePlanDateMiliseconds,
+      });
     }
 
     return createOKResponse(true);

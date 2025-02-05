@@ -8,7 +8,14 @@ import { useQuery } from "convex-helpers/react/cache";
 import { api } from "@/convex/_generated/api";
 import PageHeader from "@/components/global/PageHeader";
 import LinkButton from "@/components/global/LinkButton";
-import { ArrowLeft, CalendarFold, Pencil, Plus, Trash2 } from "lucide-react";
+import {
+  ArrowLeft,
+  CalendarFold,
+  Dot,
+  Pencil,
+  Plus,
+  Trash2,
+} from "lucide-react";
 import {
   ButtonVariant,
   HttpResponseCode,
@@ -328,7 +335,7 @@ const PlannerPage = ({
         }
       />
       <section className="page-content">
-        <div className="flex gap-8 w-full relative flex-col sm:flex-row">
+        <div className="flex gap-8 w-full relative flex-col sm:flex-row min-h-[450px]">
           <div className="flex flex-col gap-8 items-center">
             <Calendar
               mode="single"
@@ -343,11 +350,6 @@ const PlannerPage = ({
                 recipeListForMonth === undefined &&
                 initialISOMonth !== selectedISOMonth
               }
-            />
-            <ThisMonthRecipeList
-              planList={planList}
-              locale={locale}
-              clasList="hidden md:flex"
             />
           </div>
           <div className="flex flex-col gap-8 w-full @container">
@@ -403,12 +405,14 @@ const PlannerPage = ({
               </div>
             )}
           </div>
-          <ThisMonthRecipeList
-            planList={planList}
-            locale={locale}
-            clasList="md:hidden pt-8"
-          />
         </div>
+        <ThisMonthRecipeList
+          activeDate={date && convertToServerTime(date)}
+          planList={planList}
+          locale={locale}
+          clasList="pt-8"
+          onItemClick={(date) => setDate(new Date(date))}
+        />
       </section>
       <ActionDialog
         isOpen={isRemoveDialogOpen}
@@ -478,15 +482,19 @@ const PlannerPage = ({
 };
 
 interface ThisMonthRecipeListProps {
+  activeDate?: string;
   planList: Plan[] | null;
   locale: string;
   clasList?: string;
+  onItemClick: (date: string) => void;
 }
 
 const ThisMonthRecipeList = ({
+  activeDate,
   planList,
   locale,
   clasList,
+  onItemClick,
 }: ThisMonthRecipeListProps) => {
   const t = useTranslations();
 
@@ -506,23 +514,40 @@ const ThisMonthRecipeList = ({
   };
 
   return (
-    <div className={cn("flex flex-col gap-4 w-full", clasList)}>
+    <div className={cn("w-full @container", clasList)}>
       <h3 className="text-[20px] sm:text-[24px]">
         {t("Groups.Planner.RecipeListTitle")}
       </h3>
-      <div className="pt-2 flex flex-col gap-2">
+      <div className="pt-8 columns-1 @sm:columns-2 @lg:columns-3 @2xl:columns-4 gap-4">
         {planList &&
           getGroupedData(planList)?.map((plan, index) => {
             return (
-              <div key={index} className="flex gap-3">
-                <div className="w-6 text-secondary text-[18px] text-right">
+              <div
+                key={index}
+                className={cn(
+                  "transition-all flex flex-col gap-3 px-2 py-4 mb-4 rounded-lg break-inside-avoid outline-1 outline outline-accent cursor-pointer hover:outline-primary",
+                  {
+                    "text-primary": activeDate === plan.date,
+                  }
+                )}
+                onClick={() => onItemClick(plan.date)}
+              >
+                <div
+                  className={cn("w-full text-text2 text-[18px] text-center", {
+                    "text-primary": activeDate === plan.date,
+                  })}
+                >
                   {convertToClientTime(plan.date).toLocaleString(locale, {
                     day: "numeric",
                   })}
                 </div>
-                <div className="flex flex-col text-[16px] sm:text-[18px]">
+                <div className="heading-underline !my-0" />
+                <div className="flex flex-col text-[14px] sm:text-[16px] justify-between gap-2">
                   {plan.names.map((name, i) => (
-                    <div key={i}>{name}</div>
+                    <div key={i} className="flex items-center gap-1">
+                      <Dot className="!min-w-6 !h-6" />
+                      {name}
+                    </div>
                   ))}
                 </div>
               </div>
