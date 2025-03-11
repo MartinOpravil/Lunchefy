@@ -52,10 +52,7 @@ const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
               href={`/app/${recipe.data.groupId}/planner`}
               variant={ButtonVariant.Minimalistic}
             />
-            <LatestRecipeDateInPlanner
-              groupId={recipe.data.groupId}
-              recipeId={recipe.data._id}
-            />
+            <LatestRecipeDateInPlanner recipe={recipe.data} />
           </>
         }
         rightSide={

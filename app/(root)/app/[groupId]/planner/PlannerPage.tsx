@@ -21,6 +21,7 @@ import {
   HttpResponseCode,
   PlannerAge,
   Privilage,
+  SearchBy,
 } from "@/enums";
 import ActionButton from "@/components/global/ActionButton";
 import { notifyError, notifySuccess } from "@/lib/notifications";
@@ -76,6 +77,7 @@ const PlannerPage = ({
   const changeRecipeInDate = useMutation(api.planner.changeRecipeInDate);
   const removeRecipeFromDate = useMutation(api.planner.removeRecipeFromDate);
 
+  const [searchBy, setSearchBy] = useState<SearchBy>(SearchBy.Name);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchTags, setSearchTags] = useState<Option[]>([]);
 
@@ -440,6 +442,8 @@ const PlannerPage = ({
             <RecipeSearchInput
               variant={RecipeFilterVariant.Planner}
               group={group}
+              searchBy={searchBy}
+              setSearchBy={setSearchBy}
               searchTerm={searchTerm}
               setSearchTerm={setSearchTerm}
               searchTags={searchTags}

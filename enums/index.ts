@@ -34,3 +34,9 @@ export enum PlannerAge {
   ThreeWeeks = "Three weeks",
   OneMonth = "One month",
 }
+
+export enum SearchBy {
+  Name = "name",
+  Tags = "tags",
+  Planner = "planner",
+}

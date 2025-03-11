@@ -29,13 +29,13 @@ import { SubmitHandler } from "react-hook-form";
 import NoContent from "@/components/global/NoContent";
 import Recipe from "@/components/recipes/Recipe";
 import { RECIPES_INITIAL_COUNT } from "@/constants/pagination";
-import { Option } from "@/components/ui/multiple-selector";
 import RecipeSearchInput from "@/components/RecipeSearchInput";
 import { useTranslations } from "next-intl";
 import { useTagManager } from "@/components/recipes/TagManager";
 import PlannerButton from "@/components/groups/PlannerButton";
 import { DropdownMenuCheckboxItem } from "@/components/ui/dropdown-menu";
 import { getPlannerAgeMiliseconds } from "@/lib/time";
+import { useGroupStore } from "@/store/group";
 
 interface GroupPageProps {
   userPreloaded: Preloaded<typeof api.users.getLoggedUser>;
@@ -52,7 +52,16 @@ const GroupPage = ({
   todayRecipePreload,
 }: GroupPageProps) => {
   const t = useTranslations();
-
+  const {
+    searchBy,
+    setSearchBy,
+    searchTerm,
+    setSearchTerm,
+    searchTags,
+    setSearchTags,
+    planAge,
+    setPlanAge,
+  } = useGroupStore();
   const user = usePreloadedQuery(userPreloaded);
   const group = usePreloadedQuery(groupPreloaded);
   const initialRecipes = usePreloadedQuery(recipesPreloaded);
@@ -61,17 +70,12 @@ const GroupPage = ({
 
   const { convertToValues } = useTagManager();
 
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchTags, setSearchTags] = useState<Option[]>([]);
-
   const [resetForm, setResetForm] = useState<(() => void) | null>(null);
   const coverImageRef = useRef<ImageInputHandle>(null);
   const recipeImageRef = useRef<ImageInputHandle>(null);
 
   const [isNewFormOpen, setIsNewFormOpen] = useState(false);
   const [isShowingRecipeTags, setIsShowingRecipeTags] = useState(false);
-
-  const [planAge, setPlanAge] = useState<string | undefined>(undefined);
 
   const recipeListAge = useMemo(() => {
     return getPlannerAgeMiliseconds(currentDate, planAge as PlannerAge);
@@ -218,6 +222,8 @@ const GroupPage = ({
           <div className="w-full flex-row flex-nowrap justify-center items-center">
             <RecipeSearchInput
               group={group}
+              searchBy={searchBy}
+              setSearchBy={setSearchBy}
               searchTerm={searchTerm}
               setSearchTerm={setSearchTerm}
               searchTags={searchTags}

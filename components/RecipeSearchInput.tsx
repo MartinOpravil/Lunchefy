@@ -33,13 +33,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { PlannerAge } from "@/enums";
-
-enum SearchBy {
-  Name = "name",
-  Tags = "tags",
-  Planner = "planner",
-}
+import { PlannerAge, SearchBy } from "@/enums";
 
 export enum RecipeFilterVariant {
   Page = "page",
@@ -49,12 +43,14 @@ export enum RecipeFilterVariant {
 interface RecipeFilterProps {
   variant?: RecipeFilterVariant;
   group: Awaited<ReturnType<typeof getGroupById>>;
+  searchBy: SearchBy;
+  setSearchBy: (searchBy: SearchBy) => void;
   searchTerm: string;
-  setSearchTerm: Dispatch<SetStateAction<string>>;
+  setSearchTerm: (searchTerm: string) => void;
   searchTags: Option[];
-  setSearchTags: Dispatch<SetStateAction<Option[]>>;
+  setSearchTags: (searchTags: Option[]) => void;
   plannerAge?: string;
-  setPlannerAge: Dispatch<SetStateAction<string | undefined>>;
+  setPlannerAge: (searchTerm: string | undefined) => void;
   classList?: string;
   showSettings?: boolean;
   settingItems?: React.ReactNode;
@@ -65,6 +61,8 @@ const debounceDelay = 500;
 const RecipeSearchInput = ({
   variant = RecipeFilterVariant.Page,
   group,
+  searchBy,
+  setSearchBy,
   searchTerm,
   setSearchTerm,
   searchTags,
@@ -77,10 +75,11 @@ const RecipeSearchInput = ({
 }: RecipeFilterProps) => {
   const t = useTranslations();
 
+  // const { searchBy, setSearchBy } = useGroupStore();
   const { tagOptions } = useTagManager();
 
   const [internalSearchTerm, setInternalSearchTerm] = useState(searchTerm);
-  const [searchBy, setSearchBy] = useState<SearchBy>(SearchBy.Name);
+  // const [searchBy, setSearchBy] = useState<SearchBy>(SearchBy.Name);
 
   const debouncedUpdate = useCallback(
     debounce((value) => {
