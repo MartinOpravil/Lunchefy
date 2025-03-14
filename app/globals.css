@@ -190,7 +190,7 @@ html {
   }
 
   .recipe-grid {
-    @apply w-full grid grid-cols-1 @sm:grid-cols-2 @2xl:grid-cols-3 @4xl:grid-cols-4 gap-x-5 gap-y-8;
+    @apply w-full grid grid-cols-1 @xs:grid-cols-2 @2xl:grid-cols-3 @4xl:grid-cols-4 gap-x-5 gap-y-8;
   }
 
   .group-button {
