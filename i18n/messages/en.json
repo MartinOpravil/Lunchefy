@@ -54,21 +54,21 @@
     },
     "General": {
       "title": "Why Use Our App?",
-      "text": "<div>Do you cook home-cooked meals? Do you have many recipes? Can't often decide what to cook?</div><div>Our <span class='logo-min'> Lunchefy </span> app makes meal planning simple and, thanks to its modern design, enjoyable. It is designed for both experienced chefs and amateurs. It offers you the opportunity to not only organize recipes, plan your meals and also share them with others.</div><div>Transfer your recipes collected over the years. Then, when you need them, you can find them quickly and easily, both by <span class='homepage-bold'>Name</span> or by the <span class='homepage-bold'>Tags</span> that you can assign to your recipes.</div><div>Plan your meals in our built-in calendar so you can prepare what you'll cook in advance and also look back at what you've cooked. Connect with family or friends and share your ideas and plans for the days ahead.</div>"
+      "text": "<div>Do you cook home-cooked meals? Do you have many recipes? Can't often decide what to cook?</div><div>Our <span class='logo-min'> Lunchefy </span> app makes meal planning simple and, thanks to its modern design, enjoyable. It is designed for both experienced chefs and amateurs. It offers you the opportunity to not only organize recipes, plan your meals and also share them with others.</div><div>Transfer your recipes collected over the years. You can then easily find them at any time - whether by <span class='homepage-bold'>Name</span>, <span class='homepage-bold'>Tags</span> or date of last use in the <span class='homepage-bold'>Planner</span>.</div><div>Plan your meals in our built-in calendar so you can prepare what you'll cook in advance and also look back at what you've cooked. Connect with family or friends and share your ideas and plans for the days ahead.</div>"
     },
     "Features": {
       "title": "<div><span class='logo-features'>Lunchefy</span> is</div>",
       "Manager": {
         "title": "Recipe manager",
-        "description": "Your Recipes, Organized and Always Accessible."
+        "description": "Your Recipes, Organized and in One Place."
       },
       "Planner": {
         "title": "Planner",
-        "description": "Plan Your Meals, One Day at a Time."
+        "description": "Keep track of what you're cooking."
       },
       "SharingPlatform": {
         "title": "Sharing platform",
-        "description": "Collaborate and Cook Together."
+        "description": "Cook and plan together with family and friends."
       }
     },
     "RecipeManager": {
@@ -77,7 +77,7 @@
     },
     "Planner": {
       "title": "Planner",
-      "text": "<div>The <span class='logo-min'> Lunchefy </span> app takes away the eternal question: <br><span class='font-bold italic'>„What's for lunch today?“</span></div><div>With our planner, you can easily assign recipes to specific days and create a visual plan for the whole week or month.</div><div>If you are planning not only lunch, but also dinner or a dessert for a given day. No problem. You can assign any number of recipes to each day, so there's no limit to your creativity.</div><div>By assigning recipes to dates, you can streamline your shopping, reduce food waste and save time in the kitchen.</div>"
+      "text": "<div>The <span class='logo-min'> Lunchefy </span> app takes away the eternal question: <br><span class='font-bold italic'>„What's for lunch today?“</span></div><div>With our planner, you can easily assign recipes to specific days and create a visual plan for the whole week or month.</div><div>If you are planning not only lunch, but also dinner or a dessert for a given day. No problem. You can assign any number of recipes to each day, so there's no limit to your creativity.</div><div>Matching recipes to dates will make it easier to plan for the days ahead. You can sort your recipes by last used date and easily see which ones you haven't used in a while.</div>"
     },
     "SharingPlatform": {
       "title": "Sharing platform",
