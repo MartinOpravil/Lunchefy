@@ -146,7 +146,7 @@ const UserAccessForm = ({
                         <SelectValue placeholder="" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent className="bg-background">
+                    <SelectContent>
                       <SelectItem value={Privilage.Editor}>
                         {t(
                           `Groups.AccessManager.Privilage.${Privilage.Editor}`
@@ -167,7 +167,7 @@ const UserAccessForm = ({
           <div className="flex justify-between gap-2">
             <ActionButton
               icon={
-                <Trash2 className="group-hover:text-primary transition-all" />
+                <Trash2 className="text-text group-hover:text-primary transition-all" />
               }
               onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
                 e.preventDefault();

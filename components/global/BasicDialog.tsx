@@ -22,7 +22,7 @@ const BasicDialog = ({
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className={classList}>
         <DialogHeader className="gap-2">
-          <DialogTitle className="flex gap-4 items-center text-black-2 !text-[22px] sm:!text-[26px] text-center">
+          <DialogTitle className="flex gap-4 items-center text-text !text-[22px] sm:!text-[26px] text-center">
             {title}
             {icon}
           </DialogTitle>

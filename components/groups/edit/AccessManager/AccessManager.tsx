@@ -202,7 +202,7 @@ const AccessManager = ({ groupName, groupId }: AccessManagerProps) => {
                             />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent className="bg-background">
+                        <SelectContent>
                           <SelectItem value={Privilage.Editor}>
                             {t(
                               `Groups.AccessManager.Privilage.${Privilage.Editor}`

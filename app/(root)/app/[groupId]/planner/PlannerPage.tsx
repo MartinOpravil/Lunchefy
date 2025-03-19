@@ -346,7 +346,7 @@ const PlannerPage = ({
               selected={date}
               onSelect={handleSelect}
               events={planList?.map((x) => x.date)}
-              className="rounded-md border"
+              className="rounded-md border text-text"
               onMonthChange={(e) => handleMonthChange(e)}
               isLoading={
                 recipeListForMonth === undefined &&
@@ -548,7 +548,7 @@ const ThisMonthRecipeList = ({
                 <div className="heading-underline !my-0" />
                 <div className="flex flex-col text-[14px] sm:text-[16px] justify-between gap-2">
                   {plan.names.map((name, i) => (
-                    <div key={i} className="flex items-center gap-1">
+                    <div key={i} className="flex items-center gap-1 text-text">
                       <Dot className="!min-w-6 !h-6" />
                       {name}
                     </div>

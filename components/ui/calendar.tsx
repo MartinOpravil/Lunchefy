@@ -29,17 +29,20 @@ function Calendar({
       showOutsideDays={showOutsideDays}
       className={cn("", className)}
       classNames={{
-        root: cn(defaultClassNames.root, "p-3"),
+        root: cn(defaultClassNames.root, "p-3 border-accent"),
         month_caption: cn(
           defaultClassNames.month_caption,
           "calendar-month capitalize"
         ),
         weekdays: cn(defaultClassNames.weekdays, "capitalize"),
-        day: cn(defaultClassNames.day, "rounded-full"),
+        day: cn(
+          defaultClassNames.day,
+          "transition-all rounded-full hover:opacity-75"
+        ),
         day_button: cn(defaultClassNames.day_button, "min-w-full"),
         selected: "select-day",
         today: "bg-secondary/25",
-        chevron: "",
+        chevron: "hover:opacity-75",
       }}
       modifiers={{
         events: eventDays,

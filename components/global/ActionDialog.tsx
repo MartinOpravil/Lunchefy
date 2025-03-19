@@ -52,7 +52,7 @@ const ActionDialog = ({
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogContent>
         <AlertDialogHeader className="gap-4">
-          <AlertDialogTitle className="text-black-2 !text-[22px] sm:!text-[26px] text-center">
+          <AlertDialogTitle className="text-text !text-[22px] sm:!text-[26px] text-center">
             {title}
           </AlertDialogTitle>
           {subject && (

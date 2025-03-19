@@ -32,7 +32,7 @@ const PrivilageBadge = ({ privilage }: PrivilageBadgeProps) => {
   return (
     <div
       className={cn(
-        "text-white-1 w-fit rounded-full px-3 py-1 select-none flex gap-2 outline outline-1 bg-secondary"
+        "text-white-1 w-fit rounded-full px-3 py-1 select-none flex gap-2 bg-secondary"
         // privilageStyles
       )}
     >

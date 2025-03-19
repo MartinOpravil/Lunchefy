@@ -99,7 +99,9 @@ const GroupListPage = ({
         <h3 className="text-16 text-primary">
           {t("Groups.General.Disclaimer.Title")}
         </h3>
-        <div className="text-12">{t("Groups.General.Disclaimer.Text")}</div>
+        <div className="text-12 text-text">
+          {t("Groups.General.Disclaimer.Text")}
+        </div>
       </section>
     </main>
   );

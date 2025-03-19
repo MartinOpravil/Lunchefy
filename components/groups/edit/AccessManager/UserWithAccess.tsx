@@ -26,7 +26,7 @@ const UserWithAccess = ({
 
   return (
     <>
-      <div className="w-full flex flex-col @sm:flex-row justify-between items-center gap-2 pt-2">
+      <div className="text-text w-full flex flex-col @sm:flex-row justify-between items-center gap-2 pt-2">
         <div className="flex flex-col w-full">
           <div>{name}</div>
           <div className="text-12">{email}</div>

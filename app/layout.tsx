@@ -53,7 +53,7 @@ export default async function RootLayout({
         "overflow-x-hidden"
       )}
     >
-      <body className="flex flex-col relative w-full bg-background">
+      <body className="flex flex-col relative w-full">
         <NextIntlClientProvider messages={messages}>
           <ConvexClerkProvider>
             <ConvexQueryCacheProvider>{children}</ConvexQueryCacheProvider>

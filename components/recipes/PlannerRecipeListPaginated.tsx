@@ -29,7 +29,7 @@ const PlannerRecipeListPaginated = ({
   const t = useTranslations("Recipes.Scroll");
   return (
     <>
-      <div className="flex flex-col w-full gap-1 pt-2 h-40 relative overflow-y-auto">
+      <div className="text-text flex flex-col w-full gap-1 pt-2 h-40 relative overflow-y-auto">
         {recipeListPaginated.results?.map((recipe, index) => (
           <div
             className={cn(

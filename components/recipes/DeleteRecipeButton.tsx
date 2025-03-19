@@ -65,9 +65,12 @@ const DeleteRecipeButton = ({
       <ActionButton
         icon={
           <Trash2
-            className={cn("group-hover/delete:text-primary transition-all", {
-              "!w-5 text-text2": small,
-            })}
+            className={cn(
+              "text-text group-hover/delete:text-primary transition-all",
+              {
+                "!w-5 text-text2": small,
+              }
+            )}
           />
         }
         onClick={handleOpenDialog}

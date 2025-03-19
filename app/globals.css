@@ -31,11 +31,11 @@ html {
 
 @layer utilities {
   .input-label {
-    @apply font-bold text-lg sm:text-xl;
+    @apply font-bold text-lg sm:text-xl text-text;
     font-family: var(--font-playfair);
   }
   .input-class {
-    @apply w-full min-h-12 text-16 text-black-1 placeholder:text-16 rounded-[8px] bg-transparent placeholder:text-accent border-2 border-accent transition-all hover:border-primary focus-visible:border-primary outline-none focus-visible:outline-none;
+    @apply w-full min-h-12 text-16 text-text placeholder:text-16 rounded-[8px] bg-transparent placeholder:text-accent border-2 border-accent transition-all hover:border-primary focus-visible:border-primary outline-none focus-visible:outline-none;
   }
 
   .image-input {
@@ -96,16 +96,16 @@ html {
   }
 
   h1 {
-    @apply text-2xl sm:text-5xl font-semibold;
+    @apply text-2xl sm:text-5xl font-semibold text-text;
   }
   h2 {
-    @apply text-[28px] sm:text-[36px] font-semibold;
+    @apply text-[28px] sm:text-[36px] font-semibold text-text;
   }
   h3 {
-    @apply text-lg sm:text-xl font-semibold;
+    @apply text-lg sm:text-xl font-semibold text-text;
   }
   p {
-    @apply text-14 sm:text-16 font-normal;
+    @apply text-14 sm:text-16 font-normal text-text;
   }
 
   .logo,
@@ -297,9 +297,6 @@ html {
   color: white;
 }
 
-.cl-userButtonPopoverActionButtonIcon {
-  color: white;
-}
 .cl-internal-wkkub3 {
   /* color: #f97535; */
 }
@@ -321,10 +318,6 @@ html {
       opacity: 0.7;
     }
   }
-}
-
-.cl-userButtonPopoverActionButtonIcon {
-  color: var(--text);
 }
 
 @layer base {

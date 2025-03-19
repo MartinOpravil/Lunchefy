@@ -70,7 +70,7 @@ const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
       <section className="page-content">
         <div className="flex flex-col w-full gap-16">
           {recipe.data.description && (
-            <div className="text-16 sm:text-[20px]">
+            <div className="text-16 sm:text-[20px] text-text">
               {recipe.data.description}
             </div>
           )}

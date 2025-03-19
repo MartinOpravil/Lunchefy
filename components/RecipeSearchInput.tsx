@@ -34,6 +34,7 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { PlannerAge, SearchBy } from "@/enums";
+import { useGlobalStore } from "@/store/global";
 
 export enum RecipeFilterVariant {
   Page = "page",
@@ -74,7 +75,7 @@ const RecipeSearchInput = ({
   settingItems,
 }: RecipeFilterProps) => {
   const t = useTranslations();
-
+  const { darkMode } = useGlobalStore();
   // const { searchBy, setSearchBy } = useGroupStore();
   const { tagOptions } = useTagManager();
 
@@ -126,7 +127,7 @@ const RecipeSearchInput = ({
             <SelectTrigger className="input-class h-full transition-all">
               <SelectValue className="placeholder:text-secondary" />
             </SelectTrigger>
-            <SelectContent className="bg-background">
+            <SelectContent>
               <SelectItem value={SearchBy.Name}>
                 <div className="flex gap-2 items-center">
                   <PencilLine /> {t("Recipes.SearchInput.SortBy.Name")}
@@ -164,6 +165,7 @@ const RecipeSearchInput = ({
               onChange={setSearchTags}
               hidePlaceholderWhenSelected
               groupBy="group"
+              darkMode={darkMode}
             />
           )}
           {searchBy === SearchBy.Planner && (
@@ -174,7 +176,7 @@ const RecipeSearchInput = ({
                   placeholder={t("Recipes.SearchInput.Placeholder.Planner")}
                 />
               </SelectTrigger>
-              <SelectContent className="bg-background">
+              <SelectContent>
                 <SelectItem value={PlannerAge.Latest}>
                   <div className="flex gap-2">
                     {t("Recipes.SearchInput.Values.Planner.Latest")}

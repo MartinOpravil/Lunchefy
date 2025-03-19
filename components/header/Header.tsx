@@ -12,6 +12,7 @@ import { useTranslations } from "next-intl";
 import LinkButton from "../global/LinkButton";
 import { ButtonVariant } from "@/enums";
 import Link from "next/link";
+import DarkModeSwitcher from "../global/DarkModeSwitcher";
 
 const Header = () => {
   const t = useTranslations("Global.Button");
@@ -24,6 +25,7 @@ const Header = () => {
       </Link>
       <div className="flex gap-4 justify-center items-center">
         <LocaleSwitcherSelect />
+        <DarkModeSwitcher />
         <ClerkLoaded>
           <SignedOut>
             <LinkButton

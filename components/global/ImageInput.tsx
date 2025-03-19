@@ -211,7 +211,7 @@ const ImageInput = (
         <TabsList className="w-full flex flex-col sm:flex-row mb-4 transition-[height]">
           <TabsTrigger
             value={ImageType.Uploaded}
-            className="flex gap-2 w-full"
+            className="flex gap-2 w-full text-text"
             onMouseDown={() => setSelectedTab(ImageType.Uploaded)}
           >
             <ImageUp />
@@ -219,7 +219,7 @@ const ImageInput = (
           </TabsTrigger>
           <TabsTrigger
             value={ImageType.External}
-            className="flex gap-2 w-full"
+            className="flex gap-2 w-full text-text"
             onMouseDown={() => setSelectedTab(ImageType.External)}
           >
             <ExternalLink />
@@ -264,7 +264,7 @@ const ImageInput = (
                     />
                     <ActionButton
                       icon={
-                        <Trash2 className="group-hover:text-primary transition-all" />
+                        <Trash2 className="text-text group-hover:text-primary transition-all" />
                       }
                       onClick={handleFileRemoval}
                       variant={ButtonVariant.NegativeMinimalistic}

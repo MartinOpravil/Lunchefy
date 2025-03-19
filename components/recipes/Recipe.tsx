@@ -38,7 +38,7 @@ const Recipe = ({
   return (
     <Card
       className={cn(
-        "relative cursor-pointer transition-all overflow-hidden border hover:border-primary group",
+        "relative cursor-pointer transition-all overflow-hidden border border-accent hover:border-primary group",
         classList
       )}
     >

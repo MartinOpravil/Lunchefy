@@ -84,6 +84,8 @@ interface MultipleSelectorProps {
   >;
   /** hide the clear all button. */
   hideClearAllButton?: boolean;
+
+  darkMode?: boolean;
 }
 
 export interface MultipleSelectorRef {
@@ -206,6 +208,7 @@ const MultipleSelector = React.forwardRef<
       commandProps,
       inputProps,
       hideClearAllButton = false,
+      darkMode = false,
     }: MultipleSelectorProps,
     ref: React.Ref<MultipleSelectorRef>
   ) => {
@@ -592,7 +595,7 @@ const MultipleSelector = React.forwardRef<
           <div className="relative">
             {open && (
               <CommandList
-                className="absolute top-1 z-10 w-full rounded-md border bg-popover text-popover-foreground shadow-md outline-none animate-in bg-background"
+                className="absolute top-1 z-10 w-full rounded-md border border-accent bg-popover text-popover-foreground shadow-md outline-none animate-in bg-background"
                 onMouseLeave={() => {
                   setOnScrollbar(false);
                 }}
@@ -618,7 +621,7 @@ const MultipleSelector = React.forwardRef<
                         <CommandGroup
                           key={key}
                           heading={key}
-                          className="h-full overflow-auto"
+                          className="h-full overflow-auto text-text"
                         >
                           <>
                             {dropdowns.map((option) => {
@@ -642,7 +645,7 @@ const MultipleSelector = React.forwardRef<
                                     onChange?.(newOptions);
                                   }}
                                   className={cn(
-                                    "cursor-pointer gap-4",
+                                    "cursor-pointer gap-4 text-text",
                                     option.disable &&
                                       "cursor-default text-muted-foreground"
                                   )}
@@ -653,6 +656,9 @@ const MultipleSelector = React.forwardRef<
                                     width={30}
                                     height={30}
                                     className=""
+                                    style={{
+                                      filter: darkMode ? "invert(100%)" : "",
+                                    }}
                                   />
                                   {option.label}
                                 </CommandItem>

@@ -41,7 +41,9 @@ const PlannerButton = ({
         <CalendarFold className="!w-8 !h-8 text-primary my-2 ml-2" />
       )}
       <div className="pr-2">
-        <div className="text-12">{t("Groups.Planner.Button.Today")}</div>
+        <div className="text-12 text-text">
+          {t("Groups.Planner.Button.Today")}
+        </div>
         <div className="flex gap-2 items-center">
           <span className="text-primary text-[18px]">
             {todayRecipeCount

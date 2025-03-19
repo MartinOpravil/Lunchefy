@@ -45,7 +45,7 @@ const Home = () => {
             <span className="text-primary text-14 sm:text-[20px] uppercase font-[700] tracking-wider">
               {t("Hero.subTitle")}
             </span>
-            <p className="text-20 sm:text-[36px] font-[700] whitespace-pre-line">
+            <p className="text-20 sm:text-[36px] font-[700] whitespace-pre-line text-black-1">
               {t("Hero.title")}
             </p>
             <SignedIn>
@@ -78,7 +78,7 @@ const Home = () => {
           className="w-[100%] h-[100%] object-contain max-h-[575px] sm:w-[50%]"
         />
       </section>
-      <section className="page-width-wider relative py-16 lg:py-32 flex flex-col gap-12 justify-center items-center bg-[#F7F7F7] rounded-xl mx-[-100px]">
+      <section className="page-width-wider relative py-16 lg:py-32 flex flex-col gap-12 justify-center items-center bg-accent/20 rounded-xl mx-[-100px]">
         <div
           className="flex gap-4 items-center text-[30px] md:text-[36px] h3"
           dangerouslySetInnerHTML={{
@@ -183,7 +183,7 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="page-width-wider bg-[#F7F7F7] py-16 lg:py-32 flex flex-col gap-6 text-center items-center mx-[-100px]">
+      <section className="page-width-wider bg-accent/20 py-16 lg:py-32 flex flex-col gap-6 text-center items-center mx-[-100px]">
         <div className="flex flex-col items-center gap-4 sm:gap-2 w-full px-[100px]">
           <h2 className="">{t("Banner.title")}</h2>
           <div

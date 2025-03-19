@@ -48,7 +48,7 @@ const RecipeListPaginated = ({
                 <Mouse />
                 <div className="text-center">
                   {t("Top")}
-                  <h3>{t("Bottom")}</h3>
+                  <h3 className="text-white-1">{t("Bottom")}</h3>
                 </div>
               </div>
             </div>

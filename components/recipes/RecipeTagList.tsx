@@ -3,6 +3,7 @@ import { useTagManager } from "./TagManager";
 import Image from "next/image";
 import { Badge } from "../ui/badge";
 import { cn } from "@/lib/utils";
+import { useGlobalStore } from "@/store/global";
 
 interface RecipeTagListProps {
   recipeTags: string;
@@ -18,6 +19,7 @@ const RecipeTagList = ({
   dense = false,
 }: RecipeTagListProps) => {
   const { convertToTags } = useTagManager();
+  const { darkMode } = useGlobalStore();
 
   const { tags, hasMore, moreCount } = useMemo(() => {
     let tags = convertToTags(recipeTags);
@@ -64,7 +66,7 @@ const RecipeTagList = ({
             className={cn("!w-[25px] !h-[25px]", {
               "!w-[22px] !h-[22px]": dense,
             })}
-            style={{ filter: !dense ? "invert(100%)" : "" }}
+            style={{ filter: darkMode || !dense ? "invert(100%)" : "" }}
           />
           {useName && <div className="text-[14px]">{tag.label}</div>}
         </Badge>

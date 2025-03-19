@@ -34,7 +34,7 @@ const LocaleSwitcherSelect = () => {
       <Select value={language} onValueChange={onChange}>
         <SelectTrigger
           useArrow={false}
-          className="input-class !border-transparent relative flex gap-2"
+          className="input-class !border-transparent hover:opacity-70 relative flex gap-2 p-0 rounded-full"
         >
           {isPending && (
             <LoaderCircle className="animate-spin text-primary !w-6 !h-6" />
@@ -46,7 +46,7 @@ const LocaleSwitcherSelect = () => {
             />
           </div>
         </SelectTrigger>
-        <SelectContent className="bg-background">
+        <SelectContent>
           <SelectItem value={"cs"}>
             <div className="flex gap-2">Čeština</div>
           </SelectItem>

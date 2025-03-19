@@ -131,7 +131,7 @@ const RecipeForm = ({ recipe, isVerified }: RecipeDetailHeaderProps) => {
           <TabsList className="w-full flex flex-col sm:flex-row my-6">
             <TabsTrigger
               value="false"
-              className="flex gap-2 w-full"
+              className="flex gap-2 w-full text-text"
               onMouseDown={() =>
                 setValue("isImageRecipe", false, { shouldDirty: true })
               }
@@ -141,7 +141,7 @@ const RecipeForm = ({ recipe, isVerified }: RecipeDetailHeaderProps) => {
             </TabsTrigger>
             <TabsTrigger
               value="true"
-              className="flex gap-2 w-full"
+              className="flex gap-2 w-full text-text"
               onMouseDown={() =>
                 setValue("isImageRecipe", true, { shouldDirty: true })
               }
