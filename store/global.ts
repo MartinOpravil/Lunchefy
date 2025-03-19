@@ -1,4 +1,4 @@
-import { setDarkMode } from "@/lib/theme";
+import { setDarkModeCookie } from "@/lib/cookies";
 import { create } from "zustand";
 
 type GlobalStore = {
@@ -11,6 +11,6 @@ export const useGlobalStore = create<GlobalStore>((set, get) => ({
 
   toggleDarkMode: () => {
     set((state) => ({ darkMode: !state.darkMode }));
-    setDarkMode(get().darkMode);
+    setDarkModeCookie(get().darkMode);
   },
 }));

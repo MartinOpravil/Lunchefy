@@ -7,6 +7,7 @@ import { ConvexQueryCacheProvider } from "convex-helpers/react/cache/provider";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import { cn } from "@/lib/utils";
+import { getDarkModeCookie } from "@/lib/cookies";
 
 const playfair = Playfair({
   subsets: ["latin"],
@@ -43,6 +44,8 @@ export default async function RootLayout({
   const locale = await getLocale();
   const messages = await getMessages();
 
+  const darkMode = await getDarkModeCookie();
+
   return (
     <html
       lang={locale}
@@ -50,12 +53,13 @@ export default async function RootLayout({
         playfair.variable,
         inter.variable,
         marckScript.variable,
-        "overflow-x-hidden"
+        "overflow-x-hidden",
+        { "dark-theme": darkMode }
       )}
     >
       <body className="flex flex-col relative w-full">
         <NextIntlClientProvider messages={messages}>
-          <ConvexClerkProvider>
+          <ConvexClerkProvider hasDarkMode={darkMode}>
             <ConvexQueryCacheProvider>{children}</ConvexQueryCacheProvider>
           </ConvexClerkProvider>
           <Toaster />
