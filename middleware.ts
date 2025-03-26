@@ -4,7 +4,13 @@ const isPublicRoute = createRouteMatcher(["/sign-in(.*)", "/sign-up(.*)", "/"]);
 
 export default clerkMiddleware(async (auth, req) => {
   // Restrict admin route to users with specific role
-  if (!isPublicRoute(req)) await auth.protect();
+  if (!isPublicRoute(req)) {
+    try {
+      await auth.protect();
+    } catch (error) {
+      console.log("Auth failed in middleware:", error);
+    }
+  }
 });
 
 export const config = {
