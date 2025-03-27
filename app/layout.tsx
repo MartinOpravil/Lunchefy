@@ -8,6 +8,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import { cn } from "@/lib/utils";
 import { getDarkModeCookie } from "@/lib/cookies";
+import ThemeProvider from "./providers/ThemeProvider";
 
 const playfair = Playfair({
   subsets: ["latin"],
@@ -59,8 +60,10 @@ export default async function RootLayout({
     >
       <body className="flex flex-col relative w-full">
         <NextIntlClientProvider messages={messages}>
-          <ConvexClerkProvider hasDarkMode={darkMode}>
-            <ConvexQueryCacheProvider>{children}</ConvexQueryCacheProvider>
+          <ConvexClerkProvider>
+            <ConvexQueryCacheProvider>
+              <ThemeProvider hasDarkMode={darkMode}>{children}</ThemeProvider>
+            </ConvexQueryCacheProvider>
           </ConvexClerkProvider>
           <Toaster />
         </NextIntlClientProvider>

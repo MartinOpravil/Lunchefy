@@ -5,25 +5,12 @@ import { ConvexReactClient } from "convex/react";
 import { ReactNode, useEffect } from "react";
 import { csCZ, enUS } from "@clerk/localizations";
 import { useLocale } from "next-intl";
-import { useGlobalStore } from "@/store/global";
 
 const convex = new ConvexReactClient(
   process.env.NEXT_PUBLIC_CONVEX_URL as string
 );
 
-const ConvexClerkProvider = ({
-  children,
-  hasDarkMode = false,
-}: {
-  children: ReactNode;
-  hasDarkMode: boolean;
-}) => {
-  const { toggleDarkMode } = useGlobalStore();
-
-  useEffect(() => {
-    if (hasDarkMode) toggleDarkMode();
-  }, []);
-
+const ConvexClerkProvider = ({ children }: { children: ReactNode }) => {
   return (
     <ClerkProvider
       publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY as string}

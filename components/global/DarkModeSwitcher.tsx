@@ -5,11 +5,11 @@ import { Moon, Sun } from "lucide-react";
 import { useGlobalStore } from "@/store/global";
 
 const DarkModeSwitcher = () => {
-  const { darkMode, toggleDarkMode } = useGlobalStore();
+  const { darkMode, setDarkMode } = useGlobalStore();
   return (
     <ActionButton
       icon={darkMode ? <Sun /> : <Moon />}
-      onClick={toggleDarkMode}
+      onClick={() => setDarkMode(!darkMode)}
       classList="rounded-full outline-transparent hover:outline-transparent hover:bg-accent/50 !w-10 !h-10"
     />
   );

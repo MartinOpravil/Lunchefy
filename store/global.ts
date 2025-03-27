@@ -3,14 +3,14 @@ import { create } from "zustand";
 
 type GlobalStore = {
   darkMode: boolean;
-  toggleDarkMode: () => void;
+  setDarkMode: (value: boolean) => void;
 };
 
 export const useGlobalStore = create<GlobalStore>((set, get) => ({
   darkMode: false,
 
-  toggleDarkMode: () => {
-    set((state) => ({ darkMode: !state.darkMode }));
-    setDarkModeCookie(get().darkMode);
+  setDarkMode: (value: boolean) => {
+    set((state) => ({ darkMode: value }));
+    setDarkModeCookie(value);
   },
 }));
