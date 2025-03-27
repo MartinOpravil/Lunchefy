@@ -14,8 +14,11 @@ const ThemeProvider = ({
   const { setDarkMode } = useGlobalStore();
 
   useEffect(() => {
-    if (typeof window !== "undefined" && hasDarkMode) setDarkMode(true);
-  }, []);
+    if (typeof window !== "undefined") {
+      console.log("Setting dark mode to:", hasDarkMode);
+      setDarkMode(hasDarkMode);
+    }
+  }, [hasDarkMode]);
 
   return children;
 };
