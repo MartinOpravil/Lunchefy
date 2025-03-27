@@ -11,14 +11,14 @@ const ThemeProvider = ({
   children,
   hasDarkMode = false,
 }: ThemeProviderProps) => {
-  const { setDarkMode } = useGlobalStore();
+  // const { setDarkMode } = useGlobalStore();
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      console.log("Setting dark mode to:", hasDarkMode);
-      setDarkMode(hasDarkMode);
-    }
-  }, [hasDarkMode]);
+  // useEffect(() => {
+  //   if (typeof window !== "undefined") {
+  //     console.log("Setting dark mode to:", hasDarkMode);
+  //     setDarkMode(hasDarkMode);
+  //   }
+  // }, [hasDarkMode]);
 
   return children;
 };
