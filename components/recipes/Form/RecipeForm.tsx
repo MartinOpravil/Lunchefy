@@ -20,6 +20,7 @@ import { AutosizeTextarea } from "@/components/ui/autosize-textarea";
 import MultipleSelector from "@/components/ui/multiple-selector";
 import { useTranslations } from "next-intl";
 import { useTagManager } from "../TagManager";
+import { useGlobalStore } from "@/store/global";
 
 interface RecipeDetailHeaderProps {
   recipe?: Awaited<ReturnType<typeof getRecipeById>>;
@@ -33,6 +34,7 @@ interface CustomFormContext {
 
 const RecipeForm = ({ recipe, isVerified }: RecipeDetailHeaderProps) => {
   const t = useTranslations();
+  const { darkMode } = useGlobalStore();
   const { register, setValue, coverImageRef, recipeImageRef, getValues } =
     useFormContext() as ReturnType<typeof useFormContext> & CustomFormContext;
 
@@ -117,6 +119,7 @@ const RecipeForm = ({ recipe, isVerified }: RecipeDetailHeaderProps) => {
                     hidePlaceholderWhenSelected
                     {...field}
                     groupBy="group"
+                    darkMode={darkMode}
                   />
                 </FormControl>
                 <FormMessage className="text-primary" />
