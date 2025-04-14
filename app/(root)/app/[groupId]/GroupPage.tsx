@@ -12,6 +12,7 @@ import { api } from "@/convex/_generated/api";
 import {
   ButtonVariant,
   HttpResponseCode,
+  OrderBy,
   PlannerAge,
   Privilage,
 } from "@/enums";
@@ -23,7 +24,17 @@ import {
   usePaginatedQuery,
   usePreloadedQuery,
 } from "convex/react";
-import { ArrowLeft, ChefHat, Pencil, Plus } from "lucide-react";
+import {
+  ArrowDownAZ,
+  ArrowLeft,
+  ArrowUpAZ,
+  ChefHat,
+  ClockArrowDown,
+  ClockArrowUp,
+  Pencil,
+  Plus,
+  Tags,
+} from "lucide-react";
 import React, { useMemo, useRef, useState } from "react";
 import { SubmitHandler } from "react-hook-form";
 import NoContent from "@/components/global/NoContent";
@@ -33,7 +44,11 @@ import RecipeSearchInput from "@/components/RecipeSearchInput";
 import { useTranslations } from "next-intl";
 import { useTagManager } from "@/components/recipes/TagManager";
 import PlannerButton from "@/components/groups/PlannerButton";
-import { DropdownMenuCheckboxItem } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenuCheckboxItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+} from "@/components/ui/dropdown-menu";
 import { getPlannerAgeMiliseconds } from "@/lib/time";
 import { useGroupStore } from "@/store/group";
 
@@ -70,6 +85,8 @@ const GroupPage = ({
 
   const { convertToValues } = useTagManager();
 
+  const [orderBy, setOrderBy] = useState<OrderBy>(OrderBy.CreationDateDescend);
+
   const [resetForm, setResetForm] = useState<(() => void) | null>(null);
   const coverImageRef = useRef<ImageInputHandle>(null);
   const recipeImageRef = useRef<ImageInputHandle>(null);
@@ -85,6 +102,7 @@ const GroupPage = ({
     api.recipes.getRecipes,
     {
       groupId: group.data?._id!,
+      orderBy,
     },
     { initialNumItems: RECIPES_INITIAL_COUNT }
   );
@@ -136,6 +154,10 @@ const GroupPage = ({
       );
     }
   };
+
+  const isShowingFilteredResults = useMemo(() => {
+    return searchTerm.length > 0 || !!searchTags.length || !!recipeListAge;
+  }, [searchTerm, searchTags, recipeListAge]);
 
   if (!group.data) {
     return <></>;
@@ -232,21 +254,51 @@ const GroupPage = ({
               setPlannerAge={setPlanAge}
               classList="@sm:w-[700px]"
               showSettings
-              settingItems={
+              settingViewItems={
                 <>
                   <DropdownMenuCheckboxItem
                     checked={isShowingRecipeTags}
                     onCheckedChange={setIsShowingRecipeTags}
                   >
-                    {t("Recipes.View.ShowTags")}
+                    <div className="flex gap-2 items-center">
+                      <Tags /> {t("Recipes.View.ShowTags")}
+                    </div>
                   </DropdownMenuCheckboxItem>
                 </>
+              }
+              showOrderSettings={!isShowingFilteredResults}
+              settingOrderItems={
+                <DropdownMenuRadioGroup
+                  value={orderBy}
+                  onValueChange={(val: string) => setOrderBy(val as OrderBy)}
+                >
+                  <DropdownMenuRadioItem value={OrderBy.CreationDateAscend}>
+                    <div className="flex gap-2 items-center">
+                      <ClockArrowUp /> {t("Recipes.View.CreationDate")}
+                    </div>
+                  </DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value={OrderBy.CreationDateDescend}>
+                    <div className="flex gap-2 items-center">
+                      <ClockArrowDown /> {t("Recipes.View.CreationDate")}
+                    </div>
+                  </DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value={OrderBy.NameAscend}>
+                    <div className="flex gap-2 items-center">
+                      <ArrowUpAZ /> {t("Recipes.View.Name")}
+                    </div>
+                  </DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value={OrderBy.NameDescend}>
+                    <div className="flex gap-2 items-center">
+                      <ArrowDownAZ /> {t("Recipes.View.Name")}
+                    </div>
+                  </DropdownMenuRadioItem>
+                </DropdownMenuRadioGroup>
               }
             />
           </div>
         )}
 
-        {searchTerm.length > 0 || searchTags.length || recipeListAge ? (
+        {isShowingFilteredResults ? (
           <RecipeSearchResults
             groupId={group.data._id}
             searchTerm={searchTerm}

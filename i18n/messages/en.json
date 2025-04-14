@@ -375,7 +375,10 @@
     },
     "View": {
       "View": "View",
-      "ShowTags": "Show tags"
+      "ShowTags": "Show tags",
+      "OrderBy": "Order by",
+      "CreationDate": "Creation date",
+      "Name": "Name"
     }
   },
   "Users": {

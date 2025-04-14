@@ -1,10 +1,11 @@
 import { createBadResponse, createOKResponse } from "@/lib/communication";
 import { mutation, query } from "./_generated/server";
 import { getLoggedUser } from "./users";
-import { HttpResponseCode, Privilage } from "@/enums";
+import { HttpResponseCode, OrderBy, Privilage } from "@/enums";
 import { v } from "convex/values";
 import { paginationOptsValidator, QueryInitializer } from "convex/server";
 import { Author } from "@/types";
+import { removeDiacritics } from "@/lib/utils";
 
 export const getRecipes = query({
   args: {
@@ -13,6 +14,7 @@ export const getRecipes = query({
     searchTags: v.optional(v.array(v.string())),
     paginationOpts: paginationOptsValidator,
     dateMiliseconds: v.optional(v.number()),
+    orderBy: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     let query;
@@ -22,13 +24,13 @@ export const getRecipes = query({
         query = ctx.db
           .query("recipes")
           .withSearchIndex("nameSearch", (q) =>
-            q.search("name", args.searchTerm!)
+            q.search("nameNormalized", removeDiacritics(args.searchTerm!))
           );
       } else {
         query = ctx.db
           .query("recipes")
           .withSearchIndex("nameSearch", (q) =>
-            q.search("name", args.searchTerm!)
+            q.search("nameNormalized", removeDiacritics(args.searchTerm!))
           );
       }
     } else if (args.searchTags?.length) {
@@ -44,7 +46,28 @@ export const getRecipes = query({
           .withIndex("by_planner_date")
           .order("desc");
       } else {
-        query = ctx.db.query("recipes").order("desc");
+        const orderBy = args.orderBy as OrderBy | undefined;
+        switch (orderBy) {
+          case OrderBy.CreationDateAscend:
+            query = ctx.db.query("recipes").order("asc");
+            break;
+          case OrderBy.NameAscend:
+            query = ctx.db
+              .query("recipes")
+              .withIndex("by_normalized_name")
+              .order("asc");
+            break;
+          case OrderBy.NameDescend:
+            query = ctx.db
+              .query("recipes")
+              .withIndex("by_normalized_name")
+              .order("desc");
+            break;
+          case OrderBy.CreationDateDescend:
+          default:
+            query = ctx.db.query("recipes").order("desc");
+            break;
+        }
       }
     }
 
@@ -168,6 +191,7 @@ export const createRecipe = mutation({
     const newRecipeId = await ctx.db.insert("recipes", {
       groupId: args.groupId,
       name: args.name,
+      nameNormalized: removeDiacritics(args.name),
       description: args.description,
       coverImage: args.coverImage,
       ingredients: args.ingredients,
@@ -243,6 +267,7 @@ export const updateRecipe = mutation({
 
     await ctx.db.patch(args.id, {
       name: args.name,
+      nameNormalized: removeDiacritics(args.name),
       description: args.description,
       coverImage: args.coverImage,
       ingredients: args.ingredients,

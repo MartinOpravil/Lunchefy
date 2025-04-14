@@ -40,3 +40,10 @@ export enum SearchBy {
   Tags = "tags",
   Planner = "planner",
 }
+
+export enum OrderBy {
+  NameAscend = "nameAscend",
+  NameDescend = "nameDescend",
+  CreationDateAscend = "creationDateAscend",
+  CreationDateDescend = "creationDateDescend",
+}

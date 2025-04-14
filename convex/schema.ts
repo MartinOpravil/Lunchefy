@@ -39,6 +39,7 @@ export default defineSchema({
     ),
     groupId: v.id("groups"),
     name: v.string(),
+    nameNormalized: v.string(),
     description: v.optional(v.string()),
     coverImage: v.optional(
       v.object({
@@ -61,8 +62,9 @@ export default defineSchema({
     plannerDate: v.optional(v.number()),
   })
     .index("by_planner_date", ["plannerDate"])
+    .index("by_normalized_name", ["nameNormalized"])
     .searchIndex("nameSearch", {
-      searchField: "name",
+      searchField: "nameNormalized",
     })
     .searchIndex("tagSearch", {
       searchField: "tags",

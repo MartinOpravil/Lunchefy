@@ -373,7 +373,10 @@
     },
     "View": {
       "View": "Zobrazení",
-      "ShowTags": "Zobrazit štítky"
+      "ShowTags": "Zobrazit štítky",
+      "OrderBy": "Řazení podle",
+      "CreationDate": "Data vytvoření",
+      "Name": "Názvu"
     }
   },
   "Users": {

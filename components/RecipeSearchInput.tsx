@@ -54,7 +54,9 @@ interface RecipeFilterProps {
   setPlannerAge: (searchTerm: string | undefined) => void;
   classList?: string;
   showSettings?: boolean;
-  settingItems?: React.ReactNode;
+  settingViewItems?: React.ReactNode;
+  settingOrderItems?: React.ReactNode;
+  showOrderSettings?: boolean;
 }
 
 const debounceDelay = 500;
@@ -72,7 +74,9 @@ const RecipeSearchInput = ({
   setPlannerAge,
   classList,
   showSettings = false,
-  settingItems,
+  settingViewItems,
+  settingOrderItems,
+  showOrderSettings = false,
 }: RecipeFilterProps) => {
   const t = useTranslations();
   const { darkMode } = useGlobalStore();
@@ -213,8 +217,15 @@ const RecipeSearchInput = ({
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuLabel>{t("Recipes.View.View")}</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {settingItems}
+              {settingViewItems}
+              {showOrderSettings && (
+                <>
+                  <DropdownMenuLabel>
+                    {t("Recipes.View.OrderBy")}
+                  </DropdownMenuLabel>
+                  {settingOrderItems}
+                </>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         )}
