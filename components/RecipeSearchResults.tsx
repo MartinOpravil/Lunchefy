@@ -60,6 +60,7 @@ const RecipeSearchResults = ({
                 recipeListPaginated={filteredRecipesPaginated}
                 privilage={privilage}
                 showTags={showTags}
+                groupByPlannerDate={!!dateMiliseconds}
               />
             )}
           </>
