@@ -377,6 +377,12 @@
       "OrderBy": "Řazení podle",
       "CreationDate": "Data vytvoření",
       "Name": "Názvu"
+    },
+    "Planner": {
+      "ThisWeek": "Tento týden",
+      "LastWeek": "Minulý týden",
+      "XWeeksAgo": "Před {week} týdny",
+      "NotYetPlanned": "Ještě nebylo plánováno"
     }
   },
   "Users": {

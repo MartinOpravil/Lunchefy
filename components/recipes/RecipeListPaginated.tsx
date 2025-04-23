@@ -29,17 +29,32 @@ const RecipeListPaginated = ({
   showTags = false,
   groupByPlannerDate = false,
 }: RecipeListPaginatedProps) => {
-  const t = useTranslations("Recipes.Scroll");
+  const t = useTranslations("Recipes");
+
+  const MS_PER_WEEK = 7 * 24 * 60 * 60 * 1000;
+  const now = Date.now();
+
+  const label = (weekDiff: number) =>
+    weekDiff === 0
+      ? t("Planner.ThisWeek")
+      : weekDiff === 1
+        ? t("Planner.LastWeek")
+        : t("Planner.XWeeksAgo", { week: weekDiff });
 
   const recipeListGroupedByPlannerDate = useMemo(() => {
     if (!groupByPlannerDate) return undefined;
 
-    const groupedByMonth = recipeListPaginated.results.reduce<GroupedRecipes>(
+    const groupedByWeek = recipeListPaginated.results.reduce<GroupedRecipes>(
       (acc, recipe) => {
-        if (!recipe.plannerDate) return acc;
-        const date = new Date(recipe.plannerDate);
-        // const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
-        const key = `${date?.toLocaleDateString("CS", { month: "long" })}`;
+        let key = "";
+        if (!recipe.plannerDate) {
+          key = t("Planner.NotYetPlanned");
+        } else {
+          const diffInMs = now - recipe.plannerDate;
+          const weekDiff = Math.floor(diffInMs / MS_PER_WEEK);
+
+          key = label(weekDiff);
+        }
 
         if (!acc[key]) {
           acc[key] = [];
@@ -51,29 +66,25 @@ const RecipeListPaginated = ({
       {}
     );
 
-    return groupedByMonth;
-  }, [recipeListPaginated, groupByPlannerDate]);
+    return groupedByWeek;
+  }, [recipeListPaginated, groupByPlannerDate, t]);
 
   return (
     <>
-      <div className={cn({ "recipe-grid": !groupByPlannerDate })}>
-        {/* {recipeListGroupedByPlannerDate ? (
-          <>{Object.keys(recipeListGroupedByPlannerDate).length}</>
-        ) : (
-          <>"Nothing"</>
-        )} */}
+      <div
+        className={cn("flex flex-col gap-8", {
+          "recipe-grid": !groupByPlannerDate,
+        })}
+      >
         {recipeListGroupedByPlannerDate ? (
           <>
             {Object.entries(recipeListGroupedByPlannerDate).map(
               ([month, recipes]: [string, Doc<"recipes">[]]) => (
-                <>
-                  <div
-                    key={`${month}`}
-                    className="flex w-full py-2 justify-center items-center"
-                  >
-                    {month}
+                <div key={month}>
+                  <div className="flex w-full py-8 items-center justify-start">
+                    <h3 className="opacity-70">{month}</h3>
                   </div>
-                  <div key={`${month}-recipes`} className="recipe-grid">
+                  <div className="recipe-grid">
                     {recipes?.map((recipe) => (
                       <Recipe
                         key={recipe._id}
@@ -83,7 +94,7 @@ const RecipeListPaginated = ({
                       />
                     ))}
                   </div>
-                </>
+                </div>
               )
             )}
           </>
@@ -108,13 +119,15 @@ const RecipeListPaginated = ({
           {recipeListPaginated.status !== "Exhausted" && (
             <div className="h-full w-full relative">
               <Skeleton className="h-full w-full bg-primary/30" />
-              <div className="absolute top-0 left-0 w-full h-full text-white-1 flex flex-col justify-center items-center gap-2">
-                <Mouse />
-                <div className="text-center">
-                  {t("Top")}
-                  <h3 className="text-white-1">{t("Bottom")}</h3>
+              {!groupByPlannerDate && (
+                <div className="absolute top-0 left-0 w-full h-full text-white-1 flex flex-col justify-center items-center gap-2">
+                  <Mouse />
+                  <div className="text-center">
+                    {t("Scroll.Top")}
+                    <h3 className="text-white-1">{t("Scroll.Bottom")}</h3>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           )}
         </InfiniteScroll>

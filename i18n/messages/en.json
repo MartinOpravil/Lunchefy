@@ -379,6 +379,12 @@
       "OrderBy": "Order by",
       "CreationDate": "Creation date",
       "Name": "Name"
+    },
+    "Planner": {
+      "ThisWeek": "This week",
+      "LastWeek": "Last week",
+      "XWeeksAgo": "{week} weeks ago",
+      "NotYetPlanned": "Not yet planned"
     }
   },
   "Users": {

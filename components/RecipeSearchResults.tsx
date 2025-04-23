@@ -45,7 +45,7 @@ const RecipeSearchResults = ({
 
   return (
     <div className="flex flex-col gap-4 justify-center items-start w-full @container">
-      <h3>{t("General.SearchResults")}</h3>
+      {!dateMiliseconds && <h3>{t("General.SearchResults")}</h3>}
 
       {!filteredRecipesPaginated && (
         <Loader2 className="my-4 h-8 w-8 animate-spin" />
