@@ -51,6 +51,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { getPlannerAgeMiliseconds } from "@/lib/time";
 import { useGroupStore } from "@/store/group";
+import { DEFAULT_RECIPE_ORDER_BY } from "@/constants/order";
 
 interface GroupPageProps {
   userPreloaded: Preloaded<typeof api.users.getLoggedUser>;
@@ -85,7 +86,7 @@ const GroupPage = ({
 
   const { convertToValues } = useTagManager();
 
-  const [orderBy, setOrderBy] = useState<OrderBy>(OrderBy.CreationDateDescend);
+  const [orderBy, setOrderBy] = useState<OrderBy>(DEFAULT_RECIPE_ORDER_BY);
 
   const [resetForm, setResetForm] = useState<(() => void) | null>(null);
   const coverImageRef = useRef<ImageInputHandle>(null);
@@ -272,24 +273,25 @@ const GroupPage = ({
                   value={orderBy}
                   onValueChange={(val: string) => setOrderBy(val as OrderBy)}
                 >
-                  <DropdownMenuRadioItem value={OrderBy.CreationDateAscend}>
-                    <div className="flex gap-2 items-center">
-                      <ClockArrowUp /> {t("Recipes.View.CreationDate")}
-                    </div>
-                  </DropdownMenuRadioItem>
                   <DropdownMenuRadioItem value={OrderBy.CreationDateDescend}>
                     <div className="flex gap-2 items-center">
                       <ClockArrowDown /> {t("Recipes.View.CreationDate")}
                     </div>
                   </DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value={OrderBy.CreationDateAscend}>
+                    <div className="flex gap-2 items-center">
+                      <ClockArrowUp /> {t("Recipes.View.CreationDate")}
+                    </div>
+                  </DropdownMenuRadioItem>
+
                   <DropdownMenuRadioItem value={OrderBy.NameAscend}>
                     <div className="flex gap-2 items-center">
-                      <ArrowUpAZ /> {t("Recipes.View.Name")}
+                      <ArrowDownAZ /> {t("Recipes.View.Name")}
                     </div>
                   </DropdownMenuRadioItem>
                   <DropdownMenuRadioItem value={OrderBy.NameDescend}>
                     <div className="flex gap-2 items-center">
-                      <ArrowDownAZ /> {t("Recipes.View.Name")}
+                      <ArrowUpAZ /> {t("Recipes.View.Name")}
                     </div>
                   </DropdownMenuRadioItem>
                 </DropdownMenuRadioGroup>

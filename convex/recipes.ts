@@ -6,6 +6,7 @@ import { v } from "convex/values";
 import { paginationOptsValidator, QueryInitializer } from "convex/server";
 import { Author } from "@/types";
 import { removeDiacritics } from "@/lib/utils";
+import { DEFAULT_RECIPE_ORDER_BY } from "@/constants/order";
 
 export const getRecipes = query({
   args: {
@@ -46,7 +47,7 @@ export const getRecipes = query({
           .withIndex("by_planner_date")
           .order("desc");
       } else {
-        const orderBy = args.orderBy as OrderBy | undefined;
+        const orderBy = (args.orderBy as OrderBy) ?? DEFAULT_RECIPE_ORDER_BY;
         switch (orderBy) {
           case OrderBy.CreationDateAscend:
             query = ctx.db.query("recipes").order("asc");
