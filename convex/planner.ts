@@ -195,15 +195,18 @@ export const removeRecipeFromDate = mutation({
       groupId: plan.groupId,
       recipeId: plan.recipeId,
     });
+
+    let latestRecipePlanDateMiliseconds;
+
     if (latestRecipePlanDate.data) {
-      const latestRecipePlanDateMiliseconds = new Date(
+      latestRecipePlanDateMiliseconds = new Date(
         latestRecipePlanDate.data
       ).getTime();
-
-      await ctx.db.patch(plan.recipeId, {
-        plannerDate: latestRecipePlanDateMiliseconds,
-      });
     }
+
+    await ctx.db.patch(plan.recipeId, {
+      plannerDate: latestRecipePlanDateMiliseconds,
+    });
 
     return createOKResponse(true);
   },

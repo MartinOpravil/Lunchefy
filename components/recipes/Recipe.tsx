@@ -11,6 +11,7 @@ import LoaderSpinner from "../global/LoaderSpinner";
 import { Doc } from "@/convex/_generated/dataModel";
 import ChosenImage from "../global/ChosenImage";
 import RecipeTagList from "./RecipeTagList";
+import AssignRecipeToTodayButton from "./AssignRecipeToTodayButton";
 
 export interface RecipeProps {
   recipe: Doc<"recipes">;
@@ -62,14 +63,9 @@ const Recipe = ({
             image={recipe.coverImage}
             classList="transition-all group-hover:scale-105"
           />
-          {showTags && recipe.tags && !vertical && (
-            <div className="transition-all absolute top-2 bg-background px-2 rounded-xl opacity-60 group-hover:opacity-80">
-              <RecipeTagList recipeTags={recipe.tags} useName={false} dense />
-            </div>
-          )}
         </div>
         {isRoutingToOverview && (
-          <LoaderSpinner classList="absolute top-2 right-2 !text-primary" />
+          <LoaderSpinner classList="absolute top-2 left-2 !text-primary" />
         )}
         <div className="flex flex-col justify-between w-full flex-grow p-2 gap-2 ">
           <div className="flex flex-col pt-1 px-1 gap-2 pb-2">
@@ -91,6 +87,25 @@ const Recipe = ({
         </div>
         {useVerticalButton && <div className="w-28 h-10" />}
       </Link>
+      <div className="absolute top-2 w-full px-2 pointer-events-none">
+        {!vertical && (
+          <>
+            {showTags && recipe.tags && (
+              <div className="transition-all w-fit bg-background mx-auto px-2 rounded-xl opacity-60 group-hover:opacity-80 mb-2">
+                <RecipeTagList recipeTags={recipe.tags} useName={false} dense />
+              </div>
+            )}
+
+            <div className="text-right">
+              <AssignRecipeToTodayButton
+                recipeId={recipe._id}
+                groupId={recipe.groupId}
+                isCardVariant
+              />
+            </div>
+          </>
+        )}
+      </div>
       {privilage !== Privilage.Viewer && (
         <div className="absolute top-[7.75rem] w-full p-2 flex justify-between items-center pointer-events-none">
           {privilage === Privilage.Owner && (
