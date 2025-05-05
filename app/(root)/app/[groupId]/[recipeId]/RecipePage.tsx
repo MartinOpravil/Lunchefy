@@ -14,6 +14,7 @@ import { useTranslations } from "next-intl";
 import React, { useRef } from "react";
 import RecipeChangeBanner from "@/components/recipes/RecipeChangeBanner";
 import AssignRecipeToTodayButton from "@/components/recipes/AssignRecipeToTodayButton";
+import { useGroupStore } from "@/store/group";
 
 interface RecipePageProps {
   recipePreloaded: Preloaded<typeof api.recipes.getRecipeById>;
@@ -21,6 +22,7 @@ interface RecipePageProps {
 
 const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
   const t = useTranslations("Recipes.General");
+  const { isRecipeInTodayList } = useGroupStore();
   const recipe = usePreloadedQuery(recipePreloaded);
   const lightboxRef = useRef<LightboxHandle>(null);
 
@@ -58,10 +60,12 @@ const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
         }
         rightSide={
           <>
-            <AssignRecipeToTodayButton
-              recipeId={recipe.data._id}
-              groupId={recipe.data.groupId}
-            />
+            {!isRecipeInTodayList(recipe.data._id) && (
+              <AssignRecipeToTodayButton
+                recipeId={recipe.data._id}
+                groupId={recipe.data.groupId}
+              />
+            )}
             {recipe.data.privilage !== Privilage.Viewer && (
               <LinkButton
                 icon={<Pencil />}

@@ -35,7 +35,7 @@ import {
   Plus,
   Tags,
 } from "lucide-react";
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { SubmitHandler } from "react-hook-form";
 import NoContent from "@/components/global/NoContent";
 import Recipe from "@/components/recipes/Recipe";
@@ -77,12 +77,22 @@ const GroupPage = ({
     setSearchTags,
     planAge,
     setPlanAge,
+    setTodayRecipeList,
   } = useGroupStore();
   const user = usePreloadedQuery(userPreloaded);
   const group = usePreloadedQuery(groupPreloaded);
   const initialRecipes = usePreloadedQuery(recipesPreloaded);
   const createRecipe = useMutation(api.recipes.createRecipe);
   const todayRecipe = usePreloadedQuery(todayRecipePreload);
+
+  useEffect(() => {
+    if (todayRecipe.data)
+      setTodayRecipeList(
+        todayRecipe.data.map((x) => {
+          return { id: x._id, name: x.name };
+        })
+      );
+  }, [todayRecipe]);
 
   const { convertToValues } = useTagManager();
 
@@ -232,13 +242,7 @@ const GroupPage = ({
             )}
           </>
         }
-        topRightSide={
-          <PlannerButton
-            groupId={group.data._id}
-            todayRecipeName={todayRecipe.data?.[0]?.name}
-            todayRecipeCount={todayRecipe.data?.length}
-          />
-        }
+        topRightSide={<PlannerButton groupId={group.data._id} />}
       />
       <section className="page-content gap-6">
         {!!initialRecipes.page.length && (

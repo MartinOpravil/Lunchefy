@@ -12,6 +12,7 @@ import { Doc } from "@/convex/_generated/dataModel";
 import ChosenImage from "../global/ChosenImage";
 import RecipeTagList from "./RecipeTagList";
 import AssignRecipeToTodayButton from "./AssignRecipeToTodayButton";
+import { useGroupStore } from "@/store/group";
 
 export interface RecipeProps {
   recipe: Doc<"recipes">;
@@ -32,6 +33,7 @@ const Recipe = ({
   showTags = false,
   classList,
 }: RecipeProps) => {
+  const { isRecipeInTodayList } = useGroupStore();
   const [isRoutingToOverview, setIsRoutingToOverview] = useState(false);
 
   if (!recipe) return <></>;
@@ -96,13 +98,15 @@ const Recipe = ({
               </div>
             )}
 
-            <div className="text-right">
-              <AssignRecipeToTodayButton
-                recipeId={recipe._id}
-                groupId={recipe.groupId}
-                isCardVariant
-              />
-            </div>
+            {!isRecipeInTodayList(recipe._id) && (
+              <div className="text-right">
+                <AssignRecipeToTodayButton
+                  recipeId={recipe._id}
+                  groupId={recipe.groupId}
+                  isCardVariant
+                />
+              </div>
+            )}
           </>
         )}
       </div>

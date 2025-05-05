@@ -11,17 +11,17 @@ import { Id } from "@/convex/_generated/dataModel";
 import { convertToServerTime } from "@/lib/time";
 import { useTranslations } from "next-intl";
 
-interface AddRecipeToTodayPlanButtonProps {
+interface AssignRecipeToTodayPlanButtonProps {
   recipeId: GenericId<"recipes">;
   groupId: GenericId<"groups">;
   isCardVariant?: boolean;
 }
 
-const AddRecipeToTodayPlanButton = ({
+const AssignRecipeToTodayPlanButton = ({
   recipeId,
   groupId,
   isCardVariant = false,
-}: AddRecipeToTodayPlanButtonProps) => {
+}: AssignRecipeToTodayPlanButtonProps) => {
   const t = useTranslations();
   const assignRecipeToDate = useMutation(api.planner.assignRecipeToDate);
   const [isLoading, setIsLoading] = useState(false);
@@ -86,4 +86,4 @@ const AddRecipeToTodayPlanButton = ({
   );
 };
 
-export default AddRecipeToTodayPlanButton;
+export default AssignRecipeToTodayPlanButton;

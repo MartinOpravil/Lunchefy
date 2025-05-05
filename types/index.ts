@@ -61,3 +61,8 @@ export interface Author {
   date: number;
   imageSrc: string;
 }
+
+export type RecipeRef = {
+  id: string;
+  name: string;
+};

@@ -4,19 +4,15 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import React, { useState } from "react";
 import LoaderSpinner from "../global/LoaderSpinner";
+import { useGroupStore } from "@/store/group";
 
 interface PlannerButtonProps {
   groupId: string;
-  todayRecipeName?: string;
-  todayRecipeCount?: number;
 }
 
-const PlannerButton = ({
-  groupId,
-  todayRecipeName,
-  todayRecipeCount,
-}: PlannerButtonProps) => {
+const PlannerButton = ({ groupId }: PlannerButtonProps) => {
   const t = useTranslations();
+  const { todayRecipeList, getTodayRecipe } = useGroupStore();
 
   const [isRouting, setIsRouting] = useState(false);
 
@@ -46,15 +42,13 @@ const PlannerButton = ({
         </div>
         <div className="flex gap-2 items-center">
           <span className="text-primary text-[18px]">
-            {todayRecipeCount
-              ? todayRecipeName
-              : t("Groups.Planner.TodayNoRecipe")}
+            {getTodayRecipe()?.name ?? t("Groups.Planner.TodayNoRecipe")}
           </span>
         </div>
       </div>
-      {(todayRecipeCount ?? 0) > 1 && (
+      {(todayRecipeList?.length ?? 0) > 1 && (
         <div className="p-1.5 rounded-full bg-primary flex justify-center items-center text-14 text-white-1 mr-2 w-8 h-8">
-          {`+${todayRecipeCount! - 1}`}
+          {`+${todayRecipeList?.length! - 1}`}
         </div>
       )}
     </Link>
