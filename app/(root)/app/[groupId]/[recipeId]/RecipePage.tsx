@@ -1,19 +1,19 @@
 "use client";
-import Lightbox, { LightboxHandle } from "@/components/global/Lightbox";
-import LinkButton from "@/components/global/LinkButton";
-import ChosenImage from "@/components/global/ChosenImage";
-import PageHeader from "@/components/global/PageHeader";
-import LatestRecipeDateInPlanner from "@/components/recipes/LatestRecipeDateInPlanner";
-import RecipeTagList from "@/components/recipes/RecipeTagList";
-import SimilarRecipes from "@/components/recipes/SimilarRecipes";
+import Lightbox, { LightboxHandle } from "@/components/global/image/Lightbox";
+import LinkButton from "@/components/global/button/LinkButton";
+import ChosenImage from "@/components/global/image/ChosenImage";
+import PageHeader from "@/components/global/content/PageHeader";
+import LatestRecipeDateInPlanner from "@/components/recipe/LatestRecipeDateInPlanner";
+import RecipeTagList from "@/components/recipe/tag/RecipeTagList";
+import SimilarRecipes from "@/components/recipe/SimilarRecipes";
 import { api } from "@/convex/_generated/api";
 import { ButtonVariant, Privilage } from "@/enums";
 import { Preloaded, usePreloadedQuery } from "convex/react";
 import { ArrowLeft, CalendarDays, Pencil } from "lucide-react";
 import { useTranslations } from "next-intl";
 import React, { useRef } from "react";
-import RecipeChangeBanner from "@/components/recipes/RecipeChangeBanner";
-import AssignRecipeToTodayButton from "@/components/recipes/AssignRecipeToTodayButton";
+import RecipeChangeBanner from "@/components/recipe/RecipeChangeBanner";
+import AssignRecipeToTodayButton from "@/components/recipe/button/AssignRecipeToTodayButton";
 import { useGroupStore } from "@/store/group";
 
 interface RecipePageProps {

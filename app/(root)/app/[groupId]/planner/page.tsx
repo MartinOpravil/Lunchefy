@@ -4,7 +4,7 @@ import PlannerPage from "./PlannerPage";
 import { getAuthToken } from "@/lib/authentication";
 import { preloadQuery } from "convex/nextjs";
 import { api } from "@/convex/_generated/api";
-import ContentHandler from "@/components/global/ContentHandler";
+import ContentHandler from "@/components/global/content/ContentHandler";
 import { getISOMonth } from "@/lib/time";
 
 interface PlannerServerPageProps {

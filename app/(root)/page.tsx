@@ -1,4 +1,5 @@
-import LinkButton from "@/components/global/LinkButton";
+import "./homepage.css";
+import LinkButton from "@/components/global/button/LinkButton";
 import { Card } from "@/components/ui/card";
 import { ButtonVariant } from "@/enums";
 import { SignedIn } from "@clerk/nextjs";

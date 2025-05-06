@@ -2,7 +2,7 @@
 import { ClerkProvider, useAuth } from "@clerk/nextjs";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
 import { ConvexReactClient } from "convex/react";
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 import { csCZ, enUS } from "@clerk/localizations";
 import { useLocale } from "next-intl";
 

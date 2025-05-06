@@ -1,6 +1,6 @@
+import "./globals.css";
 import type { Metadata } from "next";
 import { Inter, Playfair, Marck_Script } from "next/font/google";
-import "./globals.css";
 import ConvexClerkProvider from "./providers/ConvexClerkProvider";
 import { Toaster } from "sonner";
 import { ConvexQueryCacheProvider } from "convex-helpers/react/cache/provider";

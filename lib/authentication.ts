@@ -6,7 +6,7 @@ export async function getAuthToken() {
 
   try {
     const token = await getToken({ template: "convex" });
-    // console.log("token: ", token);
+
     if (!token) {
       console.log("No token available, redirecting to sign-in...");
       redirect("/sign-in?loggedOut=true");

@@ -15,7 +15,6 @@ const ThemeProvider = ({
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      // console.log("Setting dark mode to:", hasDarkMode);
       setDarkMode(hasDarkMode, false);
     }
   }, []);

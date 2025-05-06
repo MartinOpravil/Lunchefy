@@ -4,7 +4,7 @@ import { getAuthToken } from "@/lib/authentication";
 import { preloadQuery } from "convex/nextjs";
 import React from "react";
 import RecipePage from "./RecipePage";
-import ContentHandler from "@/components/global/ContentHandler";
+import ContentHandler from "@/components/global/content/ContentHandler";
 
 interface RecipeDetailServerPageProps {
   params: Promise<{ recipeId: Id<"recipes"> }>;

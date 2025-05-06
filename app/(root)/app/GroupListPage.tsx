@@ -1,14 +1,14 @@
 "use client";
 import { api } from "@/convex/_generated/api";
 import React, { useRef, useState } from "react";
-import GroupList from "@/components/groups/GroupList";
+import GroupList from "@/components/group/item/GroupList";
 import { Preloaded, useMutation, usePreloadedQuery } from "convex/react";
 import { HttpResponseCode } from "@/enums";
 import { ImageInputHandle, ImageStateProps } from "@/types";
-import NewGroupHeader from "@/components/groups/header/NewGroupHeader";
-import FormProviderWrapper from "@/components/FormProviderWrapper";
+import NewGroupHeader from "@/components/group/header/NewGroupHeader";
+import FormProviderWrapper from "@/components/global/form/FormProviderWrapper";
 import { groupFormSchema, GroupFormValues } from "@/constants/formSchema";
-import GroupForm from "@/components/groups/form/GroupForm";
+import GroupForm from "@/components/group/form/GroupForm";
 import { SubmitHandler } from "react-hook-form";
 import { notifyError, notifySuccess } from "@/lib/notifications";
 import { useTranslations } from "next-intl";

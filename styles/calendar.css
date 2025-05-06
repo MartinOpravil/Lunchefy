@@ -1,0 +1,18 @@
+.calendar-month {
+  @apply font-[400] !text-[20px];
+  font-family: var(--font-playfair);
+}
+.event-day,
+.select-day {
+  @apply relative z-10 text-background;
+  &::before {
+    @apply absolute w-8 h-8 top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] m-auto bg-secondary/70 rounded-full z-[-1];
+    content: "";
+  }
+}
+
+.select-day {
+  &::before {
+    @apply bg-primary/70;
+  }
+}

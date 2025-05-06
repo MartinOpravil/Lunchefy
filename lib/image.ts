@@ -33,7 +33,7 @@ export const convertImageToWebP = async (
     image.width > preferedImageMaxWidth
       ? image.width / preferedImageMaxWidth
       : 1;
-  // console.log(`width: ${image.width}, scaleFactor: ${scaleFactor}`);
+
   canvas.width = image.width / scaleFactor;
   canvas.height = image.height / scaleFactor;
 

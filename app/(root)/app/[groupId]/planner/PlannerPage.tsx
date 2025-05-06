@@ -6,8 +6,8 @@ import { isSameDay } from "date-fns";
 import { Preloaded, useMutation, usePreloadedQuery } from "convex/react";
 import { useQuery } from "convex-helpers/react/cache";
 import { api } from "@/convex/_generated/api";
-import PageHeader from "@/components/global/PageHeader";
-import LinkButton from "@/components/global/LinkButton";
+import PageHeader from "@/components/global/content/PageHeader";
+import LinkButton from "@/components/global/button/LinkButton";
 import {
   ArrowLeft,
   CalendarFold,
@@ -23,7 +23,7 @@ import {
   Privilage,
   SearchBy,
 } from "@/enums";
-import ActionButton from "@/components/global/ActionButton";
+import ActionButton from "@/components/global/button/ActionButton";
 import { notifyError, notifySuccess } from "@/lib/notifications";
 import { Id } from "@/convex/_generated/dataModel";
 import {
@@ -33,15 +33,15 @@ import {
   getPlannerAgeMiliseconds,
 } from "@/lib/time";
 import { Plan } from "@/types";
-import ActionDialog from "@/components/global/ActionDialog";
-import BasicDialog from "@/components/global/BasicDialog";
+import ActionDialog from "@/components/global/dialog/ActionDialog";
+import BasicDialog from "@/components/global/dialog/BasicDialog";
 import RecipeSearchInput, {
   RecipeFilterVariant,
-} from "@/components/RecipeSearchInput";
+} from "@/components/recipe/search/RecipeSearchInput";
 import { Option } from "@/components/ui/multiple-selector";
-import PlannerRecipeResultList from "@/components/PlannerRecipeResultList";
+import PlannerRecipeResultList from "@/components/recipe/search/PlannerRecipeResultList";
 import { useLocale, useTranslations } from "next-intl";
-import Recipe from "@/components/recipes/Recipe";
+import Recipe from "@/components/recipe/item/Recipe";
 import { cn } from "@/lib/utils";
 
 enum RecipeAction {

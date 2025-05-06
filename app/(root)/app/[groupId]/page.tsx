@@ -5,7 +5,7 @@ import React from "react";
 import GroupPage from "./GroupPage";
 import { RECIPES_INITIAL_COUNT } from "@/constants/pagination";
 import { GenericId } from "convex/values";
-import ContentHandler from "@/components/global/ContentHandler";
+import ContentHandler from "@/components/global/content/ContentHandler";
 
 interface GroupServerPageProps {
   params: Promise<{ groupId: GenericId<"groups"> }>;

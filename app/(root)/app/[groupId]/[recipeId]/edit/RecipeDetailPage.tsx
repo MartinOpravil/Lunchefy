@@ -1,8 +1,8 @@
 "use client";
-import FormProviderWrapper from "@/components/FormProviderWrapper";
-import RecipeDetailHeader from "@/components/recipes/Detail/RecipeDetailHeader";
-import RecipeForm from "@/components/recipes/Form/RecipeForm";
-import { useTagManager } from "@/components/recipes/TagManager";
+import FormProviderWrapper from "@/components/global/form/FormProviderWrapper";
+import EditRecipeHeader from "@/components/recipe/header/EditRecipeHeader";
+import RecipeForm from "@/components/recipe/form/RecipeForm";
+import { useTagManager } from "@/components/recipe/tag/TagManager";
 import { recipeFormSchema, RecipeFormValues } from "@/constants/formSchema";
 import { api } from "@/convex/_generated/api";
 import { HttpResponseCode } from "@/enums";
@@ -100,7 +100,7 @@ const RecipeDetailPage = ({
       recipeImageRef={recipeImageRef}
     >
       <main className="page page-width-normal">
-        <RecipeDetailHeader recipe={recipe} />
+        <EditRecipeHeader recipe={recipe} />
         <main className="page-content">
           {user.data && (
             <RecipeForm recipe={recipe} isVerified={user.data.isVerified} />

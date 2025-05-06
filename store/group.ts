@@ -20,15 +20,18 @@ type GroupStore = {
 
 export const useGroupStore = create<GroupStore>((set, get) => ({
   searchBy: SearchBy.Name,
-  searchTerm: "",
-  searchTags: [],
-  planAge: undefined,
-  todayRecipeList: undefined,
-
   setSearchBy: (searchBy: SearchBy) => set((state) => ({ searchBy })),
+
+  searchTerm: "",
   setSearchTerm: (searchTerm: string) => set((state) => ({ searchTerm })),
+
+  searchTags: [],
   setSearchTags: (searchTags: Option[]) => set((state) => ({ searchTags })),
+
+  planAge: undefined,
   setPlanAge: (planAge: string | undefined) => set((state) => ({ planAge })),
+
+  todayRecipeList: undefined,
   setTodayRecipeList: (recipeList?: RecipeRef[]) =>
     set((state) => ({ todayRecipeList: recipeList })),
   getTodayRecipe: () => get().todayRecipeList?.[0],

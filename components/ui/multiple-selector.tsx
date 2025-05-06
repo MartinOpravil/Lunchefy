@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { useTagManager } from "../recipes/TagManager";
+import { useTagManager } from "../recipe/tag/TagManager";
 
 export interface Option {
   value: string;

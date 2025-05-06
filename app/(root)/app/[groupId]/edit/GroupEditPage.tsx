@@ -1,7 +1,7 @@
 "use client";
-import FormProviderWrapper from "@/components/FormProviderWrapper";
-import GroupForm from "@/components/groups/form/GroupForm";
-import GroupEditHeader from "@/components/groups/edit/GroupEditHeader";
+import FormProviderWrapper from "@/components/global/form/FormProviderWrapper";
+import GroupForm from "@/components/group/form/GroupForm";
+import EditGroupHeader from "@/components/group/header/EditGroupHeader";
 import { groupFormSchema, GroupFormValues } from "@/constants/formSchema";
 import { api } from "@/convex/_generated/api";
 import { notifyError, notifySuccess } from "@/lib/notifications";
@@ -83,7 +83,7 @@ const GroupEditPage = ({
       coverImageRef={coverImageRef}
     >
       <main className="page page-width-normal">
-        <GroupEditHeader group={group} />
+        <EditGroupHeader group={group} />
         <section className="page-content">
           {user.data && (
             <GroupForm group={group} isVerified={user.data.isVerified} />

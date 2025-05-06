@@ -1,7 +1,7 @@
 "use server";
 import { cookies } from "next/headers";
 
-const DARK_MODE_KEY = "darkMode";
+const DARK_MODE_KEY = "DARK_MODE";
 
 export const getDarkModeCookie = async (): Promise<boolean> => {
   const cookieStore = await cookies();

@@ -1,5 +1,5 @@
 "use client";
-
+import "../../styles/calendar.css";
 import * as React from "react";
 import { ChevronLeft, ChevronRight, LoaderCircle } from "lucide-react";
 import { DayPicker, getDefaultClassNames } from "react-day-picker";

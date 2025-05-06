@@ -4,7 +4,7 @@ import React from "react";
 import { preloadQuery } from "convex/nextjs";
 import { getAuthToken } from "@/lib/authentication";
 import GroupEditPage from "./GroupEditPage";
-import ContentHandler from "@/components/global/ContentHandler";
+import ContentHandler from "@/components/global/content/ContentHandler";
 
 interface GroupEditServerPageProps {
   params: Promise<{ groupId: Id<"groups"> }>;

@@ -1,12 +1,12 @@
 "use client";
-import FormProviderWrapper from "@/components/FormProviderWrapper";
-import ActionButton from "@/components/global/ActionButton";
-import LinkButton from "@/components/global/LinkButton";
-import PageHeader from "@/components/global/PageHeader";
-import RecipeForm from "@/components/recipes/Form/RecipeForm";
-import NewRecipeHeader from "@/components/recipes/headers/NewRecipeHeader";
-import RecipesPaginated from "@/components/recipes/RecipeListPaginated";
-import RecipeSearchResults from "@/components/RecipeSearchResults";
+import FormProviderWrapper from "@/components/global/form/FormProviderWrapper";
+import ActionButton from "@/components/global/button/ActionButton";
+import LinkButton from "@/components/global/button/LinkButton";
+import PageHeader from "@/components/global/content/PageHeader";
+import RecipeForm from "@/components/recipe/form/RecipeForm";
+import NewRecipeHeader from "@/components/recipe/header/NewRecipeHeader";
+import RecipesPaginated from "@/components/recipe/item/RecipeListPaginated";
+import RecipeSearchResults from "@/components/recipe/search/RecipeSearchResults";
 import { recipeFormSchema, RecipeFormValues } from "@/constants/formSchema";
 import { api } from "@/convex/_generated/api";
 import {
@@ -37,13 +37,13 @@ import {
 } from "lucide-react";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { SubmitHandler } from "react-hook-form";
-import NoContent from "@/components/global/NoContent";
-import Recipe from "@/components/recipes/Recipe";
+import NoContent from "@/components/global/content/NoContent";
+import Recipe from "@/components/recipe/item/Recipe";
 import { RECIPES_INITIAL_COUNT } from "@/constants/pagination";
-import RecipeSearchInput from "@/components/RecipeSearchInput";
+import RecipeSearchInput from "@/components/recipe/search/RecipeSearchInput";
 import { useTranslations } from "next-intl";
-import { useTagManager } from "@/components/recipes/TagManager";
-import PlannerButton from "@/components/groups/PlannerButton";
+import { useTagManager } from "@/components/recipe/tag/TagManager";
+import PlannerButton from "@/components/group/button/PlannerButton";
 import {
   DropdownMenuCheckboxItem,
   DropdownMenuRadioGroup,
