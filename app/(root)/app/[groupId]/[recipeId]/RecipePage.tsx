@@ -1,19 +1,24 @@
 "use client";
-import Lightbox, { LightboxHandle } from "@/components/global/image/Lightbox";
-import LinkButton from "@/components/global/button/LinkButton";
-import ChosenImage from "@/components/global/image/ChosenImage";
-import PageHeader from "@/components/global/content/PageHeader";
-import LatestRecipeDateInPlanner from "@/components/recipe/LatestRecipeDateInPlanner";
-import RecipeTagList from "@/components/recipe/tag/RecipeTagList";
-import SimilarRecipes from "@/components/recipe/SimilarRecipes";
+
+import { useRef } from "react";
+
+import { useTranslations } from "next-intl";
+
 import { api } from "@/convex/_generated/api";
-import { ButtonVariant, Privilage } from "@/enums";
 import { Preloaded, usePreloadedQuery } from "convex/react";
 import { ArrowLeft, CalendarDays, Pencil } from "lucide-react";
-import { useTranslations } from "next-intl";
-import React, { useRef } from "react";
+
+import LinkButton from "@/components/global/button/LinkButton";
+import PageHeader from "@/components/global/content/PageHeader";
+import ChosenImage from "@/components/global/image/ChosenImage";
+import Lightbox, { LightboxHandle } from "@/components/global/image/Lightbox";
+import LatestRecipeDateInPlanner from "@/components/recipe/LatestRecipeDateInPlanner";
 import RecipeChangeBanner from "@/components/recipe/RecipeChangeBanner";
+import SimilarRecipes from "@/components/recipe/SimilarRecipes";
 import AssignRecipeToTodayButton from "@/components/recipe/button/AssignRecipeToTodayButton";
+import RecipeTagList from "@/components/recipe/tag/RecipeTagList";
+
+import { ButtonVariant, Privilage } from "@/enums";
 import { useGroupStore } from "@/store/group";
 
 interface RecipePageProps {
@@ -77,29 +82,29 @@ const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
         }
       />
       <section className="page-content">
-        <div className="flex flex-col w-full gap-16">
+        <div className="flex w-full flex-col gap-16">
           {recipe.data.description && (
-            <div className="text-16 sm:text-[20px] text-text">
+            <div className="text-16 text-text sm:text-[20px]">
               {recipe.data.description}
             </div>
           )}
           {recipe.data.coverImage &&
             (recipe.data.coverImage.imageUrl ||
               recipe.data.coverImage.externalUrl) && (
-              <div className="rounded-xl overflow-hidden w-full aspect-[16/10] outline outline-2 outline-transparent hover:outline-primary transition-all">
+              <div className="aspect-[16/10] w-full overflow-hidden rounded-xl outline outline-2 outline-transparent transition-all hover:outline-primary">
                 <ChosenImage
                   image={recipe.data.coverImage}
                   onClick={() =>
                     lightboxRef.current?.setOpen(
                       recipe.data?.coverImage?.imageUrl ||
-                        recipe.data?.coverImage?.externalUrl
+                        recipe.data?.coverImage?.externalUrl,
                     )
                   }
                 />
               </div>
             )}
-          <div className="flex flex-col sm:flex-row gap-20">
-            <div className="flex flex-col flex-grow">
+          <div className="flex flex-col gap-20 sm:flex-row">
+            <div className="flex flex-grow flex-col">
               {!recipe.data.isImageRecipe ? (
                 <div className="flex flex-col gap-12">
                   {recipe.data.ingredients && (
@@ -108,7 +113,7 @@ const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
                         {t("Form.Property.Ingredients")}
                       </h2>
                       <div
-                        className="prose prose-big"
+                        className="prose-big prose"
                         dangerouslySetInnerHTML={{
                           __html: recipe.data.ingredients ?? "",
                         }}
@@ -121,7 +126,7 @@ const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
                         {t("Form.Property.Instructions")}
                       </h2>
                       <div
-                        className="prose prose-big"
+                        className="prose-big prose"
                         dangerouslySetInnerHTML={{
                           __html: recipe.data.instructions ?? "",
                         }}
@@ -139,12 +144,12 @@ const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
                       {recipe.data.recipeImage &&
                         (recipe.data.recipeImage.imageUrl ||
                           recipe.data.recipeImage.externalUrl) && (
-                          <div className="flex rounded-lg overflow-hidden h-full max-h-[800px] outline outline-2 outline-transparent hover:outline-primary transition-all">
+                          <div className="flex h-full max-h-[800px] overflow-hidden rounded-lg outline outline-2 outline-transparent transition-all hover:outline-primary">
                             <ChosenImage
                               image={recipe.data.recipeImage}
                               onClick={() =>
                                 lightboxRef.current?.setOpen(
-                                  recipe.data?.recipeImage?.externalUrl
+                                  recipe.data?.recipeImage?.externalUrl,
                                 )
                               }
                             />
@@ -155,10 +160,10 @@ const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
                 </>
               )}
             </div>
-            <div className="sm:min-w-[33%] sm:w-[33%] flex flex-col gap-12">
+            <div className="flex flex-col gap-12 sm:w-[33%] sm:min-w-[33%]">
               {recipe.data.tags && (
-                <div className="p-4 bg-secondary/15 rounded-lg">
-                  <h2 className="text-[28px] pb-6">
+                <div className="rounded-lg bg-secondary/15 p-4">
+                  <h2 className="pb-6 text-[28px]">
                     {t("Form.Property.Tags")}
                   </h2>
                   <RecipeTagList recipeTags={recipe.data.tags} useName />

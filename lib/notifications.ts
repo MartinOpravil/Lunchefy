@@ -14,7 +14,7 @@ export function notifySuccess(title: string, description?: string | null) {
 export function notifyError(
   title: string,
   description?: string | null,
-  duration: number = 10000
+  duration: number = 10000,
 ) {
   toast(title, {
     className: "bg-primary text-white-1 text-16",

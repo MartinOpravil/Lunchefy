@@ -1,5 +1,10 @@
 "use client";
-import React from "react";
+
+import { useTranslations } from "next-intl";
+
+import { Trash2 } from "lucide-react";
+
+import ActionButton from "@/components/global/button/ActionButton";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -8,10 +13,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import ActionButton from "@/components/global/button/ActionButton";
-import { Trash2 } from "lucide-react";
+
 import { ButtonVariant } from "@/enums";
-import { useTranslations } from "next-intl";
 
 interface AlertDialogProps {
   isOpen: boolean;
@@ -52,15 +55,15 @@ const ActionDialog = ({
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogContent>
         <AlertDialogHeader className="gap-4">
-          <AlertDialogTitle className="text-text !text-[22px] sm:!text-[26px] text-center">
+          <AlertDialogTitle className="text-center !text-[22px] text-text sm:!text-[26px]">
             {title}
           </AlertDialogTitle>
           {subject && (
-            <AlertDialogTitle className="text-primary text-center !text-[18px] sm:!text-[24px] whitespace-pre-line">
+            <AlertDialogTitle className="whitespace-pre-line text-center !text-[18px] text-primary sm:!text-[24px]">
               {subject}
             </AlertDialogTitle>
           )}
-          <AlertDialogDescription className="text-center !text-[14px] sm:!text-[16px] pb-4 text-text2">
+          <AlertDialogDescription className="pb-4 text-center !text-[14px] text-text2 sm:!text-[16px]">
             {description}
           </AlertDialogDescription>
         </AlertDialogHeader>

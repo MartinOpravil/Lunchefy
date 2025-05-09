@@ -1,5 +1,6 @@
-import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+
+import { auth } from "@clerk/nextjs/server";
 
 export async function getAuthToken() {
   const { userId, getToken, sessionId } = await auth();
@@ -18,7 +19,7 @@ export async function getAuthToken() {
       "Error retrieving token (error, userId, sessionId):",
       error,
       userId,
-      sessionId
+      sessionId,
     );
     redirect("/sign-in?loggedOut=true");
   }

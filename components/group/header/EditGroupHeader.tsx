@@ -1,16 +1,21 @@
 "use client";
-import React, { useState } from "react";
-import PageHeader from "@/components/global/content/PageHeader";
-import LinkButton from "@/components/global/button/LinkButton";
-import ActionButton from "@/components/global/button/ActionButton";
-import BasicDialog from "@/components/global/dialog/BasicDialog";
-import AccessManager from "../accessManager/AccessManager";
-import { ButtonVariant, Privilage } from "@/enums";
-import DeleteGroupButton from "../button/DeleteGroupButton";
+
+import { useState } from "react";
+import { useFormContext } from "react-hook-form";
+
+import { useTranslations } from "next-intl";
+
 import { getGroupById } from "@/convex/groups";
 import { ArrowLeft, ChefHat, Save, Share2, Users } from "lucide-react";
-import { useFormContext } from "react-hook-form";
-import { useTranslations } from "next-intl";
+
+import ActionButton from "@/components/global/button/ActionButton";
+import LinkButton from "@/components/global/button/LinkButton";
+import PageHeader from "@/components/global/content/PageHeader";
+import BasicDialog from "@/components/global/dialog/BasicDialog";
+import AccessManager from "@/components/group/accessManager/AccessManager";
+import DeleteGroupButton from "@/components/group/button/DeleteGroupButton";
+
+import { ButtonVariant, Privilage } from "@/enums";
 
 interface EditGroupHeaderProps {
   group: Awaited<ReturnType<typeof getGroupById>>;
@@ -30,7 +35,6 @@ const EditGroupHeader = ({ group }: EditGroupHeaderProps) => {
     <>
       <PageHeader
         title={`${group.data.name}`}
-        icon={<Users />}
         leftSide={
           <>
             <LinkButton

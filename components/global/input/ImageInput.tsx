@@ -1,15 +1,21 @@
 "use client";
-import React, {
+
+import {
   Dispatch,
-  forwardRef,
   Ref,
   SetStateAction,
+  forwardRef,
   useImperativeHandle,
   useRef,
   useState,
 } from "react";
-import { Input } from "../../ui/input";
+
+import { useTranslations } from "next-intl";
 import Image from "next/image";
+
+import { api } from "@/convex/_generated/api";
+import { Id } from "@/convex/_generated/dataModel";
+import { useMutation } from "convex/react";
 import {
   Ban,
   CloudUpload,
@@ -18,21 +24,20 @@ import {
   Loader,
   Trash2,
 } from "lucide-react";
-import { ImageInputHandle, ImageStateProps } from "@/types";
-import { FormLabel } from "../../ui/form";
-import { Id } from "@/convex/_generated/dataModel";
-import { useMutation } from "convex/react";
-import { api } from "@/convex/_generated/api";
-import { useTranslations } from "next-intl";
-import { notifyError } from "@/lib/notifications";
-import { convertImageToWebP } from "@/lib/image";
+
 import ActionButton from "@/components/global/button/ActionButton";
-import { ButtonVariant } from "@/enums";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
 import ChosenImage, {
   ChosenImageContent,
   ChosenImageVariant,
-} from "../image/ChosenImage";
+} from "@/components/global/image/ChosenImage";
+import { FormLabel } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+import { ButtonVariant } from "@/enums";
+import { convertImageToWebP } from "@/lib/image";
+import { notifyError } from "@/lib/notifications";
+import { ImageInputHandle, ImageStateProps } from "@/types";
 
 enum ImageType {
   Uploaded = "uploaded",
@@ -57,12 +62,12 @@ const ImageInput = (
     isVerified = false,
     formPropertyName,
   }: ImageInputProps,
-  ref: Ref<ImageInputHandle>
+  ref: Ref<ImageInputHandle>,
 ) => {
   const t = useTranslations("Global");
 
   const [selectedTab, setSelectedTab] = useState(
-    image?.externalUrl?.length ? ImageType.External : ImageType.Uploaded
+    image?.externalUrl?.length ? ImageType.External : ImageType.Uploaded,
   );
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -70,13 +75,13 @@ const ImageInput = (
   const [isImageConverting, setIsImageConverting] = useState(false);
   const [isImageDeleting, setIsImageDeleting] = useState(false);
   const [imageStorageId, setImageStorageId] = useState<Id<"_storage"> | null>(
-    null
+    null,
   );
   const generateUploadUrl = useMutation(api.files.generateUploadUrl);
   const deleteFile = useMutation(api.files.deleteFile);
   const getImageUrl = useMutation(api.files.getUrl);
   const [imageStorageIdBackup, setImageStorageIdBackup] = useState(
-    image?.storageId
+    image?.storageId,
   );
   const [imageBlob, setImageBlob] = useState<
     { blob: Blob; fileName: string } | undefined
@@ -179,7 +184,7 @@ const ImageInput = (
   };
 
   const handleFileRemoval = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     e.preventDefault();
     // setIsImageDeleting(true)
@@ -198,7 +203,7 @@ const ImageInput = (
   const handleFileOpen = (
     e:
       | React.MouseEvent<HTMLButtonElement, MouseEvent>
-      | React.MouseEvent<HTMLDivElement, MouseEvent>
+      | React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
     e.preventDefault();
     inputRef?.current?.click();
@@ -208,10 +213,10 @@ const ImageInput = (
     <div className="image-input relative">
       {label && <FormLabel className="input-label">{label}</FormLabel>}
       <Tabs value={selectedTab}>
-        <TabsList className="w-full flex flex-col sm:flex-row mb-4 transition-[height]">
+        <TabsList className="mb-4 flex w-full flex-col transition-[height] sm:flex-row">
           <TabsTrigger
             value={ImageType.Uploaded}
-            className="flex gap-2 w-full text-text"
+            className="flex w-full gap-2 text-text"
             onMouseDown={() => setSelectedTab(ImageType.Uploaded)}
           >
             <ImageUp />
@@ -219,7 +224,7 @@ const ImageInput = (
           </TabsTrigger>
           <TabsTrigger
             value={ImageType.External}
-            className="flex gap-2 w-full text-text"
+            className="flex w-full gap-2 text-text"
             onMouseDown={() => setSelectedTab(ImageType.External)}
           >
             <ExternalLink />
@@ -228,7 +233,7 @@ const ImageInput = (
         </TabsList>
         <TabsContent value={ImageType.Uploaded}>
           {!isVerified ? (
-            <div className="relative flex justify-center items-center p-6 min-h-[160px]">
+            <div className="relative flex min-h-[160px] items-center justify-center p-6">
               {image?.imageUrl && (
                 <Image
                   src={image.imageUrl}
@@ -236,10 +241,10 @@ const ImageInput = (
                   width={0}
                   height={0}
                   sizes="100vw"
-                  className="w-[100%] h-[100%] sm:w-[50%] max-h-[500px] object-contain"
+                  className="h-[100%] max-h-[500px] w-[100%] object-contain sm:w-[50%]"
                 />
               )}
-              <div className="absolute top-0 left-0 w-full h-full flex flex-col gap-2 justify-center items-center bg-primary/50 rounded text-white-1 p-6 backdrop-blur-sm">
+              <div className="absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center gap-2 rounded bg-primary/50 p-6 text-white-1 backdrop-blur-sm">
                 <Ban />
                 <div className="text-center">{t("Image.NoAccess")}</div>
               </div>
@@ -254,8 +259,8 @@ const ImageInput = (
                 accept="image/*"
               />
               {image?.imageUrl ? (
-                <div className="image-input-inner !cursor-default relative">
-                  <div className="absolute top-1 left-1 bottom-1 flex flex-col gap-2 flex-wrap justify-between w-full">
+                <div className="image-input-inner relative !cursor-default">
+                  <div className="absolute bottom-1 left-1 top-1 flex w-full flex-col flex-wrap justify-between gap-2">
                     <ActionButton
                       icon={<CloudUpload />}
                       title={t("Image.ChangeImage")}
@@ -264,7 +269,7 @@ const ImageInput = (
                     />
                     <ActionButton
                       icon={
-                        <Trash2 className="text-text group-hover:text-primary transition-all" />
+                        <Trash2 className="text-text transition-all group-hover:text-primary" />
                       }
                       onClick={handleFileRemoval}
                       variant={ButtonVariant.NegativeMinimalistic}
@@ -272,14 +277,14 @@ const ImageInput = (
                     />
                   </div>
                   {(isImageLoading || isImageConverting) && (
-                    <div className="absolute z-50 flex flex-col justify-center items-center text-16 flex-center font-medium text-white-1 p-2 bg-primary rounded-lg">
+                    <div className="text-16 flex-center absolute z-50 flex flex-col items-center justify-center rounded-lg bg-primary p-2 font-medium text-white-1">
                       <Loader size={30} className="animate-spin text-white-1" />
                       {isImageConverting
                         ? t("Image.Converting")
                         : t("Image.Uploading")}
                     </div>
                   )}
-                  <div className="flex-center w-full rounded-lg overflow-hidden">
+                  <div className="flex-center w-full overflow-hidden rounded-lg">
                     <ChosenImage
                       image={image}
                       variant={ChosenImageVariant.ImageInputPreview}
@@ -291,7 +296,7 @@ const ImageInput = (
                 <div className="image-input-inner" onClick={handleFileOpen}>
                   <div className="flex flex-col items-center gap-1">
                     {isImageLoading || isImageConverting ? (
-                      <div className="flex flex-col justify-center items-center text-16 flex-center font-medium text-primary">
+                      <div className="text-16 flex-center flex flex-col items-center justify-center font-medium text-primary">
                         <Loader
                           size={30}
                           className="animate-spin text-black-1"
@@ -302,11 +307,11 @@ const ImageInput = (
                       </div>
                     ) : (
                       <>
-                        <CloudUpload className="text-primary !w-14 !h-14" />
+                        <CloudUpload className="!h-14 !w-14 text-primary" />
                         <h2 className="text-14 font-bold text-primary">
                           {t("Image.Title")}
                         </h2>
-                        <p className="text-12 font-normal text-[gray-1] text-center">
+                        <p className="text-12 text-center font-normal text-[gray-1]">
                           {t("Image.Description")}
                         </p>
                       </>
@@ -352,12 +357,12 @@ const ImageInput = (
               });
             }}
           />
-          <div className="text-primary text-center text-[12px]">
+          <div className="text-center text-[12px] text-primary">
             {t("Image.ExternalImageDiclaimer")}
           </div>
 
           {image?.externalUrl && (
-            <div className="flex-center w-full rounded-lg overflow-hidden border-transparent">
+            <div className="flex-center w-full overflow-hidden rounded-lg border-transparent">
               <ChosenImage
                 image={image}
                 variant={ChosenImageVariant.ImageInputPreview}

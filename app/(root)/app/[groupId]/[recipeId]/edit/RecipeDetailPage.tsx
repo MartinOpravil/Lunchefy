@@ -1,18 +1,23 @@
 "use client";
-import FormProviderWrapper from "@/components/global/form/FormProviderWrapper";
-import EditRecipeHeader from "@/components/recipe/header/EditRecipeHeader";
-import RecipeForm from "@/components/recipe/form/RecipeForm";
-import { useTagManager } from "@/components/recipe/tag/TagManager";
-import { recipeFormSchema, RecipeFormValues } from "@/constants/formSchema";
-import { api } from "@/convex/_generated/api";
-import { HttpResponseCode } from "@/enums";
-import { notifyError, notifySuccess } from "@/lib/notifications";
-import { ImageInputHandle, ImageStateProps } from "@/types";
-import { Preloaded, useMutation, usePreloadedQuery } from "convex/react";
+
+import { useRef, useState } from "react";
+import { SubmitHandler } from "react-hook-form";
+
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import React, { useRef, useState } from "react";
-import { SubmitHandler } from "react-hook-form";
+
+import { api } from "@/convex/_generated/api";
+import { Preloaded, useMutation, usePreloadedQuery } from "convex/react";
+
+import FormProviderWrapper from "@/components/global/form/FormProviderWrapper";
+import RecipeForm from "@/components/recipe/form/RecipeForm";
+import EditRecipeHeader from "@/components/recipe/header/EditRecipeHeader";
+
+import { RecipeFormValues, recipeFormSchema } from "@/constants/formSchema";
+import { HttpResponseCode } from "@/enums";
+import { useTagManager } from "@/hooks/TagManager";
+import { notifyError, notifySuccess } from "@/lib/notifications";
+import { ImageInputHandle, ImageStateProps } from "@/types";
 
 interface RecipeDetailPageProps {
   userPreload: Preloaded<typeof api.users.getLoggedUser>;
@@ -39,7 +44,7 @@ const RecipeDetailPage = ({
   const recipeImageRef = useRef<ImageInputHandle>(null);
 
   const handleSubmit: SubmitHandler<RecipeFormValues> = async (
-    values: RecipeFormValues
+    values: RecipeFormValues,
   ) => {
     if (!recipe.data) return;
     try {
@@ -61,7 +66,7 @@ const RecipeDetailPage = ({
         switch (response.status) {
           case HttpResponseCode.NotFound:
             return notifyError(
-              t("Recipes.General.Notification.Error.Update404")
+              t("Recipes.General.Notification.Error.Update404"),
             );
           default:
             return notifyError(t("Global.Notification.UnexpectedError"));
@@ -75,39 +80,39 @@ const RecipeDetailPage = ({
     } catch (error) {
       notifyError(
         t("Recipes.General.Notification.Error.Update"),
-        error?.toString()
+        error?.toString(),
       );
     }
   };
 
   return (
-    <FormProviderWrapper
-      onSubmit={handleSubmit}
-      formSchema={recipeFormSchema}
-      defaultValues={{
-        name: recipe.data?.name ?? "",
-        instructions: recipe.data?.instructions ?? "",
-        description: recipe.data?.description,
-        ingredients: recipe.data?.ingredients,
-        coverImage: recipe.data?.coverImage,
-        tags: recipe.data?.tags ? convertToTags(recipe.data.tags) : undefined,
-        recipeImage: recipe.data?.recipeImage,
-        isImageRecipe: recipe.data?.isImageRecipe,
-      }}
-      onFormStateChange={setIsFormDirty}
-      passResetToParent={setResetForm}
-      coverImageRef={coverImageRef}
-      recipeImageRef={recipeImageRef}
-    >
-      <main className="page page-width-normal">
+    <main className="page page-width-normal">
+      <FormProviderWrapper
+        onSubmit={handleSubmit}
+        formSchema={recipeFormSchema}
+        defaultValues={{
+          name: recipe.data?.name ?? "",
+          instructions: recipe.data?.instructions ?? "",
+          description: recipe.data?.description,
+          ingredients: recipe.data?.ingredients,
+          coverImage: recipe.data?.coverImage,
+          tags: recipe.data?.tags ? convertToTags(recipe.data.tags) : undefined,
+          recipeImage: recipe.data?.recipeImage,
+          isImageRecipe: recipe.data?.isImageRecipe,
+        }}
+        onFormStateChange={setIsFormDirty}
+        passResetToParent={setResetForm}
+        coverImageRef={coverImageRef}
+        recipeImageRef={recipeImageRef}
+      >
         <EditRecipeHeader recipe={recipe} />
-        <main className="page-content">
+        <section className="page-content">
           {user.data && (
             <RecipeForm recipe={recipe} isVerified={user.data.isVerified} />
           )}
-        </main>
-      </main>
-    </FormProviderWrapper>
+        </section>
+      </FormProviderWrapper>
+    </main>
   );
 };
 

@@ -1,16 +1,19 @@
 "use client";
-import BulletList from "@tiptap/extension-bullet-list";
-import ListItem from "@tiptap/extension-list-item";
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
+
 import { useEffect } from "react";
-import EditorControlBar from "./controls/EditorControlBar";
-import { Skeleton } from "../../ui/skeleton";
-import { Color } from "@tiptap/extension-color";
-import TextStyle from "@tiptap/extension-text-style";
-import TextAlign from "@tiptap/extension-text-align";
-import { debounce } from "lodash";
 import { useFormContext } from "react-hook-form";
+
+import BulletList from "@tiptap/extension-bullet-list";
+import { Color } from "@tiptap/extension-color";
+import ListItem from "@tiptap/extension-list-item";
+import TextAlign from "@tiptap/extension-text-align";
+import TextStyle from "@tiptap/extension-text-style";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import { debounce } from "lodash";
+
+import EditorControlBar from "@/components/recipe/editor/controls/EditorControlBar";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface EditorProps {
   value?: string;

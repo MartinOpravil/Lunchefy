@@ -1,38 +1,37 @@
 "use client";
+
+import { useCallback, useEffect, useState } from "react";
+
+import { useTranslations } from "next-intl";
+
+import { getGroupById } from "@/convex/groups";
+import { debounce } from "lodash";
 import {
   CalendarDays,
   PencilLine,
   SlidersHorizontal,
   Tags,
 } from "lucide-react";
-import React, {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
-import MultipleSelector, { Option } from "../../ui/multiple-selector";
-import { Input } from "../../ui/input";
-import { debounce } from "lodash";
-import { getGroupById } from "@/convex/groups";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import MultipleSelector, { Option } from "@/components/ui/multiple-selector";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../ui/select";
-import { useTranslations } from "next-intl";
-import { useTagManager } from "../tag/TagManager";
-import { cn } from "@/lib/utils";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "../../ui/dropdown-menu";
+} from "@/components/ui/select";
+
 import { PlannerAge, SearchBy } from "@/enums";
+import { useTagManager } from "@/hooks/TagManager";
+import { cn } from "@/lib/utils";
 import { useGlobalStore } from "@/store/global";
 
 export enum RecipeFilterVariant {
@@ -89,7 +88,7 @@ const RecipeSearchInput = ({
     debounce((value) => {
       setSearchTerm(value);
     }, debounceDelay),
-    [debounceDelay]
+    [debounceDelay],
   );
 
   useEffect(() => {
@@ -118,41 +117,41 @@ const RecipeSearchInput = ({
   if (!group.data) return <></>;
 
   return (
-    <div className="w-full @container z-50 flex justify-end">
+    <div className="z-50 flex w-full justify-end @container">
       <div
         className={cn(
-          "w-full flex flex-col gap-2 justify-start items-start @md:flex-row",
-          classList
+          "flex w-full flex-col items-start justify-start gap-2 @md:flex-row",
+          classList,
         )}
       >
-        <div className="flex flex-shrink w-full @md:max-w-44">
+        <div className="flex w-full flex-shrink @md:max-w-44">
           <Select value={searchBy} onValueChange={handleSearchByChange}>
             <SelectTrigger className="input-class h-full transition-all">
               <SelectValue className="placeholder:text-secondary" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value={SearchBy.Name}>
-                <div className="flex gap-2 items-center">
+                <div className="flex items-center gap-2">
                   <PencilLine /> {t("Recipes.SearchInput.SortBy.Name")}
                 </div>
               </SelectItem>
               <SelectItem value={SearchBy.Tags}>
-                <div className="flex gap-2 items-center">
+                <div className="flex items-center gap-2">
                   <Tags /> {t("Recipes.SearchInput.SortBy.Tags")}
                 </div>
               </SelectItem>
               <SelectItem value={SearchBy.Planner}>
-                <div className="flex gap-2 items-center">
+                <div className="flex items-center gap-2">
                   <CalendarDays /> {t("Recipes.SearchInput.SortBy.Planner")}
                 </div>
               </SelectItem>
             </SelectContent>
           </Select>
         </div>
-        <div className="flex flex-grow w-full @md:w-auto">
+        <div className="flex w-full flex-grow @md:w-auto">
           {searchBy === SearchBy.Name && (
             <Input
-              className="input-class border-2 border-accent focus-visible:ring-secondary transition-all"
+              className="input-class border-2 border-accent transition-all focus-visible:ring-secondary"
               placeholder={t("Recipes.SearchInput.Placeholder.Name")}
               type="text"
               value={internalSearchTerm}
@@ -161,7 +160,7 @@ const RecipeSearchInput = ({
           )}
           {searchBy === SearchBy.Tags && (
             <MultipleSelector
-              className="input-class border-2 border-accent focus-visible:ring-secondary transition"
+              className="input-class border-2 border-accent transition focus-visible:ring-secondary"
               options={tagOptions}
               placeholder={t("Recipes.SearchInput.Placeholder.Tags")}
               value={searchTags}
@@ -211,7 +210,7 @@ const RecipeSearchInput = ({
         </div>
         {showSettings && (
           <DropdownMenu>
-            <DropdownMenuTrigger className="transition-all flex self-end @md:self-center p-1 text-text2 hover:text-text outline-none">
+            <DropdownMenuTrigger className="flex self-end p-1 text-text2 outline-none transition-all hover:text-text @md:self-center">
               <SlidersHorizontal />
             </DropdownMenuTrigger>
             <DropdownMenuContent>

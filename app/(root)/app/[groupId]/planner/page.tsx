@@ -1,10 +1,11 @@
-import React from "react";
-import { Id } from "@/convex/_generated/dataModel";
-import PlannerPage from "./PlannerPage";
-import { getAuthToken } from "@/lib/authentication";
-import { preloadQuery } from "convex/nextjs";
 import { api } from "@/convex/_generated/api";
+import { Id } from "@/convex/_generated/dataModel";
+import { preloadQuery } from "convex/nextjs";
+
+import PlannerPage from "@/app/(root)/app/[groupId]/planner/PlannerPage";
 import ContentHandler from "@/components/global/content/ContentHandler";
+
+import { getAuthToken } from "@/lib/authentication";
 import { getISOMonth } from "@/lib/time";
 
 interface PlannerServerPageProps {
@@ -22,7 +23,7 @@ const PlannerServerPage = async ({ params }: PlannerServerPageProps) => {
     {
       id: groupId,
     },
-    { token }
+    { token },
   );
   const recipeListForMonthPreloadPromise = preloadQuery(
     api.planner.getGroupRecipeListForMonth,
@@ -30,7 +31,7 @@ const PlannerServerPage = async ({ params }: PlannerServerPageProps) => {
       groupId,
       month,
     },
-    { token }
+    { token },
   );
 
   const [groupPreload, recipeListForMonthPreload] = await Promise.all([

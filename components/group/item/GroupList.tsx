@@ -1,11 +1,12 @@
-"use client";
-import React from "react";
-import NoContent from "../../global/content/NoContent";
-import { getGroupList } from "@/convex/groups";
-import Group from "./Group";
 import { useTranslations } from "next-intl";
-import { cn } from "@/lib/utils";
+
+import { getGroupList } from "@/convex/groups";
+
+import NoContent from "@/components/global/content/NoContent";
 import NewGroupButton from "@/components/group/button/NewGroupButton";
+import Group from "@/components/group/item/Group";
+
+import { cn } from "@/lib/utils";
 
 interface GroupListProps {
   groupList: Awaited<ReturnType<typeof getGroupList>>;
@@ -18,8 +19,8 @@ const GroupList = ({ groupList, onClick }: GroupListProps) => {
   return groupList.data ? (
     <div
       className={cn(
-        "flex justify-center flex-wrap",
-        groupList.data.length ? "gap-4" : "gap-8"
+        "flex flex-wrap justify-center",
+        groupList.data.length ? "gap-4" : "gap-8",
       )}
     >
       {groupList.data.length === 0 ? (

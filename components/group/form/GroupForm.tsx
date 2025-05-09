@@ -1,5 +1,13 @@
 "use client";
-import React from "react";
+
+import { useFormContext } from "react-hook-form";
+
+import { useTranslations } from "next-intl";
+
+import { getGroupById } from "@/convex/groups";
+
+import ImageInput from "@/components/global/input/ImageInput";
+import { AutosizeTextarea } from "@/components/ui/autosize-textarea";
 import {
   FormControl,
   FormField,
@@ -8,14 +16,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
-import { useFormContext } from "react-hook-form";
-import ImageInput from "@/components/global/input/ImageInput";
-import { ImageInputHandle } from "@/types";
 import PrivilageBadge from "@/components/user/PrivilageBadge";
-import { getGroupById } from "@/convex/groups";
-import { AutosizeTextarea } from "@/components/ui/autosize-textarea";
-import { useTranslations } from "next-intl";
+
+import { ImageInputHandle } from "@/types";
 
 interface GroupFormProps {
   group?: Awaited<ReturnType<typeof getGroupById>>;

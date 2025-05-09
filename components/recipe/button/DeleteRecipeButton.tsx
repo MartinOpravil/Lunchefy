@@ -1,16 +1,20 @@
-import React, { useState } from "react";
-import ActionButton from "@/components/global/button/ActionButton";
-import ActionDialog from "../../global/dialog/ActionDialog";
-import { useMutation } from "convex/react";
-import { api } from "@/convex/_generated/api";
-import { notifyError, notifySuccess } from "@/lib/notifications";
-import { ClassListProp } from "@/types";
+import { useState } from "react";
+
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
+
+import { api } from "@/convex/_generated/api";
+import { useMutation } from "convex/react";
 import { GenericId } from "convex/values";
 import { Trash2 } from "lucide-react";
+
+import ActionButton from "@/components/global/button/ActionButton";
+import ActionDialog from "@/components/global/dialog/ActionDialog";
+
 import { ButtonVariant } from "@/enums";
-import { useTranslations } from "next-intl";
+import { notifyError, notifySuccess } from "@/lib/notifications";
+import { cn } from "@/lib/utils";
+import { ClassListProp } from "@/types";
 
 export interface DeleteRecipeButtonProps extends ClassListProp {
   recipeId: GenericId<"recipes">;
@@ -35,7 +39,7 @@ const DeleteRecipeButton = ({
   const deleteRecipe = useMutation(api.recipes.deleteRecipe);
 
   const handleOpenDialog = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     e.preventDefault();
     e.stopPropagation();
@@ -66,10 +70,10 @@ const DeleteRecipeButton = ({
         icon={
           <Trash2
             className={cn(
-              "text-text group-hover/delete:text-primary transition-all",
+              "text-text transition-all group-hover/delete:text-primary",
               {
                 "!w-5 text-text2": small,
-              }
+              },
             )}
           />
         }

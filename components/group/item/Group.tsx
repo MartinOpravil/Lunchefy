@@ -1,12 +1,17 @@
 "use client";
-import React, { useState } from "react";
+
+import { useState } from "react";
+
 import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { Users } from "lucide-react";
+
 import { Doc } from "@/convex/_generated/dataModel";
-import { Avatar } from "@/components/ui/avatar";
-import ChosenImage from "@/components/global/image/ChosenImage";
+import { Users } from "lucide-react";
+
 import LoaderSpinner from "@/components/global/content/LoaderSpinner";
+import ChosenImage from "@/components/global/image/ChosenImage";
+import { Avatar } from "@/components/ui/avatar";
+
+import { cn } from "@/lib/utils";
 
 export interface GroupProps {
   group: Doc<"groups">;
@@ -26,11 +31,11 @@ const Group = ({ group, privilage }: GroupProps) => {
           className="link"
           onClick={() => setIsRoutingToOverview(true)}
         >
-          <Avatar className="relative w-[100px] h-[100px] bg-gray-400/20 transition-opacity group-hover:opacity-80">
+          <Avatar className="relative h-[100px] w-[100px] bg-gray-400/20 transition-opacity group-hover:opacity-80">
             <ChosenImage
               image={group.coverImage}
               classList="relative w-[100px] h-[100px]"
-              emptyIcon={<Users className="!w-[50px] !h-[50px]" />}
+              emptyIcon={<Users className="!h-[50px] !w-[50px]" />}
             />
             {isRoutingToOverview && (
               <LoaderSpinner classList="text-primary/90 absolute !w-[130px] !h-[130px]" />

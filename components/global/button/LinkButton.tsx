@@ -1,12 +1,16 @@
 "use client";
-import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
+
+import { useState } from "react";
+
 import Link from "next/link";
-import { cn } from "@/lib/utils";
-import IconImage from "@/components/global/image/IconImage";
+
 import LoaderSpinner from "@/components/global/content/LoaderSpinner";
-import { ClassListProp } from "@/types";
+import IconImage from "@/components/global/image/IconImage";
+import { Button } from "@/components/ui/button";
+
 import { ButtonVariant } from "@/enums";
+import { cn } from "@/lib/utils";
+import { ClassListProp } from "@/types";
 
 interface LinkButtonBaseProps extends ClassListProp {
   title?: string;
@@ -41,7 +45,7 @@ const LinkButton = ({
       className={cn(
         "action-button",
         classList,
-        `${isRouting && "pointer-events-none"}`
+        `${isRouting && "pointer-events-none"}`,
       )}
       onClick={visualizeRouting}
       variant={variant}

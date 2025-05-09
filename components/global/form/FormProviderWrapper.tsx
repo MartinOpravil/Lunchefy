@@ -1,26 +1,31 @@
 "use client";
-import React, { ReactNode, Ref, useEffect, useState } from "react";
+
+import { ReactNode, Ref, useEffect, useState } from "react";
 import {
-  useForm,
+  DefaultValues,
+  FieldValues,
   FormProvider,
   SubmitHandler,
-  FieldValues,
-  DefaultValues,
-  useFormContext,
   UseFormReturn,
+  useForm,
+  useFormContext,
 } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z, ZodSchema } from "zod";
-import { ImageInputHandle } from "@/types";
-import ActionDialog from "../dialog/ActionDialog";
-import { usePathname, useRouter } from "next/navigation";
+
 import { useTranslations } from "next-intl";
+import { usePathname, useRouter } from "next/navigation";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ZodSchema, z } from "zod";
+
+import ActionDialog from "@/components/global/dialog/ActionDialog";
+
+import { ImageInputHandle } from "@/types";
 
 interface FormContextProps<T extends FieldValues> extends UseFormReturn<T> {
   coverImageRef: Ref<ImageInputHandle>;
   recipeImageRef?: Ref<ImageInputHandle>;
   performManualLeaveAction: (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => void;
 }
 
@@ -53,7 +58,7 @@ const FormProviderWrapper = <T extends FieldValues>({
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [pendingNavigation, setPendingNavigation] = useState<string | null>(
-    null
+    null,
   );
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -63,7 +68,7 @@ const FormProviderWrapper = <T extends FieldValues>({
   });
 
   const performManualLeaveAction = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     e.preventDefault();
     if (!manualLeaveAction) return;

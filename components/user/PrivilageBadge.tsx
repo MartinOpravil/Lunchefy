@@ -1,9 +1,11 @@
-import { Privilage } from "@/enums";
-import { cn } from "@/lib/utils";
-import { PrivilageBadgeProps } from "@/types";
-import { User, UserCog, UserPen } from "lucide-react";
+import { useMemo } from "react";
+
 import { useTranslations } from "next-intl";
-import React, { useMemo } from "react";
+
+import { User, UserCog, UserPen } from "lucide-react";
+
+import { Privilage } from "@/enums";
+import { PrivilageBadgeProps } from "@/types";
 
 const PrivilageBadge = ({ privilage }: PrivilageBadgeProps) => {
   const t = useTranslations("Groups");
@@ -18,24 +20,8 @@ const PrivilageBadge = ({ privilage }: PrivilageBadgeProps) => {
     }
   }, [privilage]);
 
-  // const privilageStyles = useMemo(() => {
-  //   switch (privilage) {
-  //     case Privilage.Owner:
-  //       return "bg-primary bg-secondary";
-  //     case Privilage.Editor:
-  //       return "bg-accent";
-  //     default:
-  //       return "bg-secondary";
-  //   }
-  // }, [privilage]);
-
   return (
-    <div
-      className={cn(
-        "text-white-1 w-fit rounded-full px-3 py-1 select-none flex gap-2 bg-secondary"
-        // privilageStyles
-      )}
-    >
+    <div className="flex w-fit select-none gap-2 rounded-full bg-secondary px-3 py-1 text-white-1">
       {privilageImage}
       {t(`AccessManager.Privilage.${privilage}`)}
     </div>

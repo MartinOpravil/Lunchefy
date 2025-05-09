@@ -47,3 +47,9 @@ export enum OrderBy {
   CreationDateAscend = "creationDateAscend",
   CreationDateDescend = "creationDateDescend",
 }
+
+export enum RecipePlannerAction {
+  Assign = "assign",
+  Swap = "swap",
+  Remove = "remove",
+}

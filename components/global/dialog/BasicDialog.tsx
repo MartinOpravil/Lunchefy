@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Dialog,
   DialogContent,
@@ -6,6 +5,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+
 import { BasicDialogProps } from "@/types";
 
 const BasicDialog = ({
@@ -22,11 +22,11 @@ const BasicDialog = ({
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className={classList}>
         <DialogHeader className="gap-2">
-          <DialogTitle className="flex gap-4 items-center text-text !text-[22px] sm:!text-[26px] text-center">
+          <DialogTitle className="flex items-center gap-4 text-center !text-[22px] text-text sm:!text-[26px]">
             {title}
             {icon}
           </DialogTitle>
-          <div className="text-text2 !text-[14px] sm:!text-[16px] text-left">
+          <div className="text-left !text-[14px] text-text2 sm:!text-[16px]">
             {description}
           </div>
           <div className="heading-underline" />

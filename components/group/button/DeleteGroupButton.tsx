@@ -1,16 +1,20 @@
-import React, { useState } from "react";
+import { useState } from "react";
+
+import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
+
+import { api } from "@/convex/_generated/api";
+import { useMutation } from "convex/react";
+import { GenericId } from "convex/values";
+import { Trash2 } from "lucide-react";
+
 import ActionButton from "@/components/global/button/ActionButton";
 import ActionDialog from "@/components/global/dialog/ActionDialog";
-import { useMutation } from "convex/react";
-import { api } from "@/convex/_generated/api";
-import { notifyError, notifySuccess } from "@/lib/notifications";
-import { useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
-import { GenericId } from "convex/values";
-import { ClassListProp } from "@/types";
-import { Trash2 } from "lucide-react";
+
 import { ButtonVariant, HttpResponseCode } from "@/enums";
-import { useTranslations } from "next-intl";
+import { notifyError, notifySuccess } from "@/lib/notifications";
+import { cn } from "@/lib/utils";
+import { ClassListProp } from "@/types";
 
 export interface DeleteGroupButtonProps extends ClassListProp {
   groupId: GenericId<"groups">;
@@ -31,7 +35,7 @@ const DeleteGroupButton = ({
   const deleteGroup = useMutation(api.groups.deleteGroup);
 
   const handleOpenDialog = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     e.preventDefault();
     e.stopPropagation();
@@ -48,7 +52,7 @@ const DeleteGroupButton = ({
         switch (response.status) {
           case HttpResponseCode.InternalServerError:
             return notifyError(
-              t("Groups.General.Notification.Error.Delete500")
+              t("Groups.General.Notification.Error.Delete500"),
             );
           default:
             return notifyError(t("Global.Notification.UnexpectedError"));
@@ -67,7 +71,7 @@ const DeleteGroupButton = ({
     <>
       <ActionButton
         icon={
-          <Trash2 className="text-text group-hover:text-primary transition-all" />
+          <Trash2 className="text-text transition-all group-hover:text-primary" />
         }
         onClick={handleOpenDialog}
         isLoading={isDeleting}

@@ -1,15 +1,20 @@
 "use client";
-import React, { Dispatch, SetStateAction } from "react";
-import { Privilage } from "@/enums";
-import InfiniteScroll from "../../ui/infinite-scroll";
-import { Mouse, Plus } from "lucide-react";
-import { Skeleton } from "../../ui/skeleton";
-import { UsePaginatedQueryReturnType } from "convex/react";
-import { api } from "@/convex/_generated/api";
-import { RECIPES_NEXT_COUNT } from "@/constants/pagination";
-import { cn } from "@/lib/utils";
+
+import { Dispatch, SetStateAction } from "react";
+
 import { useTranslations } from "next-intl";
-import ChosenImage from "../../global/image/ChosenImage";
+
+import { api } from "@/convex/_generated/api";
+import { UsePaginatedQueryReturnType } from "convex/react";
+import { Mouse, Plus } from "lucide-react";
+
+import ChosenImage from "@/components/global/image/ChosenImage";
+import InfiniteScroll from "@/components/ui/infinite-scroll";
+import { Skeleton } from "@/components/ui/skeleton";
+
+import { RECIPES_NEXT_COUNT } from "@/constants/pagination";
+import { Privilage } from "@/enums";
+import { cn } from "@/lib/utils";
 
 interface PlannerRecipeListPaginatedProps {
   recipeListPaginated: UsePaginatedQueryReturnType<
@@ -29,20 +34,20 @@ const PlannerRecipeListPaginated = ({
   const t = useTranslations("Recipes.Scroll");
   return (
     <>
-      <div className="text-text flex flex-col w-full gap-1 pt-2 h-40 relative overflow-y-auto">
+      <div className="relative flex h-40 w-full flex-col gap-1 overflow-y-auto pt-2 text-text">
         {recipeListPaginated.results?.map((recipe, index) => (
           <div
             className={cn(
-              "flex gap-2 justify-between items-center p-1 rounded-lg hover:bg-primary/50 cursor-pointer transition group",
-              selectedRecipeId === recipe._id && "bg-secondary"
+              "group flex cursor-pointer items-center justify-between gap-2 rounded-lg p-1 transition hover:bg-primary/50",
+              selectedRecipeId === recipe._id && "bg-secondary",
             )}
             key={index}
             onClick={() => selectResultAction && selectResultAction(recipe._id)}
           >
-            <div className="flex gap-3 items-center ">
+            <div className="flex items-center gap-3">
               <div
                 className={cn(
-                  "relative flex items-center justify-center rounded-lg overflow-hidden bg-accent/30 min-h-[50px] min-w-[50px] w-[50px] !h-[50px]"
+                  "relative flex !h-[50px] min-h-[50px] w-[50px] min-w-[50px] items-center justify-center overflow-hidden rounded-lg bg-accent/30",
                 )}
               >
                 <ChosenImage
@@ -64,9 +69,9 @@ const PlannerRecipeListPaginated = ({
           threshold={1}
         >
           {recipeListPaginated.status !== "Exhausted" && (
-            <div className="h-12 w-full relative">
+            <div className="relative h-12 w-full">
               <Skeleton className="h-full w-full bg-accent/70" />
-              <div className="absolute top-0 left-0 w-full h-full text-white-1 flex justify-center items-center gap-2">
+              <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center gap-2 text-white-1">
                 <Mouse />
                 <div>{t("Full")}</div>
               </div>

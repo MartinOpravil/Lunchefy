@@ -1,7 +1,10 @@
 "use client";
-import React from "react";
-import { useLocale, useTranslations } from "next-intl";
+
+import { useTranslations } from "next-intl";
+
 import { Doc } from "@/convex/_generated/dataModel";
+
+import { getTimeLocale } from "@/lib/utils";
 
 interface LatestRecipeDateInPlannerProps {
   recipe: Doc<"recipes">;
@@ -12,13 +15,13 @@ const LatestRecipeDateInPlanner = ({
 }: LatestRecipeDateInPlannerProps) => {
   const t = useTranslations("Groups.Planner");
 
-  const locale = useLocale() === "cs" ? "cs" : "en-GB";
+  const locale = getTimeLocale();
 
   if (!recipe.plannerDate) return <></>;
 
   return (
-    <div className="text-text2 flex gap-2 items-center">
-      <span className="hidden sm:block text-[14px]">{t("PlannedForDate")}</span>
+    <div className="flex items-center gap-2 text-text2">
+      <span className="hidden text-[14px] sm:block">{t("PlannedForDate")}</span>
       <h3 className="text-primary">
         {new Date(recipe.plannerDate).toLocaleDateString(locale, {
           day: "numeric",

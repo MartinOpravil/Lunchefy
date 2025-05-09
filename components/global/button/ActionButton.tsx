@@ -1,11 +1,12 @@
 "use client";
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import IconImage from "@/components/global/image/IconImage";
+
 import LoaderSpinner from "@/components/global/content/LoaderSpinner";
-import { ClassListProp } from "@/types";
+import IconImage from "@/components/global/image/IconImage";
+import { Button } from "@/components/ui/button";
+
 import { ButtonVariant } from "@/enums";
+import { cn } from "@/lib/utils";
+import { ClassListProp } from "@/types";
 
 export interface ActionButtonBaseProps extends ClassListProp {
   title?: string;
@@ -34,7 +35,7 @@ const ActionButton = ({
       className={cn(
         "action-button",
         classList,
-        `${isLoading && "pointer-events-none"}`
+        `${isLoading && "pointer-events-none"}`,
       )}
       onClick={onClick}
       disabled={isDisabled}

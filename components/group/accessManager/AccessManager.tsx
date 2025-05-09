@@ -1,6 +1,21 @@
 "use client";
+
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+
+import { useTranslations } from "next-intl";
+
+import { api } from "@/convex/_generated/api";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "convex-helpers/react/cache";
+import { useMutation } from "convex/react";
+import { GenericId } from "convex/values";
+import { Share2 } from "lucide-react";
+import { z } from "zod";
+
 import ActionButton from "@/components/global/button/ActionButton";
-import React, { useState } from "react";
+import LoaderSpinner from "@/components/global/content/LoaderSpinner";
+import UserWithAccess from "@/components/group/accessManager/UserWithAccess";
 import {
   Form,
   FormControl,
@@ -9,6 +24,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -16,20 +32,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Input } from "@/components/ui/input";
-import { useMutation } from "convex/react";
-import { useQuery } from "convex-helpers/react/cache";
-import { api } from "@/convex/_generated/api";
-import LoaderSpinner from "@/components/global/content/LoaderSpinner";
-import UserWithAccess from "./UserWithAccess";
+
 import { ButtonVariant, HttpResponseCode, Privilage } from "@/enums";
 import { notifyError, notifySuccess } from "@/lib/notifications";
-import { Share2 } from "lucide-react";
-import { GenericId } from "convex/values";
-import { useTranslations } from "next-intl";
 
 export interface AccessManagerProps {
   groupName: string;
@@ -47,7 +52,7 @@ const AccessManager = ({ groupName, groupId }: AccessManagerProps) => {
       privilage: z.string({
         message: t("Groups.AccessManager.Form.Validation.Privilage"),
       }),
-    })
+    }),
   );
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -81,15 +86,15 @@ const AccessManager = ({ groupName, groupId }: AccessManagerProps) => {
         switch (result.status) {
           case HttpResponseCode.NotFound:
             return notifyError(
-              t("Groups.AccessManager.Notification.Error.Create404")
+              t("Groups.AccessManager.Notification.Error.Create404"),
             );
           case HttpResponseCode.Conflict:
             return notifyError(
-              t("Groups.AccessManager.Notification.Error.Create409")
+              t("Groups.AccessManager.Notification.Error.Create409"),
             );
           case HttpResponseCode.InternalServerError:
             return notifyError(
-              t("Groups.AccessManager.Notification.Error.Create500")
+              t("Groups.AccessManager.Notification.Error.Create500"),
             );
           default:
             return notifyError(t("Global.Notification.UnexpectedError"));
@@ -101,7 +106,7 @@ const AccessManager = ({ groupName, groupId }: AccessManagerProps) => {
         t("Groups.AccessManager.Notification.Success.Create", {
           email: values.email,
           privilage: values.privilage,
-        })
+        }),
       );
       form.setValue("email", "");
       form.setValue("privilage", "");
@@ -112,7 +117,7 @@ const AccessManager = ({ groupName, groupId }: AccessManagerProps) => {
   }
 
   return (
-    <div className="access-manager @container w-full transition-all">
+    <div className="access-manager w-full transition-all @container">
       {!isFormOpen && (
         <>
           <div className="flex flex-col">
@@ -128,7 +133,7 @@ const AccessManager = ({ groupName, groupId }: AccessManagerProps) => {
           {groupSharedUsersData ? (
             <>
               {!!groupSharedUsersData.length && (
-                <div className="access-manager-list pt-6 w-full">
+                <div className="access-manager-list w-full pt-6">
                   <h3 className="text-16 text-text">
                     {t("Groups.AccessManager.ListTitle")}
                   </h3>
@@ -171,7 +176,7 @@ const AccessManager = ({ groupName, groupId }: AccessManagerProps) => {
                         <Input
                           className="input-class"
                           placeholder={t(
-                            "Groups.AccessManager.Form.Placeholder.Email"
+                            "Groups.AccessManager.Form.Placeholder.Email",
                           )}
                           {...field}
                         />
@@ -197,7 +202,7 @@ const AccessManager = ({ groupName, groupId }: AccessManagerProps) => {
                             <SelectValue
                               className=""
                               placeholder={t(
-                                "Groups.AccessManager.Form.Placeholder.Privilage"
+                                "Groups.AccessManager.Form.Placeholder.Privilage",
                               )}
                             />
                           </SelectTrigger>
@@ -205,12 +210,12 @@ const AccessManager = ({ groupName, groupId }: AccessManagerProps) => {
                         <SelectContent>
                           <SelectItem value={Privilage.Editor}>
                             {t(
-                              `Groups.AccessManager.Privilage.${Privilage.Editor}`
+                              `Groups.AccessManager.Privilage.${Privilage.Editor}`,
                             )}
                           </SelectItem>
                           <SelectItem value={Privilage.Viewer}>
                             {t(
-                              `Groups.AccessManager.Privilage.${Privilage.Viewer}`
+                              `Groups.AccessManager.Privilage.${Privilage.Viewer}`,
                             )}
                           </SelectItem>
                         </SelectContent>

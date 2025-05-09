@@ -1,10 +1,19 @@
+import { useState, useTransition } from "react";
+import Flag from "react-world-flags";
+
+import { useLocale } from "next-intl";
+
+import { LoaderCircle } from "lucide-react";
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+} from "@/components/ui/select";
+
 import { Locale } from "@/i18n/config";
 import { setUserLocale } from "@/lib/locale";
-import React, { useState, useTransition } from "react";
-import { Select, SelectContent, SelectItem, SelectTrigger } from "../ui/select";
-import { useLocale } from "next-intl";
-import { LoaderCircle } from "lucide-react";
-import Flag from "react-world-flags";
 
 const LocaleSwitcherSelect = () => {
   const [isPending, startTransition] = useTransition();
@@ -34,10 +43,10 @@ const LocaleSwitcherSelect = () => {
       <Select value={language} onValueChange={onChange}>
         <SelectTrigger
           useArrow={false}
-          className="input-class !border-transparent hover:opacity-70 relative flex gap-2 p-0 rounded-full"
+          className="input-class relative flex gap-2 rounded-full !border-transparent p-0 hover:opacity-70"
         >
           {isPending && (
-            <LoaderCircle className="animate-spin text-primary !w-6 !h-6" />
+            <LoaderCircle className="!h-6 !w-6 animate-spin text-primary" />
           )}
           <div className="overflow-hidden">
             <Flag

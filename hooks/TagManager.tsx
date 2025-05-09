@@ -1,6 +1,8 @@
 import { useMemo } from "react";
-import { Option } from "@/components/ui/multiple-selector";
+
 import { useTranslations } from "next-intl";
+
+import { Option } from "@/components/ui/multiple-selector";
 
 export enum Tag {
   Chicken = "chicken",
@@ -195,7 +197,7 @@ export function useTagManager() {
     return values
       .split(" ")
       .map((value) =>
-        tagOptions.find((option) => option.value === (value as Tag))
+        tagOptions.find((option) => option.value === (value as Tag)),
       )
       .filter((option): option is Option => option !== undefined);
   };

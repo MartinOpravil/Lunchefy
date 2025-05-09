@@ -1,7 +1,9 @@
+import { create } from "zustand";
+
 import { Option } from "@/components/ui/multiple-selector";
+
 import { SearchBy } from "@/enums";
 import { RecipeRef } from "@/types";
-import { create } from "zustand";
 
 type GroupStore = {
   searchBy: SearchBy;

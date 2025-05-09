@@ -1,5 +1,6 @@
-import { setDarkModeCookie } from "@/lib/cookies";
 import { create } from "zustand";
+
+import { setDarkModeCookie } from "@/lib/cookies";
 
 type GlobalStore = {
   darkMode: boolean;

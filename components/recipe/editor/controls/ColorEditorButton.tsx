@@ -1,8 +1,10 @@
 "use client";
-import { Editor } from "@tiptap/react";
-import React, { ChangeEvent, useRef } from "react";
 
+import { ChangeEvent, useRef } from "react";
+
+import { Editor } from "@tiptap/react";
 import { Palette } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 
 interface ColorEditorButtonProps {
@@ -21,7 +23,7 @@ const ColorEditorButton = ({ editor }: ColorEditorButtonProps) => {
   };
 
   const performAction = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     e.preventDefault();
     if (colorInputRef.current) colorInputRef.current.click();
@@ -42,7 +44,7 @@ const ColorEditorButton = ({ editor }: ColorEditorButtonProps) => {
         <Palette />
       </Button>
       <div
-        className="absolute w-2.5 h-2.5 rounded-full bottom-0.5 right-0.5 pointer-events-none"
+        className="pointer-events-none absolute bottom-0.5 right-0.5 h-2.5 w-2.5 rounded-full"
         style={{ backgroundColor: editor.getAttributes("textStyle").color }}
       />
       <input

@@ -1,52 +1,36 @@
-import "./homepage.css";
-import LinkButton from "@/components/global/button/LinkButton";
-import { Card } from "@/components/ui/card";
-import { ButtonVariant } from "@/enums";
-import { SignedIn } from "@clerk/nextjs";
-import { BookOpenText, CalendarFold, CookingPot, Share2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { ReactNode } from "react";
 
-interface IndexCardProps {
-  icon: ReactNode;
-  title: string;
-  description: string;
-}
+import { SignedIn } from "@clerk/nextjs";
+import { BookOpenText, CalendarFold, CookingPot, Share2 } from "lucide-react";
 
-const IndexCard = ({ icon, title, description }: IndexCardProps) => {
-  return (
-    <Card className="bg-background border-none py-[50px] px-[30px] text-center flex flex-col items-center w-full max-w-[300px]">
-      <div className="flex flex-col gap-6 items-center justify-center">
-        <div className="rounded-full bg-secondary/70 w-[100px] h-[100px] flex items-center justify-center">
-          {icon}
-        </div>
-        <h3 className="text-[26px] h-[50px]">{title}</h3>
-      </div>
-      <p className="text-[18px]">{description}</p>
-    </Card>
-  );
-};
+import LinkButton from "@/components/global/button/LinkButton";
+import FeatureCard from "@/components/home/FeatureCard";
+
+import { ButtonVariant } from "@/enums";
+
+import "./homepage.css";
 
 const Home = () => {
   const t = useTranslations("HomePage");
+
   return (
     <main className="homepage">
-      <section className="page-width-wider flex items-end min-h-[350px] sm:min-h-[590px] hero">
+      <section className="hero">
         <Image
           src="/images/hero.webp"
-          alt="recipe image"
+          alt="hero image"
           width={0}
           height={0}
           sizes="100vw"
-          className="absolute w-[100%] h-[100%] object-cover z-0 "
+          className="absolute z-0 h-[100%] w-[100%] object-cover"
         />
-        <div className="w-full h-full flex flex-col justify-end z-10 pb-12 pt-40 lg:py-16">
-          <div className="relative max-w-[600px] flex flex-col gap-2">
-            <span className="text-primary text-14 sm:text-[20px] uppercase font-[700] tracking-wider">
+        <div className="z-10 flex h-full w-full flex-col justify-end pb-12 pt-40 lg:py-16">
+          <div className="relative flex max-w-[600px] flex-col gap-2">
+            <span className="text-14 font-[700] uppercase tracking-wider text-primary sm:text-[20px]">
               {t("Hero.subTitle")}
             </span>
-            <p className="text-20 sm:text-[36px] font-[700] whitespace-pre-line text-black-1">
+            <p className="text-20 whitespace-pre-line font-[700] text-black-1 sm:text-[36px]">
               {t("Hero.title")}
             </p>
             <SignedIn>
@@ -60,11 +44,10 @@ const Home = () => {
           </div>
         </div>
       </section>
-      <section className="page-width-normal py-16 lg:py-32 flex flex-col items-center sm:flex-row gap-16">
-        <div className="flex flex-col gap-6 sm:w-[50%]">
+      <section className="normal-section">
+        <div className="section-content sm:w-[50%]">
           <h2>{t("General.title")}</h2>
           <div
-            className="flex flex-col gap-6 leading-7"
             dangerouslySetInnerHTML={{
               __html: t.raw("General.text"),
             }}
@@ -76,47 +59,39 @@ const Home = () => {
           width={0}
           height={0}
           sizes="100vw"
-          className="w-[100%] h-[100%] object-contain max-h-[575px] sm:w-[50%]"
+          className="section-image"
         />
       </section>
-      <section className="page-width-wider relative py-16 lg:py-32 flex flex-col gap-12 justify-center items-center bg-accent/20 rounded-xl mx-[-100px]">
+      <section className="wider-section !gap-12">
         <div
-          className="flex gap-4 items-center text-[30px] md:text-[36px] h3"
+          className="h3 flex items-center text-[30px] md:text-[36px]"
           dangerouslySetInnerHTML={{
             __html: t.raw("Features.title"),
           }}
         />
 
-        <div className="flex gap-8 items-between justify-center w-full flex-wrap">
-          <IndexCard
-            icon={
-              <BookOpenText className="text-background !w-[50px] !h-[50px]" />
-            }
+        <div className="flex w-full flex-wrap justify-center gap-8">
+          <FeatureCard
+            icon={<BookOpenText className="feature-icon" />}
             title={t("Features.Manager.title")}
             description={t("Features.Manager.description")}
           />
-          <IndexCard
-            icon={
-              <CalendarFold className="text-background !w-[50px] !h-[50px]" />
-            }
+          <FeatureCard
+            icon={<CalendarFold className="feature-icon" />}
             title={t("Features.Planner.title")}
             description={t("Features.Planner.description")}
           />
-          <IndexCard
-            icon={
-              <Share2 className="text-background !w-[50px] !h-[50px] mr-1" />
-            }
+          <FeatureCard
+            icon={<Share2 className="feature-icon mr-1" />}
             title={t("Features.SharingPlatform.title")}
             description={t("Features.SharingPlatform.description")}
           />
         </div>
       </section>
-
-      <section className="page-width-normal relative py-16 lg:py-32 flex flex-col items-center sm:flex-row gap-16">
-        <div className="flex flex-col gap-6 w-full sm:w-[50%]">
+      <section className="normal-section">
+        <div className="section-content">
           <h2>{t("RecipeManager.title")}</h2>
           <div
-            className="flex flex-col gap-6 leading-7"
             dangerouslySetInnerHTML={{
               __html: t.raw("RecipeManager.text"),
             }}
@@ -128,14 +103,13 @@ const Home = () => {
           width={0}
           height={0}
           sizes="100vw"
-          className="w-[100%] h-[100%] object-contain max-h-[575px] sm:w-[50%]"
+          className="section-image"
         />
       </section>
-      <section className="page-width-normal relative py-16 lg:py-32 flex flex-col items-center sm:flex-row gap-16">
-        <div className="flex flex-col gap-6 w-full sm:w-[50%] md:order-2">
+      <section className="normal-section">
+        <div className="section-content md:order-2">
           <h2>{t("Planner.title")}</h2>
           <div
-            className="flex flex-col gap-6 leading-7"
             dangerouslySetInnerHTML={{
               __html: t.raw("Planner.text"),
             }}
@@ -147,14 +121,13 @@ const Home = () => {
           width={0}
           height={0}
           sizes="100vw"
-          className="w-[100%] h-[100%] object-contain max-h-[575px] sm:w-[50%] md:order-1"
+          className="section-image md:order-1"
         />
       </section>
-      <section className="page-width-normal relative py-16 lg:py-32 flex flex-col items-center sm:flex-row gap-16">
-        <div className="flex flex-col gap-6 w-full sm:w-[50%]">
+      <section className="normal-section">
+        <div className="section-content">
           <h2>{t("SharingPlatform.title")}</h2>
           <div
-            className="flex flex-col gap-6 leading-7"
             dangerouslySetInnerHTML={{
               __html: t.raw("SharingPlatform.text"),
             }}
@@ -166,29 +139,27 @@ const Home = () => {
           width={0}
           height={0}
           sizes="100vw"
-          className="w-[100%] h-[100%] object-contain max-h-[575px] sm:w-[50%]"
+          className="section-image"
         />
       </section>
-      <section className="page-width-normal relative pt-16 pb-32 lg:pt-32 lg:pb-48 flex flex-col items-center sm:flex-row gap-16">
-        <div className="flex flex-col gap-8 w-full sm:w-[50%] md:order-2">
+      <section className="normal-section !pb-32 lg:!pb-48 lg:!pt-32">
+        <div className="section-content !gap-8 md:order-2">
           <h2>{t("Next.title")}</h2>
           <div
-            className="flex flex-col gap-6 leading-7"
             dangerouslySetInnerHTML={{
               __html: t.raw("Next.text"),
             }}
           />
         </div>
-        <div className="w-[100%] h-[100%] object-contain max-h-[575px] sm:w-[50%] md:order-1">
-          <CookingPot className="!w-[200px] !h-[200px] text-secondary m-auto" />
+        <div className="section-image md:order-1">
+          <CookingPot className="m-auto !h-[200px] !w-[200px] text-secondary" />
         </div>
       </section>
-
-      <section className="page-width-wider bg-accent/20 py-16 lg:py-32 flex flex-col gap-6 text-center items-center mx-[-100px]">
-        <div className="flex flex-col items-center gap-4 sm:gap-2 w-full px-[100px]">
+      <section className="wider-section">
+        <div className="flex w-full flex-col items-center gap-4 px-[100px] sm:gap-2">
           <h2 className="">{t("Banner.title")}</h2>
           <div
-            className="flex flex-col sm:flex-row gap-x-4 gap-y-2 items-center"
+            className="flex flex-col items-center gap-x-4 gap-y-2 sm:flex-row"
             dangerouslySetInnerHTML={{
               __html: t.raw("Banner.text"),
             }}
@@ -202,8 +173,8 @@ const Home = () => {
           />
         </div>
       </section>
-      <section className="page-width-normal pt-16 flex flex-col items-center">
-        <div className="flex flex-col items-center gap-2 w-full text-center">
+      <section className="footer-section">
+        <div className="flex w-full flex-col items-center gap-2 text-center">
           <div className="logo text-[60px]">Lunchefy</div>
           <div
             dangerouslySetInnerHTML={{

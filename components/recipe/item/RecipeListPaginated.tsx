@@ -1,15 +1,20 @@
 "use client";
-import React, { useMemo } from "react";
-import Recipe from "./Recipe";
-import { Privilage } from "@/enums";
-import InfiniteScroll from "../../ui/infinite-scroll";
-import { Mouse } from "lucide-react";
-import { Skeleton } from "../../ui/skeleton";
-import { UsePaginatedQueryReturnType } from "convex/react";
-import { api } from "@/convex/_generated/api";
-import { RECIPES_NEXT_COUNT } from "@/constants/pagination";
+
+import { useMemo } from "react";
+
 import { useTranslations } from "next-intl";
+
+import { api } from "@/convex/_generated/api";
 import { Doc } from "@/convex/_generated/dataModel";
+import { UsePaginatedQueryReturnType } from "convex/react";
+import { Mouse } from "lucide-react";
+
+import Recipe from "@/components/recipe/item/Recipe";
+import InfiniteScroll from "@/components/ui/infinite-scroll";
+import { Skeleton } from "@/components/ui/skeleton";
+
+import { RECIPES_NEXT_COUNT } from "@/constants/pagination";
+import { Privilage } from "@/enums";
 import { cn } from "@/lib/utils";
 
 interface RecipeListPaginatedProps {
@@ -63,7 +68,7 @@ const RecipeListPaginated = ({
         acc[key].push(recipe);
         return acc;
       },
-      {}
+      {},
     );
 
     return groupedByWeek;
@@ -81,7 +86,7 @@ const RecipeListPaginated = ({
             {Object.entries(recipeListGroupedByPlannerDate).map(
               ([month, recipes]: [string, Doc<"recipes">[]]) => (
                 <div key={month}>
-                  <div className="flex w-full py-8 items-center justify-start">
+                  <div className="flex w-full items-center justify-start py-8">
                     <h3 className="opacity-70">{month}</h3>
                   </div>
                   <div className="recipe-grid">
@@ -95,7 +100,7 @@ const RecipeListPaginated = ({
                     ))}
                   </div>
                 </div>
-              )
+              ),
             )}
           </>
         ) : (
@@ -117,10 +122,10 @@ const RecipeListPaginated = ({
           threshold={1}
         >
           {recipeListPaginated.status !== "Exhausted" && (
-            <div className="h-full w-full relative">
+            <div className="relative h-full w-full">
               <Skeleton className="h-full w-full bg-primary/30" />
               {!groupByPlannerDate && (
-                <div className="absolute top-0 left-0 w-full h-full text-white-1 flex flex-col justify-center items-center gap-2">
+                <div className="absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center gap-2 text-white-1">
                   <Mouse />
                   <div className="text-center">
                     {t("Scroll.Top")}

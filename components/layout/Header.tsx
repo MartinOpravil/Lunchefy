@@ -1,4 +1,8 @@
 "use client";
+
+import { useTranslations } from "next-intl";
+import Link from "next/link";
+
 import {
   ClerkLoaded,
   SignedIn,
@@ -6,24 +10,23 @@ import {
   UserButton,
   useUser,
 } from "@clerk/nextjs";
-import React from "react";
-import LocaleSwitcherSelect from "./LocaleSwitcherSelect";
-import { useTranslations } from "next-intl";
+
 import LinkButton from "@/components/global/button/LinkButton";
+import DarkModeSwitcher from "@/components/layout/DarkModeSwitcher";
+import LocaleSwitcherSelect from "@/components/layout/LocaleSwitcherSelect";
+
 import { ButtonVariant } from "@/enums";
-import Link from "next/link";
-import DarkModeSwitcher from "./DarkModeSwitcher";
 
 const Header = () => {
   const t = useTranslations("Global.Button");
   const { user } = useUser();
 
   return (
-    <nav className="page-width-normal flex justify-between items-center py-8">
+    <nav className="page-width-normal flex items-center justify-between py-8">
       <Link href="/">
         <span className="logo text-[36px] sm:text-[40px]">Lunchefy</span>
       </Link>
-      <div className="flex gap-4 justify-center items-center">
+      <div className="flex items-center justify-center gap-4">
         <LocaleSwitcherSelect />
         <DarkModeSwitcher />
         <ClerkLoaded>

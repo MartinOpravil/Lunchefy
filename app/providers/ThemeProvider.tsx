@@ -1,6 +1,8 @@
 "use client";
+
+import { useEffect } from "react";
+
 import { useGlobalStore } from "@/store/global";
-import React, { useEffect } from "react";
 
 interface ThemeProviderProps {
   children: React.ReactNode;

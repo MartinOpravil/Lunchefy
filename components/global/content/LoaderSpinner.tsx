@@ -1,6 +1,6 @@
-import { cn } from "@/lib/utils";
 import { LoaderCircle } from "lucide-react";
-import React from "react";
+
+import { cn } from "@/lib/utils";
 
 interface LoaderSpinnerProps {
   size?: number;
@@ -9,9 +9,9 @@ interface LoaderSpinnerProps {
 
 const LoaderSpinner = ({ size = 100, classList }: LoaderSpinnerProps) => {
   return (
-    <div className="absolute flex-center bg-inherit w-full h-full rounded-md pointer-events-none z-10">
+    <div className="flex-center pointer-events-none absolute z-10 h-full w-full rounded-md bg-inherit">
       <LoaderCircle
-        className={cn("animate-spin text-white", classList)}
+        className={cn("text-white animate-spin", classList)}
         size={size}
       />
     </div>

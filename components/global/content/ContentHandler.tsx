@@ -1,13 +1,18 @@
 "use client";
-import { HttpResponseCode } from "@/enums";
-import { ConvexResponse } from "@/lib/communication";
+
+import { ReactNode, useMemo } from "react";
+
+import { useTranslations } from "next-intl";
+
 import { Preloaded, usePreloadedQuery } from "convex/react";
 import { FunctionReference } from "convex/server";
-import { useTranslations } from "next-intl";
-import React, { ReactNode, useMemo } from "react";
-import LinkButton from "@/components/global/button/LinkButton";
 import { ArrowLeft, FileLock2, FileX2 } from "lucide-react";
-import LoaderSpinner from "./LoaderSpinner";
+
+import LinkButton from "@/components/global/button/LinkButton";
+import LoaderSpinner from "@/components/global/content/LoaderSpinner";
+
+import { HttpResponseCode } from "@/enums";
+import { ConvexResponse } from "@/lib/communication";
 
 interface ContentHandlerProps {
   children: ReactNode;
@@ -25,11 +30,11 @@ const ContentHandler = ({ children, preloadedData }: ContentHandlerProps) => {
     switch (response.status) {
       case HttpResponseCode.NotFound:
         title = t("Validation.NoContent");
-        image = <FileX2 className="text-primary !w-[150px] !h-[150px]" />;
+        image = <FileX2 className="!h-[150px] !w-[150px] text-primary" />;
         break;
       case HttpResponseCode.Forbidden:
         title = t("Validation.NoPermission");
-        image = <FileLock2 className="text-primary !w-[150px] !h-[150px]" />;
+        image = <FileLock2 className="!h-[150px] !w-[150px] text-primary" />;
         break;
       default:
         break;
@@ -43,13 +48,13 @@ const ContentHandler = ({ children, preloadedData }: ContentHandlerProps) => {
 
   if (!response.data && response.status !== HttpResponseCode.OK) {
     return (
-      <div className="page w-full flex flex-col flex-grow justify-center items-center gap-10 min-h-[600px]">
+      <div className="page flex min-h-[600px] w-full flex-grow flex-col items-center justify-center gap-10">
         {response.status === HttpResponseCode.Unauthorized ? (
           <LoaderSpinner classList="text-primary !w-[130px] !h-[130px]" />
         ) : (
           <>
             {image}
-            <div className="flex flex-col justify-center items-center gap-4 text-center">
+            <div className="flex flex-col items-center justify-center gap-4 text-center">
               <h1 className="text-7xl">{response.status}</h1>
               <h3>{title}</h3>
             </div>

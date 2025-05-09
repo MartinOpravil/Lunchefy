@@ -1,4 +1,5 @@
 "use server";
+
 import { cookies } from "next/headers";
 
 const DARK_MODE_KEY = "DARK_MODE";

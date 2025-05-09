@@ -1,10 +1,13 @@
+import { useFormContext } from "react-hook-form";
+
+import { useTranslations } from "next-intl";
+
+import { ArrowLeft, Save } from "lucide-react";
+
 import ActionButton from "@/components/global/button/ActionButton";
 import PageHeader from "@/components/global/content/PageHeader";
+
 import { ButtonVariant } from "@/enums";
-import { ArrowLeft, Save, Users } from "lucide-react";
-import { useTranslations } from "next-intl";
-import React from "react";
-import { useFormContext } from "react-hook-form";
 
 interface CustomFormContext {
   performManualLeaveAction: () => void;
@@ -22,7 +25,6 @@ const NewGroupHeader = () => {
   return (
     <PageHeader
       title={t("Groups.General.NewGroupTitle")}
-      icon={<Users />}
       leftSide={
         <ActionButton
           icon={<ArrowLeft />}

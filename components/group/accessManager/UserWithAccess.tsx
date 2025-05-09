@@ -1,12 +1,16 @@
+import { useState } from "react";
+
+import { useTranslations } from "next-intl";
+
+import { GenericId } from "convex/values";
+import { Pencil, Share2 } from "lucide-react";
+
 import ActionButton from "@/components/global/button/ActionButton";
 import BasicDialog from "@/components/global/dialog/BasicDialog";
+import UserAccessForm from "@/components/group/accessManager/UserAccessForm";
 import PrivilageBadge from "@/components/user/PrivilageBadge";
-import React, { useState } from "react";
-import UserAccessForm from "./UserAccessForm";
-import { Pencil, Share2 } from "lucide-react";
+
 import { Privilage } from "@/enums";
-import { GenericId } from "convex/values";
-import { useTranslations } from "next-intl";
 
 export interface UserWithAccessProps {
   name: string;
@@ -26,12 +30,12 @@ const UserWithAccess = ({
 
   return (
     <>
-      <div className="text-text w-full flex flex-col @sm:flex-row justify-between items-center gap-2 pt-2">
-        <div className="flex flex-col w-full">
+      <div className="flex w-full flex-col items-center justify-between gap-2 pt-2 text-text @sm:flex-row">
+        <div className="flex w-full flex-col">
           <div>{name}</div>
           <div className="text-12">{email}</div>
         </div>
-        <div className="actions flex gap-4 w-full sm:w-fit items-center justify-end">
+        <div className="actions flex w-full items-center justify-end gap-4 sm:w-fit">
           <PrivilageBadge privilage={privilage} />
           <ActionButton
             icon={<Pencil />}

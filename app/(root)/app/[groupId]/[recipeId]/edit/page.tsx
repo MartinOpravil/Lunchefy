@@ -1,10 +1,11 @@
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
-import { getAuthToken } from "@/lib/authentication";
 import { preloadQuery } from "convex/nextjs";
-import React from "react";
-import RecipeDetailPage from "./RecipeDetailPage";
+
+import RecipeDetailPage from "@/app/(root)/app/[groupId]/[recipeId]/edit/RecipeDetailPage";
 import ContentHandler from "@/components/global/content/ContentHandler";
+
+import { getAuthToken } from "@/lib/authentication";
 
 interface RecipeDetailServerPageProps {
   params: Promise<{ recipeId: Id<"recipes"> }>;
@@ -23,7 +24,7 @@ const RecipeDetailServerPage = async ({
       id: recipeId,
       checkPrivilages: true,
     },
-    { token }
+    { token },
   );
 
   const [userPreload, recipePreload] = await Promise.all([

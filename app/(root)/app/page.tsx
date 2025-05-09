@@ -1,8 +1,10 @@
 import { api } from "@/convex/_generated/api";
 import { preloadQuery } from "convex/nextjs";
-import React from "react";
+
+import GroupListPage from "@/app/(root)/app/GroupListPage";
+import ContentHandler from "@/components/global/content/ContentHandler";
+
 import { getAuthToken } from "@/lib/authentication";
-import GroupListPage from "./GroupListPage";
 
 const GroupListServerPage = async () => {
   const token = await getAuthToken();
@@ -10,7 +12,7 @@ const GroupListServerPage = async () => {
   const groupListPreloadPromise = preloadQuery(
     api.groups.getGroupList,
     {},
-    { token }
+    { token },
   );
 
   const [userPreload, groupListPreload] = await Promise.all([
@@ -19,10 +21,12 @@ const GroupListServerPage = async () => {
   ]);
 
   return (
-    <GroupListPage
-      groupListPreloaded={groupListPreload}
-      userPreloaded={userPreload}
-    />
+    <ContentHandler preloadedData={groupListPreload}>
+      <GroupListPage
+        groupListPreloaded={groupListPreload}
+        userPreloaded={userPreload}
+      />
+    </ContentHandler>
   );
 };
 

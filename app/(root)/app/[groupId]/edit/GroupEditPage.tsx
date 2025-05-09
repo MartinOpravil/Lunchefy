@@ -1,17 +1,22 @@
 "use client";
+
+import { useRef, useState } from "react";
+import { SubmitHandler } from "react-hook-form";
+
+import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
+
+import { api } from "@/convex/_generated/api";
+import { Preloaded, useMutation, usePreloadedQuery } from "convex/react";
+
 import FormProviderWrapper from "@/components/global/form/FormProviderWrapper";
 import GroupForm from "@/components/group/form/GroupForm";
 import EditGroupHeader from "@/components/group/header/EditGroupHeader";
-import { groupFormSchema, GroupFormValues } from "@/constants/formSchema";
-import { api } from "@/convex/_generated/api";
+
+import { GroupFormValues, groupFormSchema } from "@/constants/formSchema";
+import { HttpResponseCode } from "@/enums";
 import { notifyError, notifySuccess } from "@/lib/notifications";
 import { ImageInputHandle, ImageStateProps } from "@/types";
-import { Preloaded, useMutation, usePreloadedQuery } from "convex/react";
-import { useRouter } from "next/navigation";
-import React, { useRef, useState } from "react";
-import { SubmitHandler } from "react-hook-form";
-import { HttpResponseCode } from "@/enums";
-import { useTranslations } from "next-intl";
 
 interface GroupEditPageProps {
   groupPreloaded: Preloaded<typeof api.groups.getGroupById>;
@@ -33,7 +38,7 @@ const GroupEditPage = ({
   const [resetForm, setResetForm] = useState<(() => void) | null>(null);
 
   const handleSubmit: SubmitHandler<GroupFormValues> = async (
-    values: GroupFormValues
+    values: GroupFormValues,
   ) => {
     if (!group.data) return;
 
@@ -50,7 +55,7 @@ const GroupEditPage = ({
         switch (response.status) {
           case HttpResponseCode.NotFound:
             return notifyError(
-              t("Groups.General.Notification.Error.Update404")
+              t("Groups.General.Notification.Error.Update404"),
             );
           default:
             return notifyError(t("Global.Notification.UnexpectedError"));
@@ -64,33 +69,33 @@ const GroupEditPage = ({
     } catch (error) {
       notifyError(
         t("Groups.General.Notification.Error.Update"),
-        error?.toString()
+        error?.toString(),
       );
     }
   };
 
   return (
-    <FormProviderWrapper
-      onSubmit={handleSubmit}
-      formSchema={groupFormSchema}
-      defaultValues={{
-        name: group.data?.name ?? "",
-        description: group.data?.description,
-        coverImage: group.data?.coverImage,
-      }}
-      onFormStateChange={setIsFormDirty}
-      passResetToParent={setResetForm}
-      coverImageRef={coverImageRef}
-    >
-      <main className="page page-width-normal">
+    <main className="page page-width-normal">
+      <FormProviderWrapper
+        onSubmit={handleSubmit}
+        formSchema={groupFormSchema}
+        defaultValues={{
+          name: group.data?.name ?? "",
+          description: group.data?.description,
+          coverImage: group.data?.coverImage,
+        }}
+        onFormStateChange={setIsFormDirty}
+        passResetToParent={setResetForm}
+        coverImageRef={coverImageRef}
+      >
         <EditGroupHeader group={group} />
         <section className="page-content">
           {user.data && (
             <GroupForm group={group} isVerified={user.data.isVerified} />
           )}
         </section>
-      </main>
-    </FormProviderWrapper>
+      </FormProviderWrapper>
+    </main>
   );
 };
 

@@ -1,22 +1,22 @@
-"use client";
+import { ChefHat } from "lucide-react";
+
 import { cn } from "@/lib/utils";
-import React, { ReactNode } from "react";
 
 interface PageHeaderProps {
-  icon?: ReactNode;
+  icon?: React.ReactNode;
   title: string;
   description?: string;
-  descriptionSlot?: ReactNode;
-  topLeftSide?: ReactNode;
-  topRightSide?: ReactNode;
-  leftSide?: ReactNode;
-  rightSide?: ReactNode;
+  descriptionSlot?: React.ReactNode;
+  topLeftSide?: React.ReactNode;
+  topRightSide?: React.ReactNode;
+  leftSide?: React.ReactNode;
+  rightSide?: React.ReactNode;
   showIcon?: boolean;
   titleClassName?: string;
 }
 
 const PageHeader = ({
-  icon,
+  icon = <ChefHat className="text-white-1" />,
   title,
   description,
   descriptionSlot,
@@ -29,8 +29,8 @@ const PageHeader = ({
 }: PageHeaderProps) => {
   return (
     <nav className="relative">
-      <div className="flex flex-wrap gap-2 gap-y-6 justify-between items-end">
-        <div className="flex flex-col flex-grow">
+      <div className="flex flex-wrap items-end justify-between gap-2 gap-y-6">
+        <div className="flex flex-grow flex-col">
           <h2 className={cn("flex items-center gap-3", titleClassName)}>
             {showIcon && (
               <div className="rounded-full bg-primary p-2">{icon}</div>
@@ -42,19 +42,19 @@ const PageHeader = ({
           {descriptionSlot}
         </div>
         {topRightSide && (
-          <div className="flex flex-grow items-center justify-end gap-2 flex-wrap">
+          <div className="flex flex-grow flex-wrap items-center justify-end gap-2">
             {topRightSide}
           </div>
         )}
       </div>
       <div className="heading-underline" />
       {(leftSide || rightSide) && (
-        <div className="flex justify-between items-center gap-2 flex-wrap">
+        <div className="flex flex-wrap items-center justify-between gap-2">
           {leftSide && (
-            <div className="flex gap-2 items-center">{leftSide}</div>
+            <div className="flex items-center gap-2">{leftSide}</div>
           )}
           {rightSide && (
-            <div className="flex gap-2 items-center">{rightSide}</div>
+            <div className="flex items-center gap-2">{rightSide}</div>
           )}
         </div>
       )}

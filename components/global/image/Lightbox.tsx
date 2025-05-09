@@ -1,5 +1,7 @@
 "use client";
-import React, { forwardRef, Ref, useImperativeHandle, useRef } from "react";
+
+import { Ref, forwardRef, useImperativeHandle, useRef, useState } from "react";
+
 import LightboxYARL from "yet-another-react-lightbox";
 import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
@@ -15,12 +17,12 @@ interface LightboxProps {
 
 const Lightbox = (
   { imageSrcList }: LightboxProps,
-  ref: Ref<LightboxHandle>
+  ref: Ref<LightboxHandle>,
 ) => {
-  const [open, setOpen] = React.useState(false);
-  const [index, setIndex] = React.useState(0);
+  const [open, setOpen] = useState(false);
+  const [index, setIndex] = useState(0);
 
-  const fullscreenRef = React.useRef(null);
+  const fullscreenRef = useRef(null);
   const zoomRef = useRef(null);
 
   useImperativeHandle(ref, () => ({

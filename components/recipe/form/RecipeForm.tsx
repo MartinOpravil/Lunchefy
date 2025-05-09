@@ -1,8 +1,15 @@
 "use client";
-import { getRecipeById } from "@/convex/recipes";
-import { ImageInputHandle } from "@/types";
-import React from "react";
+
 import { useFormContext } from "react-hook-form";
+
+import { useTranslations } from "next-intl";
+
+import { getRecipeById } from "@/convex/recipes";
+import { FileImage, FileText, Image as ImageLucide, Text } from "lucide-react";
+
+import ImageInput from "@/components/global/input/ImageInput";
+import Editor from "@/components/recipe/editor/Editor";
+import { AutosizeTextarea } from "@/components/ui/autosize-textarea";
 import {
   FormControl,
   FormField,
@@ -10,17 +17,14 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import PrivilageBadge from "@/components/user/PrivilageBadge";
 import { Input } from "@/components/ui/input";
-import ImageInput from "@/components/global/input/ImageInput";
-import Editor from "@/components/recipe/editor/Editor";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { FileImage, FileText, Image as ImageLucide, Text } from "lucide-react";
-import { AutosizeTextarea } from "@/components/ui/autosize-textarea";
 import MultipleSelector from "@/components/ui/multiple-selector";
-import { useTranslations } from "next-intl";
-import { useTagManager } from "../tag/TagManager";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import PrivilageBadge from "@/components/user/PrivilageBadge";
+
+import { useTagManager } from "@/hooks/TagManager";
 import { useGlobalStore } from "@/store/global";
+import { ImageInputHandle } from "@/types";
 
 interface RecipeDetailHeaderProps {
   recipe?: Awaited<ReturnType<typeof getRecipeById>>;
@@ -47,7 +51,7 @@ const RecipeForm = ({ recipe, isVerified }: RecipeDetailHeaderProps) => {
           <PrivilageBadge privilage={recipe.data.privilage} />
         )}
       </div>
-      <div className="flex flex-col gap-4 pb-6 w-full">
+      <div className="flex w-full flex-col gap-4 pb-6">
         <section className="flex flex-col gap-[30px]">
           <FormField
             {...{ ...register("name"), ref: null }}
@@ -78,7 +82,7 @@ const RecipeForm = ({ recipe, isVerified }: RecipeDetailHeaderProps) => {
                   <AutosizeTextarea
                     className="input-class"
                     placeholder={t(
-                      "Recipes.General.Form.Placeholder.Description"
+                      "Recipes.General.Form.Placeholder.Description",
                     )}
                     {...field}
                     maxHeight={200}
@@ -128,13 +132,13 @@ const RecipeForm = ({ recipe, isVerified }: RecipeDetailHeaderProps) => {
           />
         </section>
         <Tabs defaultValue={recipe?.data?.isImageRecipe.toString() ?? "false"}>
-          <h3 className="input-label w-full text-center pt-4">
+          <h3 className="input-label w-full pt-4 text-center">
             {t("Recipes.General.Content")}
           </h3>
-          <TabsList className="w-full flex flex-col sm:flex-row my-6">
+          <TabsList className="my-6 flex w-full flex-col sm:flex-row">
             <TabsTrigger
               value="false"
-              className="flex gap-2 w-full text-text"
+              className="flex w-full gap-2 text-text"
               onMouseDown={() =>
                 setValue("isImageRecipe", false, { shouldDirty: true })
               }
@@ -144,7 +148,7 @@ const RecipeForm = ({ recipe, isVerified }: RecipeDetailHeaderProps) => {
             </TabsTrigger>
             <TabsTrigger
               value="true"
-              className="flex gap-2 w-full text-text"
+              className="flex w-full gap-2 text-text"
               onMouseDown={() =>
                 setValue("isImageRecipe", true, { shouldDirty: true })
               }
@@ -157,7 +161,7 @@ const RecipeForm = ({ recipe, isVerified }: RecipeDetailHeaderProps) => {
           <TabsContent value="false">
             <div className="flex flex-col gap-[30px]">
               {recipe?.data?.recipeImage && (
-                <div className="text-12 text-primary text-center">
+                <div className="text-12 text-center text-primary">
                   {t("Recipes.General.ImageDeletionDisclaimer")}
                 </div>
               )}

@@ -1,7 +1,10 @@
-import React, { useMemo } from "react";
-import { useTagManager } from "./TagManager";
+import { useMemo } from "react";
+
 import Image from "next/image";
-import { Badge } from "../../ui/badge";
+
+import { Badge } from "@/components/ui/badge";
+
+import { useTagManager } from "@/hooks/TagManager";
 import { cn } from "@/lib/utils";
 import { useGlobalStore } from "@/store/global";
 
@@ -45,16 +48,16 @@ const RecipeTagList = ({
 
   return (
     <div
-      className={cn("flex flex-wrap gap-1 gap-y-1.5 justify-center", {
-        "gap-1 justify-center": dense,
+      className={cn("flex flex-wrap justify-center gap-1 gap-y-1.5", {
+        "justify-center gap-1": dense,
       })}
     >
       {tags.map((tag, index) => (
         <Badge
           key={index}
           className={cn(
-            "flex gap-2 bg-secondary text-white-1 px-2 select-none hover:bg-default",
-            { "bg-transparent px-0": dense }
+            "hover:bg-default flex select-none gap-2 bg-secondary px-2 text-white-1",
+            { "bg-transparent px-0": dense },
           )}
         >
           <Image
@@ -63,8 +66,8 @@ const RecipeTagList = ({
             alt="Tag"
             width={25}
             height={25}
-            className={cn("!w-[25px] !h-[25px]", {
-              "!w-[22px] !h-[22px]": dense,
+            className={cn("!h-[25px] !w-[25px]", {
+              "!h-[22px] !w-[22px]": dense,
             })}
             style={{ filter: darkMode || !dense ? "invert(100%)" : "" }}
           />
@@ -72,7 +75,7 @@ const RecipeTagList = ({
         </Badge>
       ))}
       {hasMore && (
-        <div className="flex items-center justify-center text-12 pb-[0.15rem]">
+        <div className="text-12 flex items-center justify-center pb-[0.15rem]">
           +{moreCount}
         </div>
       )}

@@ -1,4 +1,17 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+
+import { useTranslations } from "next-intl";
+
+import { api } from "@/convex/_generated/api";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "convex/react";
+import { GenericId } from "convex/values";
+import { Save, Trash2 } from "lucide-react";
+import { z } from "zod";
+
+import ActionButton from "@/components/global/button/ActionButton";
+import ActionDialog from "@/components/global/dialog/ActionDialog";
 import {
   Form,
   FormControl,
@@ -14,18 +27,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+
 import { ButtonVariant, HttpResponseCode, Privilage } from "@/enums";
-import ActionButton from "@/components/global/button/ActionButton";
-import ActionDialog from "@/components/global/dialog/ActionDialog";
-import { useMutation } from "convex/react";
-import { api } from "@/convex/_generated/api";
 import { notifyError, notifySuccess } from "@/lib/notifications";
-import { Save, Trash2 } from "lucide-react";
-import { GenericId } from "convex/values";
-import { useTranslations } from "next-intl";
 
 const formSchema = z.object({
   privilage: z.string(),
@@ -76,7 +80,7 @@ const UserAccessForm = ({
         switch (result.status) {
           case HttpResponseCode.Forbidden:
             return notifyError(
-              t("Groups.AccessManager.Notification.Error.Update403")
+              t("Groups.AccessManager.Notification.Error.Update403"),
             );
           default:
             return notifyError(t("Global.Notification.UnexpectedError"));
@@ -86,7 +90,7 @@ const UserAccessForm = ({
       notifySuccess(
         t("Groups.AccessManager.Notification.Success.Update", {
           privilage: values.privilage,
-        })
+        }),
       );
       actionClicked();
       form.setValue("privilage", "");
@@ -105,14 +109,14 @@ const UserAccessForm = ({
         switch (result.status) {
           case HttpResponseCode.Forbidden:
             return notifyError(
-              t("Groups.AccessManager.Notification.Error.Revoke403")
+              t("Groups.AccessManager.Notification.Error.Revoke403"),
             );
           default:
             return notifyError(t("Global.Notification.UnexpectedError"));
         }
       }
       notifySuccess(
-        t("Groups.AccessManager.Notification.Success.Revoke", { name, email })
+        t("Groups.AccessManager.Notification.Success.Revoke", { name, email }),
       );
       actionClicked();
     } catch (error) {
@@ -149,12 +153,12 @@ const UserAccessForm = ({
                     <SelectContent>
                       <SelectItem value={Privilage.Editor}>
                         {t(
-                          `Groups.AccessManager.Privilage.${Privilage.Editor}`
+                          `Groups.AccessManager.Privilage.${Privilage.Editor}`,
                         )}
                       </SelectItem>
                       <SelectItem value={Privilage.Viewer}>
                         {t(
-                          `Groups.AccessManager.Privilage.${Privilage.Viewer}`
+                          `Groups.AccessManager.Privilage.${Privilage.Viewer}`,
                         )}
                       </SelectItem>
                     </SelectContent>
@@ -167,7 +171,7 @@ const UserAccessForm = ({
           <div className="flex justify-between gap-2">
             <ActionButton
               icon={
-                <Trash2 className="text-text group-hover:text-primary transition-all" />
+                <Trash2 className="text-text transition-all group-hover:text-primary" />
               }
               onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
                 e.preventDefault();

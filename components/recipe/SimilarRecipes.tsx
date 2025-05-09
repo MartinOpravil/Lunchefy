@@ -1,11 +1,13 @@
+import { useTranslations } from "next-intl";
+
 import { api } from "@/convex/_generated/api";
 import { usePaginatedQuery } from "convex/react";
-import { useTranslations } from "next-intl";
-import React from "react";
-import { useTagManager } from "./tag/TagManager";
-import { Skeleton } from "../ui/skeleton";
-import Recipe from "./item/Recipe";
+
+import Recipe from "@/components/recipe/item/Recipe";
+import { Skeleton } from "@/components/ui/skeleton";
+
 import { Privilage } from "@/enums";
+import { useTagManager } from "@/hooks/TagManager";
 
 interface SimilarRecipesProps {
   groupId: string;
@@ -30,7 +32,7 @@ const SimilarRecipes = ({
         ? convertToTags(recipeTags).map((x) => x.value)
         : undefined,
     },
-    { initialNumItems: 5 }
+    { initialNumItems: 5 },
   );
 
   return (
@@ -38,7 +40,7 @@ const SimilarRecipes = ({
       <h2 className="pb text-[28px]">{t("Recipes.General.SimilarRecipes")}</h2>
       {/* <div className="heading-underline" /> */}
       {similarRecipes.status === "LoadingFirstPage" && (
-        <Skeleton className="w-full h-[150px] bg-primary/20 flex justify-center items-center">
+        <Skeleton className="flex h-[150px] w-full items-center justify-center bg-primary/20">
           <h3>{t("Global.Loading")}</h3>
         </Skeleton>
       )}

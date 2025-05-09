@@ -1,17 +1,22 @@
 "use client";
-import React, { ReactNode, useState } from "react";
-import { Card } from "@/components/ui/card";
+
+import { ReactNode, useState } from "react";
+
 import Link from "next/link";
-import LinkButton from "@/components/global/button/LinkButton";
-import { cn } from "@/lib/utils";
-import { ButtonVariant, Privilage } from "@/enums";
-import DeleteRecipeButton from "../button/DeleteRecipeButton";
-import { Pencil } from "lucide-react";
-import LoaderSpinner from "../../global/content/LoaderSpinner";
+
 import { Doc } from "@/convex/_generated/dataModel";
-import ChosenImage from "../../global/image/ChosenImage";
-import RecipeTagList from "../tag/RecipeTagList";
-import AssignRecipeToTodayButton from "../button/AssignRecipeToTodayButton";
+import { Pencil } from "lucide-react";
+
+import LinkButton from "@/components/global/button/LinkButton";
+import LoaderSpinner from "@/components/global/content/LoaderSpinner";
+import ChosenImage from "@/components/global/image/ChosenImage";
+import AssignRecipeToTodayButton from "@/components/recipe/button/AssignRecipeToTodayButton";
+import DeleteRecipeButton from "@/components/recipe/button/DeleteRecipeButton";
+import RecipeTagList from "@/components/recipe/tag/RecipeTagList";
+import { Card } from "@/components/ui/card";
+
+import { ButtonVariant, Privilage } from "@/enums";
+import { cn } from "@/lib/utils";
 import { useGroupStore } from "@/store/group";
 
 export interface RecipeProps {
@@ -41,24 +46,24 @@ const Recipe = ({
   return (
     <Card
       className={cn(
-        "relative cursor-pointer transition-all overflow-hidden border border-accent hover:border-primary group",
-        classList
+        "group relative cursor-pointer overflow-hidden border border-accent transition-all hover:border-primary",
+        classList,
       )}
     >
       <Link
         href={`/app/${recipe.groupId}/${recipe._id}`}
         className={cn(
-          "relative min-h-[200px] h-full flex flex-col justify-between items-center",
+          "relative flex h-full min-h-[200px] flex-col items-center justify-between",
           { "min-h-[240px]": privilage === Privilage.Viewer },
           { "flex-row": vertical },
-          { "min-h-fit": vertical }
+          { "min-h-fit": vertical },
         )}
         onClick={() => setIsRoutingToOverview(true)}
       >
         <div
           className={cn(
-            "relative w-full h-[180px] flex items-center justify-center overflow-hidden bg-accent/30",
-            { "min-h-[110px] min-w-[110px] w-[110px] !h-[110px]": vertical }
+            "relative flex h-[180px] w-full items-center justify-center overflow-hidden bg-accent/30",
+            { "!h-[110px] min-h-[110px] w-[110px] min-w-[110px]": vertical },
           )}
         >
           <ChosenImage
@@ -69,31 +74,31 @@ const Recipe = ({
         {isRoutingToOverview && (
           <LoaderSpinner classList="absolute top-2 left-2 !text-primary" />
         )}
-        <div className="flex flex-col justify-between w-full flex-grow p-2 gap-2 ">
-          <div className="flex flex-col pt-1 px-1 gap-2 pb-2">
+        <div className="flex w-full flex-grow flex-col justify-between gap-2 p-2">
+          <div className="flex flex-col gap-2 px-1 pb-2 pt-1">
             <h3
               className={cn(
-                "text-xl sm:text-2xl sm:leading-7 group-hover:text-primary transition-all line-clamp-3",
-                { "text-xl": vertical }
+                "line-clamp-3 text-xl transition-all group-hover:text-primary sm:text-2xl sm:leading-7",
+                { "text-xl": vertical },
               )}
             >
               {recipe.name}
             </h3>
             {!vertical && recipe.description && (
-              <div className="text-12 text-text2 line-clamp-3">
+              <div className="text-12 line-clamp-3 text-text2">
                 {recipe.description}
               </div>
             )}
           </div>
           {/* {privilage !== Privilage.Viewer && <div className="h-10" />} */}
         </div>
-        {useVerticalButton && <div className="w-28 h-10" />}
+        {useVerticalButton && <div className="h-10 w-28" />}
       </Link>
-      <div className="absolute top-2 w-full px-2 pointer-events-none">
+      <div className="pointer-events-none absolute top-2 w-full px-2">
         {!vertical && (
           <>
             {showTags && recipe.tags && (
-              <div className="transition-all w-fit bg-background mx-auto px-2 rounded-xl opacity-60 group-hover:opacity-80 mb-2">
+              <div className="mx-auto mb-2 w-fit rounded-xl bg-background px-2 opacity-60 transition-all group-hover:opacity-80">
                 <RecipeTagList recipeTags={recipe.tags} useName={false} dense />
               </div>
             )}
@@ -111,7 +116,7 @@ const Recipe = ({
         )}
       </div>
       {privilage !== Privilage.Viewer && (
-        <div className="absolute top-[7.75rem] w-full p-2 flex justify-between items-center pointer-events-none">
+        <div className="pointer-events-none absolute top-[7.75rem] flex w-full items-center justify-between p-2">
           {privilage === Privilage.Owner && (
             <DeleteRecipeButton
               recipeId={recipe._id}
@@ -129,7 +134,7 @@ const Recipe = ({
           />
         </div>
       )}
-      <div className="absolute top-[50%] translate-y-[-50%] right-6">
+      <div className="absolute right-6 top-[50%] translate-y-[-50%]">
         {verticalButton}
       </div>
     </Card>

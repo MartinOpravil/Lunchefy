@@ -1,9 +1,12 @@
 "use client";
+
 import { Editor } from "@tiptap/react";
-import React from "react";
-import EditorButton, { EditorButtonType } from "./EditorButton";
-import { Skeleton } from "../../../ui/skeleton";
-import ColorEditorButton from "./ColorEditorButton";
+
+import ColorEditorButton from "@/components/recipe/editor/controls/ColorEditorButton";
+import EditorButton, {
+  EditorButtonType,
+} from "@/components/recipe/editor/controls/EditorButton";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface EditorControlBarProps {
   editor: Editor | null;
@@ -13,7 +16,7 @@ const EditorControlBar = ({ editor }: EditorControlBarProps) => {
   const skeletonClasses = "h-8 w-8 bg-gray-200";
 
   return (
-    <div className="flex gap-x-4 gap-y-1 flex-wrap justify-between">
+    <div className="flex flex-wrap justify-between gap-x-4 gap-y-1">
       <div className="flex flex-wrap gap-1">
         {editor ? (
           <>
@@ -39,7 +42,7 @@ const EditorControlBar = ({ editor }: EditorControlBarProps) => {
           </>
         )}
       </div>
-      <div className="flex gap-1 flex-wrap justify-end">
+      <div className="flex flex-wrap justify-end gap-1">
         {editor ? (
           <>
             <EditorButton editor={editor} type={EditorButtonType.AlignLeft} />

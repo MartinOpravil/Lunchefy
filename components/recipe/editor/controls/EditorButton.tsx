@@ -1,6 +1,7 @@
 "use client";
-import React, { useMemo } from "react";
-import { Button } from "../../../ui/button";
+
+import { useMemo } from "react";
+
 import { Editor } from "@tiptap/react";
 import {
   AlignCenter,
@@ -20,6 +21,9 @@ import {
   TextQuote,
   Undo,
 } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+
 import { ButtonVariant } from "@/enums";
 import { cn } from "@/lib/utils";
 
@@ -51,7 +55,7 @@ interface EditorButtonProps {
 const EditorButton = ({ type, editor }: EditorButtonProps) => {
   const performAction = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    action: () => boolean
+    action: () => boolean,
   ) => {
     e.preventDefault();
     action();
@@ -223,7 +227,7 @@ const EditorButton = ({ type, editor }: EditorButtonProps) => {
       disabled={isDisabled()}
       className={cn(
         "editor-button",
-        isActive() ? "outline outline-[2px] outline-primary" : ""
+        isActive() ? "outline outline-[2px] outline-primary" : "",
       )}
       onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
         performAction(e, action)

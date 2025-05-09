@@ -1,7 +1,7 @@
-"use client";
-import React from "react";
-import ActionButton from "@/components/global/button/ActionButton";
 import { Moon, Sun } from "lucide-react";
+
+import ActionButton from "@/components/global/button/ActionButton";
+
 import { useGlobalStore } from "@/store/global";
 
 const DarkModeSwitcher = () => {

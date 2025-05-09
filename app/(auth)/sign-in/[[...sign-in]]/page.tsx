@@ -1,9 +1,13 @@
 "use client";
-import { notifySuccess } from "@/lib/notifications";
-import { SignedOut, SignIn } from "@clerk/nextjs";
+
+import { useEffect } from "react";
+
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
-import React, { useEffect } from "react";
+
+import { SignIn } from "@clerk/nextjs";
+
+import { notifySuccess } from "@/lib/notifications";
 
 const Page = () => {
   const t = useTranslations("Users.Notification.Success");

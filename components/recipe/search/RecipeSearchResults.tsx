@@ -1,13 +1,15 @@
-import { api } from "@/convex/_generated/api";
-import { usePaginatedQuery } from "convex/react";
-import React from "react";
-import { Privilage } from "@/enums";
-import { Id } from "@/convex/_generated/dataModel";
-import { Loader2 } from "lucide-react";
-import { RECIPES_SEARCH_INITIAL_COUNT } from "@/constants/pagination";
 import { useTranslations } from "next-intl";
+
+import { api } from "@/convex/_generated/api";
+import { Id } from "@/convex/_generated/dataModel";
+import { usePaginatedQuery } from "convex/react";
+import { Loader2 } from "lucide-react";
+
 import NoContent from "@/components/global/content/NoContent";
 import RecipeListPaginated from "@/components/recipe/item/RecipeListPaginated";
+
+import { RECIPES_SEARCH_INITIAL_COUNT } from "@/constants/pagination";
+import { Privilage } from "@/enums";
 
 export enum RecipeSearchResultListVariant {
   Page = "page",
@@ -40,11 +42,11 @@ const RecipeSearchResults = ({
       searchTags: searchTags,
       dateMiliseconds,
     },
-    { initialNumItems: RECIPES_SEARCH_INITIAL_COUNT }
+    { initialNumItems: RECIPES_SEARCH_INITIAL_COUNT },
   );
 
   return (
-    <div className="flex flex-col gap-4 justify-center items-start w-full @container">
+    <div className="flex w-full flex-col items-start justify-center gap-4 @container">
       {!dateMiliseconds && <h3>{t("General.SearchResults")}</h3>}
 
       {!filteredRecipesPaginated && (

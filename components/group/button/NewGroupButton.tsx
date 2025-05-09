@@ -1,7 +1,10 @@
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { cn } from "@/lib/utils";
-import { Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
+
+import { Plus } from "lucide-react";
+
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+
+import { cn } from "@/lib/utils";
 
 interface NewGroupButtonProps {
   onClick: () => void;
@@ -19,9 +22,9 @@ const NewGroupButton = ({ onClick, hasGroups }: NewGroupButtonProps) => {
       onClick={onClick}
     >
       <div className="link">
-        <Avatar className="relative w-[100px] h-[100px] transition-all group-hover:opacity-90">
+        <Avatar className="relative h-[100px] w-[100px] transition-all group-hover:opacity-90">
           <AvatarFallback className="bg-primary">
-            <Plus className="text-white-1 !w-[50px] !h-[50px]" />
+            <Plus className="!h-[50px] !w-[50px] text-white-1" />
           </AvatarFallback>
         </Avatar>
         <div className="gap-2 transition-all group-hover:opacity-90">

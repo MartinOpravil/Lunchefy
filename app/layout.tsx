@@ -1,14 +1,18 @@
-import "./globals.css";
 import type { Metadata } from "next";
-import { Inter, Playfair, Marck_Script } from "next/font/google";
-import ConvexClerkProvider from "./providers/ConvexClerkProvider";
-import { Toaster } from "sonner";
-import { ConvexQueryCacheProvider } from "convex-helpers/react/cache/provider";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages, getTranslations } from "next-intl/server";
-import { cn } from "@/lib/utils";
+import { Inter, Marck_Script, Playfair } from "next/font/google";
+
+import { ConvexQueryCacheProvider } from "convex-helpers/react/cache/provider";
+import { Toaster } from "sonner";
+
+import ConvexClerkProvider from "@/app/providers/ConvexClerkProvider";
+import ThemeProvider from "@/app/providers/ThemeProvider";
+
 import { getDarkModeCookie } from "@/lib/cookies";
-import ThemeProvider from "./providers/ThemeProvider";
+import { cn } from "@/lib/utils";
+
+import "./globals.css";
 
 const playfair = Playfair({
   subsets: ["latin"],
@@ -42,10 +46,11 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const locale = await getLocale();
-  const messages = await getMessages();
-
-  const darkMode = await getDarkModeCookie();
+  const [locale, messages, darkMode] = await Promise.all([
+    getLocale(),
+    getMessages(),
+    getDarkModeCookie(),
+  ]);
 
   return (
     <html
@@ -55,10 +60,10 @@ export default async function RootLayout({
         inter.variable,
         marckScript.variable,
         "overflow-x-hidden",
-        { "dark-theme": darkMode }
+        { "dark-theme": darkMode },
       )}
     >
-      <body className="flex flex-col relative w-full">
+      <body className="relative flex w-full flex-col">
         <NextIntlClientProvider messages={messages}>
           <ConvexClerkProvider>
             <ConvexQueryCacheProvider>

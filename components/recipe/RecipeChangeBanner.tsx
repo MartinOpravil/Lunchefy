@@ -1,9 +1,9 @@
-import React from "react";
 import Image from "next/image";
+
 import { CalendarFold } from "lucide-react";
+
+import { cn, getTimeLocale } from "@/lib/utils";
 import { Author } from "@/types";
-import { useLocale } from "next-intl";
-import { cn } from "@/lib/utils";
 
 interface RecipeChangeBannerProps {
   author: Author;
@@ -11,16 +11,16 @@ interface RecipeChangeBannerProps {
 }
 
 const RecipeChangeBanner = ({ author, className }: RecipeChangeBannerProps) => {
-  const locale = useLocale() === "cs" ? "cs" : "en-GB";
+  const locale = getTimeLocale();
 
   return (
     <div
       className={cn(
-        "flex flex-col sm:flex-row gap-x-8 gap-y-2 text-text2 pt-2 sm:pt-0",
-        className
+        "flex flex-col gap-x-8 gap-y-2 pt-2 text-text2 sm:flex-row sm:pt-0",
+        className,
       )}
     >
-      <div className="flex gap-3 items-center text-14 sm:text-16 justify-end">
+      <div className="text-14 sm:text-16 flex items-center justify-end gap-3">
         <div className="sm:order-1">{author.name}</div>
         <Image
           unoptimized
@@ -31,7 +31,7 @@ const RecipeChangeBanner = ({ author, className }: RecipeChangeBannerProps) => {
           className="rounded-full"
         />
       </div>
-      <div className="flex gap-2 items-center text-14 sm:text-16 justify-end">
+      <div className="text-14 sm:text-16 flex items-center justify-end gap-2">
         <CalendarFold className="!w-5" />
         <div className="flex gap-2">
           <div>

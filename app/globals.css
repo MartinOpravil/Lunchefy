@@ -20,17 +20,17 @@ html {
 
 @layer utilities {
   .input-label {
-    @apply font-bold text-lg sm:text-xl text-text;
+    @apply text-lg font-bold text-text sm:text-xl;
     font-family: var(--font-playfair);
   }
   .input-class {
-    @apply w-full min-h-12 text-16 text-text placeholder:text-16 rounded-[8px] bg-transparent placeholder:text-accent border-2 border-accent transition-all hover:border-primary focus-visible:border-primary outline-none focus-visible:outline-none;
+    @apply text-16 placeholder:text-16 min-h-12 w-full rounded-[8px] border-2 border-accent bg-transparent text-text outline-none transition-all placeholder:text-accent hover:border-primary focus-visible:border-primary focus-visible:outline-none;
   }
 
   .image-input {
-    @apply flex flex-col gap-4 w-full relative;
+    @apply relative flex w-full flex-col gap-4;
     .image-input-inner {
-      @apply cursor-pointer outline-dashed outline-2 outline-accent rounded-sm flex flex-col items-center justify-center p-6 gap-4 hover:outline-primary transition-all;
+      @apply flex cursor-pointer flex-col items-center justify-center gap-4 rounded-sm p-6 outline-dashed outline-2 outline-accent transition-all hover:outline-primary;
     }
   }
 
@@ -68,13 +68,13 @@ html {
   }
 
   h1 {
-    @apply text-2xl sm:text-5xl font-semibold text-text;
+    @apply text-2xl font-semibold text-text sm:text-5xl;
   }
   h2 {
-    @apply text-[28px] sm:text-[36px] font-semibold text-text;
+    @apply text-[28px] font-semibold text-text sm:text-[36px];
   }
   h3 {
-    @apply text-lg sm:text-xl font-semibold text-text;
+    @apply text-lg font-semibold text-text sm:text-xl;
   }
   p {
     @apply text-14 sm:text-16 font-normal text-text;
@@ -88,7 +88,7 @@ html {
   }
 
   .action-button {
-    @apply relative text-16 w-fit font-medium gap-2 transition-all p-2.5;
+    @apply text-16 relative w-fit gap-2 p-2.5 font-medium transition-all;
     font-family: var(--font-inter);
   }
   .icon-primary {
@@ -97,35 +97,35 @@ html {
     }
   }
   .heading-underline {
-    @apply w-full bg-accent my-4 rounded-md h-[1px];
+    @apply my-4 h-[1px] w-full rounded-md bg-accent;
   }
 
   .page {
-    @apply flex flex-col pb-6 min-h-[calc(100dvh-124px)];
+    @apply flex min-h-[calc(100dvh-124px)] flex-col pb-6;
   }
   .page-content {
-    @apply relative h-full flex flex-col items-center justify-start pt-16 pb-4 flex-grow;
+    @apply relative flex h-full flex-grow flex-col items-center justify-start pb-4 pt-16;
   }
 
   .page-width-normal,
   .page-width-wider {
-    @apply relative w-full md:max-w-[1024px] m-auto px-4 lg:px-0;
+    @apply relative m-auto w-full px-4 md:max-w-[1024px] lg:px-0;
   }
   .page-width-wider {
-    @apply md:max-w-[1224px] px-0 lg:rounded-xl overflow-hidden;
+    @apply overflow-hidden px-0 md:max-w-[1224px] lg:rounded-xl;
     > div {
       @apply px-4 lg:px-[100px];
     }
   }
 
   .recipe-grid {
-    @apply w-full grid grid-cols-1 @xs:grid-cols-2 @2xl:grid-cols-3 @4xl:grid-cols-4 gap-x-5 gap-y-8;
+    @apply grid w-full grid-cols-1 gap-x-5 gap-y-8 @xs:grid-cols-2 @2xl:grid-cols-3 @4xl:grid-cols-4;
   }
 
   .group-button {
-    @apply relative cursor-pointer transition-all text-center w-[130px];
+    @apply relative w-[130px] cursor-pointer text-center transition-all;
     .link {
-      @apply flex flex-col justify-center items-center gap-2;
+      @apply flex flex-col items-center justify-center gap-2;
     }
   }
 }

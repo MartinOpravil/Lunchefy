@@ -1,11 +1,12 @@
 import { api } from "@/convex/_generated/api";
-import { getAuthToken } from "@/lib/authentication";
 import { preloadQuery } from "convex/nextjs";
-import React from "react";
-import GroupPage from "./GroupPage";
-import { RECIPES_INITIAL_COUNT } from "@/constants/pagination";
 import { GenericId } from "convex/values";
+
+import GroupPage from "@/app/(root)/app/[groupId]/GroupPage";
 import ContentHandler from "@/components/global/content/ContentHandler";
+
+import { RECIPES_INITIAL_COUNT } from "@/constants/pagination";
+import { getAuthToken } from "@/lib/authentication";
 
 interface GroupServerPageProps {
   params: Promise<{ groupId: GenericId<"groups"> }>;
@@ -21,7 +22,7 @@ const GroupServerPage = async ({ params }: GroupServerPageProps) => {
       id: groupId,
       checkPrivilages: false,
     },
-    { token }
+    { token },
   );
   const recipesPreloadPromise = preloadQuery(
     api.recipes.getRecipes,
@@ -32,14 +33,14 @@ const GroupServerPage = async ({ params }: GroupServerPageProps) => {
         cursor: null,
       },
     },
-    { token }
+    { token },
   );
   const todayRecipePreloadPromise = preloadQuery(
     api.planner.getTodayRecipe,
     {
       groupId,
     },
-    { token }
+    { token },
   );
 
   const [userPreload, groupPreload, recipesPreload, todayRecipePreload] =

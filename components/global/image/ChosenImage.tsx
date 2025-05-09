@@ -1,7 +1,11 @@
 "use client";
-import React, { useEffect, useMemo, useState } from "react";
+
+import { useEffect, useMemo, useState } from "react";
+
 import Image from "next/image";
+
 import { Image as ImageLucide } from "lucide-react";
+
 import { cn } from "@/lib/utils";
 import { ImageStateProps } from "@/types";
 
@@ -50,8 +54,8 @@ const ChosenImage = ({
 
   return (
     <div
-      className={cn("w-[100%] h-[100%] select-none", {
-        "sm:w-[75%] max-h-[500px]":
+      className={cn("h-[100%] w-[100%] select-none", {
+        "max-h-[500px] sm:w-[75%]":
           variant === ChosenImageVariant.ImageInputPreview,
         "cursor-pointer": !!onClick,
       })}
@@ -71,13 +75,13 @@ const ChosenImage = ({
           height={0}
           sizes="100vw"
           className={cn(
-            "w-[100%] h-[100%] object-cover",
+            "h-[100%] w-[100%] object-cover",
             {
               "absolute hidden": !isVisible,
-              "object-contain rounded-xl":
+              "rounded-xl object-contain":
                 variant === ChosenImageVariant.ImageInputPreview,
             },
-            classList
+            classList,
           )}
           onError={() => {
             setIsVisible(false);
@@ -90,17 +94,17 @@ const ChosenImage = ({
       {(!imageSrc || !isVisible || !image) && (
         <div
           className={cn(
-            "w-full h-full rounded-xl flex justify-center items-center",
+            "flex h-full w-full items-center justify-center rounded-xl",
             {
-              "bg-accent/30 min-h-[250px]":
+              "min-h-[250px] bg-accent/30":
                 variant === ChosenImageVariant.ImageInputPreview,
-            }
+            },
           )}
         >
           {emptyIcon ? (
             emptyIcon
           ) : (
-            <ImageLucide className="!w-16 !h-16 text-accent transition-all group-hover:scale-105" />
+            <ImageLucide className="!h-16 !w-16 text-accent transition-all group-hover:scale-105" />
           )}
         </div>
       )}

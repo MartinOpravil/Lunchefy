@@ -1,15 +1,20 @@
 "use client";
-import React, { useState } from "react";
-import ActionButton from "../../global/button/ActionButton";
-import { CalendarPlus } from "lucide-react";
-import { ButtonVariant, HttpResponseCode } from "@/enums";
-import { useMutation } from "convex/react";
-import { api } from "@/convex/_generated/api";
-import { GenericId } from "convex/values";
-import { notifyError, notifySuccess } from "@/lib/notifications";
-import { Id } from "@/convex/_generated/dataModel";
-import { convertToServerTime } from "@/lib/time";
+
+import { useState } from "react";
+
 import { useTranslations } from "next-intl";
+
+import { api } from "@/convex/_generated/api";
+import { Id } from "@/convex/_generated/dataModel";
+import { useMutation } from "convex/react";
+import { GenericId } from "convex/values";
+import { CalendarPlus } from "lucide-react";
+
+import ActionButton from "@/components/global/button/ActionButton";
+
+import { ButtonVariant, HttpResponseCode } from "@/enums";
+import { notifyError, notifySuccess } from "@/lib/notifications";
+import { convertToServerTime } from "@/lib/time";
 
 interface AssignRecipeToTodayPlanButtonProps {
   recipeId: GenericId<"recipes">;
@@ -27,14 +32,14 @@ const AssignRecipeToTodayPlanButton = ({
   const [isLoading, setIsLoading] = useState(false);
 
   const handleAssignRecipeToDate = async (
-    e: React.MouseEvent<HTMLButtonElement>
+    e: React.MouseEvent<HTMLButtonElement>,
   ) => {
     e.preventDefault();
     if (!recipeId)
       return notifyError(
         t("Groups.Planner.Notification.Error.NoRecipeSelected"),
         null,
-        3000
+        3000,
       );
 
     try {
@@ -50,11 +55,11 @@ const AssignRecipeToTodayPlanButton = ({
         switch (result.status) {
           case HttpResponseCode.Conflict:
             return notifyError(
-              t("Groups.Planner.Notification.Error.Assign409")
+              t("Groups.Planner.Notification.Error.Assign409"),
             );
           case HttpResponseCode.InternalServerError:
             return notifyError(
-              t("Groups.Planner.Notification.Error.Assign500")
+              t("Groups.Planner.Notification.Error.Assign500"),
             );
           default:
             return notifyError(t("Global.Notification.UnexpectedError"));
@@ -65,7 +70,7 @@ const AssignRecipeToTodayPlanButton = ({
     } catch (error) {
       notifyError(
         t("Groups.Planner.Notification.Error.Assign"),
-        error?.toString()
+        error?.toString(),
       );
       setIsLoading(false);
     }

@@ -1,9 +1,12 @@
 "use client";
 
-import { Command as CommandPrimitive, useCommandState } from "cmdk";
-import { ChevronDown, X } from "lucide-react";
 import * as React from "react";
 import { forwardRef, useEffect } from "react";
+
+import Image from "next/image";
+
+import { Command as CommandPrimitive, useCommandState } from "cmdk";
+import { ChevronDown, X } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import {
@@ -12,9 +15,10 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
+
 import { cn } from "@/lib/utils";
-import Image from "next/image";
-import { useTagManager } from "../recipe/tag/TagManager";
+
+import { useTagManager } from "../../hooks/TagManager";
 
 export interface Option {
   value: string;
@@ -135,7 +139,7 @@ function removePickedOption(groupOption: GroupOption, picked: Option[]) {
 
   for (const [key, value] of Object.entries(cloneOption)) {
     cloneOption[key] = value.filter(
-      (val) => !picked.find((p) => p.value === val.value)
+      (val) => !picked.find((p) => p.value === val.value),
     );
   }
   return cloneOption;
@@ -210,7 +214,7 @@ const MultipleSelector = React.forwardRef<
       hideClearAllButton = false,
       darkMode = false,
     }: MultipleSelectorProps,
-    ref: React.Ref<MultipleSelectorRef>
+    ref: React.Ref<MultipleSelectorRef>,
   ) => {
     const { valueToTag, tagOptions } = useTagManager();
 
@@ -222,7 +226,7 @@ const MultipleSelector = React.forwardRef<
 
     const [selected, setSelected] = React.useState<Option[]>(value || []);
     const [options, setOptions] = React.useState<GroupOption>(
-      transToGroupOption(arrayDefaultOptions, groupBy)
+      transToGroupOption(arrayDefaultOptions, groupBy),
     );
     const [inputValue, setInputValue] = React.useState("");
     const debouncedSearchTerm = useDebounce(inputValue, delay || 500);
@@ -235,7 +239,7 @@ const MultipleSelector = React.forwardRef<
         focus: () => inputRef?.current?.focus(),
         reset: () => setSelected([]),
       }),
-      [selected]
+      [selected],
     );
 
     const handleClickOutside = (event: MouseEvent | TouchEvent) => {
@@ -256,7 +260,7 @@ const MultipleSelector = React.forwardRef<
         setSelected(newOptions);
         onChange?.(newOptions);
       },
-      [onChange, selected]
+      [onChange, selected],
     );
 
     const handleKeyDown = React.useCallback(
@@ -278,7 +282,7 @@ const MultipleSelector = React.forwardRef<
           }
         }
       },
-      [handleUnselect, selected]
+      [handleUnselect, selected],
     );
 
     useEffect(() => {
@@ -425,7 +429,7 @@ const MultipleSelector = React.forwardRef<
 
     const selectables = React.useMemo<GroupOption>(
       () => removePickedOption(options, selected),
-      [options, selected]
+      [options, selected],
     );
 
     /** Avoid Creatable Selector freezing or lagging when paste a long string. */
@@ -452,8 +456,8 @@ const MultipleSelector = React.forwardRef<
           commandProps?.onKeyDown?.(e);
         }}
         className={cn(
-          "h-auto overflow-visible bg-transparent cursor-pointer",
-          commandProps?.className
+          "h-auto cursor-pointer overflow-visible bg-transparent",
+          commandProps?.className,
         )}
         shouldFilter={
           commandProps?.shouldFilter !== undefined
@@ -470,12 +474,12 @@ const MultipleSelector = React.forwardRef<
       >
         <div
           className={cn(
-            "min-h-10 focus-within:border-primary flex w-full items-center overflow-hidden",
+            "flex min-h-10 w-full items-center overflow-hidden focus-within:border-primary",
             {
               "px-3 py-2": selected.length !== 0,
               "cursor-text": !disabled && selected.length !== 0,
             },
-            className
+            className,
           )}
           onClick={() => {
             if (disabled) return;
@@ -483,7 +487,7 @@ const MultipleSelector = React.forwardRef<
           }}
         >
           <div
-            className={cn("relative flex flex-wrap items-center gap-1 w-full", {
+            className={cn("relative flex w-full flex-wrap items-center gap-1", {
               "!pr-8": selected.length,
             })}
           >
@@ -492,10 +496,10 @@ const MultipleSelector = React.forwardRef<
                 <Badge
                   key={option.value}
                   className={cn(
-                    "flex gap-1 bg-secondary text-white-1 pl-1.5 pr-1",
+                    "flex gap-1 bg-secondary pl-1.5 pr-1 text-white-1",
                     "data-[disabled]:bg-muted-foreground data-[disabled]:text-muted data-[disabled]:hover:bg-muted-foreground",
                     "data-[fixed]:bg-muted-foreground data-[fixed]:text-muted data-[fixed]:hover:bg-muted-foreground",
-                    badgeClassName
+                    badgeClassName,
                   )}
                   data-fixed={option.fixed}
                   data-disabled={disabled || undefined}
@@ -506,14 +510,14 @@ const MultipleSelector = React.forwardRef<
                     alt="Tag"
                     width={20}
                     height={20}
-                    className="w-[20px] h-[20px]"
+                    className="h-[20px] w-[20px]"
                     style={{ filter: "invert(100%)" }}
                   />
                   {valueToTag(option.value)?.label}
                   <button
                     className={cn(
-                      "rounded-full outline-none ring-offset-background focus:ring-2 focus:ring-ring focus:ring-offset-2",
-                      (disabled || option.fixed) && "hidden"
+                      "focus:ring-ring rounded-full outline-none ring-offset-background focus:ring-2 focus:ring-offset-2",
+                      (disabled || option.fixed) && "hidden",
                     )}
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
@@ -526,7 +530,7 @@ const MultipleSelector = React.forwardRef<
                     }}
                     onClick={() => handleUnselect(option)}
                   >
-                    <X className="!h-4 !w-4 text-muted-foreground hover:text-foreground" />
+                    <X className="text-muted-foreground hover:text-foreground !h-4 !w-4" />
                   </button>
                 </Badge>
               );
@@ -558,13 +562,13 @@ const MultipleSelector = React.forwardRef<
                   : placeholder
               }
               className={cn(
-                "flex-1 bg-transparent outline-none h-full px-3 overflow-hidden placeholder:text-accent",
+                "h-full flex-1 overflow-hidden bg-transparent px-3 outline-none placeholder:text-accent",
                 {
                   "w-full": hidePlaceholderWhenSelected,
                   "": selected.length === 0,
                   "": selected.length !== 0,
                 },
-                inputProps?.className
+                inputProps?.className,
               )}
             />
             <button
@@ -579,14 +583,14 @@ const MultipleSelector = React.forwardRef<
                   disabled ||
                   selected.length < 1 ||
                   selected.filter((s) => s.fixed).length === selected.length) &&
-                  "hidden"
+                  "hidden",
               )}
             >
               <X />
             </button>
             {!selected.length && (
-              <div className="bg-background h-full">
-                <ChevronDown className="h-6 w-6 p-0 mr-2.5 opacity-50 bg-background" />
+              <div className="h-full bg-background">
+                <ChevronDown className="mr-2.5 h-6 w-6 bg-background p-0 opacity-50" />
               </div>
             )}
           </div>
@@ -595,7 +599,7 @@ const MultipleSelector = React.forwardRef<
           <div className="relative">
             {open && (
               <CommandList
-                className="absolute top-1 z-10 w-full rounded-md border border-accent bg-popover text-popover-foreground shadow-md outline-none animate-in bg-background"
+                className="bg-popover text-popover-foreground absolute top-1 z-10 w-full rounded-md border border-accent bg-background shadow-md outline-none animate-in"
                 onMouseLeave={() => {
                   setOnScrollbar(false);
                 }}
@@ -647,7 +651,7 @@ const MultipleSelector = React.forwardRef<
                                   className={cn(
                                     "cursor-pointer gap-4 text-text",
                                     option.disable &&
-                                      "cursor-default text-muted-foreground"
+                                      "text-muted-foreground cursor-default",
                                   )}
                                 >
                                   <Image
@@ -676,7 +680,7 @@ const MultipleSelector = React.forwardRef<
         )}
       </Command>
     );
-  }
+  },
 );
 
 MultipleSelector.displayName = "MultipleSelector";

@@ -1,5 +1,4 @@
 import { cn } from "@/lib/utils";
-import React from "react";
 
 const NoContent = ({
   title,
@@ -9,7 +8,7 @@ const NoContent = ({
   subTitle?: string;
 }) => {
   return (
-    <div className="w-full flex flex-col items-center text-center gap-3">
+    <div className="flex w-full flex-col items-center gap-3 text-center">
       <h2 className="text-primary">{title}</h2>
       <h3 className={cn({ "text-text2": !title })}>{subTitle}</h3>
     </div>
