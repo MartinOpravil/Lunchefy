@@ -2,7 +2,8 @@ import Image from "next/image";
 
 import { CalendarFold } from "lucide-react";
 
-import { cn, getTimeLocale } from "@/lib/utils";
+import { useTimeLocale } from "@/hooks/useTimeLocale";
+import { cn } from "@/lib/utils";
 import { Author } from "@/types";
 
 interface RecipeChangeBannerProps {
@@ -11,7 +12,7 @@ interface RecipeChangeBannerProps {
 }
 
 const RecipeChangeBanner = ({ author, className }: RecipeChangeBannerProps) => {
-  const locale = getTimeLocale();
+  const locale = useTimeLocale();
 
   return (
     <div

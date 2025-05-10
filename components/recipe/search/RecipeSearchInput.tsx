@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { useTranslations } from "next-intl";
 
@@ -78,18 +78,15 @@ const RecipeSearchInput = ({
 }: RecipeFilterProps) => {
   const t = useTranslations();
   const { darkMode } = useGlobalStore();
-  // const { searchBy, setSearchBy } = useGroupStore();
   const { tagOptions } = useTagManager();
 
   const [internalSearchTerm, setInternalSearchTerm] = useState(searchTerm);
-  // const [searchBy, setSearchBy] = useState<SearchBy>(SearchBy.Name);
 
-  const debouncedUpdate = useCallback(
-    debounce((value) => {
+  const debouncedUpdate = useMemo(() => {
+    return debounce((value: string) => {
       setSearchTerm(value);
-    }, debounceDelay),
-    [debounceDelay],
-  );
+    }, debounceDelay);
+  }, [setSearchTerm]);
 
   useEffect(() => {
     return () => {

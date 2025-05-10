@@ -44,7 +44,7 @@ const RecipeTagList = ({
       hasMore,
       moreCount,
     };
-  }, [recipeTags, convertToTags]);
+  }, [recipeTags, convertToTags, dense]);
 
   return (
     <div

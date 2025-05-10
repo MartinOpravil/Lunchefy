@@ -7,7 +7,7 @@ import ActionButton from "@/components/global/button/ActionButton";
 import Recipe from "@/components/recipe/item/Recipe";
 
 import { Privilage, RecipePlannerAction } from "@/enums";
-import { getTimeLocale } from "@/lib/utils";
+import { useTimeLocale } from "@/hooks/useTimeLocale";
 import { Plan, PlannerAction } from "@/types";
 
 interface SelectedDayOverviewProps {
@@ -24,7 +24,7 @@ const SelectedDayOverview = ({
   action,
 }: SelectedDayOverviewProps) => {
   const t = useTranslations();
-  const locale = getTimeLocale();
+  const locale = useTimeLocale();
 
   return (
     <div className="flex w-full flex-col gap-8 @container">

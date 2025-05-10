@@ -19,7 +19,7 @@ const ThemeProvider = ({
     if (typeof window !== "undefined") {
       setDarkMode(hasDarkMode, false);
     }
-  }, []);
+  }, [hasDarkMode, setDarkMode]);
 
   return children;
 };

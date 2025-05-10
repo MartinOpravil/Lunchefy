@@ -2,8 +2,9 @@ import { useTranslations } from "next-intl";
 
 import { Dot } from "lucide-react";
 
+import { useTimeLocale } from "@/hooks/useTimeLocale";
 import { convertToClientTime } from "@/lib/time";
-import { cn, getTimeLocale } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { Plan } from "@/types";
 
 interface ThisMonthRecipeListProps {
@@ -21,7 +22,7 @@ const ThisMonthRecipeList = ({
 }: ThisMonthRecipeListProps) => {
   const t = useTranslations();
 
-  const locale = getTimeLocale();
+  const locale = useTimeLocale();
 
   const getGroupedData = (planList: Plan[]) => {
     return Object.values(

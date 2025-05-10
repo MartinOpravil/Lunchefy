@@ -70,7 +70,7 @@ const GroupPage = ({
           return { id: x._id, name: x.name };
         }),
       );
-  }, [todayRecipe]);
+  }, [todayRecipe, setTodayRecipeList]);
 
   const { convertToValues } = useTagManager();
 

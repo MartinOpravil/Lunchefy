@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 
 import { Doc } from "@/convex/_generated/dataModel";
 
-import { getTimeLocale } from "@/lib/utils";
+import { useTimeLocale } from "@/hooks/useTimeLocale";
 
 interface LatestRecipeDateInPlannerProps {
   recipe: Doc<"recipes">;
@@ -15,7 +15,7 @@ const LatestRecipeDateInPlanner = ({
 }: LatestRecipeDateInPlannerProps) => {
   const t = useTranslations("Groups.Planner");
 
-  const locale = getTimeLocale();
+  const locale = useTimeLocale();
 
   if (!recipe.plannerDate) return <></>;
 

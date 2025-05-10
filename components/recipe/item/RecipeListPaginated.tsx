@@ -39,15 +39,15 @@ const RecipeListPaginated = ({
   const MS_PER_WEEK = 7 * 24 * 60 * 60 * 1000;
   const now = Date.now();
 
-  const label = (weekDiff: number) =>
-    weekDiff === 0
-      ? t("Planner.ThisWeek")
-      : weekDiff === 1
-        ? t("Planner.LastWeek")
-        : t("Planner.XWeeksAgo", { week: weekDiff });
-
   const recipeListGroupedByPlannerDate = useMemo(() => {
     if (!groupByPlannerDate) return undefined;
+
+    const label = (weekDiff: number) =>
+      weekDiff === 0
+        ? t("Planner.ThisWeek")
+        : weekDiff === 1
+          ? t("Planner.LastWeek")
+          : t("Planner.XWeeksAgo", { week: weekDiff });
 
     const groupedByWeek = recipeListPaginated.results.reduce<GroupedRecipes>(
       (acc, recipe) => {
@@ -72,7 +72,7 @@ const RecipeListPaginated = ({
     );
 
     return groupedByWeek;
-  }, [recipeListPaginated, groupByPlannerDate, t]);
+  }, [recipeListPaginated, groupByPlannerDate, t, MS_PER_WEEK, now]);
 
   return (
     <>

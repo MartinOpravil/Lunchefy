@@ -2,7 +2,7 @@
 
 My personal project for organizing recipes and planning for a given day.
 
-# Features
+## Features
 
 - Managing
   - Create, Edit or Delete your recipe collection.
@@ -14,11 +14,11 @@ My personal project for organizing recipes and planning for a given day.
 - Sharing
   - Create your own group and invite others to collaborate or view recipe catalogue.
 
-# Used Technologies
+## Used Technologies
 
 - Next.js, Convex, Typescript, Tailwind, Zustand, ShadCN
 
-# Live Demo
+## Live Demo
 
 [https://lunchefy.vercel.app/](https://lunchefy.vercel.app/)
 
@@ -27,13 +27,13 @@ Demo user credentials:
 lunchefy@gmail.com / v7kJM53F5MNpcMhQG@4e
 ```
 
-# Setup
+## Setup
 
 ```bash
 npm install
 npm run dev
 ```
 
-# Preview
+## Preview
 
 [http://localhost:3000](http://localhost:3000).
