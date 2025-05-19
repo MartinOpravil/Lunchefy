@@ -17,8 +17,7 @@ interface PlannerRecipeResultListProps {
   groupId: Id<"groups">;
   searchTerm: string;
   searchTags: string[];
-  privilage: Privilage;
-  selectResultAction: Dispatch<SetStateAction<string | undefined>>;
+  selectRecipeIdForAction: Dispatch<SetStateAction<string | undefined>>;
   selectedRecipeId?: string;
   dateMiliseconds?: number;
 }
@@ -27,8 +26,7 @@ const PlannerRecipeResultList = ({
   groupId,
   searchTerm,
   searchTags,
-  privilage,
-  selectResultAction,
+  selectRecipeIdForAction,
   selectedRecipeId,
   dateMiliseconds,
 }: PlannerRecipeResultListProps) => {
@@ -58,8 +56,7 @@ const PlannerRecipeResultList = ({
             ) : (
               <PlannerRecipeListPaginated
                 recipeListPaginated={filteredRecipesPaginated}
-                privilage={privilage}
-                selectResultAction={selectResultAction}
+                selectRecipeIdForAction={selectRecipeIdForAction}
                 selectedRecipeId={selectedRecipeId}
               />
             )}

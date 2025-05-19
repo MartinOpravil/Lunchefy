@@ -253,15 +253,10 @@ const PlannerPopupManager = ({ action, date }: PlannerPopupManagerProps) => {
               />
               <PlannerRecipeResultList
                 groupId={action.group.data._id}
-                privilage={action.group.data.privilage}
                 searchTerm={searchTerm}
                 searchTags={searchTags.map((x) => x.value)}
-                selectResultAction={setSelectedRecipeIdForAction}
-                selectedRecipeId={
-                  action.type === RecipePlannerAction.Swap
-                    ? action.id
-                    : undefined
-                }
+                selectRecipeIdForAction={setSelectedRecipeIdForAction}
+                selectedRecipeId={selectedRecipeIdForAction}
                 dateMiliseconds={recipeListAge}
               />
               <ActionButton

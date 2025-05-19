@@ -13,22 +13,19 @@ import InfiniteScroll from "@/components/ui/infinite-scroll";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { RECIPES_NEXT_COUNT } from "@/constants/pagination";
-import { Privilage } from "@/enums";
 import { cn } from "@/lib/utils";
 
 interface PlannerRecipeListPaginatedProps {
   recipeListPaginated: UsePaginatedQueryReturnType<
     typeof api.recipes.getRecipes
   >;
-  privilage: Privilage;
-  selectResultAction: Dispatch<SetStateAction<string | undefined>>;
+  selectRecipeIdForAction: Dispatch<SetStateAction<string | undefined>>;
   selectedRecipeId?: string;
 }
 
 const PlannerRecipeListPaginated = ({
   recipeListPaginated,
-  privilage,
-  selectResultAction,
+  selectRecipeIdForAction,
   selectedRecipeId,
 }: PlannerRecipeListPaginatedProps) => {
   const t = useTranslations("Recipes.Scroll");
@@ -42,7 +39,9 @@ const PlannerRecipeListPaginated = ({
               selectedRecipeId === recipe._id && "bg-secondary",
             )}
             key={index}
-            onClick={() => selectResultAction && selectResultAction(recipe._id)}
+            onClick={() =>
+              selectRecipeIdForAction && selectRecipeIdForAction(recipe._id)
+            }
           >
             <div className="flex items-center gap-3">
               <div
