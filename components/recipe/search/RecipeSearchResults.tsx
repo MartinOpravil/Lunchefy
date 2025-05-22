@@ -6,6 +6,7 @@ import { usePaginatedQuery } from "convex/react";
 import { Loader2 } from "lucide-react";
 
 import NoContent from "@/components/global/content/NoContent";
+import PlannerRecipeListPaginated from "@/components/recipe/item/PlannerRecipeListPaginated";
 import RecipeListPaginated from "@/components/recipe/item/RecipeListPaginated";
 
 import { RECIPES_SEARCH_INITIAL_COUNT } from "@/constants/pagination";
@@ -58,12 +59,21 @@ const RecipeSearchResults = ({
             {!filteredRecipesPaginated.results.length ? (
               <NoContent subTitle={t("SearchInput.Empty.Search")} />
             ) : (
-              <RecipeListPaginated
-                recipeListPaginated={filteredRecipesPaginated}
-                privilage={privilage}
-                showTags={showTags}
-                groupByPlannerDate={!!dateMiliseconds}
-              />
+              <>
+                {dateMiliseconds ? (
+                  <PlannerRecipeListPaginated
+                    recipeListPaginated={filteredRecipesPaginated}
+                    privilage={privilage}
+                    showTags={showTags}
+                  />
+                ) : (
+                  <RecipeListPaginated
+                    recipeListPaginated={filteredRecipesPaginated}
+                    privilage={privilage}
+                    showTags={showTags}
+                  />
+                )}
+              </>
             )}
           </>
         )}
