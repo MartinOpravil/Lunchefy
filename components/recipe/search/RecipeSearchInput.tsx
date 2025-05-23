@@ -153,6 +153,7 @@ const RecipeSearchInput = ({
               type="text"
               value={internalSearchTerm}
               onChange={handleInputChange}
+              clearable
             />
           )}
           {searchBy === SearchBy.Tags && (
