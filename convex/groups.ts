@@ -1,13 +1,14 @@
-import { v } from "convex/values";
-import { mutation, query } from "./_generated/server";
-import { HttpResponseCode, Privilage } from "@/enums";
 import { filter } from "convex-helpers/server/filter";
-import { Doc } from "./_generated/dataModel";
+import { v } from "convex/values";
+
+import { HttpResponseCode, Privilage } from "@/enums";
 import { createBadResponse, createOKResponse } from "@/lib/communication";
+
+import { Doc } from "./_generated/dataModel";
+import { mutation, query } from "./_generated/server";
 import { getLoggedUser } from "./users";
 
 // QUERIES -------------------------------------------
-// TODO: Check if I can use id of group directly instead of generic string
 export const getGroupById = query({
   args: { id: v.string(), checkPrivilages: v.optional(v.boolean()) },
   handler: async (ctx, args) => {
@@ -22,7 +23,7 @@ export const getGroupById = query({
     if (!userResponse.data)
       return createBadResponse(
         userResponse.status,
-        userResponse.errorMessage ?? ""
+        userResponse.errorMessage ?? "",
       );
 
     const userGroupRelationship = await ctx.db
@@ -30,14 +31,14 @@ export const getGroupById = query({
       .filter((q) =>
         q.and(
           q.eq(q.field("userId"), userResponse.data!._id),
-          q.eq(q.field("groupId"), args.id)
-        )
+          q.eq(q.field("groupId"), args.id),
+        ),
       )
       .unique();
     if (!userGroupRelationship)
       return createBadResponse(
         HttpResponseCode.Forbidden,
-        "No permission to view group"
+        "No permission to view group",
       );
 
     if (
@@ -46,7 +47,7 @@ export const getGroupById = query({
     ) {
       return createBadResponse(
         HttpResponseCode.Forbidden,
-        "You don't have access to edit this group."
+        "You don't have access to edit this group.",
       );
     }
 
@@ -68,21 +69,21 @@ export const getGroupList = query({
     const userGroupRelationshipList = await ctx.db
       .query("userGroupRelationship")
       .filter((q) =>
-        q.eq(q.field("userId"), (userResponse.data as Doc<"users">)._id)
+        q.eq(q.field("userId"), (userResponse.data as Doc<"users">)._id),
       )
       .collect();
     const groupIdList = userGroupRelationshipList.map(
-      (relation) => relation.groupId
+      (relation) => relation.groupId,
     );
     const groupList = await filter(ctx.db.query("groups"), (group) =>
-      groupIdList.includes(group._id)
+      groupIdList.includes(group._id),
     )
       .order("asc")
       .collect();
 
     const groupListWithPrivilage = groupList.map((group) => {
       const privilage = userGroupRelationshipList.find(
-        (relation) => relation.groupId === group._id
+        (relation) => relation.groupId === group._id,
       )?.privilage as string;
       return {
         ...group,
@@ -110,10 +111,10 @@ export const getGroupSharedUsers = query({
       .collect();
 
     const userIdList = userGroupRelationshipList.map(
-      (relation) => relation.userId
+      (relation) => relation.userId,
     );
     const userList = await filter(ctx.db.query("users"), (user) =>
-      userIdList.includes(user._id)
+      userIdList.includes(user._id),
     )
       .filter((q) => q.neq(q.field("_id"), userResponse.data!._id))
       .order("desc")
@@ -121,7 +122,7 @@ export const getGroupSharedUsers = query({
 
     const userListResponse = userList.map((user) => {
       const relationship = userGroupRelationshipList.find(
-        (relation) => relation.userId === user._id
+        (relation) => relation.userId === user._id,
       );
       return {
         relationshipId: relationship!._id,
@@ -147,7 +148,7 @@ export const createGroup = mutation({
         imageUrl: v.optional(v.string()),
         storageId: v.optional(v.id("_storage")),
         externalUrl: v.optional(v.string()),
-      })
+      }),
     ),
   },
   handler: async (ctx, args) => {
@@ -172,7 +173,7 @@ export const createGroup = mutation({
     if (!userGroupRelationship) {
       return createBadResponse(
         HttpResponseCode.InternalServerError,
-        "User-Group relation was not created - Relation was not able to be inserted to database."
+        "User-Group relation was not created - Relation was not able to be inserted to database.",
       );
     }
 
@@ -210,7 +211,7 @@ export const deleteGroup = mutation({
     await Promise.all(
       relationship.map(async (r) => {
         ctx.db.delete(r._id);
-      })
+      }),
     );
     // Delete all plans
     const planList = await ctx.db
@@ -220,7 +221,7 @@ export const deleteGroup = mutation({
     await Promise.all(
       planList.map(async (p) => {
         ctx.db.delete(p._id);
-      })
+      }),
     );
 
     await ctx.db.delete(args.id);
@@ -238,7 +239,7 @@ export const updateGroup = mutation({
         imageUrl: v.optional(v.string()),
         storageId: v.optional(v.id("_storage")),
         externalUrl: v.optional(v.string()),
-      })
+      }),
     ),
   },
   handler: async (ctx, args) => {
@@ -293,8 +294,8 @@ export const addAccessToGroup = mutation({
       .filter((q) =>
         q.and(
           q.eq(q.field("userId"), emailUserEntity._id),
-          q.eq(q.field("groupId"), args.groupId)
-        )
+          q.eq(q.field("groupId"), args.groupId),
+        ),
       )
       .collect();
 

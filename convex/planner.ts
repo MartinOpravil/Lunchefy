@@ -1,9 +1,11 @@
-import { v } from "convex/values";
-import { mutation, query } from "./_generated/server";
-import { createBadResponse, createOKResponse } from "@/lib/communication";
 import { filter } from "convex-helpers/server/filter";
+import { v } from "convex/values";
+
 import { HttpResponseCode } from "@/enums";
+import { createBadResponse, createOKResponse } from "@/lib/communication";
 import { Plan } from "@/types";
+
+import { mutation, query } from "./_generated/server";
 
 export const getTodayRecipe = query({
   args: {
@@ -15,7 +17,7 @@ export const getTodayRecipe = query({
     const groupPlans = await filter(
       ctx.db.query("groupPlans"),
       (plan) =>
-        plan.groupId === args.groupId && plan.date === today.toISOString()
+        plan.groupId === args.groupId && plan.date === today.toISOString(),
     ).collect();
 
     if (!groupPlans.length) {
@@ -25,8 +27,12 @@ export const getTodayRecipe = query({
     const recipeIdList = groupPlans.map((x) => x.recipeId);
 
     const recipeList = await filter(ctx.db.query("recipes"), (recipe) =>
-      recipeIdList.includes(recipe._id)
-    ).collect();
+      recipeIdList.includes(recipe._id),
+    )
+      .collect()
+      .then((x) =>
+        x.sort((a, b) => a.nameNormalized.localeCompare(b.nameNormalized)),
+      );
 
     return createOKResponse(recipeList);
   },
@@ -39,13 +45,13 @@ export const getGroupRecipeListForMonth = query({
   handler: async (ctx, args) => {
     const groupPlans = await filter(
       ctx.db.query("groupPlans"),
-      (x) => x.groupId === args.groupId && x.date.startsWith(args.month)
+      (x) => x.groupId === args.groupId && x.date.startsWith(args.month),
     ).collect();
 
     const recipeIdList = new Set(groupPlans.map((x) => x.recipeId));
 
     const recipes = await filter(ctx.db.query("recipes"), (recipe) =>
-      recipeIdList.has(recipe._id)
+      recipeIdList.has(recipe._id),
     ).collect();
 
     const recipeMap = new Map(recipes.map((recipe) => [recipe._id, recipe]));
@@ -77,7 +83,7 @@ export const assignRecipeToDate = mutation({
       (plan) =>
         plan.groupId === args.groupId &&
         plan.recipeId === args.recipeId &&
-        plan.date === args.date
+        plan.date === args.date,
     ).collect();
 
     if (groupPlans.length) return createBadResponse(HttpResponseCode.Conflict);
@@ -97,7 +103,7 @@ export const assignRecipeToDate = mutation({
       plannerDate: new Date(
         latestPreviousRecipePlanDate.data
           ? latestPreviousRecipePlanDate.data
-          : args.date
+          : args.date,
       ).getTime(),
     });
 
@@ -128,7 +134,7 @@ export const changeRecipeInDate = mutation({
       (x) =>
         x.groupId === plan.groupId &&
         x.recipeId === args.newRecipeId &&
-        x.date === plan.date
+        x.date === plan.date,
     ).unique();
 
     if (newRecipePlanInDate) {
@@ -149,7 +155,7 @@ export const changeRecipeInDate = mutation({
       });
     } else {
       const latestRecipePlanDateMiliseconds = new Date(
-        latestPreviousRecipePlanDate.data
+        latestPreviousRecipePlanDate.data,
       ).getTime();
 
       await ctx.db.patch(plan.recipeId, {
@@ -167,7 +173,7 @@ export const changeRecipeInDate = mutation({
       });
     } else {
       const latestRecipePlanDateMiliseconds = new Date(
-        latestNewRecipePlanDate.data
+        latestNewRecipePlanDate.data,
       ).getTime();
 
       await ctx.db.patch(args.newRecipeId, {
@@ -200,7 +206,7 @@ export const removeRecipeFromDate = mutation({
 
     if (latestRecipePlanDate.data) {
       latestRecipePlanDateMiliseconds = new Date(
-        latestRecipePlanDate.data
+        latestRecipePlanDate.data,
       ).getTime();
     }
 
@@ -223,8 +229,8 @@ export const getLatestRecipePlanDate = query({
       .filter((q) =>
         q.and(
           q.eq(q.field("groupId"), args.groupId),
-          q.eq(q.field("recipeId"), args.recipeId)
-        )
+          q.eq(q.field("recipeId"), args.recipeId),
+        ),
       )
       .collect();
 

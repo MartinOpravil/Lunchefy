@@ -1,7 +1,9 @@
 import { ConvexError, v } from "convex/values";
-import { internalMutation, query } from "./_generated/server";
-import { createBadResponse, createOKResponse } from "@/lib/communication";
+
 import { HttpResponseCode } from "@/enums";
+import { createBadResponse, createOKResponse } from "@/lib/communication";
+
+import { internalMutation, query } from "./_generated/server";
 
 export const getUserById = query({
   args: { clerkId: v.string() },
@@ -80,7 +82,7 @@ export const getLoggedUser = query({
     if (!identity) {
       return createBadResponse(
         HttpResponseCode.Unauthorized,
-        "User not authenticated"
+        "User not authenticated",
       );
     }
     // Get User
@@ -91,7 +93,7 @@ export const getLoggedUser = query({
     if (!user) {
       return createBadResponse(
         HttpResponseCode.NotFound,
-        "User is not present in database"
+        "User is not present in database",
       );
     }
 

@@ -1,12 +1,14 @@
+import { paginationOptsValidator } from "convex/server";
+import { v } from "convex/values";
+
+import { DEFAULT_RECIPE_ORDER_BY } from "@/constants/order";
+import { HttpResponseCode, OrderBy, Privilage } from "@/enums";
 import { createBadResponse, createOKResponse } from "@/lib/communication";
+import { removeDiacritics } from "@/lib/utils";
+import { Author } from "@/types";
+
 import { mutation, query } from "./_generated/server";
 import { getLoggedUser } from "./users";
-import { HttpResponseCode, OrderBy, Privilage } from "@/enums";
-import { v } from "convex/values";
-import { paginationOptsValidator, QueryInitializer } from "convex/server";
-import { Author } from "@/types";
-import { removeDiacritics } from "@/lib/utils";
-import { DEFAULT_RECIPE_ORDER_BY } from "@/constants/order";
 
 export const getRecipes = query({
   args: {
@@ -25,20 +27,20 @@ export const getRecipes = query({
         query = ctx.db
           .query("recipes")
           .withSearchIndex("nameSearch", (q) =>
-            q.search("nameNormalized", removeDiacritics(args.searchTerm!))
+            q.search("nameNormalized", removeDiacritics(args.searchTerm!)),
           );
       } else {
         query = ctx.db
           .query("recipes")
           .withSearchIndex("nameSearch", (q) =>
-            q.search("nameNormalized", removeDiacritics(args.searchTerm!))
+            q.search("nameNormalized", removeDiacritics(args.searchTerm!)),
           );
       }
     } else if (args.searchTags?.length) {
       query = ctx.db
         .query("recipes")
         .withSearchIndex("tagSearch", (q) =>
-          q.search("tags", args.searchTags!.join(" "))
+          q.search("tags", args.searchTags!.join(" ")),
         );
     } else {
       if (args.dateMiliseconds) {
@@ -78,12 +80,12 @@ export const getRecipes = query({
       filteredQuery = query.filter((q) =>
         q.and(
           q.eq(q.field("groupId"), args.groupId),
-          q.lt(q.field("plannerDate"), args.dateMiliseconds!)
-        )
+          q.lt(q.field("plannerDate"), args.dateMiliseconds!),
+        ),
       );
     } else {
       filteredQuery = query.filter((q) =>
-        q.eq(q.field("groupId"), args.groupId)
+        q.eq(q.field("groupId"), args.groupId),
       );
     }
 
@@ -105,7 +107,7 @@ export const getRecipeById = query({
     if (!userEntityResponse.data)
       return createBadResponse(
         userEntityResponse.status,
-        userEntityResponse.errorMessage ?? ""
+        userEntityResponse.errorMessage ?? "",
       );
 
     const userGroupRelationship = await ctx.db
@@ -113,14 +115,14 @@ export const getRecipeById = query({
       .filter((q) =>
         q.and(
           q.eq(q.field("userId"), userEntityResponse.data!._id),
-          q.eq(q.field("groupId"), recipe.groupId)
-        )
+          q.eq(q.field("groupId"), recipe.groupId),
+        ),
       )
       .unique();
     if (!userGroupRelationship)
       return createBadResponse(
         HttpResponseCode.Forbidden,
-        "No permission to view recipe"
+        "No permission to view recipe",
       );
 
     if (
@@ -129,7 +131,7 @@ export const getRecipeById = query({
     ) {
       return createBadResponse(
         HttpResponseCode.Forbidden,
-        "You don't have access to edit this recipe."
+        "You don't have access to edit this recipe.",
       );
     }
 
@@ -170,7 +172,7 @@ export const createRecipe = mutation({
         imageUrl: v.optional(v.string()),
         storageId: v.optional(v.id("_storage")),
         externalUrl: v.optional(v.string()),
-      })
+      }),
     ),
     isImageRecipe: v.boolean(),
     ingredients: v.optional(v.string()),
@@ -180,7 +182,7 @@ export const createRecipe = mutation({
         imageUrl: v.optional(v.string()),
         storageId: v.optional(v.id("_storage")),
         externalUrl: v.optional(v.string()),
-      })
+      }),
     ),
     tags: v.optional(v.array(v.string())),
   },
@@ -225,7 +227,7 @@ export const updateRecipe = mutation({
         imageUrl: v.optional(v.string()),
         storageId: v.optional(v.id("_storage")),
         externalUrl: v.optional(v.string()),
-      })
+      }),
     ),
     isImageRecipe: v.boolean(),
     ingredients: v.optional(v.string()),
@@ -235,7 +237,7 @@ export const updateRecipe = mutation({
         imageUrl: v.optional(v.string()),
         storageId: v.optional(v.id("_storage")),
         externalUrl: v.optional(v.string()),
-      })
+      }),
     ),
     tags: v.optional(v.array(v.string())),
   },
@@ -307,7 +309,7 @@ export const deleteRecipe = mutation({
     await Promise.all(
       planList.map(async (p) => {
         ctx.db.delete(p._id);
-      })
+      }),
     );
 
     // Delete image from storage

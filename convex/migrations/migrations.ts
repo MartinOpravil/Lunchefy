@@ -1,6 +1,5 @@
-import { ConvexError } from "convex/values";
+// import { removeDiacritics } from "@/lib/utils";
 import { mutation } from "../_generated/server";
-import { removeDiacritics } from "@/lib/utils";
 
 export const UserMigration = mutation({
   args: {},

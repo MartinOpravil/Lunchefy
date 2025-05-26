@@ -4,7 +4,7 @@ const authConfig = {
       domain: "https://dashing-lynx-25.clerk.accounts.dev",
       applicationID: "convex",
     },
-  ]
+  ],
 };
 
-export default authConfig
+export default authConfig;

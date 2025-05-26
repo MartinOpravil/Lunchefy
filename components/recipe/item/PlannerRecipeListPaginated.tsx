@@ -41,8 +41,8 @@ const PlannerRecipeListPaginated = ({
           ? t("Planner.LastWeek")
           : t("Planner.XWeeksAgo", { week: weekDiff });
 
-    const groupedByWeek = recipeListPaginated.results.reduce<GroupedRecipes>(
-      (acc, recipe) => {
+    const groupedRecipesByWeek =
+      recipeListPaginated.results.reduce<GroupedRecipes>((acc, recipe) => {
         let key = "";
         if (!recipe.plannerDate) {
           key = t("Planner.NotYetPlanned");
@@ -59,11 +59,9 @@ const PlannerRecipeListPaginated = ({
 
         acc[key].push(recipe);
         return acc;
-      },
-      {},
-    );
+      }, {});
 
-    return groupedByWeek;
+    return groupedRecipesByWeek;
   }, [recipeListPaginated, t, MS_PER_WEEK, now]);
 
   return (

@@ -17,7 +17,7 @@ export default defineSchema({
         imageUrl: v.optional(v.string()),
         storageId: v.optional(v.id("_storage")),
         externalUrl: v.optional(v.string()),
-      })
+      }),
     ),
   }),
   userGroupRelationship: defineTable({
@@ -35,7 +35,7 @@ export default defineSchema({
       v.object({
         date: v.number(),
         authorId: v.string(),
-      })
+      }),
     ),
     groupId: v.id("groups"),
     name: v.string(),
@@ -46,7 +46,7 @@ export default defineSchema({
         imageUrl: v.optional(v.string()),
         storageId: v.optional(v.id("_storage")),
         externalUrl: v.optional(v.string()),
-      })
+      }),
     ),
     isImageRecipe: v.boolean(),
     tags: v.optional(v.string()),
@@ -57,11 +57,11 @@ export default defineSchema({
         imageUrl: v.optional(v.string()),
         storageId: v.optional(v.id("_storage")),
         externalUrl: v.optional(v.string()),
-      })
+      }),
     ),
     plannerDate: v.optional(v.number()),
   })
-    .index("by_planner_date", ["plannerDate"])
+    .index("by_planner_date", ["plannerDate", "nameNormalized"])
     .index("by_normalized_name", ["nameNormalized"])
     .searchIndex("nameSearch", {
       searchField: "nameNormalized",
