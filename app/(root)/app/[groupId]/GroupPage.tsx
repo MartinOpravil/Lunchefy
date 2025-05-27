@@ -47,6 +47,7 @@ const GroupPage = ({
 }: GroupPageProps) => {
   const t = useTranslations();
   const {
+    setIsFetched,
     searchBy,
     setSearchBy,
     searchTerm,
@@ -70,7 +71,8 @@ const GroupPage = ({
           return { id: x._id, name: x.name };
         }),
       );
-  }, [todayRecipe, setTodayRecipeList]);
+    setIsFetched(true);
+  }, [todayRecipe, setTodayRecipeList, setIsFetched]);
 
   const { convertToValues } = useTagManager();
 

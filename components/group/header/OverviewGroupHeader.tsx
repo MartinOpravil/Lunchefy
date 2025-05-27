@@ -1,12 +1,12 @@
 import { useTranslations } from "next-intl";
 
 import { Doc } from "@/convex/_generated/dataModel";
-import { ArrowLeft, ChefHat, Pencil, Plus } from "lucide-react";
+import { ArrowLeft, Pencil, Plus } from "lucide-react";
 
 import ActionButton from "@/components/global/button/ActionButton";
 import LinkButton from "@/components/global/button/LinkButton";
 import PageHeader from "@/components/global/content/PageHeader";
-import PlannerButton from "@/components/group/button/PlannerButton";
+import PlannerButton from "@/components/planner/button/PlannerButton";
 
 import { ButtonVariant, Privilage } from "@/enums";
 
