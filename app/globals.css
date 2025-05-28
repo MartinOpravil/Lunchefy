@@ -130,6 +130,68 @@ html {
   }
 }
 
+.homepage {
+  .logo-min {
+    @apply text-[24px] sm:text-[28px];
+  }
+  .logo-features {
+    @apply text-[50px] sm:text-[60px];
+  }
+  ul {
+    @apply list-disc pl-5 text-[20px];
+  }
+  .homepage-bold {
+    @apply font-bold text-secondary;
+  }
+
+  .hero {
+    @apply page-width-wider relative flex min-h-[350px] items-end sm:min-h-[590px];
+    &::before {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      content: "";
+      background: rgb(255, 255, 255);
+      background: linear-gradient(
+        90deg,
+        rgb(255 255 255 / 90%) 0%,
+        rgb(255 255 255 / 80%) 50%,
+        rgb(236 231 220 / 0%) 100%
+      );
+      z-index: 5;
+    }
+  }
+
+  .normal-section {
+    @apply page-width-normal relative flex flex-col items-center gap-16 py-16 sm:flex-row lg:py-32;
+
+    > .section-content {
+      @apply flex w-full flex-col gap-6 sm:w-[50%];
+      > div {
+        @apply flex flex-col gap-6 leading-7;
+      }
+    }
+  }
+
+  .wider-section {
+    @apply page-width-wider flex flex-col items-center gap-6 bg-accent/20 py-16 text-center lg:py-32;
+  }
+
+  .footer-section {
+    @apply page-width-normal flex flex-col items-center pt-16;
+  }
+
+  .section-image {
+    @apply h-[100%] max-h-[575px] w-[100%] object-contain sm:w-[50%];
+  }
+
+  .feature-icon {
+    @apply !h-[50px] !w-[50px] text-background;
+  }
+}
+
 @layer base {
   ul,
   ol {

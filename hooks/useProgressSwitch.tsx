@@ -28,7 +28,7 @@ export const useProgressSwitch = ({
   };
 
   useEffect(() => {
-    if (textList.length === 1) {
+    if (textList.length < 2) {
       setIndex(0);
       setProgress(0);
       return;

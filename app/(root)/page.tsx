@@ -9,8 +9,6 @@ import FeatureCard from "@/components/home/FeatureCard";
 
 import { ButtonVariant } from "@/enums";
 
-import "./homepage.css";
-
 const Home = () => {
   const t = useTranslations("HomePage");
 

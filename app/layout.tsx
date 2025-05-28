@@ -3,6 +3,8 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import { Inter, Marck_Script, Playfair } from "next/font/google";
 
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ConvexQueryCacheProvider } from "convex-helpers/react/cache/provider";
 import { Toaster } from "sonner";
 
@@ -36,7 +38,22 @@ export async function generateMetadata(): Promise<Metadata> {
     title: "Lunchefy",
     description: t("Description"),
     icons: {
-      icon: "/logo_mini.svg",
+      icon: "https://lunchefy.vercel.app/logo_mini.ico",
+    },
+    openGraph: {
+      title: "Lunchefy",
+      description: t("Description"),
+      url: "https://lunchefy.vercel.app",
+      siteName: "Lunchefy",
+      images: [
+        {
+          url: "https://lunchefy.vercel.app/logo.png",
+          width: 1200,
+          height: 630,
+        },
+      ],
+      locale: "cs_CZ",
+      type: "website",
     },
   };
 }
@@ -72,6 +89,8 @@ export default async function RootLayout({
           </ConvexClerkProvider>
           <Toaster />
         </NextIntlClientProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
