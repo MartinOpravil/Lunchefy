@@ -2,22 +2,18 @@
 
 import { useEffect, useState } from "react";
 
-import { useLocale } from "next-intl";
-
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex-helpers/react/cache";
 import { Preloaded, usePreloadedQuery } from "convex/react";
-import { isSameDay } from "date-fns";
-import { cs, enUS } from "date-fns/locale";
 
+import PlannerCalendar from "@/components/planner/PlannerCalendar";
 import PlannerPopupManager from "@/components/planner/PlannerPopupManager";
 import SelectedDayOverview from "@/components/planner/SelectedDayOverview";
 import ThisMonthRecipeList from "@/components/planner/ThisMonthRecipeList";
 import PlannerHeader from "@/components/planner/header/PlannerHeader";
-import { Calendar } from "@/components/ui/calendar";
 
 import { RecipePlannerAction } from "@/enums";
-import { convertToServerTime, getISOMonth } from "@/lib/time";
+import { convertToServerTime, getCleanDate, getISOMonth } from "@/lib/time";
 import { Plan, PlannerAction } from "@/types";
 
 interface PlannerPageProps {
@@ -32,7 +28,6 @@ const PlannerPage = ({
   recipeListForMonthPreloaded,
 }: PlannerPageProps) => {
   const initialISOMonth = getISOMonth(new Date());
-  const localeForCalendar = useLocale() === "cs" ? cs : enUS;
 
   const group = usePreloadedQuery(groupPreloaded);
   const initialRecipeListForMonth = usePreloadedQuery(
@@ -47,9 +42,8 @@ const PlannerPage = ({
     month: selectedISOMonth,
   });
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const [date, setDate] = useState<Date | undefined>(today);
+  const today = getCleanDate(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(today);
   const [selectedPlanList, setSelectedPlanList] = useState<Plan[] | undefined>(
     initialRecipeListForMonth.data?.filter(
       (day) => day.date === convertToServerTime(today),
@@ -60,25 +54,10 @@ const PlannerPage = ({
   );
   const [planList, setPlanList] = useState(initialRecipeListForMonth.data);
 
-  const handleSelect = (clickedDate: Date | undefined) => {
-    if (!clickedDate) return;
-
-    if (date && isSameDay(date, clickedDate)) {
-      return;
-    }
-
-    setDate(clickedDate);
-  };
-
-  const handleMonthChange = (newDate: Date) => {
-    setDate(newDate);
-    setSelectedISOMonth(getISOMonth(newDate));
-  };
-
   useEffect(() => {
-    if (!date) return;
+    if (!selectedDate) return;
     const updatedSelectedPlanList = planList?.filter(
-      (day) => day.date === convertToServerTime(date),
+      (day) => day.date === convertToServerTime(selectedDate),
     );
     if (updatedSelectedPlanList) {
       setSelectedPlanList(updatedSelectedPlanList);
@@ -87,7 +66,7 @@ const PlannerPage = ({
     }
     setSelectedPlanList(undefined);
     setSelectedPlan(undefined);
-  }, [date, planList]);
+  }, [selectedDate, planList]);
 
   useEffect(() => {
     if (recipeListForMonth?.data) {
@@ -114,36 +93,31 @@ const PlannerPage = ({
       <section className="page-content">
         <div className="relative flex min-h-[450px] w-full flex-col gap-8 sm:flex-row">
           <div className="flex flex-col items-center gap-8">
-            <Calendar
-              mode="single"
-              locale={localeForCalendar}
-              ISOWeek
-              selected={date}
-              onSelect={handleSelect}
-              events={planList?.map((x) => x.date)}
-              className="rounded-md border text-text"
-              onMonthChange={(e) => handleMonthChange(e)}
-              isLoading={
-                recipeListForMonth === undefined &&
-                initialISOMonth !== selectedISOMonth
+            <PlannerCalendar
+              groupId={group.data._id}
+              initialPlanList={initialRecipeListForMonth.data ?? undefined}
+              selectedDate={selectedDate}
+              setSelectedDate={setSelectedDate}
+              onMonthChange={(newDate: Date) =>
+                setSelectedISOMonth(getISOMonth(newDate))
               }
             />
           </div>
           <SelectedDayOverview
-            date={date}
+            date={selectedDate}
             planList={selectedPlanList}
             group={group}
             action={setPopupAction}
           />
         </div>
         <ThisMonthRecipeList
-          activeDate={date && convertToServerTime(date)}
+          activeDate={selectedDate && convertToServerTime(selectedDate)}
           planList={planList}
           clasList="pt-8"
-          onItemClick={(date) => setDate(new Date(date))}
+          onItemClick={(date) => setSelectedDate(new Date(date))}
         />
       </section>
-      <PlannerPopupManager action={popupAction} date={date} />
+      <PlannerPopupManager action={popupAction} date={selectedDate} />
     </main>
   );
 };

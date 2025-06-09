@@ -3,7 +3,7 @@ import { PlannerAge } from "@/enums";
 export function convertToClientTime(serverDate: string) {
   const utcDate = new Date(serverDate);
   const localeDate = new Date(
-    utcDate.getTime() + utcDate.getTimezoneOffset() * 60000
+    utcDate.getTime() + utcDate.getTimezoneOffset() * 60000,
   );
   return localeDate;
 }
@@ -15,8 +15,8 @@ export function convertToServerTime(clientDate: Date) {
     Date.UTC(
       clientDate.getFullYear(),
       clientDate.getMonth(),
-      clientDate.getDate()
-    )
+      clientDate.getDate(),
+    ),
   ).toISOString();
   return result;
 }
@@ -29,7 +29,7 @@ export function getISOMonth(date: Date) {
 
 export function getPlannerAgeMiliseconds(
   currentDate: number,
-  plannerAge?: PlannerAge
+  plannerAge?: PlannerAge,
 ) {
   const currDate = new Date(currentDate);
 
@@ -50,4 +50,9 @@ export function getPlannerAgeMiliseconds(
     default:
       return undefined;
   }
+}
+
+export function getCleanDate(date: Date) {
+  date.setHours(0, 0, 0, 0);
+  return date;
 }

@@ -10,7 +10,7 @@ import { Pencil } from "lucide-react";
 import LinkButton from "@/components/global/button/LinkButton";
 import LoaderSpinner from "@/components/global/content/LoaderSpinner";
 import ChosenImage from "@/components/global/image/ChosenImage";
-import AssignRecipeToTodayButton from "@/components/recipe/button/AssignRecipeToTodayButton";
+import AssignRecipeToTodayButton from "@/components/recipe/button/AssignRecipeToDateButton";
 import DeleteRecipeButton from "@/components/recipe/button/DeleteRecipeButton";
 import RecipeTagList from "@/components/recipe/tag/RecipeTagList";
 import { Card } from "@/components/ui/card";
@@ -103,15 +103,9 @@ const Recipe = ({
               </div>
             )}
 
-            {!isRecipeInTodayList(recipe._id) && (
-              <div className="text-right">
-                <AssignRecipeToTodayButton
-                  recipeId={recipe._id}
-                  groupId={recipe.groupId}
-                  isCardVariant
-                />
-              </div>
-            )}
+            <div className="text-right">
+              <AssignRecipeToTodayButton recipe={recipe} isCardVariant />
+            </div>
           </>
         )}
       </div>
