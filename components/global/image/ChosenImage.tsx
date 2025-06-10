@@ -99,6 +99,7 @@ const ChosenImage = ({
               "min-h-[250px] bg-accent/30":
                 variant === ChosenImageVariant.ImageInputPreview,
             },
+            classList,
           )}
         >
           {emptyIcon ? (

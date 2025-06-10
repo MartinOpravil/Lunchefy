@@ -4,7 +4,6 @@
 
 @import url("../styles/variables.css");
 @import url("../styles/clerk.css");
-@import url("../styles/scrollbar.css");
 
 * {
   margin: 0;

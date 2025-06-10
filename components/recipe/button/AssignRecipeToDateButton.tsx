@@ -14,6 +14,7 @@ import ActionButton from "@/components/global/button/ActionButton";
 import BasicDialog from "@/components/global/dialog/BasicDialog";
 import ChosenImage from "@/components/global/image/ChosenImage";
 import PlannerCalendar from "@/components/planner/PlannerCalendar";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 import { ButtonVariant, HttpResponseCode } from "@/enums";
 import { notifyError, notifySuccess } from "@/lib/notifications";
@@ -24,7 +25,7 @@ interface AssignRecipeToTodayPlanButtonProps {
   isCardVariant?: boolean;
 }
 
-const AssignRecipeToTodayPlanButton = ({
+const AssignRecipeToDatePlanButton = ({
   recipe,
   isCardVariant = false,
 }: AssignRecipeToTodayPlanButtonProps) => {
@@ -100,18 +101,22 @@ const AssignRecipeToTodayPlanButton = ({
         setIsOpen={setIsDialogOpen}
         title={t("Groups.Planner.Action.AssignRecipeTitle")}
         description={recipe.name}
-        classList="w-[380px]"
+        classList="min-w-[380px] max-w-fit"
         content={
           <div className="flex flex-col items-center justify-center gap-4">
-            <ChosenImage
-              image={recipe.coverImage}
-              classList="h-[200px] rounded-xl"
-            />
-            <PlannerCalendar
-              groupId={recipe.groupId}
-              selectedDate={selectedDate}
-              setSelectedDate={setSelectedDate}
-            />
+            <ScrollArea className="max-h-[calc(100vh-14rem)]">
+              <div className="grid h-full grid-cols-1 gap-4 md:grid-cols-[320px_320px]">
+                <ChosenImage
+                  image={recipe.coverImage}
+                  classList="h-[150px] md:h-full rounded-xl bg-accent/30"
+                />
+                <PlannerCalendar
+                  groupId={recipe.groupId}
+                  selectedDate={selectedDate}
+                  setSelectedDate={setSelectedDate}
+                />
+              </div>
+            </ScrollArea>
 
             <div className="flex flex-col gap-2">
               <ActionButton
@@ -129,4 +134,4 @@ const AssignRecipeToTodayPlanButton = ({
   );
 };
 
-export default AssignRecipeToTodayPlanButton;
+export default AssignRecipeToDatePlanButton;

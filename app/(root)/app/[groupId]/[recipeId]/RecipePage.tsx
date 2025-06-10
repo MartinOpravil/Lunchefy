@@ -15,7 +15,7 @@ import Lightbox, { LightboxHandle } from "@/components/global/image/Lightbox";
 import LatestRecipeDateInPlanner from "@/components/recipe/LatestRecipeDateInPlanner";
 import RecipeChangeBanner from "@/components/recipe/RecipeChangeBanner";
 import SimilarRecipes from "@/components/recipe/SimilarRecipes";
-import AssignRecipeToTodayButton from "@/components/recipe/button/AssignRecipeToDateButton";
+import AssignRecipeToDateButton from "@/components/recipe/button/AssignRecipeToDateButton";
 import RecipeTagList from "@/components/recipe/tag/RecipeTagList";
 
 import { ButtonVariant, Privilage } from "@/enums";
@@ -65,7 +65,7 @@ const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
         }
         rightSide={
           <>
-            <AssignRecipeToTodayButton recipe={recipe.data} />
+            <AssignRecipeToDateButton recipe={recipe.data} />
             {recipe.data.privilage !== Privilage.Viewer && (
               <LinkButton
                 icon={<Pencil />}
