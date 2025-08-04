@@ -30,6 +30,11 @@ const ActionButton = ({
   onClick,
   classList,
 }: ActionButtonBaseProps & LinkButtonProps) => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.currentTarget.blur();
+    onClick(e);
+  };
+
   return (
     <Button
       className={cn(
@@ -37,7 +42,7 @@ const ActionButton = ({
         classList,
         `${isLoading && "pointer-events-none"}`,
       )}
-      onClick={onClick}
+      onClick={handleClick}
       disabled={isDisabled}
       variant={isDisabled ? undefined : variant}
     >

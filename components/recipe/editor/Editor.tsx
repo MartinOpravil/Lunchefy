@@ -10,7 +10,6 @@ import TextAlign from "@tiptap/extension-text-align";
 import TextStyle from "@tiptap/extension-text-style";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { debounce } from "lodash";
 
 import EditorControlBar from "@/components/recipe/editor/controls/EditorControlBar";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -35,10 +34,10 @@ const Editor = ({ value, name }: EditorProps) => {
     ],
     immediatelyRender: false,
     content: value,
-    onUpdate: debounce(({ editor }) => {
+    onUpdate: ({ editor }) => {
       const updatedContent = editor.getHTML();
       setValue(name, updatedContent, { shouldDirty: true });
-    }, 300),
+    },
     parseOptions: {
       preserveWhitespace: "full",
     },
@@ -50,17 +49,13 @@ const Editor = ({ value, name }: EditorProps) => {
   });
 
   useEffect(() => {
-    if (!editor) return;
-    let { from, to } = editor.state.selection;
-    editor.commands.setContent(value ?? "", false, {
+    if (!editor || !value) return;
+    if (editor.getHTML() === value) return;
+
+    editor.commands.setContent(value, false, {
       preserveWhitespace: "full",
     });
-    editor.commands.setTextSelection({ from, to });
-  }, [value, editor, register]);
-
-  useEffect(() => {
-    register(name, { required: true });
-  }, [register, name]);
+  }, [editor, value]);
 
   return (
     <>

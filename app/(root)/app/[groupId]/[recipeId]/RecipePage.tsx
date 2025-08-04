@@ -1,13 +1,20 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 import { useTranslations } from "next-intl";
 
 import { api } from "@/convex/_generated/api";
 import { Preloaded, usePreloadedQuery } from "convex/react";
-import { ArrowLeft, CalendarDays, Pencil } from "lucide-react";
+import {
+  ArrowLeft,
+  CalendarDays,
+  List,
+  ListChecks,
+  Pencil,
+} from "lucide-react";
 
+import ActionButton from "@/components/global/button/ActionButton";
 import LinkButton from "@/components/global/button/LinkButton";
 import PageHeader from "@/components/global/content/PageHeader";
 import ChosenImage from "@/components/global/image/ChosenImage";
@@ -19,7 +26,6 @@ import AssignRecipeToDateButton from "@/components/recipe/button/AssignRecipeToD
 import RecipeTagList from "@/components/recipe/tag/RecipeTagList";
 
 import { ButtonVariant, Privilage } from "@/enums";
-import { useGroupStore } from "@/store/group";
 
 interface RecipePageProps {
   recipePreloaded: Preloaded<typeof api.recipes.getRecipeById>;
@@ -27,9 +33,47 @@ interface RecipePageProps {
 
 const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
   const t = useTranslations("Recipes.General");
-  const { isRecipeInTodayList } = useGroupStore();
   const recipe = usePreloadedQuery(recipePreloaded);
   const lightboxRef = useRef<LightboxHandle>(null);
+  const [isInInteractiveMode, setIsInInteractiveMode] = useState(false);
+
+  const processHtmlString = (htmlString: string): string => {
+    if (!isInInteractiveMode) return htmlString;
+
+    // Replace ul li with checkboxes
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlString, "text/html");
+
+    const lists = doc.querySelectorAll("ul, ol");
+
+    lists.forEach((list) => {
+      const checkboxes: HTMLElement[] = [];
+
+      list.querySelectorAll("li").forEach((li) => {
+        const label = doc.createElement("label");
+        label.className = "checkbox";
+        const checkbox = doc.createElement("input");
+        checkbox.type = "checkbox";
+        const checkmark = doc.createElement("span");
+        checkmark.className = "checkmark";
+
+        const text = li.textContent?.trim() || "";
+        label.appendChild(checkbox);
+        label.appendChild(checkmark);
+        label.appendChild(doc.createTextNode(" " + text));
+
+        checkboxes.push(label);
+      });
+
+      checkboxes.forEach((label) => {
+        list.parentNode?.insertBefore(label, list);
+      });
+
+      list.remove();
+    });
+
+    return doc.body.innerHTML;
+  };
 
   if (!recipe.data) {
     return <></>;
@@ -103,14 +147,22 @@ const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
               {!recipe.data.isImageRecipe ? (
                 <div className="flex flex-col gap-12">
                   {recipe.data.ingredients && (
-                    <div className="flex flex-col gap-2">
-                      <h2 className="text-[28px]">
+                    <div className="flex w-full flex-col gap-2">
+                      <h2 className="flex items-center justify-between gap-2 text-[28px]">
                         {t("Form.Property.Ingredients")}
+                        <ActionButton
+                          icon={isInInteractiveMode ? <List /> : <ListChecks />}
+                          onClick={() =>
+                            setIsInInteractiveMode(!isInInteractiveMode)
+                          }
+                          variant={ButtonVariant.Minimalistic}
+                        />
                       </h2>
                       <div
                         className="prose-big prose"
                         dangerouslySetInnerHTML={{
-                          __html: recipe.data.ingredients ?? "",
+                          __html:
+                            processHtmlString(recipe.data.ingredients) ?? "",
                         }}
                       />
                     </div>
