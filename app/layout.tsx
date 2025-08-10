@@ -8,13 +8,11 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ConvexQueryCacheProvider } from "convex-helpers/react/cache/provider";
 import { Toaster } from "sonner";
 
-import ConvexClerkProvider from "@/app/providers/ConvexClerkProvider";
-import ThemeProvider from "@/app/providers/ThemeProvider";
-
 import { getDarkModeCookie } from "@/lib/cookies";
 import { cn } from "@/lib/utils";
-
-import "./globals.css";
+import ConvexClerkProvider from "@/providers/ConvexClerkProvider";
+import ThemeProvider from "@/providers/ThemeProvider";
+import "@/styles/globals.css";
 
 const playfair = Playfair({
   subsets: ["latin"],

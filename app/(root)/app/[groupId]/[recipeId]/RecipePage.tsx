@@ -196,7 +196,8 @@ const RecipePage = ({ recipePreloaded }: RecipePageProps) => {
                               image={recipe.data.recipeImage}
                               onClick={() =>
                                 lightboxRef.current?.setOpen(
-                                  recipe.data?.recipeImage?.externalUrl,
+                                  recipe.data?.recipeImage?.imageUrl ||
+                                    recipe.data?.recipeImage?.externalUrl,
                                 )
                               }
                             />

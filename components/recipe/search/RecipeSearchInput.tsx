@@ -30,7 +30,7 @@ import {
 } from "@/components/ui/select";
 
 import { PlannerAge, SearchBy } from "@/enums";
-import { useTagManager } from "@/hooks/TagManager";
+import { useTagManager } from "@/hooks/useTagManager";
 import { cn } from "@/lib/utils";
 import { useGlobalStore } from "@/store/global";
 

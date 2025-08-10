@@ -7,7 +7,7 @@ import Recipe from "@/components/recipe/item/Recipe";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { Privilage } from "@/enums";
-import { useTagManager } from "@/hooks/TagManager";
+import { useTagManager } from "@/hooks/useTagManager";
 
 interface SimilarRecipesProps {
   groupId: string;

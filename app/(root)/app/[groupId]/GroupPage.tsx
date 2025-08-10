@@ -26,7 +26,7 @@ import { DropdownMenuRadioGroup } from "@/components/ui/dropdown-menu";
 import { DEFAULT_RECIPE_ORDER_BY } from "@/constants/order";
 import { RECIPES_INITIAL_COUNT } from "@/constants/pagination";
 import { OrderBy, PlannerAge } from "@/enums";
-import { useTagManager } from "@/hooks/TagManager";
+import { useTagManager } from "@/hooks/useTagManager";
 import { getPlannerAgeMiliseconds } from "@/lib/time";
 import { useGroupStore } from "@/store/group";
 

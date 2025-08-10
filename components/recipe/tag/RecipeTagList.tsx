@@ -4,7 +4,7 @@ import Image from "next/image";
 
 import { Badge } from "@/components/ui/badge";
 
-import { useTagManager } from "@/hooks/TagManager";
+import { useTagManager } from "@/hooks/useTagManager";
 import { cn } from "@/lib/utils";
 import { useGlobalStore } from "@/store/global";
 

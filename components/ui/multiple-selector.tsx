@@ -18,7 +18,7 @@ import {
 
 import { cn } from "@/lib/utils";
 
-import { useTagManager } from "../../hooks/TagManager";
+import { useTagManager } from "../../hooks/useTagManager";
 
 export interface Option {
   value: string;

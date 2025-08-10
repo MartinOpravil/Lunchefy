@@ -13,7 +13,7 @@ import NewRecipeHeader from "@/components/recipe/header/NewRecipeHeader";
 
 import { RecipeFormValues, recipeFormSchema } from "@/constants/formSchema";
 import { HttpResponseCode } from "@/enums";
-import { useTagManager } from "@/hooks/TagManager";
+import { useTagManager } from "@/hooks/useTagManager";
 import { notifyError, notifySuccess } from "@/lib/notifications";
 import { ImageInputHandle, ImageStateProps } from "@/types";
 

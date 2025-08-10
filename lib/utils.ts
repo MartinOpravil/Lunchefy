@@ -1,5 +1,3 @@
-import { useLocale } from "next-intl";
-
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 

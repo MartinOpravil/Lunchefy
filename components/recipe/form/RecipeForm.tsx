@@ -22,7 +22,7 @@ import MultipleSelector from "@/components/ui/multiple-selector";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PrivilageBadge from "@/components/user/PrivilageBadge";
 
-import { useTagManager } from "@/hooks/TagManager";
+import { useTagManager } from "@/hooks/useTagManager";
 import { useGlobalStore } from "@/store/global";
 import { ImageInputHandle } from "@/types";
 
