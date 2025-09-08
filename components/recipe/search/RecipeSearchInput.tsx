@@ -177,6 +177,11 @@ const RecipeSearchInput = ({
                 />
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value={PlannerAge.Future}>
+                  <div className="flex gap-2">
+                    {t("Recipes.SearchInput.Values.Planner.Future")}
+                  </div>
+                </SelectItem>
                 <SelectItem value={PlannerAge.Latest}>
                   <div className="flex gap-2">
                     {t("Recipes.SearchInput.Values.Planner.Latest")}

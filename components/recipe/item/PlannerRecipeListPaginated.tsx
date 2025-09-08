@@ -34,12 +34,13 @@ const PlannerRecipeListPaginated = ({
   const now = Date.now();
 
   const recipeListGroupedByPlannerDate = useMemo(() => {
-    const label = (weekDiff: number) =>
-      weekDiff === 0
-        ? t("Planner.ThisWeek")
-        : weekDiff === 1
-          ? t("Planner.LastWeek")
-          : t("Planner.XWeeksAgo", { week: weekDiff });
+    const label = (weekDiff: number) => {
+      if (weekDiff < 0) return t("Planner.Future");
+      if (weekDiff === 0) return t("Planner.ThisWeek");
+      if (weekDiff === 1) return t("Planner.LastWeek");
+
+      return t("Planner.XWeeksAgo", { week: weekDiff });
+    };
 
     const groupedRecipesByWeek =
       recipeListPaginated.results.reduce<GroupedRecipes>((acc, recipe) => {

@@ -34,6 +34,8 @@ export function getPlannerAgeMiliseconds(
   const currDate = new Date(currentDate);
 
   switch (plannerAge) {
+    case PlannerAge.Future:
+      return Infinity;
     case PlannerAge.Latest:
       return currDate.getTime();
     case PlannerAge.OneWeek:
