@@ -355,7 +355,7 @@
       },
       "Values": {
         "Planner": {
-          "Future": "Budoucí",
+          "Future": "Naplánované",
           "Latest": "Nejnovější",
           "OneWeek": "Starší více jak 1 týden",
           "TwoWeeks": "Starší více jak 2 týdny",
@@ -380,7 +380,7 @@
       "Name": "Názvu"
     },
     "Planner": {
-      "Future": "Budoucí",
+      "Future": "Naplánované",
       "ThisWeek": "Tento týden",
       "LastWeek": "Minulý týden",
       "XWeeksAgo": "Před {week} týdny",

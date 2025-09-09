@@ -357,7 +357,7 @@
       },
       "Values": {
         "Planner": {
-          "Future": "Future",
+          "Future": "Planned",
           "Latest": "Latest",
           "OneWeek": "Older than 1 week",
           "TwoWeeks": "Older than 2 weeks",
@@ -382,7 +382,7 @@
       "Name": "Name"
     },
     "Planner": {
-      "Future": "Future",
+      "Future": "Planned",
       "ThisWeek": "This week",
       "LastWeek": "Last week",
       "XWeeksAgo": "{week} weeks ago",
