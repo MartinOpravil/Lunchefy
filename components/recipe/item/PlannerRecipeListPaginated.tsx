@@ -80,6 +80,7 @@ const PlannerRecipeListPaginated = ({
                   recipe={recipe}
                   privilage={privilage}
                   showTags={showTags}
+                  showPlannerBadge
                 />
               ))}
             </div>

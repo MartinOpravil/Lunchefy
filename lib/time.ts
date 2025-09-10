@@ -1,4 +1,5 @@
 import { PlannerAge } from "@/enums";
+import { TimeLocale } from "@/types";
 
 export function convertToClientTime(serverDate: string) {
   const utcDate = new Date(serverDate);
@@ -57,4 +58,8 @@ export function getPlannerAgeMiliseconds(
 export function getCleanDate(date: Date) {
   date.setHours(0, 0, 0, 0);
   return date;
+}
+
+export function getDay(dateNumber: number, locale: TimeLocale) {
+  return new Date(dateNumber).toLocaleDateString(locale, { weekday: "short" });
 }

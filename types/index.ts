@@ -94,3 +94,5 @@ export type PlannerAction =
   | PlannerAssignAction
   | PlannerSwapAction
   | PlannerRemoveAction;
+
+export type TimeLocale = "cs" | "en-GB";

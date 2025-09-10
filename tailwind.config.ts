@@ -30,7 +30,8 @@ const config = {
           "color-mix(in srgb, var(--secondary) calc(100% * <alpha-value>), transparent)",
         accent:
           "color-mix(in srgb, var(--accent) calc(100% * <alpha-value>), transparent)",
-        background: "var(--background)",
+        background:
+          "color-mix(in srgb, var(--background) calc(100% * <alpha-value>), transparent)",
         text: "var(--text)",
         text2: "var(--text2)",
         white: {

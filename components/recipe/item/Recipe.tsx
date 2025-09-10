@@ -12,6 +12,7 @@ import LoaderSpinner from "@/components/global/content/LoaderSpinner";
 import ChosenImage from "@/components/global/image/ChosenImage";
 import AssignRecipeToDateButton from "@/components/recipe/button/AssignRecipeToDateButton";
 import DeleteRecipeButton from "@/components/recipe/button/DeleteRecipeButton";
+import PlannerDateBadge from "@/components/recipe/item/PlannerDateBadge";
 import RecipeTagList from "@/components/recipe/tag/RecipeTagList";
 import { Card } from "@/components/ui/card";
 
@@ -26,6 +27,7 @@ export interface RecipeProps {
   verticalButton?: ReactNode;
   useVerticalButton?: boolean;
   showTags?: boolean;
+  showPlannerBadge?: boolean;
   classList?: string;
 }
 
@@ -36,6 +38,7 @@ const Recipe = ({
   verticalButton,
   useVerticalButton = false,
   showTags = false,
+  showPlannerBadge = false,
   classList,
 }: RecipeProps) => {
   const { isRecipeInTodayList } = useGroupStore();
@@ -94,18 +97,23 @@ const Recipe = ({
         </div>
         {useVerticalButton && <div className="h-10 w-28" />}
       </Link>
-      <div className="pointer-events-none absolute top-2 w-full px-2">
+      <div
+        className={cn(
+          "pointer-events-none absolute top-2 flex w-full gap-2 px-2",
+          showPlannerBadge ? "justify-between" : "justify-end",
+        )}
+      >
         {!vertical && (
           <>
+            {showPlannerBadge && recipe.plannerDate && (
+              <PlannerDateBadge dateNumber={recipe.plannerDate} />
+            )}
             {showTags && recipe.tags && (
               <div className="mx-auto mb-2 w-fit rounded-xl bg-background px-2 opacity-60 transition-all group-hover:opacity-80">
                 <RecipeTagList recipeTags={recipe.tags} useName={false} dense />
               </div>
             )}
-
-            <div className="text-right">
-              <AssignRecipeToDateButton recipe={recipe} isCardVariant />
-            </div>
+            <AssignRecipeToDateButton recipe={recipe} isCardVariant />
           </>
         )}
       </div>
